@@ -109,7 +109,7 @@ void* memset(void *dest, char val, size_t count)
 void* memset(void *dest, int val, unsigned int count)
 {
 	unsigned char *temp = (unsigned char *)dest;
-	for (; count != 0; count--, temp[count] = val);
+	for (; count != 0; count--, temp[count] = (unsigned char)val);
 	return dest;
 }
 

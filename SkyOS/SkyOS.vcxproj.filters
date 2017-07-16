@@ -42,6 +42,33 @@
     <ClInclude Include="va_list.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="SkyHal.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyGDT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyIDT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InterruptHandler.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdio.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyPIT.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyPIC.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HardwareSubordination.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="kernel.cpp">
@@ -54,6 +81,33 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SkyString.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyHal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyGDT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyIDT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InterruptHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyPIT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyPIC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HardwareSubordination.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

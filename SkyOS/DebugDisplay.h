@@ -10,3 +10,5 @@ void DebugGotoXY(unsigned x, unsigned y);
 void DebugGetXY(unsigned* x, unsigned* y);
 int DebugGetHorz();
 int DebugGetVert();
+
+void itoa_s(int i, unsigned base, char* buf);

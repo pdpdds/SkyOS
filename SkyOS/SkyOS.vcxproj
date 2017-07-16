@@ -14,6 +14,7 @@
     <ProjectGuid>{7F3309CB-1038-461A-A0E7-7D77DD33DAF7}</ProjectGuid>
     <RootNamespace>OrangeOS</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -49,6 +50,8 @@
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>kernel</TargetName>
+    <TargetExt>.sys</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -83,6 +86,7 @@
       <ExceptionHandling />
       <StructMemberAlignment>1Byte</StructMemberAlignment>
       <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4102;4146</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalOptions>/safeseh:no
@@ -102,7 +106,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalDependencies />
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <RegisterOutput>true</RegisterOutput>
+      <RegisterOutput>false</RegisterOutput>
       <FunctionOrder>@order.txt</FunctionOrder>
     </Link>
   </ItemDefinitionGroup>
@@ -110,19 +114,37 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Console.cpp" />
     <ClCompile Include="CRTInitialze.cpp" />
     <ClCompile Include="DebugDisplay.cpp" />
+    <ClCompile Include="HardwareSubordination.cpp" />
+    <ClCompile Include="InterruptHandler.cpp" />
     <ClCompile Include="kernel.cpp" />
+    <ClCompile Include="SkyGDT.cpp" />
+    <ClCompile Include="SkyHal.cpp" />
+    <ClCompile Include="SkyIDT.cpp" />
+    <ClCompile Include="SkyPIC.cpp" />
+    <ClCompile Include="SkyPIT.cpp" />
     <ClCompile Include="SkyString.cpp" />
+    <ClCompile Include="stdio.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Console.h" />
     <ClInclude Include="CRTInitialze.h" />
     <ClInclude Include="DebugDisplay.h" />
+    <ClInclude Include="HardwareSubordination.h" />
+    <ClInclude Include="InterruptHandler.h" />
     <ClInclude Include="kernel.h" />
     <ClInclude Include="size_t.h" />
+    <ClInclude Include="SkyGDT.h" />
+    <ClInclude Include="SkyHal.h" />
+    <ClInclude Include="SkyIDT.h" />
+    <ClInclude Include="SkyPIC.h" />
+    <ClInclude Include="SkyPIT.h" />
     <ClInclude Include="SkyString.h" />
     <ClInclude Include="stdarg.h" />
     <ClInclude Include="StdIntTypes.h" />
+    <ClInclude Include="stdio.h" />
     <ClInclude Include="va_list.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

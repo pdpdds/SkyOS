@@ -18,6 +18,11 @@
 //    INTERFACE DEFINITIONS / ENUMERATIONS / SIMPLE TYPEDEFS
 //============================================================================
 
+typedef unsigned long  ulong;			//64 bit integer
+typedef unsigned int   uint;			//32 bit integer
+typedef unsigned short ushort;			//16 bit integer
+typedef unsigned char  uchar;			//8 bit integer
+
 /* 7.18.1.1  Exact-width integer types */
 typedef signed char int8_t;
 typedef unsigned char   uint8_t;
