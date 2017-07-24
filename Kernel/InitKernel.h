@@ -5,9 +5,8 @@ extern void _cdecl kKeyboardHandler();
 extern void __cdecl  InitializeConstructors();
 
 void SetInterruptVector();
-void InitializeFloppyDrive();
+void InitFloppyDrive();
 void CreateCentralSystem();
-void CreateTestKernelProcess();
 
 bool InitKeyboard();
 bool InitHardDrive();

@@ -1,5 +1,28 @@
 #pragma once
 #include "stdint.h"
+#include "header.h"
+#include "string.h"
+#include "sprintf.h"
+#include "Console.h"
+#include "HAL.h"
+#include "RTC.H"
+#include "IDT.h"
+#include "GDT.h"
+#include "PIT.h"
+#include "PIC.h"
+#include "PhysicalMemoryManager.h"
+#include "VirtualMemoryManager.h"
+#include "kheap.h"
+#include "../Mint64/HardDisk.h"
+#include "ZetPlane.h"
+#include "sysapi.h"
+#include "tss.h"
+#include "ProcessManager.h"
+#include "ConsoleManager.h"
+#include "List.h"
+#include "KernelProcedure.h"
+#include "Console.h"
+#include "InitKernel.h"
 
 /*   _emit is DB equivalent but not DD equivalent exist
 so we define it ourself */

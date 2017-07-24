@@ -117,3 +117,26 @@ DWORD WINAPI TestKernelProcess(LPVOID parameter)
 
 	return 0;
 }
+
+/* render rectangle in 32 bpp modes. */
+extern void rect32(int x, int y, int w, int h, int col);
+
+
+DWORD WINAPI RectGenerate(LPVOID parameter)
+{
+	int col = 0;
+	bool dir = true;
+	SkyConsole::Print("RectGenerate\n");
+	while (1) {
+		rect32(200, 250, 100, 100, col << 16);
+		if (dir) {
+			if (col++ == 0xfe)
+				dir = false;
+		}
+		else
+			if (col-- == 1)
+				dir = true;
+	}
+
+	return 0;
+}

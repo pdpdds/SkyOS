@@ -1,30 +1,4 @@
 ﻿#include "main.h"
-#include "header.h"
-#include "string.h"
-#include "sprintf.h"
-#include "Console.h"
-#include "HAL.h"
-#include "RTC.H"
-#include "IDT.h"
-#include "GDT.h"
-#include "PIT.h"
-#include "PIC.h"
-#include "exception.h"
-#include "PhysicalMemoryManager.h"
-#include "VirtualMemoryManager.h"
-#include "kheap.h"
-#include "../Mint64/HardDisk.h"
-#include "flpydsk.h"
-#include "fat12.h"
-#include "ZetPlane.h"
-#include "sysapi.h"
-#include "tss.h"
-#include "ProcessManager.h"
-#include "ConsoleManager.h"
-#include "List.h"
-#include "KernelProcedure.h"
-#include "Console.h"
-#include "InitKernel.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -57,11 +31,12 @@ _declspec(naked) void multiboot_entry(void)
 			call    main; kernel entry
 			halt :
 		jmp halt; halt processor
-
 	}
 }
 
-bool InitializeMemorySystem(multiboot_info* bootinfo, uint32_t kernelSize);
+extern bool systemOn;
+bool InitMemoryManager(multiboot_info* bootinfo, uint32_t kernelSize);
+void StartConsoleSystem();
 
 void main(unsigned long magic, unsigned long addr)
 {
@@ -80,11 +55,12 @@ void main(unsigned long magic, unsigned long addr)
 	i86_pic_initialize(0x20, 0x28);
 	i86_pit_initialize();
 											
-	SetInterruptVector();
-			
-	InitializeMemorySystem(pBootInfo, 0);
+	SetInterruptVector();			
+	InitMemoryManager(pBootInfo, 0);
 
 	InitKeyboard();
+
+	InitFloppyDrive();
 
 	InitHardDrive();
 	
@@ -96,56 +72,14 @@ void main(unsigned long magic, unsigned long addr)
 	LeaveCriticalSection();
 	
 	//! initialize TSS
-	install_tss(5, 0x10, 0);
+	//install_tss(5, 0x10, 0);
 
 	DumpSystemInfo();
 
 	/*SkyConsole::Print("Press Any Key\n");
 	SkyConsole::GetChar();*/
-	CreateCentralSystem();				
+	StartConsoleSystem();
 }
-
-__declspec(naked) void  _cdecl HandleInterrupt()
-{
-	_asm {
-		pushad
-	}
-	
-	_asm {
-		mov al, 0x20
-		out 0x20, al
-		popad
-		iretd
-	}
-}
-
-void SetInterruptVector()
-{
-	setvect(0, (void(__cdecl &)(void))divide_by_zero_fault);
-	setvect(1, (void(__cdecl &)(void))single_step_trap);
-	setvect(2, (void(__cdecl &)(void))nmi_trap);
-	setvect(3, (void(__cdecl &)(void))breakpoint_trap);
-	setvect(4, (void(__cdecl &)(void))overflow_trap);
-	setvect(5, (void(__cdecl &)(void))bounds_check_fault);
-	setvect(6, (void(__cdecl &)(void))invalid_opcode_fault);
-	setvect(7, (void(__cdecl &)(void))no_device_fault);
-	setvect(8, (void(__cdecl &)(void))double_fault_abort);
-	setvect(10, (void(__cdecl &)(void))invalid_tss_fault);
-	setvect(11, (void(__cdecl &)(void))no_segment_fault);
-	setvect(12, (void(__cdecl &)(void))stack_fault);
-	setvect(13, (void(__cdecl &)(void))general_protection_fault);
-	setvect(14, (void(__cdecl &)(void))page_fault);
-	setvect(16, (void(__cdecl &)(void))fpu_fault);
-	setvect(17, (void(__cdecl &)(void))alignment_check_fault);
-	setvect(18, (void(__cdecl &)(void))machine_check_abort);
-	setvect(19, (void(__cdecl &)(void))simd_fpu_fault);
-	
-	setvect(33, (void(__cdecl &)(void))HandleInterrupt);
-	setvect(38, (void(__cdecl &)(void))HandleInterrupt);
-
-	//i86_install_ir(SYSTEM_TMR_INT_NUMBER, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32 | 0x0500, 0x8, (I86_IRQ_HANDLER)TMR_TSS_SEG);
-}
-
 
 uint32_t GetTotalMemory(multiboot_info* bootinfo)
 {
@@ -179,7 +113,7 @@ uint32_t GetTotalMemory(multiboot_info* bootinfo)
 //  where the kernel is to be loaded to in real mode
 //  define IMAGE_RMODE_BASE 0x3000
 
-bool InitializeMemorySystem(multiboot_info* bootinfo, uint32_t kernelSize)
+bool InitMemoryManager(multiboot_info* bootinfo, uint32_t kernelSize)
 {
 	uint32_t totalMemorySize = GetTotalMemory(bootinfo);
 
@@ -211,44 +145,8 @@ bool InitializeMemorySystem(multiboot_info* bootinfo, uint32_t kernelSize)
 	return true;
 }
 
-void InitializeFloppyDrive()
-{
-	//! set drive 0 as current drive
-	flpydsk_set_working_drive(0);
 
-	//! install floppy disk to IR 38, uses IRQ 6
-	flpydsk_install(38);
-
-	//! initialize FAT12 filesystem
-	fsysFatInitialize();
-}
-
-/* render rectangle in 32 bpp modes. */
-extern void rect32(int x, int y, int w, int h, int col);
-
-
-DWORD WINAPI RectGenerate(LPVOID parameter)
-{
-	int col = 0;
-	bool dir = true;
-	SkyConsole::Print("RectGenerate\n");
-	while (1) {
-		rect32(200, 250, 100, 100, col << 16);
-		if (dir) {
-			if (col++ == 0xfe)
-				dir = false;
-		}
-		else
-			if (col-- == 1)
-				dir = true;
-	}
-
-	return 0;
-}
-
-extern bool systemOn;
-
-void CreateCentralSystem()
+void StartConsoleSystem()
 {		
 	Process* pProcess = ProcessManager::GetInstance()->CreateProcess(SystemEntry, true);
 
@@ -259,9 +157,7 @@ void CreateCentralSystem()
 	//Thread* newThread2 = ProcessManager::CreateThread(pProcess, TaskProcessor, pProcess);
 	
 	Thread* pThread = pProcess->GetThread(0);
-	pThread->m_taskState = TASK_STATE_RUNNING;
-
-	//CreateTestKernelProcess();
+	pThread->m_taskState = TASK_STATE_RUNNING;	
 
 	int entryPoint = (int)pThread->frame.eip;
 	unsigned int procStack = pThread->frame.esp;
@@ -289,17 +185,4 @@ void CreateCentralSystem()
 			push entryPoint; EIP
 			iretd
 	}
-
 }
-
-void CreateTestKernelProcess()
-{
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcess(TestKernelProcess);
-
-	if (pProcess)
-		SkyConsole::Print("Create Success System Process\n");	
-}
-
-
-
-
