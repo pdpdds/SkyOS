@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Entry">
+      <UniqueIdentifier>{133342e2-89aa-43a0-bcb7-a8de80cb8046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hal">
+      <UniqueIdentifier>{f28e2cbc-40ef-4d94-ae8c-5d93396242a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Console">
+      <UniqueIdentifier>{7b170f13-618e-4bf5-93a8-57f2fbd6c417}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{05f338c7-5233-4da2-bca6-85b8e22080cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Disk">
+      <UniqueIdentifier>{d43a5571-5d81-411c-8f65-dec866f99256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="API">
+      <UniqueIdentifier>{6c38a177-ab66-4f39-b44e-7d875f173b36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Process">
+      <UniqueIdentifier>{4e8b9853-f281-4ba6-b922-0a30235e6756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mint64">
+      <UniqueIdentifier>{bcab9d7b-f7f0-44c6-9503-104314014f9d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="entry.cpp">
+      <Filter>Entry</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Entry</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugDisplay.cpp">
+      <Filter>Entry</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
+    <ClCompile Include="exception.cpp">
+      <Filter>Hal</Filter>
+    </ClCompile>
+    <ClCompile Include="GDT.cpp">
+      <Filter>Hal</Filter>
+    </ClCompile>
+    <ClCompile Include="Hal.cpp">
+      <Filter>Hal</Filter>
+    </ClCompile>
+    <ClCompile Include="IDT.cpp">
+      <Filter>Hal</Filter>
+    </ClCompile>
+    <ClCompile Include="pic.cpp">
+      <Filter>Hal</Filter>
+    </ClCompile>
+    <ClCompile Include="PIT.cpp">
+      <Filter>Hal</Filter>
+    </ClCompile>
+    <ClCompile Include="RTC.cpp">
+      <Filter>Hal</Filter>
+    </ClCompile>
+    <ClCompile Include="kheap.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="ordered_array.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="fat12.cpp">
+      <Filter>Disk</Filter>
+    </ClCompile>
+    <ClCompile Include="flpydsk.cpp">
+      <Filter>Disk</Filter>
+    </ClCompile>
+    <ClCompile Include="fsys.cpp">
+      <Filter>Disk</Filter>
+    </ClCompile>
+    <ClCompile Include="Harddisk.cpp">
+      <Filter>Disk</Filter>
+    </ClCompile>
+    <ClCompile Include="dma.cpp">
+      <Filter>Hal</Filter>
+    </ClCompile>
+    <ClCompile Include="sysapi.cpp">
+      <Filter>API</Filter>
+    </ClCompile>
+    <ClCompile Include="ZetPlane.cpp" />
+    <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="tss.cpp">
+      <Filter>Hal</Filter>
+    </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
+    <ClCompile Include="Process.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcessManager.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
+    <ClCompile Include="task.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
+    <ClCompile Include="user.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
+    <ClCompile Include="kybrd.cpp" />
+    <ClCompile Include="Scheduler.cpp" />
+    <ClCompile Include="ConsoleManager.cpp" />
+    <ClCompile Include="..\Mint64\Synchronization.cpp">
+      <Filter>Mint64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Mint64\Keyboard.cpp">
+      <Filter>Mint64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Mint64\Queue.cpp">
+      <Filter>Mint64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Mint64\Mouse.cpp">
+      <Filter>Mint64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Mint64\kList.cpp">
+      <Filter>Mint64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Mint64\HardDisk.cpp">
+      <Filter>Mint64</Filter>
+    </ClCompile>
+    <ClCompile Include="KernelProcedure.cpp" />
+    <ClCompile Include="PhysicalMemoryManager.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="VirtualMemoryManager.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="PageTableEntry.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="PageDirectoryEntry.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="sprintf.cpp" />
+    <ClCompile Include="stdio.cpp" />
+    <ClCompile Include="string.cpp" />
+    <ClCompile Include="cstd.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DebugDisplay.h">
+      <Filter>Entry</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="exception.h">
+      <Filter>Hal</Filter>
+    </ClInclude>
+    <ClInclude Include="GDT.h">
+      <Filter>Hal</Filter>
+    </ClInclude>
+    <ClInclude Include="Hal.h">
+      <Filter>Hal</Filter>
+    </ClInclude>
+    <ClInclude Include="IDT.h">
+      <Filter>Hal</Filter>
+    </ClInclude>
+    <ClInclude Include="pic.h">
+      <Filter>Hal</Filter>
+    </ClInclude>
+    <ClInclude Include="PIT.h">
+      <Filter>Hal</Filter>
+    </ClInclude>
+    <ClInclude Include="RTC.H">
+      <Filter>Hal</Filter>
+    </ClInclude>
+    <ClInclude Include="kheap.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="ordered_array.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="fat12.h">
+      <Filter>Disk</Filter>
+    </ClInclude>
+    <ClInclude Include="flpydsk.h">
+      <Filter>Disk</Filter>
+    </ClInclude>
+    <ClInclude Include="fsys.h">
+      <Filter>Disk</Filter>
+    </ClInclude>
+    <ClInclude Include="GSH.H">
+      <Filter>Disk</Filter>
+    </ClInclude>
+    <ClInclude Include="HardDisk.h">
+      <Filter>Disk</Filter>
+    </ClInclude>
+    <ClInclude Include="dma.h">
+      <Filter>Hal</Filter>
+    </ClInclude>
+    <ClInclude Include="Collect.h" />
+    <ClInclude Include="sysapi.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="ZetPlane.h" />
+    <ClInclude Include="Plane.h" />
+    <ClInclude Include="tss.h">
+      <Filter>Hal</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="Process.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcessManager.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="task.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="image.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="kybrd.h" />
+    <ClInclude Include="Scheduler.h" />
+    <ClInclude Include="ConsoleManager.h" />
+    <ClInclude Include="..\Mint64\Keyboard.h">
+      <Filter>Mint64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Mint64\Synchronization.h">
+      <Filter>Mint64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Mint64\Queue.h">
+      <Filter>Mint64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Mint64\Mouse.h">
+      <Filter>Mint64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Mint64\kList.h">
+      <Filter>Mint64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Mint64\KTask.h">
+      <Filter>Mint64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Mint64\HardDisk.h">
+      <Filter>Mint64</Filter>
+    </ClInclude>
+    <ClInclude Include="KernelProcedure.h" />
+    <ClInclude Include="PhysicalMemoryManager.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="VirtualMemoryManager.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="PageTableEntry.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="PageDirectoryEntry.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="DoubleLinkedList.h" />
+    <ClInclude Include="OrangeQueue.h" />
+    <ClInclude Include="stdio.h" />
+    <ClInclude Include="string.h" />
+    <ClInclude Include="va_list.h" />
+    <ClInclude Include="size_t.h" />
+    <ClInclude Include="stdarg.h" />
+    <ClInclude Include="stdint.h" />
+    <ClInclude Include="ctype.h" />
+    <ClInclude Include="main.h" />
+  </ItemGroup>
+</Project>
