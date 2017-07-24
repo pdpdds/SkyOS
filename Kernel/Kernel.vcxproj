@@ -44,7 +44,8 @@
     <ExtensionsToDeleteOnClean>*.exp *.obj%3b*.ilk%3b*.tlb%3b*.tli%3b*.tlh%3b*.tmp%3b*.rsp%3b*.pgc%3b*.pgd%3b$(TargetPath)</ExtensionsToDeleteOnClean>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
-    <TargetName>KRNL32</TargetName>
+    <TargetName>kernel</TargetName>
+    <TargetExt>.sys</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IntDir>$(Configuration)\</IntDir>
@@ -88,7 +89,7 @@
       </AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>Kernel.map</MapFileName>
+      <MapFileName>../Debug/kernel.map</MapFileName>
       <SubSystem>Console</SubSystem>
       <Driver>NotSet</Driver>
       <OptimizeReferences>true</OptimizeReferences>
@@ -126,7 +127,6 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
     <ClCompile Include="cstd.cpp" />
-    <ClCompile Include="DebugDisplay.cpp" />
     <ClCompile Include="dma.cpp" />
     <ClCompile Include="entry.cpp" />
     <ClCompile Include="exception.cpp" />
@@ -139,6 +139,7 @@
     <ClCompile Include="IDT.cpp">
       <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</RuntimeTypeInfo>
     </ClCompile>
+    <ClCompile Include="InitKernel.cpp" />
     <ClCompile Include="KernelProcedure.cpp" />
     <ClCompile Include="kheap.cpp" />
     <ClCompile Include="kybrd.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="tss.cpp" />
     <ClCompile Include="user.cpp" />
+    <ClCompile Include="Video.cpp" />
     <ClCompile Include="VirtualMemoryManager.cpp" />
     <ClCompile Include="ZetPlane.cpp" />
   </ItemGroup>
@@ -178,7 +180,6 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="ConsoleManager.h" />
     <ClInclude Include="ctype.h" />
-    <ClInclude Include="DebugDisplay.h" />
     <ClInclude Include="dma.h" />
     <ClInclude Include="DoubleLinkedList.h" />
     <ClInclude Include="exception.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="HardDisk.h" />
     <ClInclude Include="IDT.h" />
     <ClInclude Include="image.h" />
+    <ClInclude Include="InitKernel.h" />
     <ClInclude Include="KernelProcedure.h" />
     <ClInclude Include="kheap.h" />
     <ClInclude Include="kybrd.h" />
@@ -218,6 +220,7 @@
     <ClInclude Include="Thread.h" />
     <ClInclude Include="tss.h" />
     <ClInclude Include="va_list.h" />
+    <ClInclude Include="Video.h" />
     <ClInclude Include="VirtualMemoryManager.h" />
     <ClInclude Include="ZetPlane.h" />
   </ItemGroup>

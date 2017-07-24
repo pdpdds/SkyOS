@@ -5,7 +5,6 @@
 #include "PhysicalMemoryManager.h"
 #include "VirtualMemoryManager.h"
 #include "task.h"
-#include "DebugDisplay.h"
 #include "ProcessManager.h"
 #include "ZetPlane.h"
 #include "PIT.h"
@@ -31,7 +30,7 @@ void cmd_alloc()
 
 		pPlane->IsRotate();
 
-		DebugPrintf("\n Plane X : %d, Plane Y : %d", pPlane->GetX(), pPlane->GetY());
+		SkyConsole::Print("Plane X : %d, Plane Y : %d\n", pPlane->GetX(), pPlane->GetY());		
 
 		delete pPlane;
 	}
@@ -46,7 +45,6 @@ void cmd_alloc()
 /* BGA LFB is at LFB_PHYSICAL. */
 #define LFB_PHYSICAL 0xE0000000
 #define LFB_VIRTUAL  0x300000
-#define PAGE_SIZE    0x1000
 
 /* render rectangle in 32 bpp modes. */
 void rect32(int x, int y, int w, int h, int col) {
@@ -154,7 +152,7 @@ void cmd_read() {
 
 	//! get pathname
 	char path[32];
-	DebugPrintf("\n\rex: \"file.txt\", \"a:\\file.txt\", \"a:\\folder\\file.txt\"\n\rFilename> ");
+	SkyConsole::Print("ex: \"file.txt\", \"a:\\file.txt\", \"a:\\folder\\file.txt\"\n\rFilename> ");
 	SkyConsole::GetCommand(path, 30);
 
 	//! open file
@@ -163,19 +161,19 @@ void cmd_read() {
 	//! test for invalid file
 	if (file.flags == FS_INVALID) {
 
-		DebugPrintf("\n\rUnable to open file");
+		SkyConsole::Print("Unable to open file\n\r");
 		return;
 	}
 
 	//! cant display directories
 	if ((file.flags & FS_DIRECTORY) == FS_DIRECTORY) {
 
-		DebugPrintf("\n\rUnable to display contents of directory.");
+		SkyConsole::Print("Unable to display contents of directory.\n\r");
 		return;
 	}
 
 	//! top line
-	DebugPrintf("\n\n\r-------[%s]-------\n\r", file.name);
+	SkyConsole::Print("\n\n\r-------[%s]-------\n\r", file.name);
 
 	//! display file contents
 	while (file.eof != 1) {
@@ -186,18 +184,18 @@ void cmd_read() {
 
 		//! display file
 		for (int i = 0; i<512; i++)
-			DebugPutc(buf[i]);
+			SkyConsole::WriteChar(buf[i]);
 
 		//! wait for input to continue if not EOF
 		if (file.eof != 1) {
-			DebugPrintf("\n\r------[Press a key to continue]------");
+			SkyConsole::Print("\n\r------[Press a key to continue]------");
 			SkyConsole::GetChar();
-			DebugPrintf("\r"); //clear last line
+			SkyConsole::Print("\r"); //clear last line
 		}
 	}
 
 	//! done :)
-	DebugPrintf("\n\n\r--------[EOF]--------");
+	SkyConsole::Print("\n\n\r--------[EOF]--------");
 }
 
 void go_user() {

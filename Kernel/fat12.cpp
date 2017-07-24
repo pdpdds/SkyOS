@@ -5,7 +5,6 @@
    arthor\ Mike
 ******************************************************************************/
 
-#include "DebugDisplay.h"
 #include <fat12.h>
 #include <string.h>
 #include <flpydsk.h>

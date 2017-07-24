@@ -1,3 +1,2 @@
 ?multiboot_entry@@YAXXZ
-??__Econsole@@YAXXZ
 

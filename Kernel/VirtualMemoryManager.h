@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "windef.h"
 #include "stdint.h"
+#include "Hal.h"
 #include "PageDirectoryEntry.h"
 #include "PageTableEntry.h"
 
@@ -31,8 +32,6 @@ using namespace PageDirectoryEntry;
 #define PTABLE_ADDR_SPACE_SIZE 0x400000
 //! directory table represents 4gb address space
 #define DTABLE_ADDR_SPACE_SIZE 0x100000000
-//! page sizes are 4k
-#define PAGE_SIZE 4096
 
 // chapter 21
 #define PAGE_DIRECTORY_INDEX(x) (((x) >> 22) & 0x3ff)

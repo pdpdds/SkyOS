@@ -113,7 +113,6 @@ idt_descriptor* i86_get_ir (uint32_t i) {
 
 	return &_idt[i];
 }
-#include "../Kernel/DebugDisplay.h"
 
 //! installs a new interrupt handler
 int i86_install_ir (uint32_t i, uint16_t flags, uint16_t sel, I86_IRQ_HANDLER irq) {

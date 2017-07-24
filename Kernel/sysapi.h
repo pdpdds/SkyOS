@@ -1,6 +1,5 @@
 #pragma once
 #include <hal.h>
-#include "DebugDisplay.h"
 #include "VirtualMemoryManager.h"
 #include "task.h"
 #include "PIT.h"

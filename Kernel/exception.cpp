@@ -2,8 +2,39 @@
 #include <hal.h>
 #include <stdint.h>
 #include "Console.h"
+#include "sprintf.h"
+#include "string.h"
 
-extern void _cdecl kernel_panic (const char* fmt, ...);
+static char* sickpc = " \
+                               _______      \n\
+                               |.-----.|    \n\
+                               ||x . x||    \n\
+                               ||_.-._||    \n\
+                               `--)-(--`    \n\
+                              __[=== o]___  \n\
+                             |:::::::::::|\\ \n\
+                             `-=========-`()\n\
+                                M. O. S.\n\n";
+
+//! something is wrong--bail out
+void _cdecl kernel_panic(const char* fmt) {
+
+	char* disclamer = "We apologize, MOS has encountered a problem and has been shut down\n\
+to prevent damage to your computer. Any unsaved work might be lost.\n\
+We are sorry for the inconvenience this might have caused.\n\n\
+Please report the following information and restart your computer.\n\
+The system has been halted.\n\n";
+	
+	SkyConsole::MoveCursor(0, 0);
+	SkyConsole::SetColor(ConsoleColor::White, ConsoleColor::Blue, false);
+	SkyConsole::Clear();
+	SkyConsole::Print(sickpc);
+	SkyConsole::Print(disclamer);
+
+	SkyConsole::Print("*** STOP: %s", fmt);
+
+	for (;;);
+}
 
 #define intstart() \
 	_asm	cli \
@@ -21,8 +52,10 @@ void _cdecl divide_by_zero_fault (uint32_t eflags,uint32_t cs,uint32_t eip, uint
 		pushad
 	}
 
-	SkyConsole::Print("Divide by 0 at physical address[0x%x:0x%x] EFLAGS[0x%x] other: 0x%x",cs, eip, eflags, other);
-	//kernel_panic ("Divide by 0 at physical address [0x%x:0x%x] EFLAGS [0x%x] other: 0x%x",cs,eip, eflags, other);
+	char str[256];
+	memset(str, 0, 256);
+	sprintf(str, "Divide by 0 at physical address[0x%x:0x%x] EFLAGS[0x%x] other: 0x%x", cs, eip, eflags, other);
+	kernel_panic(str);	
 	for (;;);
 }
 

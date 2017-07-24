@@ -33,9 +33,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Entry</Filter>
     </ClCompile>
-    <ClCompile Include="DebugDisplay.cpp">
-      <Filter>Entry</Filter>
-    </ClCompile>
     <ClCompile Include="Console.cpp">
       <Filter>Console</Filter>
     </ClCompile>
@@ -145,11 +142,10 @@
     <ClCompile Include="stdio.cpp" />
     <ClCompile Include="string.cpp" />
     <ClCompile Include="cstd.cpp" />
+    <ClCompile Include="Video.cpp" />
+    <ClCompile Include="InitKernel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DebugDisplay.h">
-      <Filter>Entry</Filter>
-    </ClInclude>
     <ClInclude Include="Console.h">
       <Filter>Console</Filter>
     </ClInclude>
@@ -272,5 +268,7 @@
     <ClInclude Include="stdint.h" />
     <ClInclude Include="ctype.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="Video.h" />
+    <ClInclude Include="InitKernel.h" />
   </ItemGroup>
 </Project>

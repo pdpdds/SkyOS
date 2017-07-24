@@ -1,6 +1,5 @@
 ﻿#include "main.h"
 #include "header.h"
-#include "DebugDisplay.h"
 #include "string.h"
 #include "sprintf.h"
 #include "Console.h"
@@ -23,85 +22,9 @@
 #include "ProcessManager.h"
 #include "ConsoleManager.h"
 #include "List.h"
-#include "kybrd.h"
-#include "Keyboard.h"
 #include "KernelProcedure.h"
 #include "Console.h"
-
-extern void __cdecl  InitializeConstructors();
-
-void SetInterruptVector();
-bool InitializeMemorySystem(multiboot_info* bootinfo, uint32_t kernelSize);
-void InitializeFloppyDrive();
-void CreateCentralSystem();
-void CreateTestKernelProcess();
-
-/* Definitions for BGA. Reference Graphics 1. */
-#define VBE_DISPI_IOPORT_INDEX          0x01CE
-#define VBE_DISPI_IOPORT_DATA           0x01CF
-#define VBE_DISPI_INDEX_XRES            0x1
-#define VBE_DISPI_INDEX_YRES            0x2
-#define VBE_DISPI_INDEX_BPP             0x3
-#define VBE_DISPI_INDEX_ENABLE          0x4
-#define VBE_DISPI_DISABLED              0x00
-#define VBE_DISPI_ENABLED               0x01
-#define VBE_DISPI_LFB_ENABLED           0x40
-
-/* writes to BGA port. */
-void VbeBochsWrite(uint16_t index, uint16_t value) {
-	OutPortWord(VBE_DISPI_IOPORT_INDEX, index);
-	OutPortWord(VBE_DISPI_IOPORT_DATA, value);
-}
-
-/* sets video mode. */
-void VbeBochsSetMode(uint16_t xres, uint16_t yres, uint16_t bpp) {
-	VbeBochsWrite(VBE_DISPI_INDEX_ENABLE, VBE_DISPI_DISABLED);
-	VbeBochsWrite(VBE_DISPI_INDEX_XRES, xres);
-	VbeBochsWrite(VBE_DISPI_INDEX_YRES, yres);
-	VbeBochsWrite(VBE_DISPI_INDEX_BPP, bpp);
-	VbeBochsWrite(VBE_DISPI_INDEX_ENABLE, VBE_DISPI_ENABLED | VBE_DISPI_LFB_ENABLED);
-}
-
-/* video mode info. */
-#define WIDTH           800
-#define HEIGHT          600
-#define BPP             32
-#define BYTES_PER_PIXEL 4
-
-/* BGA LFB is at LFB_PHYSICAL. */
-#define LFB_PHYSICAL 0xE0000000
-#define LFB_VIRTUAL  0x300000
-#define PAGE_SIZE    0x1000
-
-/* map LFB into current process address space. */
-void* VbeBochsMapLFB() {
-	int pfcount = WIDTH*HEIGHT*BYTES_PER_PIXEL / PAGE_SIZE;
-	for (int c = 0; c <= pfcount; c++)
-		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(VirtualMemoryManager::GetCurPageDirectory(), LFB_VIRTUAL + c * PAGE_SIZE, LFB_PHYSICAL + c * PAGE_SIZE, 7);
-	return (void*)LFB_VIRTUAL;
-}
-
-/* clear screen to white. */
-void fillScreen32() {
-	uint32_t* lfb = (uint32_t*)LFB_VIRTUAL;
-	for (uint32_t c = 0; c<WIDTH*HEIGHT; c++)
-		lfb[c] = 0x00000000;
-}
-
-
-/* Definitions for BGA. Reference Graphics 1. */
-#define VBE_DISPI_IOPORT_INDEX          0x01CE
-#define VBE_DISPI_IOPORT_DATA           0x01CF
-#define VBE_DISPI_INDEX_XRES            0x1
-#define VBE_DISPI_INDEX_YRES            0x2
-#define VBE_DISPI_INDEX_BPP             0x3
-#define VBE_DISPI_INDEX_ENABLE          0x4
-#define VBE_DISPI_DISABLED              0x00
-#define VBE_DISPI_ENABLED               0x01
-#define VBE_DISPI_LFB_ENABLED           0x40
-
-
-extern void _cdecl kKeyboardHandler();
+#include "InitKernel.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -138,13 +61,15 @@ _declspec(naked) void multiboot_entry(void)
 	}
 }
 
-extern volatile uint32_t	_pit_ticks;
+bool InitializeMemorySystem(multiboot_info* bootinfo, uint32_t kernelSize);
 
 void main(unsigned long magic, unsigned long addr)
-//int _cdecl kmain(multiboot_info* bootinfo) 
 {
 	InitializeConstructors();
+
 	SkyConsole::Initialize();
+	//헥사를 표시할 때 %X는 integer, %x는 unsigned integer의 헥사값을 표시한다.	
+	SkyConsole::Print("*** Sky OS Console System Init\n");
 
 	EnterCriticalSection();
 
@@ -156,142 +81,31 @@ void main(unsigned long magic, unsigned long addr)
 	i86_pit_initialize();
 											
 	SetInterruptVector();
-	//setvect(32, scheduler_isr, 0x80);
-		
-	//커널사이즈에 512를 곱하면 바이트로 환산된다.
-	//현재 커널의 사이즈는 4096바이트다.
+			
+	InitializeMemorySystem(pBootInfo, 0);
+
+	InitKeyboard();
+
+	InitHardDrive();
 	
-	InitializeMemorySystem(pBootInfo, 0);		
-	//
-
-	//EnterCriticalSection();
-
-	kkybrd_install(33);
-
-	//InitializeFloppyDrive();
-
 	InitializeSysCall();
-
-	
-
-	/*setvect(33, kKeyboardHandler);
-
-
-
-
-	// 키보드를 활성화
-	if (kInitializeKeyboard() == TRUE)
-	{
-		kChangeKeyboardLED(FALSE, FALSE, FALSE);
-	}*/
-	//i86_install_ir(SYSTEM_TMR_INT_NUMBER, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32 | 0x0500, 0x8, (I86_IRQ_HANDLER)TMR_TSS_SEG);
-	
-	
-	SkyConsole::Print("Sky OS Console System Initialize\n");
-	
+		
+	//i86_install_ir(SYSTEM_TMR_INT_NUMBER, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32 | 0x0500, 0x8, (I86_IRQ_HANDLER)TMR_TSS_SEG);			
 	i86_pit_start_counter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
+
 	LeaveCriticalSection();
 	
-	for (int i = 0; i < 100; i++)
-	{
-		ZetPlane* pZetPlane = new ZetPlane();
-		pZetPlane->m_rotation = 50;
-		SkyConsole::Print("ZetPlane Address : 0x%x\n", pZetPlane);
-		SkyConsole::Print("ZetPlane m_rotation : %d\n", pZetPlane->m_rotation);
-	}
-
-	/*VbeBochsSetMode(WIDTH, HEIGHT, BPP);
-	VbeBochsMapLFB();
-	fillScreen32();*/
-
-	CreateCentralSystem();
-	
-	/*SkyConsole::Print("Press Any Key\n");
-	SkyConsole::GetChar();
-	NativeConsole();*/
-
-	/*for (;;);
-	for (int i = 0;; i++)
-		SkyConsole::Print("rrrr : %d\n", _pit_ticks);
-	*/
-	/*char	commandBuffer[MAXPATH];
-	//SkyConsole::Clear();
-	
-	memset(commandBuffer, 0, MAXPATH);
-	while (1)
-	{
-		SkyConsole::Print("Command> ");
-		SkyConsole::GetCommand(commandBuffer, MAXPATH - 2);
-		SkyConsole::Print("\n");
-	}
-	for (;;);*/
-	
-	//! install the keyboard to IR 33, uses IRQ 1
-	
-
-	
-	/*setvect(33, kKeyboardHandler);
-	
-	// 키보드를 활성화
-	if (kInitializeKeyboard() == TRUE)
-	{		
-		kChangeKeyboardLED(FALSE, FALSE, FALSE);
-	}*/
-
-	
-
-	
-
-	InitializeSysCall();
-
 	//! initialize TSS
 	install_tss(5, 0x10, 0);
 
-	/* set video mode and map framebuffer. */
-	VbeBochsSetMode(WIDTH, HEIGHT, BPP);
-	VbeBochsMapLFB();
-	fillScreen32();
+	DumpSystemInfo();
 
-	//HardDiskHandler hardHandler;
-	//hardHandler.Initialize();		
-
-	SkyConsole::kGetCh();
-	
-	SkyConsole::SetBackColor(ConsoleColor::Blue);
-	SkyConsole::Clear();
-
-	/*if (kInitializeHDD() == TRUE)
-	{
-		SkyConsole::Print("AAAAAAAAAAAAAAAAAAAAAAAAA\n");
-	}*/
-
-	//SkyConsole::Print("HardDisk Count : %d\n", hardHandler.GetTotalDevices());
-	SkyConsole::Print("Orange OS Console System Initialize\n");
-	//SkyConsole::Print("KernelSize : %d Bytes\n", g_kernelSize);	
-
-	//헥사를 표시할 때 %X는 integer, %x는 unsigned integer의 헥사값을 표시한다.	
-
-	char str[256];
-	memset(str, 0, 256);
-
-	SYSTEMTIME sysTime;
-	GetLocalTime(&sysTime);
-
-	sprintf(str, "LocalTime : %d %d/%d %d:%d %d\n", sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
-	SkyConsole::Print("%s", str);
-
-	//파라메터 kernelSize는 스택에 존재한다. stack의 베이스 주소는 0x9000이다.
-	//sprintf(str, "Parameter kernelSize Variable Address : %x\n", (unsigned int)&g_kernelSize);
-	SkyConsole::Print("%s", str);
-
-	
-
-	CreateCentralSystem();	
-
-	//return 0;
+	/*SkyConsole::Print("Press Any Key\n");
+	SkyConsole::GetChar();*/
+	CreateCentralSystem();				
 }
 
-__declspec(naked) void  _cdecl HandleTimerInterrupt()
+__declspec(naked) void  _cdecl HandleInterrupt()
 {
 	_asm {
 		pushad
@@ -326,8 +140,8 @@ void SetInterruptVector()
 	setvect(18, (void(__cdecl &)(void))machine_check_abort);
 	setvect(19, (void(__cdecl &)(void))simd_fpu_fault);
 	
-	setvect(33, (void(__cdecl &)(void))HandleTimerInterrupt);
-	setvect(38, (void(__cdecl &)(void))HandleTimerInterrupt);
+	setvect(33, (void(__cdecl &)(void))HandleInterrupt);
+	setvect(38, (void(__cdecl &)(void))HandleInterrupt);
 
 	//i86_install_ir(SYSTEM_TMR_INT_NUMBER, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32 | 0x0500, 0x8, (I86_IRQ_HANDLER)TMR_TSS_SEG);
 }

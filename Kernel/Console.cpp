@@ -119,12 +119,16 @@ namespace SkyConsole
 			break;
 		}
 
+		if (m_xPos>= m_ScreenWidth)
+			m_yPos++;
+
 		if (m_yPos == m_ScreenHeight)			// the cursor moved off of the screen?
 		{
 			scrollup();					// scroll the screen up
 			m_yPos--;						// and move the cursor back
 		}
 		// and finally, set the cursor
+		
 		MoveCursor(m_xPos + 1, m_yPos);
 	}
 
@@ -175,7 +179,7 @@ namespace SkyConsole
 						  /*** address of ***/
 				case 's': {
 					int c = (int&)va_arg(args, char);
-					char str[64];
+					char str[256];
 					strcpy(str, (const char*)c);
 					Write(str);
 					i++;		// go to next character
