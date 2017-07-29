@@ -10,6 +10,7 @@
 #include "Console.h"
 #include "ChType.H"
 #include "kheap.h"
+#include "string.h"
 
 //-------------------FATInfo member functions-----------------------
 FATInfo::FATInfo(BYTE * DPF,struct _Partition * DiskPart, BYTE * FirstSector)

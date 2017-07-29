@@ -22,9 +22,6 @@
     <Filter Include="Process">
       <UniqueIdentifier>{4e8b9853-f281-4ba6-b922-0a30235e6756}</UniqueIdentifier>
     </Filter>
-    <Filter Include="chobits">
-      <UniqueIdentifier>{2bb13f5d-e995-4b64-932b-fbacd7eda68b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="entry.cpp">
@@ -72,9 +69,6 @@
     <ClCompile Include="fsys.cpp">
       <Filter>Disk</Filter>
     </ClCompile>
-    <ClCompile Include="Harddisk.cpp">
-      <Filter>Disk</Filter>
-    </ClCompile>
     <ClCompile Include="dma.cpp">
       <Filter>Hal</Filter>
     </ClCompile>
@@ -120,23 +114,17 @@
     <ClCompile Include="PageDirectoryEntry.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
-    <ClCompile Include="sprintf.cpp" />
-    <ClCompile Include="stdio.cpp" />
-    <ClCompile Include="string.cpp" />
-    <ClCompile Include="cstd.cpp" />
     <ClCompile Include="Video.cpp" />
     <ClCompile Include="InitKernel.cpp" />
-    <ClCompile Include="chobits\fdddrv.cpp">
-      <Filter>chobits</Filter>
-    </ClCompile>
-    <ClCompile Include="chobits\fatfs.cpp">
-      <Filter>chobits</Filter>
-    </ClCompile>
-    <ClCompile Include="vesa.cpp" />
     <ClCompile Include="FAT.cpp">
       <Filter>Disk</Filter>
     </ClCompile>
     <ClCompile Include="Partition.cpp">
+      <Filter>Disk</Filter>
+    </ClCompile>
+    <ClCompile Include="vesa.cpp" />
+    <ClCompile Include="StdVGA.cpp" />
+    <ClCompile Include="Harddisk.cpp">
       <Filter>Disk</Filter>
     </ClCompile>
   </ItemGroup>
@@ -181,9 +169,6 @@
       <Filter>Disk</Filter>
     </ClInclude>
     <ClInclude Include="GSH.H">
-      <Filter>Disk</Filter>
-    </ClInclude>
-    <ClInclude Include="HardDisk.h">
       <Filter>Disk</Filter>
     </ClInclude>
     <ClInclude Include="dma.h">
@@ -234,30 +219,20 @@
     </ClInclude>
     <ClInclude Include="DoubleLinkedList.h" />
     <ClInclude Include="OrangeQueue.h" />
-    <ClInclude Include="stdio.h" />
-    <ClInclude Include="string.h" />
-    <ClInclude Include="va_list.h" />
-    <ClInclude Include="size_t.h" />
-    <ClInclude Include="stdarg.h" />
-    <ClInclude Include="stdint.h" />
-    <ClInclude Include="ctype.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Video.h" />
     <ClInclude Include="InitKernel.h" />
-    <ClInclude Include="chobits\fatfs.h">
-      <Filter>chobits</Filter>
-    </ClInclude>
-    <ClInclude Include="chobits\fdddrv.h">
-      <Filter>chobits</Filter>
-    </ClInclude>
     <ClInclude Include="MultiBoot.h" />
-    <ClInclude Include="vesa.h" />
     <ClInclude Include="FAT.h">
       <Filter>Disk</Filter>
     </ClInclude>
     <ClInclude Include="Partition.h">
       <Filter>Disk</Filter>
     </ClInclude>
-    <ClInclude Include="ChType.H" />
+    <ClInclude Include="vesa.h" />
+    <ClInclude Include="StdVGA.H" />
+    <ClInclude Include="HardDisk.h">
+      <Filter>Disk</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

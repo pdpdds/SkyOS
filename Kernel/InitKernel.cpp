@@ -8,9 +8,7 @@
 #include "flpydsk.h"
 #include "fat12.h"
 #include "exception.h"
-#include "fatfs.h"
 #include "vesa.h"
-#include "Video.h"
 #include "HardDisk.h"
 #include "ZetPlane.h"
 

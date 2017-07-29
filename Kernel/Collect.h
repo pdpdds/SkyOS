@@ -1,13 +1,7 @@
-/*Created By Samuel -  17-12-2000
-	1) Verified and modified using template rather than void pointer on 19-Jul-2001 12:19_57am
-	2) Modified to structured chains on 25-Aug-2001 2:48_52pm
-	3) Modified to function on Ace OS (new, delete operators are removed) on 17-Aug-2002 11:32 pm
-*/
-#ifndef __COLLECT_H
-#define __COLLECT_H
+#pragma once
 
 #include "windef.h"
-#include "string.h"
+
 //#include <Heap.h>
 //#include <stdio.h>
 #ifndef __cplusplus
@@ -174,5 +168,3 @@ template<class PtrType> PtrType Collection<PtrType>::operator()(int Index)
 template<class PtrType> PtrType Collection<PtrType>::operator()(char *Key)
 	{return Item(Key);
 	}
-
-#endif

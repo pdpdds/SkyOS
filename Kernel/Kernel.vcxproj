@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,11 +18,11 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -58,7 +58,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>../mint64;.;..\Include\;./chobits</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../CommonLib;./;../Include;./chobits;.</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_ORANGE_DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
@@ -82,11 +82,9 @@
 /ALIGN:1024
  /SUBSYSTEM:CONSOLE
 /NODEFAULTLIB:LIBC %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>CommonLib.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)kernel.sys</OutputFile>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>../Debug/kernel.map</MapFileName>
@@ -118,11 +116,8 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="chobits\fatfs.cpp" />
-    <ClCompile Include="chobits\fdddrv.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
-    <ClCompile Include="cstd.cpp" />
     <ClCompile Include="dma.cpp" />
     <ClCompile Include="entry.cpp" />
     <ClCompile Include="exception.cpp" />
@@ -132,9 +127,7 @@
     <ClCompile Include="fsys.cpp" />
     <ClCompile Include="GDT.cpp" />
     <ClCompile Include="Hal.cpp" />
-    <ClCompile Include="Harddisk.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.;../mint64;..\Include\;./chobits</AdditionalIncludeDirectories>
-    </ClCompile>
+    <ClCompile Include="Harddisk.cpp" />
     <ClCompile Include="IDT.cpp">
       <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</RuntimeTypeInfo>
     </ClCompile>
@@ -156,9 +149,7 @@
     <ClCompile Include="ProcessManager.cpp" />
     <ClCompile Include="RTC.cpp" />
     <ClCompile Include="Scheduler.cpp" />
-    <ClCompile Include="sprintf.cpp" />
-    <ClCompile Include="stdio.cpp" />
-    <ClCompile Include="string.cpp" />
+    <ClCompile Include="StdVGA.cpp" />
     <ClCompile Include="sysapi.cpp" />
     <ClCompile Include="task.cpp" />
     <ClCompile Include="Thread.cpp" />
@@ -170,13 +161,9 @@
     <ClCompile Include="ZetPlane.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="chobits\fatfs.h" />
-    <ClInclude Include="chobits\fdddrv.h" />
-    <ClInclude Include="ChType.H" />
     <ClInclude Include="Collect.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="ConsoleManager.h" />
-    <ClInclude Include="ctype.h" />
     <ClInclude Include="dma.h" />
     <ClInclude Include="DoubleLinkedList.h" />
     <ClInclude Include="exception.h" />
@@ -210,16 +197,11 @@
     <ClInclude Include="ProcessManager.h" />
     <ClInclude Include="RTC.H" />
     <ClInclude Include="Scheduler.h" />
-    <ClInclude Include="size_t.h" />
-    <ClInclude Include="stdarg.h" />
-    <ClInclude Include="stdint.h" />
-    <ClInclude Include="stdio.h" />
-    <ClInclude Include="string.h" />
+    <ClInclude Include="StdVGA.H" />
     <ClInclude Include="sysapi.h" />
     <ClInclude Include="task.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="tss.h" />
-    <ClInclude Include="va_list.h" />
     <ClInclude Include="vesa.h" />
     <ClInclude Include="Video.h" />
     <ClInclude Include="VirtualMemoryManager.h" />

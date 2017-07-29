@@ -23,6 +23,7 @@
 #include "Console.h"
 #include "InitKernel.h"
 #include "FAT.h"
+#include "StdVGA.H"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -92,10 +93,10 @@ void main(unsigned long magic, unsigned long addr)
 
 	LeaveCriticalSection();	
 
-	/*InitHardDrive();
+	InitHardDrive();
 
 	InitFATFileSystem();
-
+	/*
 	UINT16 handle = FATFileOpen("C:\MENU.LST", 0);
 	
 	if (handle != 0)
@@ -131,6 +132,8 @@ void main(unsigned long magic, unsigned long addr)
 	}*/
 
 	InitGraphics(pBootInfo);
+
+	//InitVGA();
 	
 
 	/*SkyConsole::Print("Press Any Key\n");

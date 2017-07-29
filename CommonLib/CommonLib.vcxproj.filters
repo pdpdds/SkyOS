@@ -44,5 +44,8 @@
     <ClInclude Include="sprintf.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="ChType.H">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

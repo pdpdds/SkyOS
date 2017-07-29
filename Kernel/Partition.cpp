@@ -9,7 +9,8 @@
 #include <HardDisk.h>
 #include "kheap.h"
 #include "MultiBoot.h"
-#include"Console.h"
+#include "Console.h"
+#include "string.h"
 
 extern HardDiskHandler * __SysHDDHandler;
 

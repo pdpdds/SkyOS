@@ -1,10 +1,10 @@
 #include "HardDisk.h"
-#include "sprintf.h"
 #include "windef.h"
-#include "string.h"
 #include "kheap.h"
 #include "Console.h"
 #include "Hal.h"
+#include "string.h"
+#include "sprintf.h"
 
 /*---IDE Controller's Compability mode Base Registers and Interrupts ---*/
 const BYTE IDE_MAX_CONTROLLER = 4;
