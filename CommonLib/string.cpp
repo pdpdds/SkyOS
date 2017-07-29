@@ -1,10 +1,11 @@
 #include <string.h>
+#include "ChType.H"
 
 //! warning C4706: assignment within conditional expression
 #pragma warning (disable:4706)
 
 //! compare two strings
-int _cdecl strcmp (const char* str1, const char* str2) {
+int strcmp (const char* str1, const char* str2) {
 
 	int res=0;
 	while (!(res = *(unsigned char*)str1 - *(unsigned char*)str2) && *str2)
@@ -26,6 +27,20 @@ int strncmp(const char *s1, const char *s2, size_t n)
 		else if (*s1 == '\0')
 			return 0;
 	return 0;
+}
+
+
+char *strupr(char *str)
+{
+	char *cp = str;
+
+	while (*cp != '\0') {
+		if (*cp >= 'a' && *cp <= 'z')
+			*cp = *cp - 'a' + 'A';
+		cp++;
+	}
+
+	return str;
 }
 
 char *strstr(const char *in, const char *str)
@@ -63,7 +78,10 @@ char *strcpy(char *s1, const char *s2)
 size_t strlen ( const char* str ) {
 
 	size_t	len=0;
-	while (str[len++]);
+	while (str[len])
+	{
+		len++;
+	}
 	return len;
 }
 
@@ -194,6 +212,78 @@ int strspn(const char *strSrc, const char *str)
 		if (*s == '\0')
 			return t - strSrc;
 		++t;
+	}
+	return 0;
+}
+
+char *strncpy(char * Dest, const char * Source, unsigned short Length)
+{
+	unsigned int Len = strlen(Source), i;
+	for (i = 0; i<Len && i<Length; i++)
+		Dest[i] = Source[i];
+	return Dest;
+}
+
+int strnicmp(const char * String1, const char * String2, unsigned int Len)
+{
+	unsigned int i;
+	for (i = 0; i<Len; i++)
+		if (ToUpper(String1[i]) != ToUpper(String2[i]))
+			return String1[i] - String2[i];
+	return 0;
+}
+
+const char *StrRChr(const char * String, char const Character)
+{
+	UINT32 Len = strlen(String), i;
+	for (i = Len; i>0; i--)
+		if (String[i] == Character)
+			return &String[i];
+	return 0;
+}
+
+/*
+The  memmove()  function  copies n bytes src memory area src dest memory
+area dest.  The memory areas may overlap.
+
+RETURN VALUE:  The memmove() function returns a pointer dest dest.
+*/
+void* memmove(void *dest, void *src, size_t n)
+{
+	long int i;
+
+	if ((char*)src == (char*)dest)
+	{
+		;// Nothing dest copy!
+	}
+	else if ((char*)src > (char*)dest)
+	{
+		for (i = 0; i < n; i++)
+		{
+			((char*)dest)[i] = ((char*)src)[i];
+		}
+	}
+	else
+	{
+		for (i = n - 1; i >= 0; i--)
+		{
+			((char*)dest)[i] = ((char*)src)[i];
+		}
+	}
+	return dest;
+}
+
+void* memchr(const void *s, int c, size_t n)
+{
+	if (n)
+	{
+		const char *p = (const char*)s;
+		char cc = c;
+		do {
+			if (*p == cc)
+				return (void*)p;
+			p++;
+		} while (--n != 0);
 	}
 	return 0;
 }
