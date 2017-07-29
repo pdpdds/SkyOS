@@ -17,6 +17,9 @@ extern uint32_t g_pageDirectory;
 
 void SwitchTask(int tick, registers_t& registers)
 {
+	if(systemOn == false)
+		return;
+
 	Scheduler::GetInstance()->DoSchedule(tick, registers);
 }
 
@@ -31,10 +34,7 @@ Scheduler::~Scheduler()
 
 
 bool  Scheduler::DoSchedule(int tick, registers_t& registers)
-{
-	if (systemOn == false)
-		return false;
-
+{	
 #ifdef _ORANGE_DEBUG
 	/*uint32_t currentTickCount = GetTickCount();
 

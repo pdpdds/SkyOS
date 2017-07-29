@@ -3,11 +3,12 @@
   #define DLLEXPORT __declspec(dllexport)
   #define DLLIMPORT __declspec(dllimport)
 
-  #ifdef KERNELBUILT
+  /*#ifdef KERNELBUILT
       #define KERNELDLL DLLEXPORT
   #else
       #define KERNELDLL DLLIMPORT
-  #endif
+  #endif*/
+#define KERNELDLL 
 
   #define CHAR_BIT            8
 
@@ -65,10 +66,14 @@ typedef          char  s8int;
       #define VOID void
   #endif
   typedef char CHAR;
+  typedef unsigned char UCHAR;
+  typedef unsigned char BYTE;
+  typedef UCHAR				*PUCHAR;
   typedef short SHORT;
   typedef long LONG;
   typedef void *PVOID;
   typedef PVOID HANDLE;
+  typedef unsigned long		ULONG;
 
   typedef long               ISIZE;
   typedef unsigned long      LSIZE;

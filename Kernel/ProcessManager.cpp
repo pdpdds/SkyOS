@@ -239,7 +239,7 @@ bool ProcessManager::AddProcess(Process* pProcess)
 
 	Lock();	
 	m_processList.Add(pProcess);
-	Unlock();
+	Unlock();	
 	
 	return true;
 }

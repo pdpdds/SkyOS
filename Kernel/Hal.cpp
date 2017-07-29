@@ -14,7 +14,15 @@ void OutPortWord(ushort port, ushort value)
 
 uchar InPortByte(ushort port)
 {
-	return (uchar)_inp(port);
+#ifdef _MSC_VER
+	_asm {
+		mov		dx, word ptr[port]
+		in		al, dx
+		mov		byte ptr[port], al
+	}
+#endif
+	return (unsigned char)port;
+	//return (uchar)_inp(port);
 }
 
 ushort InPortWord(ushort port)

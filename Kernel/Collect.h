@@ -49,9 +49,11 @@ class Collection
 		PtrType Item(char * Key);
 		PtrType operator()(char * Key);
 	};
-template<class PtrType> UINT16 Collection<PtrType>::Count()
-	{return ItemCount;
-	}
+template<class PtrType> UINT16 Collection<PtrType>::Count()	
+{	
+	return ItemCount;	
+}
+
 template<class PtrType> BOOLEAN Collection<PtrType>::Add(PtrType ptr,int Index,char * PKey)
 	{CollectionData <PtrType> *ptrPrev,* ptrNext=0,*ptrNew, *ptrTemp;
 	char Key[15],i=0;
@@ -60,6 +62,7 @@ template<class PtrType> BOOLEAN Collection<PtrType>::Add(PtrType ptr,int Index,c
 		{Key[i] = PKey[i];
 		i++;
 		}
+	
 	Key[i]=0;
 	ptrTemp=ptrPrev=this->_Item;		//this loop will find the position where we have to put the new node
 	while( Pos<Index && ptrTemp )
@@ -68,10 +71,11 @@ template<class PtrType> BOOLEAN Collection<PtrType>::Add(PtrType ptr,int Index,c
 			ptrPrev=ptrPrev->Next;
 		Pos++;
 		}
+
 	ptrNext=ptrPrev?ptrPrev->Next:NULL; 	// you must insert before this node so keep this node's address
 	//--------------Allocate New node and Initializing its values
-	//20150920	
-//	ptrNew=(CollectionData <PtrType> *)AllocHeap( sizeof(CollectionData <PtrType>)  );
+	
+	ptrNew=(CollectionData <PtrType> *) new CollectionData <PtrType>();
 	if ( ptrNew == NULL )
 		return NULL;
 	ptrNew->ptr=ptr;
@@ -92,10 +96,10 @@ template <class PtrType> BOOLEAN Collection<PtrType>::IsKeyAlreadyExist(char * K
 	{CollectionData <PtrType>* ptrCur=this->_Item;
 	while( ptrCur )
 		{if ( strcmp(Key,ptrCur->Key) == 0 )
-			return True;
+			return TRUE;
 		ptrCur=ptrCur->Next;
 		}
-	return False;
+	return FALSE;
 	}
 template <class PtrType> BOOLEAN Collection<PtrType>::Add(PtrType ptr,char * Key)
 	{CollectionData <PtrType>* ptrCur=this->_Item;
@@ -104,6 +108,7 @@ template <class PtrType> BOOLEAN Collection<PtrType>::Add(PtrType ptr,char * Key
 			return FALSE;
 		ptrCur=ptrCur->Next;
 		}
+
 	return Add(ptr,ItemCount,Key);
 	}
 /* ----------------Donot work correctly on some occasions-------------*/
@@ -118,13 +123,13 @@ template<class PtrType> BOOLEAN Collection<PtrType>::Remove(int Index)
 				(*ptrPrev)->Next=(*ptrCur)->Next;
 			DeAllocHeap(*ptrCur);
 			ItemCount--;
-			return True;
+			return TRUE;
 			}
 		ptrPrev=&*ptrCur;
 		ptrCur=&(*ptrCur)->Next;
 		i++;
 		}
-	return False;
+	return FALSE;
 	}
 
 template<class PtrType> void Collection<PtrType>::Clear()

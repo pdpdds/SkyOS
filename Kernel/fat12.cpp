@@ -89,16 +89,22 @@ FILE fsysFatDirectory (const char* DirectoryName) {
 		//! read in sector of root directory
 		buf = (unsigned char*) flpydsk_read_sector (_MountInfo.rootOffset + sector );
 
+		for (int j = 0; j < 128; j++)
+			SkyConsole::Print("0x%x ", buf[j]);		
+		SkyConsole::Print("\n");
+
 		//! get directory info
 		directory = (PDIRECTORY) buf;
 
 		//! 16 entries per sector
 		for (int i=0; i<16; i++) {
-
+			
 			//! get current filename
 			char name[11];
 			memcpy (name, directory->Filename, 11);
 			name[11]=0;
+
+			//SkyConsole::Print("name : %s\n", name);
 
 			//! find a match?
 			if (strcmp (DosFileName, name) == 0) {
@@ -337,6 +343,7 @@ FILE fsysFatOpen (const char* FileName) {
 
 	//! unable to find
 	FILE ret;
+	
 	ret.flags = FS_INVALID;
 	return ret;
 }
@@ -353,13 +360,35 @@ void fsysFatMount () {
 	bootsector = (PBOOTSECTOR) flpydsk_read_sector (0);
 	
 	//! store mount info
-	_MountInfo.numSectors     = bootsector->Bpb.NumSectors;
-	_MountInfo.fatOffset      = 1;
-	_MountInfo.fatSize        = bootsector->Bpb.SectorsPerFat;
-	_MountInfo.fatEntrySize   = 8;
-	_MountInfo.numRootEntries = bootsector->Bpb.NumDirEntries;
-	_MountInfo.rootOffset     = (bootsector->Bpb.NumberOfFats * bootsector->Bpb.SectorsPerFat) + 1;
-	_MountInfo.rootSize       = ( bootsector->Bpb.NumDirEntries * 32 ) / bootsector->Bpb.BytesPerSector;
+	//_MountInfo.numSectors     = bootsector->Bpb.NumSectors;
+	//_MountInfo.fatOffset      = 1;
+	//_MountInfo.fatSize        = bootsector->Bpb.SectorsPerFat;
+	//_MountInfo.fatEntrySize   = 8;
+	//_MountInfo.numRootEntries = bootsector->Bpb.NumDirEntries;
+	_MountInfo.rootOffset     = 18 + 1;
+	//_MountInfo.rootSize       = ( bootsector->Bpb.NumDirEntries * 32 ) / bootsector->Bpb.BytesPerSector;
+
+
+	/*bpbOEM			db "My OS   "
+		bpbBytesPerSector:  	DW 512
+		bpbSectorsPerCluster : DB 1
+		bpbReservedSectors : DW 1
+		bpbNumberOfFATs : DB 2
+		bpbRootEntries : DW 224
+		bpbTotalSectors : DW 2880
+		bpbMedia : DB 0xf0;; 0xF1
+		bpbSectorsPerFAT: 	DW 9
+		bpbSectorsPerTrack : DW 18
+		bpbHeadsPerCylinder : DW 2
+		bpbHiddenSectors : DD 0
+		bpbTotalSectorsBig : DD 0
+		bsDriveNumber : DB 0
+		bsUnused : DB 0
+		bsExtBootSignature : DB 0x29
+		bsSerialNumber : DD 0xa0a1a2a3
+		bsVolumeLabel : DB "MOS FLOPPY "
+		bsFileSystem : DB "FAT12   "*/
+
 }
 
 /**

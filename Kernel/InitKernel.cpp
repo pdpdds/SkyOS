@@ -1,7 +1,6 @@
 ﻿#include "InitKernel.h"
 #include "Video.h"
 #include "kybrd.h"
-#include "Keyboard.h"
 #include "string.h"
 #include "sprintf.h"
 #include "RTC.H"
@@ -9,6 +8,11 @@
 #include "flpydsk.h"
 #include "fat12.h"
 #include "exception.h"
+#include "fatfs.h"
+#include "vesa.h"
+#include "Video.h"
+#include "HardDisk.h"
+#include "ZetPlane.h"
 
 bool InitKeyboard()
 {
@@ -25,17 +29,54 @@ bool InitKeyboard()
 	return true;
 }
 
+HardDiskHandler* __SysHDDHandler;
+
+void PrintHDDInfo()
+{
+	int TotHDD = __SysHDDHandler->GetTotalDevices();
+	__HDDInfo * HDDInfo;
+	BYTE Key[3] = { 'H','0',0
+	};
+
+	for (BYTE i = 0; i<TotHDD; i++)
+	{
+		HDDInfo = (struct __HDDInfo *)__SysHDDHandler->GetHDDInfo(Key);
+		if (HDDInfo != NULL)
+		{
+			UINT16 i;
+			SkyConsole::Print("\n%s Device ( %s ) :: ", HDDInfo->DeviceNumber ? "Slave " : "Master", Key);
+			if (HDDInfo->ModelNumber[0] == 0)
+				SkyConsole::Print(" N/A ");
+			else
+				for (i = 0; i<20; i++)
+					SkyConsole::WriteChar(HDDInfo->ModelNumber[i]);
+			SkyConsole::Print(" - ");
+			if (HDDInfo->SerialNumber[0] == 0)
+				SkyConsole::Print(" N/A ");
+			else
+				for (BYTE i = 0; i<20; i++)
+					SkyConsole::WriteChar(HDDInfo->SerialNumber[i]);
+			SkyConsole::Print("\n\r Cylinders %d Heads %d Sectors %d. LBA Sectors %ld\n", HDDInfo->CHSCylinderCount, HDDInfo->CHSHeadCount, HDDInfo->CHSSectorCount, HDDInfo->LBACount);
+		}
+		Key[1]++;
+	}
+}
+
 bool InitHardDrive()
 {
-	//HardDiskHandler hardHandler;
-	//hardHandler.Initialize();		
+	__SysHDDHandler = new HardDiskHandler();
+	__SysHDDHandler->Initialize();
 
 	/*if (kInitializeHDD() == TRUE)
 	{
-	SkyConsole::Print("AAAAAAAAAAAAAAAAAAAAAAAAA\n");
+		SkyConsole::Print("AAAAAAAAAAAAAAAAAAAAAAAAA\n");
 	}*/
 
-	//SkyConsole::Print("HardDisk Count : %d\n", hardHandler.GetTotalDevices());
+	SkyConsole::Print("HardDisk Count : %d\n", __SysHDDHandler->GetTotalDevices());
+
+	PrintHDDInfo();
+	
+
 	return true;
 }
 
@@ -61,24 +102,36 @@ bool DumpSystemInfo()
 	return true;
 }
 
-bool InitGraphics()
+bool InitGraphics(multiboot_info* pInfo)
 {
 	/* set video mode and map framebuffer. */
-	/*VbeBochsSetMode(WIDTH, HEIGHT, BPP);
-	VbeBochsMapLFB();
-	fillScreen32();*/
+	//VbeBochsSetMode(WIDTH, HEIGHT, BPP);
+	//VbeBochsMapLFB();
+	//fillScreen32();
+
+	init_lfb(pInfo);
+	lfb_clear();
 
 	return true;
 }
 
+extern bool FddInitializeDriver(VOID);
+extern BOOL FsInitializeModule(VOID);
+
+#include "flpydsk.h"
 void InitFloppyDrive()
 {
+	//FddInitializeDriver();
+
+	//flpydsk_install(38);
+
+	//FsInitializeModule();
 	//! set drive 0 as current drive
 	flpydsk_set_working_drive(0);
 
 	//! install floppy disk to IR 38, uses IRQ 6
 	flpydsk_install(38);
-
+	
 	//! initialize FAT12 filesystem
 	fsysFatInitialize();
 }

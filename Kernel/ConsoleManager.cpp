@@ -235,6 +235,7 @@ void cmd_proc(char* pName) {
 		ProcessManager::GetInstance()->AddProcess(pProcess);
 }
 
+#include "flpydsk.h"
 bool ConsoleManager::RunCommand(char* buf) 
 {
 
@@ -271,6 +272,38 @@ bool ConsoleManager::RunCommand(char* buf)
 	//! read sector
 	else if (strcmp(buf, "read") == 0) {
 		cmd_read();
+		
+		/*uint32_t sectornum = 0;
+		char sectornumbuf[4];
+		uint8_t* sector = 0;
+		
+		sectornum = 1;
+
+		//DebugSkyConsole::Print("\n\rSector %i contents:\n\n\r", sectornum);
+
+		//! read sector from disk
+		sector = flpydsk_read_sector(sectornum);
+
+		//! display sector
+		if (sector != 0) {
+
+			int i = 0;
+			for (int c = 0; c < 1; c++) {
+
+				for (int j = 0; j < 128; j++)									
+					SkyConsole::Print("0x%x ", sector[i + j]);
+				i += 128;
+
+				SkyConsole::Print("Press any key to continue\n");				
+			}
+		}
+		else
+			SkyConsole::Print("*** Error reading sector from disk\n");
+
+		SkyConsole::Print("Done.\n");*/
+
+
+
 	}
 	else if (strcmp(buf, "memstate") == 0) {
 		cmd_memstate();

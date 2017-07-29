@@ -1,10 +1,15 @@
 ﻿#include "List.h"
 #include "string.h"
 #include "sprintf.h"
+#include "Console.h"
 
 namespace Orange
 {
 
+	LinkedList::LinkedList()
+	{
+		m_pNode = NULL;
+	}
 		
 	int LinkedList::Count()
 	{
@@ -34,12 +39,12 @@ namespace Orange
 				
 		newNode = new ListNode();
 		newNode->Next = NULL;
-		newNode->ptrData = ptrData;
+		newNode->ptrData = ptrData;		
 				
 		if (pList == NULL)
 			m_pNode = newNode;
 		else
-		{			
+		{						
 			while (pList->Next)
 				pList = pList->Next;
 			pList->Next = newNode;

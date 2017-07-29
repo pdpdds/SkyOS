@@ -9,8 +9,8 @@
 #define BYTES_PER_PIXEL 4
 
 /* BGA LFB is at LFB_PHYSICAL. */
-#define LFB_PHYSICAL 0xE0000000
-#define LFB_VIRTUAL  0x300000
+#define LFB_PHYSICAL 0x250000
+#define LFB_VIRTUAL  0x250000
 
 
 /* Definitions for BGA. Reference Graphics 1. */
@@ -23,5 +23,11 @@
 #define VBE_DISPI_DISABLED              0x00
 #define VBE_DISPI_ENABLED               0x01
 #define VBE_DISPI_LFB_ENABLED           0x40
+
+
+void VbeBochsWrite(uint16_t index, uint16_t value);
+void VbeBochsSetMode(uint16_t xres, uint16_t yres, uint16_t bpp);
+void* VbeBochsMapLFB();
+void fillScreen32();
 
 

@@ -236,6 +236,42 @@ namespace VirtualMemoryManager
 		PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_WRITABLE);
 		PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
 
+
+////////////////////////////////////////////
+		PageTable* pageTable1 = (PageTable*)PhysicalMemoryManager::AllocBlock();
+		for (int i = 0, frame = 0x00400000, virt = 0x00400000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
+		{
+			PTE page = 0;
+			PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
+			PageTableEntry::SetFrame(&page, frame);
+
+			pageTable1->m_entries[PAGE_TABLE_INDEX(virt)] = page;
+		}
+
+		PDE* pageTable1Entry = &dir->m_entries[PAGE_DIRECTORY_INDEX(0x00400000)];
+		PageDirectoryEntry::AddAttribute(pageTable1Entry, I86_PDE_PRESENT);
+		PageDirectoryEntry::AddAttribute(pageTable1Entry, I86_PDE_WRITABLE);
+		PageDirectoryEntry::SetFrame(pageTable1Entry, (uint32_t)pageTable1);
+//
+//
+		PageTable* pageTable2 = (PageTable*)PhysicalMemoryManager::AllocBlock();
+		for (int i = 0, frame = 0x00800000, virt = 0x00800000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
+		{
+			PTE page = 0;
+			PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
+			PageTableEntry::SetFrame(&page, frame);
+
+			pageTable2->m_entries[PAGE_TABLE_INDEX(virt)] = page;
+		}
+
+		PDE* pageTable2Entry = &dir->m_entries[PAGE_DIRECTORY_INDEX(0x00800000)];
+		PageDirectoryEntry::AddAttribute(pageTable2Entry, I86_PDE_PRESENT);
+		PageDirectoryEntry::AddAttribute(pageTable2Entry, I86_PDE_WRITABLE);
+		PageDirectoryEntry::SetFrame(pageTable2Entry, (uint32_t)pageTable2);
+////////////////////////////////////////////
+
+
+
 		if (false == SetPageDirectoryInfo(dir))
 			return false;
 

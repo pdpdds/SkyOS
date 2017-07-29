@@ -171,7 +171,7 @@ BYTE ReadErrorRegister(BYTE DeviceController)
    DeviceController - Index number of Device to test  ( 0 to IDE_MAX_CONTROLLER )
    Wait UpTo ms - Optional Time in milli second to check for the busy status
    Output :
-   Returns 'True' if the device is ready else 'False'
+   Returns 'TRUE' if the device is ready else 'FALSE'
    -----------------------------------------------------------
    */
 #include "pit.h"
@@ -210,7 +210,7 @@ BOOLEAN IsDeviceDataReady(int DeviceController, DWORD WaitUpToms = 0, BOOLEAN Ch
   DeviceController - Device Number ( 0 to IDE_MAX_CONTROLLER )
   Wait UpTo ms - Optional Time in milli second to check for the busy status
   Output :
-  Returns 'True' if the device is busy else 'False'
+  Returns 'TRUE' if the device is busy else 'FALSE'
   -----------------------------------------------------------
   */
 #include "pit.h"
@@ -219,6 +219,7 @@ BOOLEAN IsDeviceControllerBusy(int DeviceController, BYTE WaitUpToms = 0)
 	UINT32 Time1, Time2;
 	Time1 = GetTickCount();
 	do	{
+		
 		UINT16 PortID = IDE_Con_IOBases[DeviceController][0] + IDE_CB_STATUS;
 		BYTE Status = InPortByte(PortID);
 		if ((Status & 0x80) == 0) //BSY bit 
@@ -294,11 +295,12 @@ void HardDiskHandler::Initialize()
 	strKey[0] = 'H'; //HDD type ID
 	strKey[1] = '0';   //First HDD
 	strKey[2] = 0;   //Null Character
-	//SetIDT(32+14,_HDDInterruptHandler);
-	//SetIDT(32+15,_HDDInterruptHandler);
+	setvect(32+14,_HDDInterruptHandler);
+	setvect(32+15,_HDDInterruptHandler);
 
 	HDDs.Initialize();
 	for (BYTE DeviceController = 0; DeviceController < IDE_MAX_CONTROLLER; DeviceController++)
+	//for (BYTE DeviceController = 0; DeviceController < 1; DeviceController++)
 	{
 		DoSoftwareReset(DeviceController);
 		if (IsDeviceControllerBusy(DeviceController)) //if device controller is busy then skipping
@@ -312,10 +314,10 @@ void HardDiskHandler::Initialize()
 			SkyConsole::Print("Controller busy after EXE\n");
 			continue;
 		}
-
+		
 		
 		BYTE Result = InPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_ERROR);
-		for (BYTE Device = 0; Device < 2; Device++)         // loop for master and slave disks
+		for (BYTE Device = 0; Device < 1; Device++)         // loop for master and slave disks
 		{
 			UINT16 DeviceID_Data[512], j;
 			if (Device == 0 && !(Result & 1))
@@ -326,18 +328,23 @@ void HardDiskHandler::Initialize()
 				OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_DEVICE_HEAD, 0x10); //Setting 4th bit(count 5) to set device as 1
 			else
 				OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_DEVICE_HEAD, 0x0);
-			
-			SimpleSleep(50);
+			SkyConsole::Print("aaaaa\n");
+			msleep(50);
+			SkyConsole::Print("bbb\n");
 			OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_COMMAND, IDE_COM_IDENTIFY_DEVICE);
 			if (!IsDeviceDataReady(DeviceController, 600, TRUE))
 			{
 				SkyConsole::Print("Data not ready %d\n", DeviceController);
 				continue;
 			}							
+
+			SkyConsole::Print("ccc\n");
 			/*Reading 512 bytes of information from the Device*/
 			for (j = 0; j < 256; j++)
 				DeviceID_Data[j] = InPortWord(IDE_Con_IOBases[DeviceController][0] + IDE_CB_DATA);
 			/* Creating new HDD node for the Collection HDDs */
+
+			SkyConsole::Print("ddd\n");
 			
 			//struct __HDDInfo * newHDD;
 			__HDDInfo * newHDD=(__HDDInfo *)kmalloc(sizeof(__HDDInfo));
@@ -346,6 +353,7 @@ void HardDiskHandler::Initialize()
 				SkyConsole::Print("HDD Initialize :: Allocation failed\n");
 				return;
 			}
+			SkyConsole::Print("eee\n");
 			newHDD->IORegisterIdx = DeviceController;
 			memcpy(newHDD->DeviceID, DeviceID_Data, 512);
 			newHDD->DeviceNumber = Device;
@@ -356,6 +364,9 @@ void HardDiskHandler::Initialize()
 			newHDD->CHSCylinderCount = DeviceID_Data[1];
 			newHDD->CHSHeadCount = DeviceID_Data[3];
 			newHDD->CHSSectorCount = DeviceID_Data[6];
+
+			SkyConsole::Print("fff\n");
+
 			if (DeviceID_Data[10] == 0)
 				strcpy(newHDD->SerialNumber, "N/A");
 			else
@@ -372,7 +383,7 @@ void HardDiskHandler::Initialize()
 				newHDD->FirmwareRevision[j] = DeviceID_Data[23 + (j / 2)] >> 8;
 				newHDD->FirmwareRevision[j + 1] = (DeviceID_Data[23 + (j / 2)] << 8) >> 8;
 			}
-
+			
 			if (DeviceID_Data[27] == 0)
 				strcpy(newHDD->ModelNumber, "N/A");
 			else
@@ -383,14 +394,16 @@ void HardDiskHandler::Initialize()
 			}
 			newHDD->LBASupported = DeviceID_Data[49] & 0x200;
 			newHDD->DMASupported = DeviceID_Data[49] & 0x100;
-
+			SkyConsole::Print("ooo\n");
 			UINT32 LBASectors = DeviceID_Data[61];
 			LBASectors = LBASectors << 16;
 			LBASectors |= DeviceID_Data[60];
-
+			SkyConsole::Print("%x : %s\n", newHDD, strKey);
 			newHDD->LBACount = LBASectors;
 			HDDs.Add(newHDD, strKey);
 			strKey[1]++;
+
+			
 		}
 	}
 }

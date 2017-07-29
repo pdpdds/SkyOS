@@ -95,7 +95,7 @@ static void i86_default_handler () {
 	DebugClrScr (0x18);
 	DebugGotoXY (0,0);
 	DebugSetColor (0x1e);
-	DebugPrintf ("*** [i86 Hal] i86_default_handler: Unhandled Exception");
+	DebugSkyConsole::Print ("*** [i86 Hal] i86_default_handler: Unhandled Exception");
 #endif
 
 	for(;;);

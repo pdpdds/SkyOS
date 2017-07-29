@@ -22,8 +22,8 @@
     <Filter Include="Process">
       <UniqueIdentifier>{4e8b9853-f281-4ba6-b922-0a30235e6756}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mint64">
-      <UniqueIdentifier>{bcab9d7b-f7f0-44c6-9503-104314014f9d}</UniqueIdentifier>
+    <Filter Include="chobits">
+      <UniqueIdentifier>{2bb13f5d-e995-4b64-932b-fbacd7eda68b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -107,24 +107,6 @@
     <ClCompile Include="kybrd.cpp" />
     <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
-    <ClCompile Include="..\Mint64\Synchronization.cpp">
-      <Filter>Mint64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Mint64\Keyboard.cpp">
-      <Filter>Mint64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Mint64\Queue.cpp">
-      <Filter>Mint64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Mint64\Mouse.cpp">
-      <Filter>Mint64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Mint64\kList.cpp">
-      <Filter>Mint64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Mint64\HardDisk.cpp">
-      <Filter>Mint64</Filter>
-    </ClCompile>
     <ClCompile Include="KernelProcedure.cpp" />
     <ClCompile Include="PhysicalMemoryManager.cpp">
       <Filter>Memory</Filter>
@@ -144,6 +126,19 @@
     <ClCompile Include="cstd.cpp" />
     <ClCompile Include="Video.cpp" />
     <ClCompile Include="InitKernel.cpp" />
+    <ClCompile Include="chobits\fdddrv.cpp">
+      <Filter>chobits</Filter>
+    </ClCompile>
+    <ClCompile Include="chobits\fatfs.cpp">
+      <Filter>chobits</Filter>
+    </ClCompile>
+    <ClCompile Include="vesa.cpp" />
+    <ClCompile Include="FAT.cpp">
+      <Filter>Disk</Filter>
+    </ClCompile>
+    <ClCompile Include="Partition.cpp">
+      <Filter>Disk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
@@ -224,27 +219,6 @@
     <ClInclude Include="kybrd.h" />
     <ClInclude Include="Scheduler.h" />
     <ClInclude Include="ConsoleManager.h" />
-    <ClInclude Include="..\Mint64\Keyboard.h">
-      <Filter>Mint64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Mint64\Synchronization.h">
-      <Filter>Mint64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Mint64\Queue.h">
-      <Filter>Mint64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Mint64\Mouse.h">
-      <Filter>Mint64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Mint64\kList.h">
-      <Filter>Mint64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Mint64\KTask.h">
-      <Filter>Mint64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Mint64\HardDisk.h">
-      <Filter>Mint64</Filter>
-    </ClInclude>
     <ClInclude Include="KernelProcedure.h" />
     <ClInclude Include="PhysicalMemoryManager.h">
       <Filter>Memory</Filter>
@@ -270,5 +244,20 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="Video.h" />
     <ClInclude Include="InitKernel.h" />
+    <ClInclude Include="chobits\fatfs.h">
+      <Filter>chobits</Filter>
+    </ClInclude>
+    <ClInclude Include="chobits\fdddrv.h">
+      <Filter>chobits</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiBoot.h" />
+    <ClInclude Include="vesa.h" />
+    <ClInclude Include="FAT.h">
+      <Filter>Disk</Filter>
+    </ClInclude>
+    <ClInclude Include="Partition.h">
+      <Filter>Disk</Filter>
+    </ClInclude>
+    <ClInclude Include="ChType.H" />
   </ItemGroup>
 </Project>

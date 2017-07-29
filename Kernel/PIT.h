@@ -78,7 +78,7 @@ extern void _cdecl i86_pit_initialize();
 extern bool _cdecl i86_pit_is_initialized();
 
 unsigned int GetTickCount();
-void _cdecl SimpleSleep(int ms);
+void _cdecl msleep(int ms);
 
 extern void i86_pit_start_counter(uint32_t freq, uint8_t counter, uint8_t mode);
 class PIT

@@ -22,8 +22,8 @@ u32int kmalloc_int(u32int sz, int align, u32int *phys)
     
         void *addr = alloc(sz, (u8int)align, &kheap);
 
-		SkyConsole::Print("0x%x\n", kheap.start_address);
-		SkyConsole::Print("0x%x\n", kheap.end_address);
+		//SkyConsole::Print("kmalloc_int 0x%x\n", kheap.start_address);
+		//SkyConsole::Print("kmalloc_int 0x%x\n", kheap.end_address);
 		
         if (phys != 0)
         {

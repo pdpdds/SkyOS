@@ -177,7 +177,7 @@ unsigned int GetTickCount()
 	return _pit_ticks;
 }
 
-void _cdecl SimpleSleep(int ms)
+void _cdecl msleep(int ms)
 {
 
 	int ticks = ms + GetTickCount();

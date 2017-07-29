@@ -400,8 +400,8 @@ void ProcessKeyInterrupt()
 __declspec(naked) void _cdecl i86_kybrd_irq () {
 
 	_asm {		
-		pushad		
 		cli
+		pushad				
 	}
 
 	_asm

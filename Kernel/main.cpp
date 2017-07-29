@@ -1,4 +1,28 @@
 ﻿#include "main.h"
+#include "stdint.h"
+#include "header.h"
+#include "string.h"
+#include "sprintf.h"
+#include "Console.h"
+#include "HAL.h"
+#include "RTC.H"
+#include "IDT.h"
+#include "GDT.h"
+#include "PIT.h"
+#include "PIC.h"
+#include "PhysicalMemoryManager.h"
+#include "VirtualMemoryManager.h"
+#include "kheap.h"
+#include "ZetPlane.h"
+#include "sysapi.h"
+#include "tss.h"
+#include "ProcessManager.h"
+#include "ConsoleManager.h"
+#include "List.h"
+#include "KernelProcedure.h"
+#include "Console.h"
+#include "InitKernel.h"
+#include "FAT.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -10,7 +34,7 @@ _declspec(naked) void multiboot_entry(void)
 			dd(MULTIBOOT_HEADER_FLAGS); flags
 			dd(CHECKSUM); checksum
 			dd(HEADER_ADRESS); header address
-			dd(LOADBASE); load address
+			dd(KERNEL_LOAD_ADDRESS); load address
 			dd(00); load end address : not used
 			dd(00); bss end addr : not used
 			dd(HEADER_ADRESS + 0x20); entry_addr: equ kernel entry
@@ -58,23 +82,56 @@ void main(unsigned long magic, unsigned long addr)
 	SetInterruptVector();			
 	InitMemoryManager(pBootInfo, 0);
 
-	InitKeyboard();
+	InitKeyboard();	
 
-	InitFloppyDrive();
-
-	InitHardDrive();
+	//InitFloppyDrive();
 	
-	InitializeSysCall();
-		
-	//i86_install_ir(SYSTEM_TMR_INT_NUMBER, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32 | 0x0500, 0x8, (I86_IRQ_HANDLER)TMR_TSS_SEG);			
+	InitializeSysCall();	
+			
 	i86_pit_start_counter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
-	LeaveCriticalSection();
+	LeaveCriticalSection();	
+
+	/*InitHardDrive();
+
+	InitFATFileSystem();
+
+	UINT16 handle = FATFileOpen("C:\MENU.LST", 0);
+	
+	if (handle != 0)
+	{
+		SkyConsole::Print("FileHandle : %x\n", handle);
+		BYTE* buffer = new BYTE[512];
+
+		FATReadFile(1, 512, buffer);
+
+		SkyConsole::Print("%s\n", buffer);
+	}*/
+	
 	
 	//! initialize TSS
 	//install_tss(5, 0x10, 0);
 
 	DumpSystemInfo();
+	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
+
+	drive_info* pDriveInfo = pBootInfo->drives_addr;
+
+	//for (int i = 0; i < pBootInfo->drives_length; i++)
+	/*{
+		SkyConsole::Print("Drive Structures Total Length : %d\n", pBootInfo->drives_length);
+		SkyConsole::Print("Drive Size : %d\n", pDriveInfo->size);
+		SkyConsole::Print("Drive Number : %d\n", pDriveInfo->drive_number);
+		SkyConsole::Print("Drive Mode : %d\n", pDriveInfo->drive_mode);
+
+		SkyConsole::Print("Drive Cylinder : %d\n", pDriveInfo->drive_cylinders);
+		SkyConsole::Print("Drive Head : %d\n", pDriveInfo->drive_heads);		
+		SkyConsole::Print("Drive Sector : %d\n", pDriveInfo->drive_sectors);		
+
+	}*/
+
+	InitGraphics(pBootInfo);
+	
 
 	/*SkyConsole::Print("Press Any Key\n");
 	SkyConsole::GetChar();*/
@@ -97,9 +154,9 @@ uint32_t GetTotalMemory(multiboot_info* bootinfo)
 		multiboot_memory_map_t* entry = (multiboot_memory_map_t*)mmapAddr;
 
 		//SkyConsole::Print("Memory Address : %x\n", entry->addr);
-		//DebugPrintf("\nMemory Length : %x", entry->len);
-		//DebugPrintf("\nMemory Type : %x", entry->type);
-		//DebugPrintf("\nEntry Size : %d", entry->size);
+		//DebugSkyConsole::Print("\nMemory Length : %x", entry->len);
+		//DebugSkyConsole::Print("\nMemory Type : %x", entry->type);
+		//DebugSkyConsole::Print("\nEntry Size : %d", entry->size);
 
 		mmapAddr += sizeof(multiboot_memory_map_t);
 		memorySize += entry->len;

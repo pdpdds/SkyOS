@@ -2,13 +2,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <string.h>
+#include "sprintf.h"
 #include "Hal.h"
-#include "Keyboard.h"
-
-extern void itoa(unsigned i, unsigned base, char* buf);
-extern void itoa_s(int i, unsigned base, char* buf);
-extern void itoa_s(unsigned int i, unsigned base, char* buf);
-extern void _cdecl SimpleSleep(int ms);
 
 namespace SkyConsole
 {
@@ -373,8 +368,8 @@ namespace SkyConsole
 
 				//! convert key to an ascii char and put it in buffer
 				char c = kkybrd_key_to_ascii(key);
-				if (c != 0 && KEY_SPACE != c) { //insure its an ascii char
-				//if (c != 0) { //insure its an ascii char
+				//if (c != 0 && KEY_SPACE != c) { //insure its an ascii char
+				if (c != 0) { //insure its an ascii char
 
 					WriteChar(c);
 					commandBuffer[i++] = c;
@@ -382,7 +377,7 @@ namespace SkyConsole
 			}
 
 			//! wait for next key. You may need to adjust this to suite your needs
-			SimpleSleep(10);
+			msleep(10);
 		}
 
 		//! null terminate the string
@@ -397,32 +392,14 @@ namespace SkyConsole
 
 		//! wait for a keypress
 		while (key == KEY_UNKNOWN)
+		{
+			__asm cli
 			key = kkybrd_get_last_key();
+			__asm sti
+		}
 
 		//! discard last keypress (we handled it) and return
 		kkybrd_discard_last_key();
 		return key;
-	}
-
-	BYTE kGetCh(void)
-	{
-		KEYDATA stData;
-
-		// 키가 눌러질 때까지 대기함
-		while (1)
-		{
-			// 키 큐에 데이터가 수신될 때까지 대기
-			while (kGetKeyFromKeyQueue(&stData) == FALSE)
-			{
-			}
-
-
-
-			// 키가 눌렸다는 데이터가 수신되면 ASCII 코드를 반환
-			if (stData.bFlags & KEY_FLAGS_DOWN)
-			{
-				return stData.bASCIICode;
-			}
-		}
 	}
 }

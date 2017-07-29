@@ -111,7 +111,7 @@ class __GSH
 			  Handler    - void pointer pointing the device class
 				       this class must implement GH class.
 		Output : -
-			  True - on success.    False - on failure.
+			  TRUE - on success.    FALSE - on failure.
 		*/
 		BOOLEAN Register(const BYTE DeviceType,const char * Description, void * Handler);
 

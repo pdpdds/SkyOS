@@ -13,6 +13,7 @@ namespace Orange
 	{
 	
 	public:
+		LinkedList();
 		int Count();
 		BOOL Add(void* ptrData);
 		BOOL Delete(void* ptrData);

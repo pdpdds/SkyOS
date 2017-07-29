@@ -58,7 +58,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>../mint64;.;..\Include\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../mint64;.;..\Include\;./chobits</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_ORANGE_DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
@@ -71,7 +71,7 @@
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat />
       <CallingConvention>Cdecl</CallingConvention>
-      <DisableSpecificWarnings>4457;4189;4100;4702</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4457;4189;4100;4702;4102</DisableSpecificWarnings>
       <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <ProjectReference>
@@ -118,24 +118,23 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Mint64\HardDisk.cpp" />
-    <ClCompile Include="..\Mint64\Keyboard.cpp" />
-    <ClCompile Include="..\Mint64\kList.cpp" />
-    <ClCompile Include="..\Mint64\Mouse.cpp" />
-    <ClCompile Include="..\Mint64\Queue.cpp" />
-    <ClCompile Include="..\Mint64\Synchronization.cpp" />
+    <ClCompile Include="chobits\fatfs.cpp" />
+    <ClCompile Include="chobits\fdddrv.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
     <ClCompile Include="cstd.cpp" />
     <ClCompile Include="dma.cpp" />
     <ClCompile Include="entry.cpp" />
     <ClCompile Include="exception.cpp" />
+    <ClCompile Include="FAT.cpp" />
     <ClCompile Include="fat12.cpp" />
     <ClCompile Include="flpydsk.cpp" />
     <ClCompile Include="fsys.cpp" />
     <ClCompile Include="GDT.cpp" />
     <ClCompile Include="Hal.cpp" />
-    <ClCompile Include="Harddisk.cpp" />
+    <ClCompile Include="Harddisk.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.;../mint64;..\Include\;./chobits</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="IDT.cpp">
       <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</RuntimeTypeInfo>
     </ClCompile>
@@ -148,6 +147,7 @@
     <ClCompile Include="ordered_array.cpp" />
     <ClCompile Include="PageDirectoryEntry.cpp" />
     <ClCompile Include="PageTableEntry.cpp" />
+    <ClCompile Include="Partition.cpp" />
     <ClCompile Include="PhysicalMemoryManager.cpp" />
     <ClCompile Include="pic.cpp" />
     <ClCompile Include="PIT.cpp" />
@@ -164,18 +164,15 @@
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="tss.cpp" />
     <ClCompile Include="user.cpp" />
+    <ClCompile Include="vesa.cpp" />
     <ClCompile Include="Video.cpp" />
     <ClCompile Include="VirtualMemoryManager.cpp" />
     <ClCompile Include="ZetPlane.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Mint64\HardDisk.h" />
-    <ClInclude Include="..\Mint64\Keyboard.h" />
-    <ClInclude Include="..\Mint64\kList.h" />
-    <ClInclude Include="..\Mint64\Mouse.h" />
-    <ClInclude Include="..\Mint64\Queue.h" />
-    <ClInclude Include="..\Mint64\Synchronization.h" />
-    <ClInclude Include="..\Mint64\KTask.h" />
+    <ClInclude Include="chobits\fatfs.h" />
+    <ClInclude Include="chobits\fdddrv.h" />
+    <ClInclude Include="ChType.H" />
     <ClInclude Include="Collect.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="ConsoleManager.h" />
@@ -183,6 +180,7 @@
     <ClInclude Include="dma.h" />
     <ClInclude Include="DoubleLinkedList.h" />
     <ClInclude Include="exception.h" />
+    <ClInclude Include="FAT.h" />
     <ClInclude Include="fat12.h" />
     <ClInclude Include="flpydsk.h" />
     <ClInclude Include="fsys.h" />
@@ -198,10 +196,12 @@
     <ClInclude Include="kybrd.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="MultiBoot.h" />
     <ClInclude Include="OrangeQueue.h" />
     <ClInclude Include="ordered_array.h" />
     <ClInclude Include="PageDirectoryEntry.h" />
     <ClInclude Include="PageTableEntry.h" />
+    <ClInclude Include="Partition.h" />
     <ClInclude Include="PhysicalMemoryManager.h" />
     <ClInclude Include="pic.h" />
     <ClInclude Include="PIT.h" />
@@ -220,6 +220,7 @@
     <ClInclude Include="Thread.h" />
     <ClInclude Include="tss.h" />
     <ClInclude Include="va_list.h" />
+    <ClInclude Include="vesa.h" />
     <ClInclude Include="Video.h" />
     <ClInclude Include="VirtualMemoryManager.h" />
     <ClInclude Include="ZetPlane.h" />
