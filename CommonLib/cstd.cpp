@@ -223,38 +223,5 @@ uint64_t _declspec (naked) _aullshr () {
 
 };
 
-
-/*
-===================================
-	Global allocators
-===================================
-*/
-/*void *operator new(size_t size)
-{
-	// Nothing we can do 'til we have a memory manager. Defined here so C++ doesnt mess up
-    return 0;
-}
-
-void* __cdecl operator new[] (unsigned int size)
-{
-	// see above
-	return 0;
-}*/
-
-/*
-===================================
-	Global deallocators
-===================================
-*/
-/*void __cdecl operator delete(void *p)
-{
-	// see above
-}
-
-void __cdecl operator delete[] (void * p)
-{
-	// see above
-}*/
-
 // enable warning
 #pragma warning (default:4100)
