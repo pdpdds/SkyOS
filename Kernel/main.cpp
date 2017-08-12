@@ -53,7 +53,7 @@ _declspec(naked) void multiboot_entry(void)
 			; eax and ebx before jump to
 			; entry adress
 			; [HEADER_ADRESS + 0x20]
-			call    main; kernel entry
+			call    kmain; kernel entry
 			halt :
 		jmp halt; halt processor
 	}
@@ -63,7 +63,7 @@ extern bool systemOn;
 bool InitMemoryManager(multiboot_info* bootinfo, uint32_t kernelSize);
 void StartConsoleSystem();
 
-void main(unsigned long magic, unsigned long addr)
+void kmain(unsigned long magic, unsigned long addr)
 {
 	InitializeConstructors();
 
@@ -85,7 +85,7 @@ void main(unsigned long magic, unsigned long addr)
 
 	InitKeyboard();	
 
-	//InitFloppyDrive();
+	InitFloppyDrive();
 	
 	InitializeSysCall();	
 			
@@ -135,9 +135,6 @@ void main(unsigned long magic, unsigned long addr)
 
 	//InitVGA();
 	
-
-	/*SkyConsole::Print("Press Any Key\n");
-	SkyConsole::GetChar();*/
 	StartConsoleSystem();
 }
 

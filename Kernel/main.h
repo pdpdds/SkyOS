@@ -1,3 +1,3 @@
 #pragma once
 
-void main(unsigned long, unsigned long);
+void kmain(unsigned long, unsigned long);
