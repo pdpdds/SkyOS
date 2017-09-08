@@ -57,38 +57,53 @@ typedef struct tag_TaskSwitch
 
 namespace VirtualMemoryManager
 {
-		
+	//가상 메모리를 초기화한다.		
 	bool Initialize();
 
+	//페이지를 할당한다.
 	bool AllocPage(PTE* e);
+	//페이지를 회수한다.
 	void FreePage(PTE* e);
 
+	//페이지 디렉토리를 PDTR 레지스터에 세트한다
 	bool SetPageDirectoryInfo(PageDirectory* dir);
 
+	//현재 페이지 디렉토리를 가져온다
 	PageDirectory* GetCurPageDirectory();
 
-	//! flushes a cached translation lookaside buffer (TLB) entry
+	//캐쉬된 TLS 락 버퍼를 비운다.
 	void FlushTranslationLockBufferEntry(uint32_t addr);
-	
-//검증해야 됨
-	void ClearPageTable(PageTable* p);	
-	PTE* GetPTE(PageTable* p, uint32_t addr);
-	uint32_t GetPageTableEntryIndex(uint32_t addr);
-	
-	uint32_t GetPageTableIndex(uint32_t addr);
-	void ClearPageDirectory(PageDirectory* dir);	
-	PDE* GetPDE(PageDirectory* p, uint32_t addr);
-//
 
+	//페이지 테이블을 초기화한다.
+	void ClearPageTable(PageTable* p);
+	//페이지 테이블 엔트리(PTE)를 가져온다	
+	PTE* GetPTE(PageTable* p, uint32_t addr);
+	//주소로부터 PTE를 얻어온다
+	uint32_t GetPageTableEntryIndex(uint32_t addr);
+	//주소로부터 페이지 테이블을 얻어온다
+	uint32_t GetPageTableIndex(uint32_t addr);
+	//페이지 디렉토리를 초기화한다
+	void ClearPageDirectory(PageDirectory* dir);
+	//주소로부터 페이지 디렉토리 엔트리를 얻어온다	
+	PDE* GetPDE(PageDirectory* p, uint32_t addr);
+	//
+	//페이지 테이블을 생성한다. 페이지 테이블의 크기는 4K다.
 	bool CreatePageTable(PageDirectory* dir, uint32_t virt, uint32_t flags);
+	//가상주소를 물리주소에 매핑한다. 이 과정에서 페이지 테이블 엔트리에 정보가 기록된다.
 	void MapPhysicalAddressToVirtualAddresss(PageDirectory* dir, uint32_t virt, uint32_t phys, uint32_t flags);
+	//가상주소로부터 실제 물리주소를 얻어낸다
 	void* GetPhysicalAddressFromVirtualAddress(PageDirectory* directory, uint32_t virtualAddress);
+	//페이지 디렉토리에 매핑된 페이지 디렉토리를 해제한다
 	void UnmapPageTable(PageDirectory* dir, uint32_t virt);
 	void UnmapPhysicalAddress(PageDirectory* dir, uint32_t virt);
+
+	//페이지 디렉토리를 생성한다. 즉 가상주소공간을 생성한다는 의미다
 	PageDirectory* CreateAddressSpace();
 
-//Create Kernel Heap Physical Memory
+	//커널 힙을 생성한다
 	bool CreateKernelHeap(PageDirectory* dir);
-	bool MapHeap(PageDirectory* dir);	
+	//특정 커널 프로세스의 페이지 디렉토리에 커널 힙을 매핑시킨다
+	//즉 커널 힙은 커널에서 돌아가는 모든 프로세스에서 공유한다
+	bool MapHeap(PageDirectory* dir);
 }
 

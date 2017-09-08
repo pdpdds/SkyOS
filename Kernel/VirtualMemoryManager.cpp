@@ -161,15 +161,21 @@ namespace VirtualMemoryManager
 
 	bool Initialize()
 	{
-		//! allocates 3gb page table
+		//페이지 디렉토리 생성. 가상주소 공간 
+		//4GB를 표현하기 위해서 페이지 디렉토리는 하나면 충분하다.
+		//페이지 디렉토리는 1024개의 페이지테이블을 가진다
+		//1024 * 1024(페이지 테이블 엔트리의 개수) * 4K(프레임의 크기) = 4G
+		PageDirectory* dir = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+
+		if (dir == NULL)
+			return false;
+
+		memset(dir, 0, sizeof(PageDirectory));
+
+		//아이덴티티 페이지 테이블을 하나 생성
 		PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
 		if (identityPageTable == NULL)
 			return false;
-
-#ifdef _ORANGE_DEBUG
-		SkyConsole::Print("Identity Page Table Alloc : 0x%x\n", identityPageTable);
-#endif // _ORANGE_DEBUG
-
 
 		//0-4MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
 		for (int i = 0, frame = 0x0, virt = 0x00000000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
@@ -181,63 +187,17 @@ namespace VirtualMemoryManager
 			identityPageTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
 		}
 
-		//페이지 디렉토리 생성. 4GB를 표현하기 위해서 페이지 디렉토리는 하나면 충분하다.
-		PageDirectory* dir = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
-
-		if (dir == NULL)
-			return false;
-
-#ifdef _ORANGE_DEBUG
-		SkyConsole::Print("Page Directory Alloc : 0x%x\n", dir);
-#endif // _ORANGE_DEBUG
-
-		memset(dir, 0, sizeof(PageDirectory));
-
-		//물리 공간 1MB 이후의 공간을 가상주소 공간 0XC0000000(3GB) 이후의 공간과 매핑시킨다
-		//커널이 로드된 물리 어드레스 주소 0x100000
-		// 가상주소 0XC0000000, 0X100000는 물리주소 0x100000에 매핑된다
-		//최초 커널을 위한 PDE, PTE
-		/*for (int y = 0; y < 1; y++)
-		{
-			PageTable* pTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
-			if (!pTable)
-				return false;
-
-#ifdef _ORANGE_DEBUG
-			SkyConsole::Print("Page Table For Kernel Mapping: 0x%x\n", pTable);
-#endif // _ORANGE_DEBUG
-
-			//! clear page table
-			memset(pTable, 0, sizeof(PageTable));
-
-			int virt = KERNEL_VIRTUAL_BASE_ADDRESS + y * PAGES_PER_TABLE * PAGE_SIZE;
-
-			//커널의 사이즈는 4메가가 넘지 않는다고 가정한다
-			int frame = KERNEL_PHYSICAL_BASE_ADDRESS;
-
-			for (int i = 0; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
-			{
-				PTE page = 0;
-				PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
-				PageTableEntry::SetFrame(&page, frame);
-
-				pTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
-			}
-
-			//! get first entry in dir table and set it up to point to our table
-			PDE* entry = &dir->m_entries[PAGE_DIRECTORY_INDEX(KERNEL_VIRTUAL_BASE_ADDRESS + y * PAGES_PER_TABLE * PAGE_SIZE)];
-			PageDirectoryEntry::AddAttribute(entry, I86_PDE_PRESENT);
-			PageDirectoryEntry::AddAttribute(entry, I86_PDE_WRITABLE);
-			PageDirectoryEntry::SetFrame(entry, (uint32_t)pTable);
-		}*/
-
+		//페이지 디렉토리에 페이지 디렉토리 엔트리(PDE)를 한 개 세트한다
+		//0번째 인덱스에 PDE를 세트한다(가상주소가 0X00000000일시 참조됨)
+		//앞에서 생성한 아이덴티티 페이지 테이블을 세트한다
+		//가상주소 = 물리주소
 		PDE* identityEntry = &dir->m_entries[PAGE_DIRECTORY_INDEX(0x00000000)];
 		PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_PRESENT);
 		PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_WRITABLE);
 		PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
 
 
-////////////////////////////////////////////
+
 		PageTable* pageTable1 = (PageTable*)PhysicalMemoryManager::AllocBlock();
 		for (int i = 0, frame = 0x00400000, virt = 0x00400000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
 		{
@@ -252,8 +212,7 @@ namespace VirtualMemoryManager
 		PageDirectoryEntry::AddAttribute(pageTable1Entry, I86_PDE_PRESENT);
 		PageDirectoryEntry::AddAttribute(pageTable1Entry, I86_PDE_WRITABLE);
 		PageDirectoryEntry::SetFrame(pageTable1Entry, (uint32_t)pageTable1);
-//
-//
+
 		PageTable* pageTable2 = (PageTable*)PhysicalMemoryManager::AllocBlock();
 		for (int i = 0, frame = 0x00800000, virt = 0x00800000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
 		{
@@ -268,10 +227,8 @@ namespace VirtualMemoryManager
 		PageDirectoryEntry::AddAttribute(pageTable2Entry, I86_PDE_PRESENT);
 		PageDirectoryEntry::AddAttribute(pageTable2Entry, I86_PDE_WRITABLE);
 		PageDirectoryEntry::SetFrame(pageTable2Entry, (uint32_t)pageTable2);
-////////////////////////////////////////////
 
-
-
+		//페이지 디렉토리를 PDBR 레지스터에 로드한다
 		if (false == SetPageDirectoryInfo(dir))
 			return false;
 
@@ -280,19 +237,14 @@ namespace VirtualMemoryManager
 			mov	eax, [dir]
 			mov	cr3, eax		// PDBR is cr3 register in i86
 		}
-
-#ifdef _ORANGE_DEBUG
-		SkyConsole::Print("Current Page Directory Base Register : 0x%x\n", _cur_pdbr);
-#endif // _ORANGE_DEBUG	
-
+		//페이징 기능을 활성화시킨다
 		PhysicalMemoryManager::EnablePaging(true);
-
+		//커널 힙을 생성한다
 		CreateKernelHeap(GetCurPageDirectory());
-		
-
 
 		return true;
 	}
+
 
 	bool SetPageDirectoryInfo(PageDirectory* dir)
 	{
