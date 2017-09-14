@@ -23,6 +23,10 @@ int printf(const char* str)
 
 void EntryPoint() {
 
+	while (1)
+	{
+
+	}
 	CreateHeap();
 
 	char* message ="Hello world!!\n";	

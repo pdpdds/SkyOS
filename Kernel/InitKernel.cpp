@@ -11,6 +11,7 @@
 #include "vesa.h"
 #include "HardDisk.h"
 #include "ZetPlane.h"
+#include "FAT.h"
 
 bool InitKeyboard()
 {
@@ -54,9 +55,25 @@ void PrintHDDInfo()
 			else
 				for (BYTE i = 0; i<20; i++)
 					SkyConsole::WriteChar(HDDInfo->SerialNumber[i]);
-			SkyConsole::Print("\n\r Cylinders %d Heads %d Sectors %d. LBA Sectors %ld\n", HDDInfo->CHSCylinderCount, HDDInfo->CHSHeadCount, HDDInfo->CHSSectorCount, HDDInfo->LBACount);
+			SkyConsole::Print("\n\r Cylinders %d Heads %d Sectors %d. LBA Sectors %d\n", HDDInfo->CHSCylinderCount, HDDInfo->CHSHeadCount, HDDInfo->CHSSectorCount, HDDInfo->LBACount);
 		}
 		Key[1]++;
+	}
+}
+
+void TestHardDrive()
+{
+	
+	UINT16 handle = FATFileOpen("C:\MENU.LST", 0);
+
+	if (handle != 0)
+	{
+		SkyConsole::Print("FileHandle : %x\n", handle);
+		BYTE* buffer = new BYTE[512];
+
+		FATReadFile(handle, 512, buffer);
+
+		SkyConsole::Print("%s\n", buffer);
 	}
 }
 
@@ -65,20 +82,18 @@ bool InitHardDrive()
 	__SysHDDHandler = new HardDiskHandler();
 	__SysHDDHandler->Initialize();
 
-	/*if (kInitializeHDD() == TRUE)
-	{
-		SkyConsole::Print("AAAAAAAAAAAAAAAAAAAAAAAAA\n");
-	}*/
-
+	
 	SkyConsole::Print("HardDisk Count : %d\n", __SysHDDHandler->GetTotalDevices());
 
 	PrintHDDInfo();
 	
+	if(__SysHDDHandler->GetTotalDevices() == 0)
+		return false;
 
 	return true;
 }
 
-bool DumpSystemInfo()
+bool DumpSystemInfo(multiboot_info* pBootInfo)
 {
 	char str[256];
 	memset(str, 0, 256);
@@ -95,6 +110,21 @@ bool DumpSystemInfo()
 	pZetPlane->m_rotation = 50;
 	SkyConsole::Print("ZetPlane Address : 0x%x\n", pZetPlane);
 	SkyConsole::Print("ZetPlane m_rotation : %d\n", pZetPlane->m_rotation);
+	}*/
+
+	drive_info* pDriveInfo = pBootInfo->drives_addr;
+
+	//for (int i = 0; i < pBootInfo->drives_length; i++)
+	/*{
+	SkyConsole::Print("Drive Structures Total Length : %d\n", pBootInfo->drives_length);
+	SkyConsole::Print("Drive Size : %d\n", pDriveInfo->size);
+	SkyConsole::Print("Drive Number : %d\n", pDriveInfo->drive_number);
+	SkyConsole::Print("Drive Mode : %d\n", pDriveInfo->drive_mode);
+
+	SkyConsole::Print("Drive Cylinder : %d\n", pDriveInfo->drive_cylinders);
+	SkyConsole::Print("Drive Head : %d\n", pDriveInfo->drive_heads);
+	SkyConsole::Print("Drive Sector : %d\n", pDriveInfo->drive_sectors);
+
 	}*/
 
 	return true;

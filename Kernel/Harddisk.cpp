@@ -110,9 +110,24 @@ const BYTE IDE_COM_WRITE_SECTORS = 0x31;
 const BYTE IDE_COM_WRITE_VERIFY = 0x3C;
 
 
-void _HDDInterruptHandler(void)
+/*void _HDDInterruptHandler(void)
 {
 	return;
+}*/
+__declspec(naked) void _HDDInterruptHandler() {
+
+	_asm {
+		cli
+		pushad
+	}
+
+	_asm {
+		mov al, 0x20
+		out 0x20, al
+		popad
+		sti
+		iretd
+	}
 }
 /*
    -----------------------------------------------------------
@@ -299,17 +314,17 @@ void HardDiskHandler::Initialize()
 	setvect(32+15,_HDDInterruptHandler);
 
 	HDDs.Initialize();
-	for (BYTE DeviceController = 0; DeviceController < IDE_MAX_CONTROLLER; DeviceController++)
-	//for (BYTE DeviceController = 0; DeviceController < 1; DeviceController++)
+	//for (BYTE DeviceController = 0; DeviceController < IDE_MAX_CONTROLLER; DeviceController++)
+	for (BYTE DeviceController = 0; DeviceController < 1; DeviceController++)
 	{
 		DoSoftwareReset(DeviceController);
-		if (IsDeviceControllerBusy(DeviceController)) //if device controller is busy then skipping
+		if (IsDeviceControllerBusy(DeviceController, 1000)) //if device controller is busy then skipping
 		{			
 			SkyConsole::Print("Controller Busy\n");
 			continue;
 		}
 		OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_COMMAND, IDE_COM_EXECUTE_DEVICE_DIAGNOSTIC);
-		if (IsDeviceControllerBusy(DeviceController, 6))
+		if (IsDeviceControllerBusy(DeviceController, 1000))
 		{			
 			SkyConsole::Print("Controller busy after EXE\n");
 			continue;
@@ -320,17 +335,17 @@ void HardDiskHandler::Initialize()
 		for (BYTE Device = 0; Device < 1; Device++)         // loop for master and slave disks
 		{
 			UINT16 DeviceID_Data[512], j;
-			if (Device == 0 && !(Result & 1))
-				continue;
+			//if (Device == 0 && !(Result & 1))
+				//continue;
 			if (Device == 1 && (Result & 0x80))
 				continue;
 			if (Device == 1)
 				OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_DEVICE_HEAD, 0x10); //Setting 4th bit(count 5) to set device as 1
 			else
 				OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_DEVICE_HEAD, 0x0);
-			SkyConsole::Print("aaaaa\n");
-			msleep(50);
-			SkyConsole::Print("bbb\n");
+			
+			//msleep(50);
+			
 			OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_COMMAND, IDE_COM_IDENTIFY_DEVICE);
 			if (!IsDeviceDataReady(DeviceController, 600, TRUE))
 			{
@@ -338,13 +353,10 @@ void HardDiskHandler::Initialize()
 				continue;
 			}							
 
-			SkyConsole::Print("ccc\n");
 			/*Reading 512 bytes of information from the Device*/
 			for (j = 0; j < 256; j++)
 				DeviceID_Data[j] = InPortWord(IDE_Con_IOBases[DeviceController][0] + IDE_CB_DATA);
 			/* Creating new HDD node for the Collection HDDs */
-
-			SkyConsole::Print("ddd\n");
 			
 			//struct __HDDInfo * newHDD;
 			__HDDInfo * newHDD=(__HDDInfo *)kmalloc(sizeof(__HDDInfo));
@@ -353,7 +365,7 @@ void HardDiskHandler::Initialize()
 				SkyConsole::Print("HDD Initialize :: Allocation failed\n");
 				return;
 			}
-			SkyConsole::Print("eee\n");
+			
 			newHDD->IORegisterIdx = DeviceController;
 			memcpy(newHDD->DeviceID, DeviceID_Data, 512);
 			newHDD->DeviceNumber = Device;
@@ -364,8 +376,6 @@ void HardDiskHandler::Initialize()
 			newHDD->CHSCylinderCount = DeviceID_Data[1];
 			newHDD->CHSHeadCount = DeviceID_Data[3];
 			newHDD->CHSSectorCount = DeviceID_Data[6];
-
-			SkyConsole::Print("fff\n");
 
 			if (DeviceID_Data[10] == 0)
 				strcpy(newHDD->SerialNumber, "N/A");
@@ -394,11 +404,11 @@ void HardDiskHandler::Initialize()
 			}
 			newHDD->LBASupported = DeviceID_Data[49] & 0x200;
 			newHDD->DMASupported = DeviceID_Data[49] & 0x100;
-			SkyConsole::Print("ooo\n");
+			
 			UINT32 LBASectors = DeviceID_Data[61];
 			LBASectors = LBASectors << 16;
 			LBASectors |= DeviceID_Data[60];
-			SkyConsole::Print("%x : %s\n", newHDD, strKey);
+			SkyConsole::Print("DeviceId : %x, %s\n", Device, newHDD->ModelNumber);
 			newHDD->LBACount = LBASectors;
 			HDDs.Add(newHDD, strKey);
 			strKey[1]++;

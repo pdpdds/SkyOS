@@ -65,7 +65,10 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 
 	int taskCount = pTaskList->CountItems();
 
-	if (taskCount == 0 || taskCount == 1)
+	if (taskCount == 0)
+		SkyConsole::Print("bug\n");
+
+	if (taskCount == 1)
 		return true;
 
 	ListNode* pNode = pTaskList->GetHead();
@@ -85,8 +88,12 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 	ListNode* pCandidate = pTaskList->GetHead();
 	Thread* pNextThread = (Thread*)pCandidate->_data;
 
+	
+
 	if (pNextThread->m_taskState == TASK_STATE_INIT)
 	{
+		SkyConsole::Print("kkkkk\n");
+
 		pNextThread->m_waitingTime = TASK_RUNNING_TIME;
 		pNextThread->m_taskState = TASK_STATE_RUNNING;
 

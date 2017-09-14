@@ -6,11 +6,12 @@
 #include "PageTableEntry.h"
 
 
-#define KERNEL_VIRTUAL_BASE_ADDRESS 0xC0000000
-#define KERNEL_VIRTUAL_HEAP_ADDRESS 0x400000
-#define KERNEL_VIRTUAL_PAGEDIRECTORY_ADDRESS 0xCE000000
-#define KERNEL_VIRTUAL_STACK_ADDRESS 0xCF000000
-#define KERNEL_PHYSICAL_BASE_ADDRESS 0x100000
+#define KERNEL_VIRTUAL_BASE_ADDRESS				0xC0000000
+
+#define KERNEL_PHYSICAL_STACK_ADDRESS			0x00800000
+#define KERNEL_PHYSICAL_BASE_ADDRESS			0x00100000
+#define KERNEL_PHYSICAL_HEAP_ADDRESS			0x00C00000
+#define KERNEL_VIRTUAL_HEAP_ADDRESS				0x00C00000
 
 
 using namespace PageTableEntry;
@@ -101,7 +102,7 @@ namespace VirtualMemoryManager
 	PageDirectory* CreateAddressSpace();
 
 	//커널 힙을 생성한다
-	bool CreateKernelHeap(PageDirectory* dir);
+	bool CreateKernelHeap();
 	//특정 커널 프로세스의 페이지 디렉토리에 커널 힙을 매핑시킨다
 	//즉 커널 힙은 커널에서 돌아가는 모든 프로세스에서 공유한다
 	bool MapHeap(PageDirectory* dir);

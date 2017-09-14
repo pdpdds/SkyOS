@@ -3,12 +3,14 @@
 #include "string.h"
 #include "Console.h"
 #include "kheap.h"
+#include"MultiBoot.h"	
 
 #ifdef _ORANGE_DEBUG
 #endif // ORANGE_DEBUG
 
 namespace VirtualMemoryManager
 {
+	int heapFrameCount = 0;
 	//! current directory table
 	PageDirectory*		_cur_directory = 0;
 
@@ -172,61 +174,61 @@ namespace VirtualMemoryManager
 
 		memset(dir, 0, sizeof(PageDirectory));
 
-		//아이덴티티 페이지 테이블을 하나 생성
-		PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
-		if (identityPageTable == NULL)
-			return false;
+		
+		
 
-		//0-4MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
-		for (int i = 0, frame = 0x0, virt = 0x00000000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
+		uint32_t frame = 0x00000000;
+		uint32_t virt = 0x00000000;
+
+		for (int i = 0; i < 3; i++)
 		{
-			PTE page = 0;
-			PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
-			PageTableEntry::SetFrame(&page, frame);
+			//아이덴티티 페이지 테이블을 세개 생성
+			PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
+			if (identityPageTable == NULL)
+				return false;
 
-			identityPageTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
+			//0-4MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
+			for (int i = 0; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
+			{
+				PTE page = 0;
+				PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
+				PageTableEntry::SetFrame(&page, frame);
+
+				identityPageTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
+			}
+
+			//페이지 디렉토리에 페이지 디렉토리 엔트리(PDE)를 한 개 세트한다
+			//0번째 인덱스에 PDE를 세트한다(가상주소가 0X00000000일시 참조됨)
+			//앞에서 생성한 아이덴티티 페이지 테이블을 세트한다
+			//가상주소 = 물리주소
+			PDE* identityEntry = &dir->m_entries[PAGE_DIRECTORY_INDEX((virt - 0x00400000))];
+			PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_PRESENT);
+			PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_WRITABLE);
+			PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
 		}
 
-		//페이지 디렉토리에 페이지 디렉토리 엔트리(PDE)를 한 개 세트한다
-		//0번째 인덱스에 PDE를 세트한다(가상주소가 0X00000000일시 참조됨)
-		//앞에서 생성한 아이덴티티 페이지 테이블을 세트한다
-		//가상주소 = 물리주소
-		PDE* identityEntry = &dir->m_entries[PAGE_DIRECTORY_INDEX(0x00000000)];
-		PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_PRESENT);
-		PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_WRITABLE);
-		PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
+		frame = KERNEL_PHYSICAL_HEAP_ADDRESS;
+		virt = KERNEL_VIRTUAL_HEAP_ADDRESS;
+		uint32_t maxAddress = frame + PhysicalMemoryManager::GetMemorySize();
+		maxAddress -= (maxAddress % 0x00400000) - 0x00400000;
 
-
-
-		PageTable* pageTable1 = (PageTable*)PhysicalMemoryManager::AllocBlock();
-		for (int i = 0, frame = 0x00400000, virt = 0x00400000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
+		while (frame < maxAddress)
 		{
-			PTE page = 0;
-			PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
-			PageTableEntry::SetFrame(&page, frame);
+			PageTable* pageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
+			for (int i = 0; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
+			{
+				PTE page = 0;
+				PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
+				PageTableEntry::SetFrame(&page, frame);
 
-			pageTable1->m_entries[PAGE_TABLE_INDEX(virt)] = page;
+				pageTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
+			}		
+
+			PDE* pageTableEntry = &dir->m_entries[PAGE_DIRECTORY_INDEX((virt - 0x00400000))];
+			PageDirectoryEntry::AddAttribute(pageTableEntry, I86_PDE_PRESENT);
+			PageDirectoryEntry::AddAttribute(pageTableEntry, I86_PDE_WRITABLE);
+			PageDirectoryEntry::SetFrame(pageTableEntry, (uint32_t)pageTable);
 		}
-
-		PDE* pageTable1Entry = &dir->m_entries[PAGE_DIRECTORY_INDEX(0x00400000)];
-		PageDirectoryEntry::AddAttribute(pageTable1Entry, I86_PDE_PRESENT);
-		PageDirectoryEntry::AddAttribute(pageTable1Entry, I86_PDE_WRITABLE);
-		PageDirectoryEntry::SetFrame(pageTable1Entry, (uint32_t)pageTable1);
-
-		PageTable* pageTable2 = (PageTable*)PhysicalMemoryManager::AllocBlock();
-		for (int i = 0, frame = 0x00800000, virt = 0x00800000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
-		{
-			PTE page = 0;
-			PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
-			PageTableEntry::SetFrame(&page, frame);
-
-			pageTable2->m_entries[PAGE_TABLE_INDEX(virt)] = page;
-		}
-
-		PDE* pageTable2Entry = &dir->m_entries[PAGE_DIRECTORY_INDEX(0x00800000)];
-		PageDirectoryEntry::AddAttribute(pageTable2Entry, I86_PDE_PRESENT);
-		PageDirectoryEntry::AddAttribute(pageTable2Entry, I86_PDE_WRITABLE);
-		PageDirectoryEntry::SetFrame(pageTable2Entry, (uint32_t)pageTable2);
 
 		//페이지 디렉토리를 PDBR 레지스터에 로드한다
 		if (false == SetPageDirectoryInfo(dir))
@@ -237,10 +239,11 @@ namespace VirtualMemoryManager
 			mov	eax, [dir]
 			mov	cr3, eax		// PDBR is cr3 register in i86
 		}
-		//페이징 기능을 활성화시킨다
+
+		//페이징 기능을 다시 활성화시킨다
 		PhysicalMemoryManager::EnablePaging(true);
-		//커널 힙을 생성한다
-		CreateKernelHeap(GetCurPageDirectory());
+
+		SkyConsole::Print("Virtual Memory Manager Init\n");
 
 		return true;
 	}
@@ -273,33 +276,38 @@ namespace VirtualMemoryManager
 #endif
 	}
 
-	//256 * 4096 = 1MB, 1MB의 힙을 할당한다
+	//256 * 50 * 4096 = 50MB의 힙을 할당한다
 
-	bool CreateKernelHeap(PageDirectory* dir)
+	bool CreateKernelHeap()
 	{
+		PageDirectory* dir = GetCurPageDirectory();
+
 		//Virtual Heap Address
 		void* pVirtualHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
 
-		m_pKernelHeapPhysicalMemory = PhysicalMemoryManager::AllocBlocks(256);
+		heapFrameCount = 256 * 100;
 
-		SkyConsole::Print("KernelHeap Address 0x%x\n", m_pKernelHeapPhysicalMemory);
+		m_pKernelHeapPhysicalMemory = PhysicalMemoryManager::AllocBlocks(heapFrameCount);
 
 		if (m_pKernelHeapPhysicalMemory == NULL)
 			return false;		
 
+		int endAddress = (uint32_t)pVirtualHeap + heapFrameCount * PMM_BLOCK_SIZE;
 		MapHeap(dir);
 
-		create_kernel_heap((u32int)KERNEL_VIRTUAL_HEAP_ADDRESS, (uint32_t)KERNEL_VIRTUAL_HEAP_ADDRESS + 256 * PAGE_SIZE, (uint32_t)KERNEL_VIRTUAL_HEAP_ADDRESS + 256 * PAGE_SIZE, 0, 0);
+		create_kernel_heap((u32int)pVirtualHeap, (uint32_t)endAddress, (uint32_t)endAddress, 0, 0);
+
+		SkyConsole::Print("KernelHeap Physical Address 0x%x\n", m_pKernelHeapPhysicalMemory);
+		SkyConsole::Print("KernelHeap Virtual Address 0x%x\n", pVirtualHeap);
 
 		return true;
 	}
 
 	bool MapHeap(PageDirectory* dir)
-	{
-		//Virtual Heap Address
-		//void* pVirtualHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
-
-		for (int i = 0; i < 256; i++)
+	{		
+		int endAddress = (uint32_t)KERNEL_VIRTUAL_HEAP_ADDRESS + heapFrameCount * PMM_BLOCK_SIZE;
+		int frameCount = (endAddress - KERNEL_VIRTUAL_HEAP_ADDRESS) / PAGE_SIZE;
+		for (int i = 0; i < frameCount; i++)
 		{
 			MapPhysicalAddressToVirtualAddresss(dir, (uint32_t)KERNEL_VIRTUAL_HEAP_ADDRESS + i * PAGE_SIZE, (uint32_t)m_pKernelHeapPhysicalMemory + i * PAGE_SIZE, I86_PTE_PRESENT | I86_PTE_WRITABLE);
 		}

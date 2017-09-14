@@ -44,6 +44,8 @@ uint8_t* flpydsk_read_sector(int sectorLBA);
 //! converts an LBA address to CHS
 void flpydsk_lba_to_chs(int lba, int *head, int *track, int *sector);
 
+void flpydsk_reset();
+
 //============================================================================
 //    INTERFACE OBJECT CLASS DEFINITIONS
 //============================================================================

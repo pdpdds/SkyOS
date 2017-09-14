@@ -286,9 +286,11 @@ void flpydsk_write_ccr(uint8_t val) {
 //! wait for irq to fire
 inline void flpydsk_wait_irq() {
 
+	__asm sti
 	//! wait for irq to fire
 	while (_FloppyDiskIRQ == 0)
 		;
+	
 	_FloppyDiskIRQ = 0;
 }
 
@@ -470,11 +472,12 @@ void flpydsk_read_sector_imp(uint8_t head, uint8_t track, uint8_t sector) {
 	uint32_t st0, cyl;
 
 	//! initialize DMA
-	/*dma_initialize_floppy((uint8_t*)DMA_BUFFER, 512);
+	//dma_initialize_floppy((uint8_t*)DMA_BUFFER, 512);
 
 	//! set the DMA for read transfer
-	dma_set_read(FDC_DMA_CHANNEL);*/
+	//dma_set_read(FDC_DMA_CHANNEL);
 
+	
 	flpydsk_SetupDMA();
 
 	//! read in a sector
@@ -488,6 +491,7 @@ void flpydsk_read_sector_imp(uint8_t head, uint8_t track, uint8_t sector) {
 	flpydsk_send_command(((sector + 1) >= FLPY_SECTORS_PER_TRACK) ? FLPY_SECTORS_PER_TRACK : sector + 1);
 	flpydsk_send_command(FLPYDSK_GAP3_LENGTH_3_5);
 	flpydsk_send_command(0xff);
+
 
 	//! wait for irq
 	flpydsk_wait_irq();

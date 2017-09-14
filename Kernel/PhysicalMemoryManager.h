@@ -2,8 +2,14 @@
 #include "windef.h"
 #include "stdint.h"
 
+#define PMM_BLOCKS_PER_BYTE 8	
+#define PMM_BLOCK_SIZE	4096	
+#define PMM_BLOCK_ALIGN	BLOCK_SIZE
+#define PMM_BITS_PER_INDEX	32
+
 namespace PhysicalMemoryManager
 {
+
 	void	Initialize(size_t memorySize, uint32_t bitmapAddr);
 
 	void SetBit(int bit);

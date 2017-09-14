@@ -11,9 +11,10 @@ void InitFloppyDrive();
 bool InitKeyboard();
 	
 bool InitHardDrive();
+void TestHardDrive();
 
 
 bool InitGraphics(multiboot_info* pInfo);
 
-bool DumpSystemInfo();
+bool DumpSystemInfo(multiboot_info* pBootInfo);
 

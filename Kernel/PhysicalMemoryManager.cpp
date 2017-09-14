@@ -6,11 +6,6 @@
 
 #endif // ORANGE_DEBUG
 
-#define PMM_BLOCKS_PER_BYTE 8	
-#define PMM_BLOCK_SIZE	4096	
-#define PMM_BLOCK_ALIGN	BLOCK_SIZE
-#define PMM_BITS_PER_INDEX	32
-
 namespace PhysicalMemoryManager
 {
 	uint32_t	m_memorySize = 0;
@@ -28,6 +23,8 @@ namespace PhysicalMemoryManager
 	//이 배열을 참조해서 해당 물리 메모리가 할당되었는지 사용중인지를 판단한다.
 	void Initialize(size_t memorySize, uint32_t bitmapAddr)
 	{
+		SkyConsole::Print("Physical Memory Manager Init..\n");
+
 		m_usedBlocks = 0;
 		m_memorySize = memorySize;
 		m_maxBlocks = m_memorySize / PMM_BLOCK_SIZE;
@@ -240,6 +237,7 @@ namespace PhysicalMemoryManager
 			return GetFreeFrame();
 
 		for (uint32_t i = 0; i < GetTotalBlockCount() / 32; i++)
+		{
 			if (m_pMemoryMap[i] != 0xffffffff)
 			{
 				for (int j = 0; j < 32; j++)
@@ -261,6 +259,8 @@ namespace PhysicalMemoryManager
 
 							if (TestMemoryMap(startingBit + count) == false)
 								free++;
+							else 
+								break;
 
 							//연속된 빈 프레임들이 존재한다. 시작 비트 인덱스는 startingBit
 							if (free == size)
@@ -269,6 +269,7 @@ namespace PhysicalMemoryManager
 					}
 				}
 			}
+		}
 
 		return -1;
 	}
@@ -301,7 +302,6 @@ namespace PhysicalMemoryManager
 	void Dump()
 	{
 		//#ifdef _ORANGE_DEBUG
-		SkyConsole::Print("Physical Memory Manager Init..\n");
 		SkyConsole::Print("Memory Size : 0x%x\n", m_memorySize);
 		SkyConsole::Print("Memory Map Address : 0x%x\n", m_pMemoryMap);
 		SkyConsole::Print("Memory Map Size : 0x%x\n", m_memoryMapSize);

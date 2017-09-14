@@ -45,6 +45,7 @@ void NativeConsole()
 
 DWORD WINAPI SystemEntry(LPVOID parameter)
 {	
+
 	while (1) {
 		NativeConsole();
 	}

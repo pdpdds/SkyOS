@@ -4,6 +4,7 @@
 #include <string.h>
 #include "sprintf.h"
 #include "Hal.h"
+#include "sysapi.h"
 
 namespace SkyConsole
 {
@@ -389,6 +390,7 @@ namespace SkyConsole
 	KEYCODE	GetChar()
 	{
 		KEYCODE key = KEY_UNKNOWN;
+		int first = GetTickCount();
 
 		//! wait for a keypress
 		while (key == KEY_UNKNOWN)
@@ -396,6 +398,16 @@ namespace SkyConsole
 			__asm cli
 			key = kkybrd_get_last_key();
 			__asm sti
+
+
+			/*int second = GetTickCount();
+			if (second - first > 100)
+			{
+				SkyConsole::Print("%d\n", second);
+
+				first = GetTickCount();
+			}*/
+			
 		}
 
 		//! discard last keypress (we handled it) and return

@@ -127,6 +127,9 @@
     <ClCompile Include="Harddisk.cpp">
       <Filter>Disk</Filter>
     </ClCompile>
+    <ClCompile Include="fat32.cpp">
+      <Filter>Disk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
@@ -232,6 +235,9 @@
     <ClInclude Include="vesa.h" />
     <ClInclude Include="StdVGA.H" />
     <ClInclude Include="HardDisk.h">
+      <Filter>Disk</Filter>
+    </ClInclude>
+    <ClInclude Include="fat32.h">
       <Filter>Disk</Filter>
     </ClInclude>
   </ItemGroup>

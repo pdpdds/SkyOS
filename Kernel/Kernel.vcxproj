@@ -59,7 +59,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>../CommonLib;./;../Include;./chobits;.</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_ORANGE_DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
       </StringPooling>
@@ -123,6 +123,7 @@
     <ClCompile Include="exception.cpp" />
     <ClCompile Include="FAT.cpp" />
     <ClCompile Include="fat12.cpp" />
+    <ClCompile Include="fat32.cpp" />
     <ClCompile Include="flpydsk.cpp" />
     <ClCompile Include="fsys.cpp" />
     <ClCompile Include="GDT.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="exception.h" />
     <ClInclude Include="FAT.h" />
     <ClInclude Include="fat12.h" />
+    <ClInclude Include="fat32.h" />
     <ClInclude Include="flpydsk.h" />
     <ClInclude Include="fsys.h" />
     <ClInclude Include="GDT.h" />

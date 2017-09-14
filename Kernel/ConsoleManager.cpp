@@ -99,7 +99,7 @@ void cmd_memtask()
 {
 	EnterCriticalSection();
 
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcess(SampleLoop2);
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory(SampleLoop2);
 	
 	LeaveCriticalSection();
 }
@@ -226,7 +226,7 @@ void cmd_proc(char* pName) {
 	if (pName == NULL)
 		return;
 
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcess(pName, PROCESS_USER);
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromFile(pName, PROCESS_KERNEL);
 	if (pProcess == 0)
 	{
 		SkyConsole::Print("Can't Execute Process. %d\n", pName);
@@ -319,6 +319,7 @@ bool ConsoleManager::RunCommand(char* buf)
 	}
 	//! run process
 	else if (strstr(buf, ".exe") > 0) {
+
 		cmd_proc(buf);
 	}	
 	else

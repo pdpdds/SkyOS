@@ -12,6 +12,7 @@
 #include <ctype.h>
 #include <hal.h>
 #include "kybrd.h"
+#include "Console.h"
 
 //============================================================================
 //    IMPLEMENTATION PRIVATE DEFINITIONS / ENUMERATIONS / SIMPLE TYPEDEFS
@@ -362,6 +363,7 @@ void ProcessKeyInterrupt()
 				case KEY_CAPSLOCK:
 					_capslock = (_capslock) ? false : true;
 					kkybrd_set_leds(_numlock, _capslock, _scrolllock);
+					//SkyConsole::Print("dfdsdsfds\n");
 					break;
 
 				case KEY_KP_NUMLOCK:

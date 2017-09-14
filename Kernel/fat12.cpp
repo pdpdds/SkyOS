@@ -83,16 +83,17 @@ FILE fsysFatDirectory (const char* DirectoryName) {
 	ToDosFileName (DirectoryName, DosFileName, 11);
 	DosFileName[11]=0;
 
+#ifdef  _SKY_DEBUG
+	SkyConsole::Print("FileOpen From Floppy, FileName : %s\n", DosFileName);
+#endif //  _SKY_DEBUG
+
+	
 	//! 14 sectors per directory
 	for (int sector=0; sector<14; sector++) {
 
 		//! read in sector of root directory
 		buf = (unsigned char*) flpydsk_read_sector (_MountInfo.rootOffset + sector );
-
-		for (int j = 0; j < 128; j++)
-			SkyConsole::Print("0x%x ", buf[j]);		
-		SkyConsole::Print("\n");
-
+		
 		//! get directory info
 		directory = (PDIRECTORY) buf;
 
@@ -273,6 +274,8 @@ FILE fsysFatOpenSubDir (FILE kFile,
 */
 FILE fsysFatOpen (const char* FileName) {
 
+	char* bootsector;
+
 	FILE curDirectory;
 	char* p = 0;
 	bool rootDir=true;
@@ -281,7 +284,7 @@ FILE fsysFatOpen (const char* FileName) {
 	//! any '\'s in path?
 	p = strchr (path, '\\');
 	if (!p) {
-
+	
 		//! nope, must be in root directory, search it
 		curDirectory = fsysFatDirectory (path);
 
@@ -297,7 +300,7 @@ FILE fsysFatOpen (const char* FileName) {
 
 	//! go to next character after first '\'
 	p++;
-
+	
 	while ( p ) {
 
 		//! get pathname
@@ -354,17 +357,14 @@ FILE fsysFatOpen (const char* FileName) {
 void fsysFatMount () {
 
 	//! Boot sector info
-	PBOOTSECTOR bootsector;
+	char* bootsector;
 
-	//! read boot sector
-	bootsector = (PBOOTSECTOR) flpydsk_read_sector (0);
-	
 	//! store mount info
-	//_MountInfo.numSectors     = bootsector->Bpb.NumSectors;
-	//_MountInfo.fatOffset      = 1;
-	//_MountInfo.fatSize        = bootsector->Bpb.SectorsPerFat;
-	//_MountInfo.fatEntrySize   = 8;
-	//_MountInfo.numRootEntries = bootsector->Bpb.NumDirEntries;
+	_MountInfo.numSectors     = 2880;
+	_MountInfo.fatOffset      = 1;
+	_MountInfo.fatSize        = 9 * 512;
+	_MountInfo.fatEntrySize   = 8;
+	_MountInfo.numRootEntries = 224;
 	_MountInfo.rootOffset     = 18 + 1;
 	//_MountInfo.rootSize       = ( bootsector->Bpb.NumDirEntries * 32 ) / bootsector->Bpb.BytesPerSector;
 

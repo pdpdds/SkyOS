@@ -31,9 +31,12 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	/* read 512 bytes into buffer */
 	volReadFile(file, buf, 512);
 	if (!ValidatePEImage(buf)) {
+		SkyConsole::Print("Invalid PE Format!! %s\n", pProcess->m_processName);
 		volCloseFile(file);
 		return 0;
 	}
+
+	SkyConsole::Print("Valid PE Format %s\n", pProcess->m_processName);
 
 	dosHeader = (IMAGE_DOS_HEADER*)buf;
 	ntHeaders = (IMAGE_NT_HEADERS*)(dosHeader->e_lfanew + (uint32_t)buf);
@@ -114,6 +117,12 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	pThread->frame.esi = 0;
 	pThread->frame.edi = 0;
 
+	pProcess->AddThread(pThread);
+
+	ListNode* node = new ListNode();
+	node->_data = pThread;
+	m_taskList.AddToTail(node);
+
 	return pThread;
 
 }
@@ -134,12 +143,10 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	pThread->m_startParam = param;	
 	
 
-	//20161109
-
 	static int kernelStackIndex = 0;
 
 //스택을 생성하고 주소공간에 매핑한다.
-	void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * kernelStackIndex++);
+	void* stackVirtual = (void*)(KERNEL_PHYSICAL_STACK_ADDRESS + PAGE_SIZE * kernelStackIndex++);
 	//void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_kernelStackIndex++);
 	void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();	
 
@@ -162,7 +169,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	return pThread;
 }
 
-Process* ProcessManager::CreateProcess(char* appName, UINT32 processType)
+Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType)
 {
 	FILE file;
 
@@ -192,6 +199,7 @@ Process* ProcessManager::CreateProcess(char* appName, UINT32 processType)
 	pProcess->m_pPageDirectory = addressSpace;
 	pProcess->m_dwPriority = 1;
 	pProcess->m_dwRunState = TASK_STATE_INIT;
+	pProcess->m_dwProcessType = processType;
 	strcpy(pProcess->m_processName, appName);
 
 	Thread* pThread = CreateThread(pProcess, &file, NULL);
@@ -244,69 +252,83 @@ bool ProcessManager::AddProcess(Process* pProcess)
 	return true;
 }
 
-//firstProcess가 true일 경우 커널의 최초 프로세스를 생성한다.
-//이 시점에서만 이전에 커널힙이 생성되었다고 가정한다.
-//이후 프로세스는 여기서 힙을 별도로 생성한다.
-Process* ProcessManager::CreateProcess(LPTHREAD_START_ROUTINE lpStartAddress, bool firstProcess)
+
+Process* ProcessManager::CreateConsoleProcess(LPTHREAD_START_ROUTINE lpStartAddress)
 {
 	Process* pProcess = new Process();
 	pProcess->m_processId = GetNextProcessId();
 
-	if (firstProcess == true)
+
+	pProcess->m_pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
+	pProcess->m_dwRunState = TASK_STATE_RUNNING;
+	strcpy(pProcess->m_processName, "System");
+
+	VirtualMemoryManager::MapHeap(pProcess->m_pPageDirectory);
+
+	pProcess->m_lpHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
+
+	pProcess->m_dwProcessType = PROCESS_KERNEL;
+	pProcess->m_dwPriority = 1;
+
+	Thread* pThread = CreateThread(pProcess, lpStartAddress, pProcess);
+
+	pProcess->AddThread(pThread);
+	AddProcess(pProcess);
+
+	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
+
+	return pProcess;
+}
+
+//firstProcess가 true일 경우 커널의 최초 프로세스를 생성한다.
+//이 시점에서만 이전에 커널힙이 생성되었다고 가정한다.
+//이후 프로세스는 여기서 힙을 별도로 생성한다.
+Process* ProcessManager::CreateProcessFromMemory(LPTHREAD_START_ROUTINE lpStartAddress)
+{
+	Process* pProcess = new Process();
+	pProcess->m_processId = GetNextProcessId();
+
+	pProcess->m_pPageDirectory = VirtualMemoryManager::CreateAddressSpace();
+	pProcess->m_dwRunState = TASK_STATE_INIT;
+	strcpy(pProcess->m_processName, "System");
+
+	PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
+	if (identityPageTable == NULL)
+		return false;
+
+	//0-4MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
+	for (int i = 0, frame = 0x0, virt = 0x00000000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
 	{
-		pProcess->m_pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
-		pProcess->m_dwRunState = TASK_STATE_RUNNING;
-		strcpy(pProcess->m_processName, "System");
+		PTE page = 0;
+		PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
+		PageTableEntry::SetFrame(&page, frame);
+
+		identityPageTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
 	}
-	else
+
+	PDE* identityEntry = &pProcess->m_pPageDirectory->m_entries[PAGE_DIRECTORY_INDEX(0x00000000)];
+	PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_PRESENT);
+	PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_WRITABLE);
+	PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
+
+
+	int flags = I86_PTE_PRESENT | I86_PTE_WRITABLE;
+
+	//커널 이미지를 주소공간에 매핑. 커널 크기는 4메가가 넘지 않는다고 가정한다
+	//1024 * PAGE_SIZE = 4MB
+	uint32_t virtualAddr = KERNEL_PHYSICAL_BASE_ADDRESS;
+	uint32_t physAddr = KERNEL_PHYSICAL_BASE_ADDRESS;
+
+	for (uint32_t i = 0; i < PAGES_PER_TABLE; i++)
 	{
-		pProcess->m_pPageDirectory = VirtualMemoryManager::CreateAddressSpace();
-		pProcess->m_dwRunState = TASK_STATE_INIT;
-		strcpy(pProcess->m_processName, "System");
-		
-		PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
-		if (identityPageTable == NULL)
-			return false;
-
-
-		//0-1MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
-		for (int i = 0, frame = 0x0, virt = 0x00000000; i<PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
-		{
-			PTE page = 0;
-			PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
-			PageTableEntry::SetFrame(&page, frame);
-
-			identityPageTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
-		}				
-
-		PDE* identityEntry = &pProcess->m_pPageDirectory->m_entries[PAGE_DIRECTORY_INDEX(0x00000000)];
-		PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_PRESENT);
-		PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_WRITABLE);
-		PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
-
-		
-		int flags = I86_PTE_PRESENT | I86_PTE_WRITABLE;
-
-		//커널 이미지를 주소공간에 매핑. 커널 크기는 4메가가 넘지 않는다고 가정한다
-		//1024 * PAGE_SIZE = 4MB
-		uint32_t virtualAddr = KERNEL_VIRTUAL_BASE_ADDRESS;
-		uint32_t physAddr = KERNEL_PHYSICAL_BASE_ADDRESS;
-
-		for (uint32_t i = 0; i < PAGES_PER_TABLE; i++)
-		{
-			VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), flags);
-		}
-		
-		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, I86_PTE_PRESENT | I86_PTE_WRITABLE);		
-
-//20161109
-		pProcess->m_pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
-	}	
-
-	if (firstProcess == false)
-	{		
-		VirtualMemoryManager::MapHeap(pProcess->m_pPageDirectory);
+		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), flags);
 	}
+
+	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, I86_PTE_PRESENT | I86_PTE_WRITABLE);
+
+	//20161109
+	pProcess->m_pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
+
 
 	pProcess->m_lpHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
 

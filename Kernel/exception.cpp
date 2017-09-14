@@ -210,3 +210,20 @@ void interrupt _cdecl simd_fpu_fault (unsigned int cs, unsigned int eip, unsigne
 	kernel_panic ("FPU SIMD fault");
 	for (;;);
 }
+
+void HaltSystem(const char* errMsg)
+{
+	SkyConsole::MoveCursor(0, 0);
+	SkyConsole::SetColor(ConsoleColor::White, ConsoleColor::Blue, false);
+	SkyConsole::Clear();
+	SkyConsole::Print(sickpc);
+
+	SkyConsole::Print("*** STOP: %s", errMsg);
+
+	__asm
+	{
+	
+	halt:
+		jmp halt;
+	}
+}

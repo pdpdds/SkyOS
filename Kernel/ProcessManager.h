@@ -32,8 +32,10 @@ public:
 		return m_processManager;
 	}
 	
-	Process* CreateProcess(LPTHREAD_START_ROUTINE lpStartAddress, bool firstProcess = false);
-	Process* CreateProcess(char* appName, UINT32 processType);	
+	Process* CreateConsoleProcess(LPTHREAD_START_ROUTINE lpStartAddress);
+	Process* CreateProcessFromMemory(LPTHREAD_START_ROUTINE lpStartAddress);
+	
+	Process* CreateProcessFromFile(char* appName, UINT32 processType);	
 	Thread* CreateThread(Process* pProcess, FILE* pFile, LPVOID param);
 	Thread* CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID param);
 
