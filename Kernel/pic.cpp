@@ -148,35 +148,29 @@ void i86_pic_initialize(uint8_t base0, uint8_t base1) {
 
 	uint8_t		icw = 0;
 
-	//! disable hardware interrupts
-	__asm cli
-
-	//! Begin initialization of PIC
-
+	//PIC 초기화 ICW1 명령을 보낸다.
 	icw = (icw & ~I86_PIC_ICW1_MASK_INIT) | I86_PIC_ICW1_INIT_YES;
 	icw = (icw & ~I86_PIC_ICW1_MASK_IC4) | I86_PIC_ICW1_IC4_EXPECT;
 
 	i86_pic_send_command(icw, 0);
 	i86_pic_send_command(icw, 1);
 
-	//! Send initialization control word 2. This is the base addresses of the irq's
-
+	//! PIC에 ICW2 명령을 보낸다. base0와 base1은 IRQ의 베이스 주소를 의미한다.
 	i86_pic_send_data(base0, 0);
 	i86_pic_send_data(base1, 1);
 
-	//! Send initialization control word 3. This is the connection between master and slave.
-	//! ICW3 for master PIC is the IR that connects to secondary pic in binary format
-	//! ICW3 for secondary PIC is the IR that connects to master pic in decimal format
-
+	//PIC에 ICW3 명령을 보낸다. 마스터와 슬레이브 PIC와의 관계를 정립한다.
+	
 	i86_pic_send_data(0x04, 0);
 	i86_pic_send_data(0x02, 1);
 
-	//! Send Initialization control word 4. Enables i86 mode
+	//ICW4 명령을 보낸다. i86 모드를 활성화 한다.
 
 	icw = (icw & ~I86_PIC_ICW4_MASK_UPM) | I86_PIC_ICW4_UPM_86MODE;
 
 	i86_pic_send_data(icw, 0);
 	i86_pic_send_data(icw, 1);
+	//PIC 초기화 완료
 }
 
 
