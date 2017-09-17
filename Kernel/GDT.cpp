@@ -1,31 +1,7 @@
-
-//****************************************************************************
-//**
-//**    gdt.cpp
-//**
-//**	global descriptor table (gdt) for i86 processors. This handles
-//**	the basic memory map for the system and permission levels
-//**
-//****************************************************************************
-
-//============================================================================
-//    IMPLEMENTATION HEADERS
-//============================================================================
-
 #include "gdt.h"
 #include <string.h>
 #include "windef.h"
 #include "defines.h"
-
-//============================================================================
-//    IMPLEMENTATION PRIVATE DEFINITIONS / ENUMERATIONS / SIMPLE TYPEDEFS
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE CLASS PROTOTYPES / EXTERNAL CLASS REFERENCES
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE STRUCTURES / UTILITY CLASSES
-//============================================================================
 
 #ifdef _MSC_VER
 #pragma pack (push, 1)
@@ -59,12 +35,6 @@ static struct gdt_descriptor	_gdt [MAX_DESCRIPTORS];
 //! gdtr data
 static struct gdtr				_gdtr;
 
-//============================================================================
-//    INTERFACE DATA
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE FUNCTION PROTOTYPES
-//============================================================================
 
 //! install gdtr
 static void gdt_install ();
@@ -111,48 +81,44 @@ gdt_descriptor* i86_gdt_get_descriptor (int i) {
 	return &_gdt[i];
 }
 
-
-//! initialize gdt
-int i86_gdt_initialize () {
-
-	//! set up gdtr
-	_gdtr.m_limit = (sizeof (struct gdt_descriptor) * MAX_DESCRIPTORS)-1;
+//GDT 초기화 및 GDTR 레지스터에 GDT 로드
+int i86_gdt_initialize()
+{
+	//GDTR 레지스터에 로드될 _gdtr 구조체의 값 초기화
+	//_gdtr 구조체의 주소는 페이징 전단계이며 실제 물리주소에 해당 변수가 할당되어 있다.
+	//디스크립터의 수를 나타내는 MAX_DESCRIPTORS의 값은 5이다.
+	//NULL 디스크립터, 커널 코드 디스크립터, 커널 데이터 디스크립터, 유저 코드 디스크립터
+	//유저 데이터 디스크립터 이렇게 총 5개이다.
+	//디스크립터당 6바이트이므로 GDT의 크기는 30바이트다.
+	_gdtr.m_limit = (sizeof(struct gdt_descriptor) * MAX_DESCRIPTORS) - 1;
 	_gdtr.m_base = (uint32_t)&_gdt[0];
 
-	//! set null descriptor
+	//NULL 디스크립터의 설정
 	gdt_set_descriptor(0, 0, 0, 0, 0);
 
-	//! set default code descriptor
-	gdt_set_descriptor (1,0,0xffffffff,
-		I86_GDT_DESC_READWRITE|I86_GDT_DESC_EXEC_CODE|I86_GDT_DESC_CODEDATA|I86_GDT_DESC_MEMORY,
+	//커널 코드 디스크립터의 설정
+	gdt_set_descriptor(1, 0, 0xffffffff,
+		I86_GDT_DESC_READWRITE | I86_GDT_DESC_EXEC_CODE | I86_GDT_DESC_CODEDATA |
+		I86_GDT_DESC_MEMORY, I86_GDT_GRAND_4K | I86_GDT_GRAND_32BIT |
+		I86_GDT_GRAND_LIMITHI_MASK);
+
+	//커널 데이터 디스크립터의 설정
+	gdt_set_descriptor(2, 0, 0xffffffff,
+		I86_GDT_DESC_READWRITE | I86_GDT_DESC_CODEDATA | I86_GDT_DESC_MEMORY,
 		I86_GDT_GRAND_4K | I86_GDT_GRAND_32BIT | I86_GDT_GRAND_LIMITHI_MASK);
 
-	//! set default data descriptor
-	gdt_set_descriptor (2,0,0xffffffff,
-		I86_GDT_DESC_READWRITE|I86_GDT_DESC_CODEDATA|I86_GDT_DESC_MEMORY,
+	//유저모드 디스크립터의 설정
+	gdt_set_descriptor(3, 0, 0xffffffff,
+		I86_GDT_DESC_READWRITE | I86_GDT_DESC_EXEC_CODE | I86_GDT_DESC_CODEDATA |
+		I86_GDT_DESC_MEMORY | I86_GDT_DESC_DPL, I86_GDT_GRAND_4K | I86_GDT_GRAND_32BIT |
+		I86_GDT_GRAND_LIMITHI_MASK);
+
+	//유저모드 데이터 디스크립터의 설정
+	gdt_set_descriptor(4, 0, 0xffffffff, I86_GDT_DESC_READWRITE | I86_GDT_DESC_CODEDATA | I86_GDT_DESC_MEMORY | I86_GDT_DESC_DPL,
 		I86_GDT_GRAND_4K | I86_GDT_GRAND_32BIT | I86_GDT_GRAND_LIMITHI_MASK);
 
-	//! set default user mode code descriptor
-	gdt_set_descriptor (3,0,0xffffffff,
-		I86_GDT_DESC_READWRITE|I86_GDT_DESC_EXEC_CODE|I86_GDT_DESC_CODEDATA|I86_GDT_DESC_MEMORY|I86_GDT_DESC_DPL,
-		I86_GDT_GRAND_4K | I86_GDT_GRAND_32BIT | I86_GDT_GRAND_LIMITHI_MASK);
-
-	//! set default user mode data descriptor
-	gdt_set_descriptor (4,0,0xffffffff,
-		I86_GDT_DESC_READWRITE|I86_GDT_DESC_CODEDATA|I86_GDT_DESC_MEMORY|I86_GDT_DESC_DPL,
-		I86_GDT_GRAND_4K | I86_GDT_GRAND_32BIT | I86_GDT_GRAND_LIMITHI_MASK);
-
-	//! install gdtr
-	gdt_install ();
+	//GDTR 레지스터에 GDT 로드
+	gdt_install();
 
 	return 0;
 }
-
-//============================================================================
-//    INTERFACE CLASS BODIES
-//============================================================================
-//****************************************************************************
-//**
-//**    END[gdt.cpp]
-//**
-//****************************************************************************
