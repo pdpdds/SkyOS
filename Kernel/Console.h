@@ -58,6 +58,5 @@ namespace SkyConsole
 
 	void GetCommand(char* commandBuffer, int bufSize);
 	KEYCODE	GetChar(); 
-	BYTE kGetCh(void);
 }
 #endif
