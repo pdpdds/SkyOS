@@ -3,6 +3,8 @@
   #define DLLEXPORT __declspec(dllexport)
   #define DLLIMPORT __declspec(dllimport)
 
+#define SKYAPI
+
   /*#ifdef KERNELBUILT
       #define KERNELDLL DLLEXPORT
   #else
