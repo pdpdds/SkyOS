@@ -1,16 +1,3 @@
-//****************************************************************************
-//**
-//**    Idt.cpp
-//**		Interrupt Descriptor Table. The IDT is responsible for providing
-//**	the interface for managing interrupts, installing, setting, requesting,
-//**	generating, and interrupt callback managing.
-//**
-//****************************************************************************
-
-//============================================================================
-//    IMPLEMENTATION HEADERS
-//============================================================================
-
 #include "idt.h"
 #include <string.h>
 #include <hal.h>
@@ -18,15 +5,6 @@
 #include "..\Kernel\DebugDisplay.h"
 #endif
 
-//============================================================================
-//    IMPLEMENTATION PRIVATE DEFINITIONS / ENUMERATIONS / SIMPLE TYPEDEFS
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE CLASS PROTOTYPES / EXTERNAL CLASS REFERENCES
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE STRUCTURES / UTILITY CLASSES
-//============================================================================
 
 #ifdef _MSC_VER
 #pragma pack (push, 1)
@@ -146,32 +124,25 @@ int i86_install_ir (uint32_t i, uint16_t flags, uint16_t sel, I86_IRQ_HANDLER ir
 }
 
 
-//! initialize idt
-int i86_idt_initialize (uint16_t codeSel) {
+//IDT를 초기화하고 디폴트 핸들러를 등록한다
+int i86_idt_initialize(uint16_t codeSel) {
 
-	//! set up idtr for processor
-	_idtr.limit = sizeof (struct idt_descriptor) * I86_MAX_INTERRUPTS -1;
-	_idtr.base	= (uint32_t)&_idt[0];
+	//IDTR 레지스터에 로드될 구조체 초기화
+	_idtr.limit = sizeof(struct idt_descriptor) * I86_MAX_INTERRUPTS - 1;
+	_idtr.base = (uint32_t)&_idt[0];
 
-	//! null out the idt
-	memset ((void*)&_idt[0], 0, sizeof (idt_descriptor) * I86_MAX_INTERRUPTS-1);
+	//NULL 디스크립터
+	memset((void*)&_idt[0], 0, sizeof(idt_descriptor) * I86_MAX_INTERRUPTS - 1);
 
-	//! register default handlers
-	for (int i=0; i<I86_MAX_INTERRUPTS; i++)
-		i86_install_ir (i, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32,
+	//디폴트 핸들러 등록
+	for (int i = 0; i<I86_MAX_INTERRUPTS; i++)
+		i86_install_ir(i, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32,
 			codeSel, (I86_IRQ_HANDLER)i86_default_handler);
 
-	//! install our idt
-	idt_install ();
+	//IDTR 레지스터를 셋업한다
+	idt_install();
 
 	return 0;
 }
 
-//============================================================================
-//    INTERFACE CLASS BODIES
-//============================================================================
-//****************************************************************************
-//**
-//**    END[idt.cpp]
-//**
-//****************************************************************************
+
