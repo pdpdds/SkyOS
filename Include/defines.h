@@ -42,7 +42,7 @@
 #define TASK_STATE_SLEEP	3 //태스크가 태스크 스케쥴러에서 제외된 상태
 #define TASK_STATE_END		4 //태스크가 종료된 상태   
 
-#define TASK_RUNNING_TIME 2   //태스크가 CPU를 사용하는 시간
+#define TASK_RUNNING_TIME 4   //태스크가 CPU를 사용하는 시간
 
 //! set access bit
 #define I86_GDT_DESC_ACCESS			0x0001			//00000001

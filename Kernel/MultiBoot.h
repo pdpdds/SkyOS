@@ -140,7 +140,7 @@ struct drive_info
 	unsigned char drive_sectors;
 
 	/* The array of I/O ports used for the drive.  */
-	unsigned short drive_ports[0];
+	unsigned short drive_ports;
 };
 
 struct APMTable

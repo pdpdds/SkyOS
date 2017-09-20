@@ -40,7 +40,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)$(ProjectName)\Intermediate\</IntDir>
     <ExtensionsToDeleteOnClean>*.exp *.obj%3b*.ilk%3b*.tlb%3b*.tli%3b*.tlh%3b*.tmp%3b*.rsp%3b*.pgc%3b*.pgd%3b$(TargetPath)</ExtensionsToDeleteOnClean>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
@@ -57,7 +57,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./;../include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../include;./lua</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ARCH_X86;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>false</StringPooling>
@@ -107,6 +107,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cstd.cpp" />
+    <ClCompile Include="Math.c" />
+    <ClCompile Include="SkyIO.c" />
     <ClCompile Include="sprintf.cpp" />
     <ClCompile Include="stdio.cpp" />
     <ClCompile Include="string.cpp" />
@@ -114,9 +116,14 @@
   <ItemGroup>
     <ClInclude Include="ChType.H" />
     <ClInclude Include="ctype.h" />
+    <ClInclude Include="errno.h" />
+    <ClInclude Include="Math.h" />
+    <ClInclude Include="setjmp.h" />
     <ClInclude Include="size_t.h" />
+    <ClInclude Include="SkyIO.h" />
     <ClInclude Include="sprintf.h" />
     <ClInclude Include="stdarg.h" />
+    <ClInclude Include="stddef.h" />
     <ClInclude Include="stdint.h" />
     <ClInclude Include="stdio.h" />
     <ClInclude Include="string.h" />

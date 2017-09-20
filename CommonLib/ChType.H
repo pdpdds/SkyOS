@@ -28,7 +28,7 @@ static inline char ToChar(int n)
 {
 	if (n >= 9) return '9';
 	if (n <= 0) return '0';
-	return n + '0';
+	return (char)(n + '0');
 }
 
 static inline BYTE IsUpper(BYTE ch)

@@ -1,13 +1,14 @@
 #include "ConsoleManager.h"
 #include "string.h"
 #include "stdio.h"
-#include "Console.h"
+#include "SkyConsole.h"
 #include "PhysicalMemoryManager.h"
 #include "VirtualMemoryManager.h"
-#include "task.h"
+#include "ProcessUtil.h"
 #include "ProcessManager.h"
 #include "ZetPlane.h"
 #include "PIT.h"
+#include "FloppyDisk.h"
 
 extern void enter_usermode();
 
@@ -48,9 +49,9 @@ void cmd_alloc()
 
 /* render rectangle in 32 bpp modes. */
 void rect32(int x, int y, int w, int h, int col) {
-	uint32_t* lfb = (uint32_t*)LFB_VIRTUAL;
-	for (uint32_t k = 0; k < h; k++)
-		for (uint32_t j = 0; j < w; j++)
+	int* lfb = (int*)LFB_VIRTUAL;
+	for (int k = 0; k < h; k++)
+		for (int j = 0; j < w; j++)
 			lfb[(j + x) + (k + y) * WIDTH] = col;
 }
 
@@ -198,22 +199,30 @@ void cmd_read() {
 	SkyConsole::Print("\n\n\r--------[EOF]--------");
 }
 
+extern void tss_set_stack(uint16_t, uint16_t);
+
 void go_user() {
 
 	int stack = 0;
 	_asm mov[stack], esp
 
-	extern void tss_set_stack(uint16_t, uint16_t);
+	
 	tss_set_stack(0x10, (uint16_t)stack & 0xffff);
+
+	SkyConsole::Print("entering\n");
 
 	enter_usermode();
 
 	char* testStr = "\n\rWe are inside of your computer...";
 
+	int j = 0;
+	int k = 5;
+	k = k / j;
+
 	//! call OS-print message
 	_asm xor eax, eax
 	_asm lea ebx, [testStr]
-		_asm int 0x80
+	_asm int 0x80
 
 	//! cant do CLI+HLT here, so loop instead
 	while (1);
@@ -235,7 +244,6 @@ void cmd_proc(char* pName) {
 		ProcessManager::GetInstance()->AddProcess(pProcess);
 }
 
-#include "flpydsk.h"
 bool ConsoleManager::RunCommand(char* buf) 
 {
 

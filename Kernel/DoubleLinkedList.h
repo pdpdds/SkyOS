@@ -11,7 +11,7 @@ private:
 	ListNode *fNext;
 	ListNode *fPrev;
 	friend class DoubleLinkedList;
-	friend class OrangeQueue;
+	friend class SkyQueue;
 };
 
 class DoubleLinkedList {
@@ -40,7 +40,8 @@ protected:
 
 inline ListNode::ListNode()
 	: fNext(0),
-	fPrev(0)
+	fPrev(0),
+	_data(0)
 {
 
 }
@@ -57,6 +58,7 @@ inline DoubleLinkedList::DoubleLinkedList()
 {
 	fDummyHead.fNext = &fDummyHead;
 	fDummyHead.fPrev = &fDummyHead;
+	fDummyHead._data = 0;
 }
 
 inline ListNode* DoubleLinkedList::AddToTail(ListNode *node)

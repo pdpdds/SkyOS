@@ -12,6 +12,7 @@ char *strupr(char *str);
 void* memcpy(void *dest, const void *src, size_t count);
 void* memset(void *dest, char val, size_t count);
 unsigned short* memsetw(unsigned short *dest, unsigned short val, size_t count);
+int memcmp(const void *s1, const void *s2, size_t n);
 
 char* strchr (char * str, int character );
 int stricmp(const char *s1, const char *s2);

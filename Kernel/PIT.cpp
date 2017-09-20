@@ -1,7 +1,7 @@
 #include "PIT.h"
 #include "Hal.h"
 #include "tss.h"
-#include "Console.h"
+#include "SkyConsole.h"
 
 unsigned int PIT::ticks;
 extern void SwitchTask(int tick, registers_t& regs);

@@ -1,6 +1,6 @@
 ﻿#include "PhysicalMemoryManager.h"
 #include "string.h"
-#include "Console.h"
+#include "SkyConsole.h"
 
 #ifdef _ORANGE_DEBUG
 
@@ -38,7 +38,7 @@ namespace PhysicalMemoryManager
 		m_usedBlocks = GetTotalBlockCount();
 
 		//모든 메모리 블럭들이 사용중에 있다고 설정한다.	
-		memset((char*)m_pMemoryMap, 0xFF, m_memoryMapSize);
+		memset((char*)m_pMemoryMap, 0xff, m_memoryMapSize);
 	}
 
 	uint32_t GetMemoryMapSize() { return m_memoryMapSize; }

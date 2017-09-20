@@ -1,5 +1,5 @@
 #include "Scheduler.h"
-#include "Console.h"
+#include "SkyConsole.h"
 #include "PhysicalMemoryManager.h"
 #include "ProcessManager.h"
 #include "Process.h"
@@ -35,6 +35,7 @@ Scheduler::~Scheduler()
 
 bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 {	
+	
 #ifdef _ORANGE_DEBUG
 	/*uint32_t currentTickCount = GetTickCount();
 
@@ -92,7 +93,6 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 
 	if (pNextThread->m_taskState == TASK_STATE_INIT)
 	{
-		SkyConsole::Print("kkkkk\n");
 
 		pNextThread->m_waitingTime = TASK_RUNNING_TIME;
 		pNextThread->m_taskState = TASK_STATE_RUNNING;
@@ -158,6 +158,7 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 		SkyConsole::Print("es : %x\n", pNextThread->m_regs.es);
 		SkyConsole::Print("fs : %x\n", pNextThread->m_regs.fs);*/
 #endif		
+	
 		pNextThread->m_waitingTime = TASK_RUNNING_TIME;
 		pNextThread->m_taskState = TASK_STATE_RUNNING;
 

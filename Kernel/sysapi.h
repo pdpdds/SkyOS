@@ -1,12 +1,7 @@
 #pragma once
-#include <hal.h>
-#include "VirtualMemoryManager.h"
-#include "task.h"
-#include "PIT.h"
+#include "SkyAPI.h"
 
 #define MAX_SYSCALL 7
-int printf(const char* str, ...);
-HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreateionFlags, LPDWORD lpThreadId);
 
 static void* _syscalls[] = {
 

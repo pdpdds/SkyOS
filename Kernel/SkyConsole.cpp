@@ -1,10 +1,13 @@
-﻿#include "Console.h"
+﻿#include "SkyConsole.h"
 #include <stdarg.h>
 #include <stdint.h>
 #include <string.h>
 #include "sprintf.h"
 #include "Hal.h"
 #include "sysapi.h"
+#include "KeyBoard.h"
+
+using namespace KeyBoard;
 
 namespace SkyConsole
 {
@@ -368,7 +371,7 @@ namespace SkyConsole
 			if (BufChar) {
 
 				//! convert key to an ascii char and put it in buffer
-				char c = kkybrd_key_to_ascii(key);
+				char c = KeyBoard::ConvertKeyToAscii(key);
 				//if (c != 0 && KEY_SPACE != c) { //insure its an ascii char
 				if (c != 0) { //insure its an ascii char
 
@@ -396,7 +399,7 @@ namespace SkyConsole
 		while (key == KEY_UNKNOWN)
 		{
 			__asm cli
-			key = kkybrd_get_last_key();
+			key = KeyBoard::GetLastKeyCode();
 			__asm sti
 
 
@@ -411,7 +414,7 @@ namespace SkyConsole
 		}
 
 		//! discard last keypress (we handled it) and return
-		kkybrd_discard_last_key();
+		KeyBoard::DiscardLastKeyCode();
 		return key;
 	}
 }

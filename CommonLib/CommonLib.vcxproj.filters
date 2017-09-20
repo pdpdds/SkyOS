@@ -18,6 +18,8 @@
     <ClCompile Include="sprintf.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Math.c" />
+    <ClCompile Include="SkyIO.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="string.h">
@@ -47,5 +49,12 @@
     <ClInclude Include="ChType.H">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="stddef.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h" />
+    <ClInclude Include="SkyIO.h" />
+    <ClInclude Include="errno.h" />
+    <ClInclude Include="setjmp.h" />
   </ItemGroup>
 </Project>

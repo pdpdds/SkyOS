@@ -1,7 +1,7 @@
 #include "HardDisk.h"
 #include "windef.h"
 #include "kheap.h"
-#include "Console.h"
+#include "SkyConsole.h"
 #include "Hal.h"
 #include "string.h"
 #include "sprintf.h"
@@ -110,10 +110,6 @@ const BYTE IDE_COM_WRITE_SECTORS = 0x31;
 const BYTE IDE_COM_WRITE_VERIFY = 0x3C;
 
 
-/*void _HDDInterruptHandler(void)
-{
-	return;
-}*/
 __declspec(naked) void _HDDInterruptHandler() {
 
 	_asm {

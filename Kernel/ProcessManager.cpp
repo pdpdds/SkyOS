@@ -1,16 +1,17 @@
 ﻿#include "ProcessManager.h"
 #include "Process.h"
 #include "Hal.h"
-#include "Task.h"
+#include "ProcessUtil.h"
 #include "Thread.h"
 #include "string.h"
-#include "Console.h"
+#include "SkyConsole.h"
 #include "Process.h"
-#include "task.h"
 #include "PhysicalMemoryManager.h"
 #include "KernelProcedure.h"
+#include "sysapi.h"
 
 ProcessManager* ProcessManager::m_processManager = nullptr;
+static int kernelStackIndex = 0;
 
 ProcessManager::ProcessManager()
 {
@@ -72,7 +73,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory,
 			ntHeaders->OptionalHeader.ImageBase + i * PAGE_SIZE,
 			(uint32_t)memory + i * PAGE_SIZE,
-			I86_PTE_PRESENT | I86_PTE_WRITABLE | I86_PTE_USER);
+			I86_PTE_PRESENT | I86_PTE_WRITABLE);
 	}
 	memset(memory, 0, pThread->m_imageSize);
 	memcpy(memory, buf, 512);
@@ -93,22 +94,22 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	/* close file and return process ID */
 	volCloseFile(file);
 
-	/* Create userspace stack (process esp=0x100000) */
-	void* stack = (void*)(ntHeaders->OptionalHeader.ImageBase + ntHeaders->OptionalHeader.SizeOfImage + PAGE_SIZE);
-	void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
-	
-	/* map user process stack space */
-	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory,
-		(uint32_t)stack,
-		(uint32_t)stackPhys,
-		I86_PTE_PRESENT | I86_PTE_WRITABLE | I86_PTE_USER);
 
-	/* Create Heap*/
+	//스택을 생성하고 주소공간에 매핑한다.
+	void* stackVirtual = (void*)(KERNEL_PHYSICAL_STACK_ADDRESS + PAGE_SIZE * kernelStackIndex++);
+	//void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_kernelStackIndex++);
+	void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
+
+	SkyConsole::Print("Virtual Stack : %x\n", stackVirtual);
+	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
+
+	/* map user process stack space */
+	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
 	
 	/* final initialization */
-	pThread->m_initialStack = stack;
+	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE);
 	pThread->frame.esp = (uint32_t)pThread->m_initialStack;
-	pThread->frame.ebp = pThread->frame.esp;		
+	pThread->frame.ebp = pThread->frame.esp;
 
 	pThread->frame.eax = 0;
 	pThread->frame.ecx = 0;
@@ -143,7 +144,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	pThread->m_startParam = param;	
 	
 
-	static int kernelStackIndex = 0;
+	
 
 //스택을 생성하고 주소공간에 매핑한다.
 	void* stackVirtual = (void*)(KERNEL_PHYSICAL_STACK_ADDRESS + PAGE_SIZE * kernelStackIndex++);
@@ -182,16 +183,18 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType
 	if ((file.flags & FS_DIRECTORY) == FS_DIRECTORY)
 		return 0;
 
-	PageDirectory* addressSpace = 0;	
-	addressSpace = VirtualMemoryManager::CreateAddressSpace();
+	
+	PageDirectory* addressSpace = MapKernelSpace();
 
-	if (!addressSpace) 
-	{		
+	if (!addressSpace)
+	{
 		volCloseFile(&file);
 		return NULL;
 	}
 
-	MapKernelSpace(addressSpace);
+	VirtualMemoryManager::MapHeap(addressSpace);
+
+	//MapSysAPIAddress(addressSpace);
 
 	Process* pProcess = new Process();
 
@@ -345,42 +348,20 @@ Process* ProcessManager::CreateProcessFromMemory(LPTHREAD_START_ROUTINE lpStartA
 	return pProcess;
 }
 
-bool ProcessManager::MapKernelSpace(PageDirectory* addressSpace)
+PageDirectory* ProcessManager::MapKernelSpace()
 {
-	uint32_t virtualAddr;
-	uint32_t physAddr;
-	
-	int flags = I86_PTE_PRESENT | I86_PTE_WRITABLE;
-	
-//커널 이미지를 주소공간에 매핑. 커널 크기는 4메가가 넘지 않는다고 가정한다
-//1024 * PAGE_SIZE = 4MB
-	virtualAddr = KERNEL_VIRTUAL_BASE_ADDRESS;
-	physAddr = KERNEL_PHYSICAL_BASE_ADDRESS;
-	
-	for (uint32_t i = 0; i < 1024; i++) 
+	return VirtualMemoryManager::CreateCommonPageDirectory();
+}
+
+void ProcessManager::MapSysAPIAddress(PageDirectory* dir)
+{
+	uint32_t virtualAddr = KERNEL_PHYSICAL_STACK_ADDRESS;
+	uint32_t physAddr = uint32_t(&_syscalls[0]);
+
+	for (uint32_t i = 0; i < PAGES_PER_TABLE; i++)
 	{
-		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(addressSpace, virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), flags);
+		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(dir, virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), I86_PTE_PRESENT | I86_PTE_WRITABLE);
 	}
-
-	/*
-	map display memory for debug minidriver
-	idenitity mapped 0xa0000-0xBF000.
-	Note:
-	A better alternative is to have a driver associated
-	with the physical memory range map it. This should be automatic;
-	through an IO manager or driver manager.
-	*/
-	virtualAddr = 0xa0000;
-	physAddr = 0xa0000;
-	for (uint32_t i = 0; i<31; i++) 
-	{
-		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(addressSpace, virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), flags);
-	}	
-
-	//페이지 디렉토리 자체를 주소공간에 매핑
-	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(addressSpace, (uint32_t)addressSpace, (uint32_t)addressSpace, I86_PTE_PRESENT | I86_PTE_WRITABLE);		
-
-	return true;
 }
 
 Process* ProcessManager::GetCurrentProcess()

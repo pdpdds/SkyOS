@@ -51,7 +51,7 @@ void flush_tss (uint16_t sel) {
 	_asm {
 		cli
 		mov eax, 0x2b
-		ltr eax
+		ltr ax
 		sti
 	}
 
@@ -97,7 +97,7 @@ void install_tss(uint32_t idx, uint16_t kernelSS, uint16_t kernelESP) {
 	TSS.gs = 0x13;
 
 	//! flush tss
-	flush_tss(idx * sizeof(gdt_descriptor));
+	flush_tss((uint16_t)idx * sizeof(gdt_descriptor));
 }
 
 //============================================================================

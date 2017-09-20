@@ -1,5 +1,6 @@
 #pragma once
-
+#include "defines.h"
+#include "VirtualMemoryManager.h"
 
 typedef struct _TSS_32 {
 	WORD	prev_task_link, res0;
@@ -56,8 +57,6 @@ typedef struct _thread {
    uint32_t  imageSize;
 }thread;
 
-
-#include "VirtualMemoryManager.h"
 
 typedef struct _process {
    int            id;

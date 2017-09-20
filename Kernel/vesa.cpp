@@ -1,5 +1,5 @@
 #include "vesa.h"
-#include "Console.h"
+#include "SkyConsole.h"
 
 #define RGB16_565(r,g,b) ((b&31) | ((g&63) << 5 | ((r&31) << 11)))
 
@@ -16,8 +16,8 @@ void lfb_clear()
 	int i;
 	int j;
 
-	for (i = 0; i < lfb_width; i++)
-		for (j = 0; j < lfb_height; j++)
+	for (i = 0; i < (int)lfb_width; i++)
+		for (j = 0; j < (int)lfb_height; j++)
 			lfb[j * lfb_width + i] = 0;
 }
 

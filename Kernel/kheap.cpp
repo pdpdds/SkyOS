@@ -8,7 +8,7 @@
 #include "PageTableEntry.h"
 #include "VirtualMemoryManager.h"
 #include "Hal.h"
-#include "Console.h"
+#include "SkyConsole.h"
 
 // end is defined in the linker script.
 //extern u32int end;

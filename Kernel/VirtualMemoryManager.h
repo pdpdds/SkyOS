@@ -6,12 +6,14 @@
 #include "PageTableEntry.h"
 
 
-#define KERNEL_VIRTUAL_BASE_ADDRESS				0xC0000000
+#define KERNEL_VIRTUAL_BASE_ADDRESS				0x00100000
+#define KERNEL_PHYSICAL_BASE_ADDRESS			0x00100000
 
 #define KERNEL_PHYSICAL_STACK_ADDRESS			0x00800000
-#define KERNEL_PHYSICAL_BASE_ADDRESS			0x00100000
-#define KERNEL_PHYSICAL_HEAP_ADDRESS			0x00C00000
-#define KERNEL_VIRTUAL_HEAP_ADDRESS				0x00C00000
+
+#define KERNEL_PHYSICAL_HEAP_ADDRESS			0xC0000000
+#define KERNEL_VIRTUAL_HEAP_ADDRESS				0xC0000000
+#define KERNEL_VIRTUAL_SYSAPI_ADDRESS			0x00800000
 
 
 using namespace PageTableEntry;
@@ -65,6 +67,8 @@ namespace VirtualMemoryManager
 	bool AllocPage(PTE* e);
 	//페이지를 회수한다.
 	void FreePage(PTE* e);
+
+	PageDirectory* CreateCommonPageDirectory();
 
 	//페이지 디렉토리를 PDTR 레지스터에 세트한다
 	bool SetPageDirectoryInfo(PageDirectory* dir);

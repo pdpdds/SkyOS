@@ -34,13 +34,13 @@ class Partition
 	{
 	public:
 		//member functions
-		Partition(struct _Partition * Part);	
+		Partition(_Partition * Part);	
 		Partition();
 		~Partition();
 
-		struct _Partition * Part;
+		_Partition * Part;
 
-		void Initialize(struct _Partition * Part);
+		void Initialize(_Partition * Part);
 		BYTE IsBootable();
 		BYTE PartType();
 		UINT32 PartitionBegining();

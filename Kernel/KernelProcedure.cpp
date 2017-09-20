@@ -1,6 +1,6 @@
 #include "KernelProcedure.h"
 #include "ConsoleManager.h"
-#include "Console.h"
+#include "SkyConsole.h"
 #include "string.h"
 #include "Hal.h"
 #include "PIT.h"

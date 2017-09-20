@@ -110,6 +110,22 @@ void *memcpy(void *dest, const void *src, size_t count)
     return dest;
 }
 
+int memcmp(const void *s1, const void *s2, size_t n)
+{
+	unsigned char u1, u2;
+	unsigned char* _s1 = (unsigned char*)s1;
+	unsigned char* _s2 = (unsigned char*)s2;
+
+	for (; n--; _s1++, _s2++) {
+		u1 = *_s1;
+		u2 = *_s2;
+		if (u1 != u2) {
+			return (u1 - u2);
+		}
+	}
+	return 0;
+}
+
 //! sets count bytes of dest to val
 void* memset(void *dest, char val, size_t count)
 {
@@ -258,7 +274,7 @@ void* memmove(void *dest, void *src, size_t n)
 	}
 	else if ((char*)src > (char*)dest)
 	{
-		for (i = 0; i < n; i++)
+		for (i = 0; i < (long int)n; i++)
 		{
 			((char*)dest)[i] = ((char*)src)[i];
 		}
@@ -278,7 +294,7 @@ void* memchr(const void *s, int c, size_t n)
 	if (n)
 	{
 		const char *p = (const char*)s;
-		char cc = c;
+		char cc = (char)c;
 		do {
 			if (*p == cc)
 				return (void*)p;

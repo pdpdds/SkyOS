@@ -2,7 +2,6 @@
 #include "stdint.h"
 #include "MultiBoot.h"
 
-extern void _cdecl kKeyboardHandler();
 extern void __cdecl  InitializeConstructors();
 
 void SetInterruptVector();
@@ -12,7 +11,6 @@ bool InitKeyboard();
 	
 bool InitHardDrive();
 void TestHardDrive();
-
 
 bool InitGraphics(multiboot_info* pInfo);
 

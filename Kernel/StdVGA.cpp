@@ -15,7 +15,7 @@ Credits
 #include <StdVGA.h>
 #include <StdIO.h>
 #include "Hal.h"
-#include "Console.h"
+#include "SkyConsole.h"
 #include "kheap.h"
 
 BYTE __VGAMode=0;

@@ -1,9 +1,9 @@
 #pragma once
 #include "VirtualMemoryManager.h"
-#include "task.h"
+#include "ProcessUtil.h"
 #include "List.h"
-#include "image.h"
-#include "fsys.h"
+#include "PEImage.h"
+#include "VFS.h"
 #include "Process.h"
 #include "Thread.h"
 
@@ -50,7 +50,8 @@ public:
 	DoubleLinkedList* GetTaskList() { return &m_taskList; }
 
 //Page Directory Mapping
-	bool MapKernelSpace(PageDirectory* addressSpace);
+	PageDirectory* MapKernelSpace();
+	void MapSysAPIAddress(PageDirectory* dir);
 
 private:	
 

@@ -3,18 +3,18 @@
 
 typedef ListNode QueueNode;
 
-class OrangeQueue : public DoubleLinkedList {
+class SkyQueue : public DoubleLinkedList {
 public:
 	inline QueueNode* Enqueue(QueueNode*);
 	inline QueueNode* Dequeue();
 };
 
-inline QueueNode* OrangeQueue::Enqueue(QueueNode *element)
+inline QueueNode* SkyQueue::Enqueue(QueueNode *element)
 {
 	return AddToTail(element);
 }
 
-inline QueueNode* OrangeQueue::Dequeue()
+inline QueueNode* SkyQueue::Dequeue()
 {
 	QueueNode *node = GetHead();
 	if (node == 0)

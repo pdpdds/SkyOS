@@ -1,9 +1,10 @@
-#ifndef Console_h
-#define Console_h
+#ifndef SKYCONSOLE_H
+#define SKYCONSOLE_H
 #include "windef.h"
-#include "kybrd.h"
+#include "KeyBoard.h"
 
-//This gives us a little type-safety, so that we don't write a bad value somewhere along the lines
+using namespace KeyBoard;
+
 enum ConsoleColor
 {
 	Black = 0,

@@ -9,7 +9,7 @@
 #define FAT12_H_INCLUDED
 
 #include <stdint.h>
-#include <fsys.h>
+#include <VFS.h>
 
 #ifdef _MSC_VER
 #pragma pack (push, 1)
@@ -55,10 +55,10 @@ typedef struct _MOUNT_INFO {
 
 }MOUNT_INFO, *PMOUNT_INFO;
 
-extern FILE fsysFatDirectory (const char* DirectoryName);
-extern void fsysFatRead(PFILE file, unsigned char* Buffer, unsigned int Length);
-extern FILE fsysFatOpen (const char* FileName);
-extern void fsysFatInitialize ();
-extern void fsysFatMount ();
+FILE fsysFatDirectory (const char* DirectoryName);
+void fsysFatRead(PFILE file, unsigned char* Buffer, unsigned int Length);
+FILE fsysFatOpen (const char* FileName);
+void fsysFatMount ();
+void InitializeVFSFat12();
 
 #endif

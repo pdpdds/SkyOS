@@ -1,5 +1,12 @@
 #pragma once
 #include "windef.h"
+#include "SkyStruct.h"
+#include <hal.h>
+#include "VirtualMemoryManager.h"
+#include "PhysicalMemoryManager.h"
+#include "ProcessUtil.h"
+#include "PIT.h"
+
 
 void SKYASSERT(bool result, const char* pMsg);
 
@@ -21,5 +28,21 @@ void SKYAPI kLeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 //½º·¹µå
 /////////////////////////////////////////////////////////////////////////////
 DWORD SKYAPI kGetCurrentThreadId();
+
+void GetLocalTime(LPSYSTEMTIME lpSystemTime);
+BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime);
+
+int printf(const char* str, ...);
+HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreateionFlags, LPDWORD lpThreadId);
+
+
+extern "C"
+{
+	void TerminateProcess();
+	uint32_t MemoryAlloc(size_t size);
+	void MemoryFree(void* p);
+	void CreateDefaultHeap();
+	void TerminateMemoryProcess();
+}
 
 

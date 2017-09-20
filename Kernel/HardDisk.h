@@ -2,10 +2,22 @@
 #define __HARDDISK_H
 
 #include "windef.h"
-//#include <Heap.h>
-#include "GSH.H"
 #include "Collect.H"
-//#include <Timer.h>
+
+struct _GSH_IO_Parameter
+{
+	UINT32 Cylinder;
+	UINT16 Head;
+	UINT16 Sector;
+
+	UINT32 LBASector;
+
+	UINT16 SectorCount;
+
+	BYTE   Mode;		//if bit 0 is set LBA mode
+
+	UINT16 Others[20];
+};
 
 /*--------------- Error Constants -----------*/
 
@@ -72,33 +84,18 @@ class HardDiskHandler
 
 		__HDDInfo * GetHDDInfo(BYTE * DPF);
 
-		UINT16 FormatTrack(BYTE * DPF, UINT16 Track);
-
-		UINT16 InitializeDeviceParameters(BYTE * DPF,UINT16 SectorsPerCylinder,UINT16 Heads);
-
 		UINT32 CHSToLBA(BYTE *DPF, UINT32 Cylinder, UINT32 Head, UINT32 Sector);
 		void LBAToCHS(BYTE *DPF, UINT32 LBA, UINT32 * Cylinder, UINT32 * Head, UINT32 * Sector);
-		
-		BYTE * ReadMultiple(BYTE * DPF, UINT16 StartCylinder, UINT16 StartHead, UINT16 StartSector, BYTE BlockCount, BYTE NoOfBlocks);
-		BYTE * ReadMultiple(BYTE * DPF, UINT32 StartLBASector, BYTE BlockCount, BYTE NoOfBlocks);
-		UINT16 WriteMultiple(BYTE * DPF, UINT16 StartCylinder, UINT16 StartHead, UINT16 StartSector, BYTE BlockCount, BYTE NoOfBlocks);
-		UINT16 WriteMultiple(BYTE * DPF, UINT32 StartLBASector, BYTE BlockCount, BYTE NoOfBlocks);
 
 		BYTE ReadSectors(BYTE * DPF, UINT16 StartCylinder, BYTE StartHead, BYTE StartSector, BYTE NoOfSectors, BYTE * Buffer, BOOLEAN WithRetry = TRUE);
 		BYTE ReadSectors(BYTE * DPF, UINT32 StartLBASector, BYTE NoOfSectors, BYTE * Buffer, BOOLEAN WithRetry = TRUE);
 		BYTE WriteSectors(BYTE * DPF, UINT16 StartCylinder, BYTE StartHead, BYTE StartSector, BYTE NoOfSectors, BYTE * Buffer, BOOLEAN WithRetry = TRUE);
-		BYTE WriteSectors(BYTE * DPF, UINT32 StartLBASector, BYTE NoOfSectors,  BYTE * Buffer);
-
-		UINT16 ReadVerifySectors(BYTE * DPF, UINT16 StartCylinder, UINT16 StartHead, UINT16 StartSector, BYTE NoOfSectors);
-		UINT16 ReadVerifySectors(BYTE * DPF, UINT32 StartLBASector, BYTE NoOfSectors);
-
-		UINT16 Seek(BYTE * DPF, UINT16 ToCylinder, UINT16 ToHead, UINT16 ToSector);
+	
 
 		//--------Implementation of GSH functions
 		BYTE GetNoOfDevices();
 		UINT16 GetDeviceParameters(BYTE * DPF, BYTE * Buffer);
 		BYTE Reset(BYTE * DPF);
-		UINT16 Status(BYTE * DPF);
 
 		static UINT16 Verify(BYTE * DPF, _GSH_IO_Parameter * InputParameter);
 		static UINT16 Read(BYTE * DPF, _GSH_IO_Parameter * InputParameter, BYTE * Buffer);

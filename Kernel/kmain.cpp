@@ -1,32 +1,6 @@
-﻿#include "main.h"
-#include "stdint.h"
-#include "header.h"
-#include "exception.h"
-#include "string.h"
-#include "sprintf.h"
-#include "Console.h"
-#include "HAL.h"
-#include "RTC.H"
-#include "IDT.h"
-#include "GDT.h"
-#include "PIT.h"
-#include "PIC.h"
-#include "PhysicalMemoryManager.h"
-#include "VirtualMemoryManager.h"
-#include "kheap.h"
-#include "ZetPlane.h"
-#include "sysapi.h"
-#include "tss.h"
-#include "ProcessManager.h"
-#include "ConsoleManager.h"
-#include "List.h"
-#include "KernelProcedure.h"
-#include "Console.h"
-#include "InitKernel.h"
-#include "FAT.h"
-#include "StdVGA.H"
-#include "fat32.h"
-#include "fat12.h"
+﻿#include "kmain.h"
+
+extern bool systemOn;
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -62,11 +36,6 @@ _declspec(naked) void multiboot_entry(void)
 	}
 }
 
-extern bool systemOn;
-bool InitMemoryManager(multiboot_info* bootinfo, uint32_t kernelSize);
-void StartConsoleSystem();
-void JumpToNewKernelEntry(int entryPoint, unsigned int procStack);
-
 void kmain(unsigned long magic, unsigned long addr)
 {
 	InitializeConstructors();
@@ -83,12 +52,14 @@ void kmain(unsigned long magic, unsigned long addr)
 	i86_pit_initialize();
 											
 	SetInterruptVector();	
+	InitializeSysCall();
+	//! initialize TSS
+	install_tss(5, 0x10, 0);
+
 	InitKeyboard();
 
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
-	InitMemoryManager(pBootInfo, 0);
-	
-	InitializeSysCall();	
+	InitMemoryManager(pBootInfo, 0);	
 
 	InitFloppyDrive();
 			
@@ -111,9 +82,6 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	LeaveCriticalSection();
 	
-
-	//! initialize TSS
-	//install_tss(5, 0x10, 0);
 
 	DumpSystemInfo(pBootInfo);
 	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
@@ -236,20 +204,19 @@ void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
 	{
 		mov     ax, 0x10;
 		mov     ds, ax
-			mov     es, ax
-			mov     fs, ax
-			mov     gs, ax
-			;
-		; create stack frame
-			;
+		mov     es, ax
+		mov     fs, ax
+		mov     gs, ax
+			
+		; create stack frame			
 		; push   0x10;
 		; push procStack; stack
-			mov esp, procStack
-			push   0x10;
+		mov esp, procStack
+		push	0x10;
 		push    0x200; EFLAGS
-			push    0x08; CS
-			push entryPoint; EIP
-			sti
-			iretd
+		push    0x08; CS
+		push entryPoint; EIP
+		sti
+		iretd
 	}
 }

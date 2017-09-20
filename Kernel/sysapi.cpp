@@ -1,9 +1,9 @@
 #include "sysapi.h"
 #include "kheap.h"
 #include "idt.h"
-#include "ProcessManager.h"
+#include "SkyConsole.h"
 
-_declspec(naked) void syscall_dispatcher() 
+_declspec(naked) void SysCallDispatcher() 
 {
 
 	/* save index and set kernel data selector */
@@ -16,6 +16,7 @@ _declspec(naked) void syscall_dispatcher()
 			mov[idx], eax
 			pusha
 	}
+
 
 	//! bounds check
 	if (idx >= MAX_SYSCALL) {
@@ -53,7 +54,7 @@ _declspec(naked) void syscall_dispatcher()
 
 void InitializeSysCall() 
 {
-	setvect(0x80, syscall_dispatcher, I86_IDT_DESC_RING3);
+	setvect(0x80, SysCallDispatcher, I86_IDT_DESC_RING3);
 }
 
 void *operator new(size_t size)
@@ -85,32 +86,4 @@ int __cdecl _purecall()
 void operator delete[](void *p)
 {
 	kfree(p);
-}
-
-#include "Console.h"
-int printf(const char* str, ...)
-{
-	SkyConsole::Write(str);
-	return 0;
-}
-
-HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreateionFlags, LPDWORD lpThreadId)
-{
-	Process* cur = ProcessManager::GetInstance()->GetCurrentProcess();
-
-	if (cur->m_processId == PROC_INVALID_ID)
-	{
-		SkyConsole::Print("Invailid Process Id\n");
-		return 0;
-	}
-
-	Thread* newThread = ProcessManager::GetInstance()->CreateThread(cur, lpStartAddress, lpParameter);
-
-	if(newThread == NULL)
-	{
-		SkyConsole::Print("Thread Create Fail!!\n");
-		return 0;
-	}	
-	
-	return (HANDLE)newThread;
 }

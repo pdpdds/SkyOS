@@ -1,15 +1,10 @@
 #pragma once
 
-  #define DLLEXPORT __declspec(dllexport)
-  #define DLLIMPORT __declspec(dllimport)
+ #define DLLEXPORT __declspec(dllexport)
+ #define DLLIMPORT __declspec(dllimport)
 
 #define SKYAPI
 
-  /*#ifdef KERNELBUILT
-      #define KERNELDLL DLLEXPORT
-  #else
-      #define KERNELDLL DLLIMPORT
-  #endif*/
 #define KERNELDLL 
 
   #define CHAR_BIT            8

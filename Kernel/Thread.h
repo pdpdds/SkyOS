@@ -1,7 +1,7 @@
 #pragma once
 #include "windef.h"
-#include "task.h"
 #include "Hal.h"
+#include "struct.h"
 
 class Process;
 

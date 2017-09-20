@@ -9,23 +9,28 @@
 #include <HardDisk.h>
 #include "kheap.h"
 #include "MultiBoot.h"
-#include "Console.h"
+#include "SkyConsole.h"
 #include "string.h"
 
 extern HardDiskHandler * __SysHDDHandler;
 
 //----------------Partition class functions------------------------
-Partition::Partition(struct _Partition * Part)
-	{Initialize(Part);
-	}
+Partition::Partition(_Partition * Part)
+
+{
+	Initialize(Part);
+}
+
 Partition::Partition()
-	{
-	}
+{
+}
 Partition::~Partition()
-	{
-	}
-void Partition::Initialize(struct _Partition * Part)
-	{this->Part=(_Partition *)kmalloc(sizeof(_Partition));
+{
+}
+
+void Partition::Initialize(_Partition * Part)
+{
+	this->Part = (_Partition *)kmalloc(sizeof(_Partition));
 
 	//MemCpy((BYTE *)this->Part,(BYTE *)Part,sizeof(this->Part) );
 
@@ -75,7 +80,7 @@ extern void CallBackPartition(BYTE * DPF, Partition * Part);
 BYTE EnumeratePartitions(BYTE *StorageKey, void(*CallBackFunction)(BYTE * DPF, Partition * Part), UINT32 LBASector, UINT32 PartitionDeepth)
 {
 	BYTE PT[512];
-	UINT16 ReadResult;
+	BYTE ReadResult;
 	void(*CallBackFn)(BYTE * DPF, Partition * Part);
 
 	strcpy((char *)PartitionDPF, (char *)StorageKey);

@@ -7,10 +7,10 @@
 
 #include <fat12.h>
 #include <string.h>
-#include <flpydsk.h>
+#include "FloppyDisk.h"
 #include <bpb.h>
 #include <ctype.h>
-#include "Console.h"
+#include "SkyConsole.h"
 
 //! bytes per sector
 #define SECTOR_SIZE 512
@@ -92,7 +92,7 @@ FILE fsysFatDirectory (const char* DirectoryName) {
 	for (int sector=0; sector<14; sector++) {
 
 		//! read in sector of root directory
-		buf = (unsigned char*) flpydsk_read_sector (_MountInfo.rootOffset + sector );
+		buf = (unsigned char*) FloppyDisk::ReadSector(_MountInfo.rootOffset + sector );
 		
 		//! get directory info
 		directory = (PDIRECTORY) buf;
@@ -149,7 +149,7 @@ void fsysFatRead(PFILE file, unsigned char* Buffer, unsigned int Length) {
 		unsigned int physSector = 32 + (file->currentCluster - 1);
 
 		//! read in sector
-		unsigned char* sector = (unsigned char*) flpydsk_read_sector ( physSector );
+		unsigned char* sector = (unsigned char*) FloppyDisk::ReadSector( physSector );
 
 		//! copy block of memory
 		memcpy (Buffer, sector, 512);
@@ -160,11 +160,11 @@ void fsysFatRead(PFILE file, unsigned char* Buffer, unsigned int Length) {
 		unsigned int entryOffset = FAT_Offset % SECTOR_SIZE;
 
 		//! read 1st FAT sector
-		sector = (unsigned char*) flpydsk_read_sector ( FAT_Sector );
+		sector = (unsigned char*)FloppyDisk::ReadSector( FAT_Sector );
 		memcpy (FAT, sector, 512);
 
 		//! read 2nd FAT sector
-		sector = (unsigned char*) flpydsk_read_sector ( FAT_Sector + 1 );
+		sector = (unsigned char*)FloppyDisk::ReadSector( FAT_Sector + 1 );
 		memcpy (FAT + SECTOR_SIZE, sector, 512);
 
 		//! read entry for next cluster
@@ -272,10 +272,8 @@ FILE fsysFatOpenSubDir (FILE kFile,
 /**
 *	Opens a file
 */
-FILE fsysFatOpen (const char* FileName) {
-
-	char* bootsector;
-
+FILE fsysFatOpen (const char* FileName) 
+{
 	FILE curDirectory;
 	char* p = 0;
 	bool rootDir=true;
@@ -351,14 +349,30 @@ FILE fsysFatOpen (const char* FileName) {
 	return ret;
 }
 
-/**
-*	Mounts the filesystem
-*/
-void fsysFatMount () {
+//Set Bios Parameter Block
 
-	//! Boot sector info
-	char* bootsector;
+/*bpbOEM			db "My OS   "
+bpbBytesPerSector:  	DW 512
+bpbSectorsPerCluster : DB 1
+bpbReservedSectors : DW 1
+bpbNumberOfFATs : DB 2
+bpbRootEntries : DW 224
+bpbTotalSectors : DW 2880
+bpbMedia : DB 0xf0;; 0xF1
+bpbSectorsPerFAT: 	DW 9
+bpbSectorsPerTrack : DW 18
+bpbHeadsPerCylinder : DW 2
+bpbHiddenSectors : DD 0
+bpbTotalSectorsBig : DD 0
+bsDriveNumber : DB 0
+bsUnused : DB 0
+bsExtBootSignature : DB 0x29
+bsSerialNumber : DD 0xa0a1a2a3
+bsVolumeLabel : DB "MOS FLOPPY "
+bsFileSystem : DB "FAT12   "*/
 
+void fsysFatMount () 
+{
 	//! store mount info
 	_MountInfo.numSectors     = 2880;
 	_MountInfo.fatOffset      = 1;
@@ -366,37 +380,13 @@ void fsysFatMount () {
 	_MountInfo.fatEntrySize   = 8;
 	_MountInfo.numRootEntries = 224;
 	_MountInfo.rootOffset     = 18 + 1;
-	//_MountInfo.rootSize       = ( bootsector->Bpb.NumDirEntries * 32 ) / bootsector->Bpb.BytesPerSector;
-
-
-	/*bpbOEM			db "My OS   "
-		bpbBytesPerSector:  	DW 512
-		bpbSectorsPerCluster : DB 1
-		bpbReservedSectors : DW 1
-		bpbNumberOfFATs : DB 2
-		bpbRootEntries : DW 224
-		bpbTotalSectors : DW 2880
-		bpbMedia : DB 0xf0;; 0xF1
-		bpbSectorsPerFAT: 	DW 9
-		bpbSectorsPerTrack : DW 18
-		bpbHeadsPerCylinder : DW 2
-		bpbHiddenSectors : DD 0
-		bpbTotalSectorsBig : DD 0
-		bsDriveNumber : DB 0
-		bsUnused : DB 0
-		bsExtBootSignature : DB 0x29
-		bsSerialNumber : DD 0xa0a1a2a3
-		bsVolumeLabel : DB "MOS FLOPPY "
-		bsFileSystem : DB "FAT12   "*/
-
 }
 
 /**
 *	Initialize filesystem
 */
-void fsysFatInitialize () {
-
-	//! initialize filesystem struct
+void InitializeVFSFat12 () 
+{
 	strcpy (_FSysFat.Name, "FAT12");
 	_FSysFat.Directory = fsysFatDirectory;
 	_FSysFat.Mount     = fsysFatMount;
@@ -404,9 +394,7 @@ void fsysFatInitialize () {
 	_FSysFat.Read      = fsysFatRead;
 	_FSysFat.Close     = fsysFatClose;
 
-	//! register ourself to volume manager
 	volRegisterFileSystem ( &_FSysFat, 0 );
 
-	//! mounr filesystem
 	fsysFatMount ();
 }

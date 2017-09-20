@@ -1,29 +1,21 @@
 ﻿#include "InitKernel.h"
 #include "Video.h"
-#include "kybrd.h"
+#include "KeyBoard.h"
 #include "string.h"
 #include "sprintf.h"
-#include "RTC.H"
-#include "Console.h"
-#include "flpydsk.h"
+#include "SkyAPI.H"
+#include "SkyConsole.h"
+#include "FloppyDisk.h"
 #include "fat12.h"
 #include "exception.h"
 #include "vesa.h"
 #include "HardDisk.h"
 #include "ZetPlane.h"
-#include "FAT.h"
+#include "FAT32.h"
 
 bool InitKeyboard()
 {
-	kkybrd_install(33);
-
-	/*setvect(33, kKeyboardHandler);
-
-	// 키보드를 활성화
-	if (kInitializeKeyboard() == TRUE)
-	{
-	kChangeKeyboardLED(FALSE, FALSE, FALSE);
-	}*/
+	KeyBoard::Install(33);
 
 	return true;
 }
@@ -103,6 +95,7 @@ bool DumpSystemInfo(multiboot_info* pBootInfo)
 
 	sprintf(str, "LocalTime : %d %d/%d %d:%d %d\n", sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
 	SkyConsole::Print("%s", str);
+	SkyConsole::Print("%d %d %d\n", sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
 
 	/*for (int i = 0; i < 100; i++)
 	{
@@ -146,22 +139,17 @@ bool InitGraphics(multiboot_info* pInfo)
 extern bool FddInitializeDriver(VOID);
 extern BOOL FsInitializeModule(VOID);
 
-#include "flpydsk.h"
 void InitFloppyDrive()
 {
-	//FddInitializeDriver();
-
-	//flpydsk_install(38);
-
-	//FsInitializeModule();
-	//! set drive 0 as current drive
-	flpydsk_set_working_drive(0);
+	
+//! set drive 0 as current drive
+	FloppyDisk::SetWorkingDrive(0);
 
 	//! install floppy disk to IR 38, uses IRQ 6
-	flpydsk_install(38);
+	FloppyDisk::Install(38);
 	
-	//! initialize FAT12 filesystem
-	fsysFatInitialize();
+//! initialize FAT12 filesystem
+	InitializeVFSFat12();
 }
 
 __declspec(naked) void  _cdecl HandleInterrupt()

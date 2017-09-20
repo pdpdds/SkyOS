@@ -1,7 +1,7 @@
 ﻿#include "VirtualMemoryManager.h"
 #include "PhysicalMemoryManager.h"
 #include "string.h"
-#include "Console.h"
+#include "SkyConsole.h"
 #include "kheap.h"
 #include"MultiBoot.h"	
 
@@ -161,7 +161,7 @@ namespace VirtualMemoryManager
 	}
 
 
-	bool Initialize()
+	PageDirectory* CreateCommonPageDirectory()
 	{
 		//페이지 디렉토리 생성. 가상주소 공간 
 		//4GB를 표현하기 위해서 페이지 디렉토리는 하나면 충분하다.
@@ -170,12 +170,12 @@ namespace VirtualMemoryManager
 		PageDirectory* dir = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
 
 		if (dir == NULL)
-			return false;
+			return nullptr;
 
 		memset(dir, 0, sizeof(PageDirectory));
 
-		
-		
+
+
 
 		uint32_t frame = 0x00000000;
 		uint32_t virt = 0x00000000;
@@ -185,10 +185,10 @@ namespace VirtualMemoryManager
 			//아이덴티티 페이지 테이블을 세개 생성
 			PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
 			if (identityPageTable == NULL)
-				return false;
+				return nullptr;
 
 			//0-4MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
-			for (int i = 0; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
+			for (int j = 0; i < PAGES_PER_TABLE; j++, frame += PAGE_SIZE, virt += PAGE_SIZE)
 			{
 				PTE page = 0;
 				PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
@@ -207,28 +207,15 @@ namespace VirtualMemoryManager
 			PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
 		}
 
-		frame = KERNEL_PHYSICAL_HEAP_ADDRESS;
-		virt = KERNEL_VIRTUAL_HEAP_ADDRESS;
-		uint32_t maxAddress = frame + PhysicalMemoryManager::GetMemorySize();
-		maxAddress -= (maxAddress % 0x00400000) - 0x00400000;
+		return dir;
+	}
 
-		while (frame < maxAddress)
-		{
-			PageTable* pageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
-			for (int i = 0; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
-			{
-				PTE page = 0;
-				PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
-				PageTableEntry::SetFrame(&page, frame);
+	bool Initialize()
+	{
+		PageDirectory* dir = CreateCommonPageDirectory();
 
-				pageTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
-			}		
-
-			PDE* pageTableEntry = &dir->m_entries[PAGE_DIRECTORY_INDEX((virt - 0x00400000))];
-			PageDirectoryEntry::AddAttribute(pageTableEntry, I86_PDE_PRESENT);
-			PageDirectoryEntry::AddAttribute(pageTableEntry, I86_PDE_WRITABLE);
-			PageDirectoryEntry::SetFrame(pageTableEntry, (uint32_t)pageTable);
-		}
+		if (nullptr == dir)
+			return false;
 
 		//페이지 디렉토리를 PDBR 레지스터에 로드한다
 		if (false == SetPageDirectoryInfo(dir))
@@ -276,7 +263,7 @@ namespace VirtualMemoryManager
 #endif
 	}
 
-	//256 * 50 * 4096 = 50MB의 힙을 할당한다
+	//256 * 10 * 4096 = 10MB의 힙을 할당한다
 
 	bool CreateKernelHeap()
 	{
@@ -285,7 +272,7 @@ namespace VirtualMemoryManager
 		//Virtual Heap Address
 		void* pVirtualHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
 
-		heapFrameCount = 256 * 100;
+		heapFrameCount = 256;
 
 		m_pKernelHeapPhysicalMemory = PhysicalMemoryManager::AllocBlocks(heapFrameCount);
 
@@ -293,6 +280,8 @@ namespace VirtualMemoryManager
 			return false;		
 
 		int endAddress = (uint32_t)pVirtualHeap + heapFrameCount * PMM_BLOCK_SIZE;
+
+		
 		MapHeap(dir);
 
 		create_kernel_heap((u32int)pVirtualHeap, (uint32_t)endAddress, (uint32_t)endAddress, 0, 0);
@@ -307,10 +296,13 @@ namespace VirtualMemoryManager
 	{		
 		int endAddress = (uint32_t)KERNEL_VIRTUAL_HEAP_ADDRESS + heapFrameCount * PMM_BLOCK_SIZE;
 		int frameCount = (endAddress - KERNEL_VIRTUAL_HEAP_ADDRESS) / PAGE_SIZE;
+
 		for (int i = 0; i < frameCount; i++)
 		{
 			MapPhysicalAddressToVirtualAddresss(dir, (uint32_t)KERNEL_VIRTUAL_HEAP_ADDRESS + i * PAGE_SIZE, (uint32_t)m_pKernelHeapPhysicalMemory + i * PAGE_SIZE, I86_PTE_PRESENT | I86_PTE_WRITABLE);
 		}
+
+		SkyConsole::Print("aaVirtual Memory Manager Init\n");
 
 		return true;
 	}
