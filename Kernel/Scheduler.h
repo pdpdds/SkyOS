@@ -15,6 +15,7 @@ public:
 	}
 
 	bool  DoSchedule(int tick, registers_t& registers);
+	bool Yield(int currentThreadId);
 
 private:
 	Scheduler();

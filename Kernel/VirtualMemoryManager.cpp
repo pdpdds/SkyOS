@@ -174,9 +174,6 @@ namespace VirtualMemoryManager
 
 		memset(dir, 0, sizeof(PageDirectory));
 
-
-
-
 		uint32_t frame = 0x00000000;
 		uint32_t virt = 0x00000000;
 
@@ -185,10 +182,12 @@ namespace VirtualMemoryManager
 			//아이덴티티 페이지 테이블을 세개 생성
 			PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
 			if (identityPageTable == NULL)
+			{
 				return nullptr;
+			}
 
 			//0-4MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
-			for (int j = 0; i < PAGES_PER_TABLE; j++, frame += PAGE_SIZE, virt += PAGE_SIZE)
+			for (int j = 0; j < PAGES_PER_TABLE; j++, frame += PAGE_SIZE, virt += PAGE_SIZE)
 			{
 				PTE page = 0;
 				PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
@@ -212,6 +211,8 @@ namespace VirtualMemoryManager
 
 	bool Initialize()
 	{
+		SkyConsole::Print("Virtual Memory Manager Init\n");
+
 		PageDirectory* dir = CreateCommonPageDirectory();
 
 		if (nullptr == dir)
@@ -220,6 +221,7 @@ namespace VirtualMemoryManager
 		//페이지 디렉토리를 PDBR 레지스터에 로드한다
 		if (false == SetPageDirectoryInfo(dir))
 			return false;
+
 
 		_asm
 		{
@@ -230,7 +232,7 @@ namespace VirtualMemoryManager
 		//페이징 기능을 다시 활성화시킨다
 		PhysicalMemoryManager::EnablePaging(true);
 
-		SkyConsole::Print("Virtual Memory Manager Init\n");
+		
 
 		return true;
 	}

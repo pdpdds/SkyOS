@@ -127,7 +127,7 @@ void cmd_list() {
 	EnterCriticalSection();
 	SkyConsole::Print("Process List\n");
 
-	Orange::LinkedList* processlist = ProcessManager::GetInstance()->GetProcessList();
+	Sky::LinkedList* processlist = ProcessManager::GetInstance()->GetProcessList();
 
 	for (int i = 0; i < processlist->Count(); i++)
 	{

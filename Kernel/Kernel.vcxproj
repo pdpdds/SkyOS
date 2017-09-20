@@ -116,6 +116,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="RAMDisk.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
     <ClCompile Include="kentry.cpp" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="Collect.h" />
     <ClInclude Include="FloppyDiskIO.h" />
+    <ClInclude Include="RAMDisk.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="ConsoleManager.h" />
     <ClInclude Include="DoubleLinkedList.h" />

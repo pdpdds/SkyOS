@@ -16,6 +16,7 @@ static int kernelStackIndex = 0;
 ProcessManager::ProcessManager()
 {
 	m_nextProcessId = 1;	
+	m_nextThreadId = 1000;
 }
 
 ProcessManager::~ProcessManager()
@@ -53,6 +54,8 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	pThread->m_stackLimit = PAGE_SIZE;
 	pThread->m_imageBase = ntHeaders->OptionalHeader.ImageBase;
 	pThread->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;
+	pThread->m_threadId = m_nextThreadId++;
+
 	memset(&pThread->frame, 0, sizeof(trapFrame));
 	pThread->frame.eip = (uint32_t)ntHeaders->OptionalHeader.AddressOfEntryPoint + ntHeaders->OptionalHeader.ImageBase;
 	pThread->frame.flags = 0x200;
@@ -132,7 +135,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 {
 	Thread* pThread = new Thread();
 	pThread->m_pParent = pProcess;
-	
+	pThread->m_threadId = m_nextThreadId++;
 	pThread->m_dwPriority = 1;
 	pThread->m_taskState = TASK_STATE_INIT;
 	pThread->m_stackLimit = PAGE_SIZE;
@@ -275,7 +278,6 @@ Process* ProcessManager::CreateConsoleProcess(LPTHREAD_START_ROUTINE lpStartAddr
 
 	Thread* pThread = CreateThread(pProcess, lpStartAddress, pProcess);
 
-	pProcess->AddThread(pThread);
 	AddProcess(pProcess);
 
 	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
@@ -340,10 +342,11 @@ Process* ProcessManager::CreateProcessFromMemory(LPTHREAD_START_ROUTINE lpStartA
 	
 	Thread* pThread = CreateThread(pProcess, lpStartAddress, pProcess);
 	
-	pProcess->AddThread(pThread);
 	AddProcess(pProcess);	
 
 	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
+
+	
 
 	return pProcess;
 }
@@ -437,39 +440,66 @@ bool ProcessManager::DestroyProcess(Process* pProcess)
 	return true;
 }
 
+bool ProcessManager::RemoveTerminatedProcess()
+{
+	int threadCount = m_terminatedTaskList.CountItems();
+
+	for (int i = 0; i < threadCount; i++)
+	{
+		Thread* pThread = (Thread*)m_terminatedTaskList.GetHead()->_data;
+
+		ListNode* pNode = m_terminatedTaskList.Remove(pThread);
+
+		if (pNode)
+		{
+			DestroyKernelProcess(pThread->m_pParent);
+			delete pNode;
+		}
+		else
+		{
+			SkyConsole::Print("task delete fail %d\n", pThread->m_threadId);
+		}
+	}
+
+	return true;
+}
+
 //커널 프로세스를 종료한다.
 bool ProcessManager::DestroyKernelProcess(Process* pProcess)
 {
+	if (nullptr == pProcess)
+		return false;
+
 	//태스크 목록에서 프로세스의 태스크들을 제거한다.
 	RemoveFromTaskList(pProcess);
 
 	//스레드 관련 Context 자원을 해제한다.
 	//가상 주소를 운영하기 위해 할당했던 페이지 테이블, 스택 등을 회수 등등
-	ReleaseThreadContext(pProcess);
+	//ReleaseThreadContext(pProcess);
 	
 	//페이지 디렉토리 회수
 	//페이지 디렉토리는 물리 주소임
-	PhysicalMemoryManager::FreeBlock(pProcess->m_pPageDirectory);
+	//PhysicalMemoryManager::FreeBlock(pProcess->m_pPageDirectory);
 	m_processList.Delete(pProcess);
 	//프로세스 객체 완전히 제거	
-#ifdef _ORANGE_DEBUG
+#ifdef _SKY_DEBUG
 	SkyConsole::Print("terminate %s\n", pProcess->m_processName);
-#endif // _ORANGE_DEBUG
+#endif //
 
 	delete pProcess;
 
 	return true;
 }
 
-bool ProcessManager::ReleaseThreadContext(Process* pProces)
+bool ProcessManager::ReleaseThreadContext(Process* pProcess)
 {
-	int threadCount = pProces->m_threadList.CountItems();
+	int threadCount = pProcess->m_threadList.CountItems();
 
 	for (int i = 0; i < threadCount; i++)
 	{
-		Thread* pThread = pProces->GetThread(i);
+		Thread* pThread = pProcess->GetThread(i);
 		//스택 페이지 회수
-		VirtualMemoryManager::UnmapPhysicalAddress(pProces->m_pPageDirectory, (uint32_t)pThread->m_initialStack);
+		VirtualMemoryManager::UnmapPhysicalAddress(pProcess->m_pPageDirectory, (uint32_t)pThread->m_initialStack);
 
 		// TLS 등등을 회수		
 	}

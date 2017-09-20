@@ -160,6 +160,7 @@
     <ClCompile Include="Scheduler.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="RAMDisk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h">
@@ -303,5 +304,6 @@
     <ClInclude Include="Scheduler.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="RAMDisk.h" />
   </ItemGroup>
 </Project>

@@ -14,7 +14,8 @@ private:
 	friend class SkyQueue;
 };
 
-class DoubleLinkedList {
+class DoubleLinkedList 
+{
 public:
 	inline DoubleLinkedList();
 	inline ListNode* AddToTail(ListNode*);
@@ -23,6 +24,7 @@ public:
 	inline ListNode* AddAfter(ListNode *prev, ListNode *newEntry);
 	inline ListNode* Remove(ListNode*);
 	inline ListNode* Remove(void*);
+	inline void		 Clear();
 	inline ListNode* GetHead() const;
 	inline ListNode* GetTail() const;
 	inline ListNode* GetNext(const ListNode*) const;
@@ -97,6 +99,22 @@ inline ListNode* DoubleLinkedList::Remove(void* data)
 	}
 
 	return NULL;
+}
+
+inline void DoubleLinkedList::Clear()
+{
+	ListNode* node = fDummyHead.fNext;
+
+	if (node == &fDummyHead)
+		return;
+
+	ListNode* tempNode = node;
+	while (tempNode != nullptr)
+	{
+		node = tempNode;
+		tempNode = node->fNext;
+		delete node;
+	}
 }
 
 inline ListNode* DoubleLinkedList::GetHead() const

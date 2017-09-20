@@ -102,12 +102,14 @@ class HardDiskHandler
 		static UINT16 Write(BYTE * DPF, _GSH_IO_Parameter * InputParameter, BYTE * Buffer);
 
 		BYTE GetLastErrorCode()
-			{return LastError;
-			}
+		{
+			return LastError;
+		}
 		char * GetLastError(BYTE ErrorCode);
 		char * GetLastError()
-			{return GetLastError(LastError);
-			}
+		{
+			return GetLastError(LastError);
+		}
 	};
 extern HardDiskHandler* __SysHDDHandler;
 #endif

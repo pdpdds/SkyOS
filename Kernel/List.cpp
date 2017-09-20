@@ -3,7 +3,7 @@
 #include "sprintf.h"
 #include "SkyConsole.h"
 
-namespace Orange
+namespace Sky
 {
 
 	LinkedList::LinkedList()

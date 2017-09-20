@@ -5,8 +5,12 @@
 #include "Hal.h"
 #include "PIT.h"
 #include "Process.h"
+#include "ProcessManager.h"
+#include "Scheduler.h"
+#include "SkyAPI.h"
 
 bool systemOn = false;
+void NativeConsole();
 
 void NativeConsole()
 {
@@ -43,7 +47,7 @@ void NativeConsole()
 	}
 }
 
-DWORD WINAPI SystemEntry(LPVOID parameter)
+DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 {	
 
 	while (1) {
@@ -82,38 +86,49 @@ DWORD WINAPI SampleLoop(LPVOID parameter)
 	return 0;
 }
 
-DWORD WINAPI TaskProcessor(LPVOID parameter)
-{
-	Process* pProcess = (Process*)parameter;
-	SkyConsole::Print("TaskProcessor Thread Parent Process Address %x\n", pProcess);
+#define TS_WATCHDOG_CLOCK_POS		(0xb8000+(80-1)*2)
+#define TIMEOUT_PER_SECOND		50				/* system timer (irq0) */
+static bool m_bShowTSWatchdogClock = true;
 
-	while (true)
+DWORD WINAPI WatchDogProc(LPVOID parameter)
+{		
+	Process* pProcess = (Process*)parameter;
+	int pos = 0;
+	char *addr = (char *)TS_WATCHDOG_CLOCK_POS, status[] = { '-', '\\', '|', '/', '-', '\\', '|', '/' };
+	int first = GetTickCount();
+
+	while (1) 
 	{
-	//	simpl
+	
+		int second = GetTickCount();
+		if (second - first >= TIMEOUT_PER_SECOND)
+		{
+			if (++pos > 7) 
+				pos = 0;
+		
+			if (m_bShowTSWatchdogClock)
+				*addr = status[pos];
+
+			first = GetTickCount();
+		}
 	}
 
 	return 0;
 }
 
-DWORD WINAPI TestKernelProcess(LPVOID parameter)
-{		
+DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
+{
 	Process* pProcess = (Process*)parameter;
-	SkyConsole::Print("Test Second Kernel Process %x\n", pProcess);
-	BOOL bExit = false;
-	int first = GetTickCount();
-
-	while (bExit == false)
+	
+	while (1)
 	{
-		static int count = 0;
-		
-		int second = GetTickCount();
-		if (second - first > 100)
-		{
-			SkyConsole::Print("Test Second Kernel Process %x\n", pProcess);
+		__asm cli
+		ProcessManager::GetInstance()->RemoveTerminatedProcess();
 
-			first = GetTickCount();
-			count++;
-		}
+		Scheduler::GetInstance()->Yield(kGetCurrentThreadId());
+
+		__asm sti
+		
 	}
 
 	return 0;

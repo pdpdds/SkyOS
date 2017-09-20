@@ -21,7 +21,7 @@ public:
 	Process* GetCurrentProcess();	
 
 
-	Orange::LinkedList* GetProcessList() { return &m_processList;}
+	Sky::LinkedList* GetProcessList() { return &m_processList;}
 	int GetNextProcessId() { return m_nextProcessId++; }
 
 	static ProcessManager* GetInstance()
@@ -41,8 +41,9 @@ public:
 
 	bool AddProcess(Process* pProcess);
 	Process* FindProcess(int processId);
-	bool RemoveFromTaskList(Process* pProcess);
 
+	bool RemoveTerminatedProcess();
+	bool RemoveFromTaskList(Process* pProcess);
 	bool DestroyProcess(Process* pProcess);
 	bool DestroyKernelProcess(Process* pProcess);
 	bool ReleaseThreadContext(Process* pProcess);
@@ -58,7 +59,10 @@ private:
 private:
 	static ProcessManager* m_processManager;
 
-	int m_nextProcessId;	
-	Orange::LinkedList m_processList;
+	int m_nextProcessId;
+	int m_nextThreadId;
+
+	Sky::LinkedList m_processList;
 	DoubleLinkedList m_taskList;
+	DoubleLinkedList m_terminatedTaskList;
 };

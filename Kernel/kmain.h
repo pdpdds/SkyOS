@@ -25,6 +25,7 @@
 #include "StdVGA.H"
 #include "fat32.h"
 #include "fat12.h"
+#include "RAMDisk.h"
 
 void kmain(unsigned long, unsigned long);
 bool InitMemoryManager(multiboot_info* bootinfo, uint32_t kernelSize);

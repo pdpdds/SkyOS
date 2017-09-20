@@ -169,3 +169,29 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 
 	return true;
 }
+
+bool Scheduler::Yield(int currentThreadId)
+{
+	DoubleLinkedList* pTaskList = ProcessManager::GetInstance()->GetTaskList();
+
+	int taskCount = pTaskList->CountItems();
+
+	if (taskCount == 0)
+		SkyConsole::Print("bug\n");
+
+	if (taskCount == 1)
+		return true;
+
+	ListNode* pNode = pTaskList->GetHead();
+	Thread* pThread = (Thread*)pNode->_data;
+
+	if (pThread->m_threadId != currentThreadId)
+		return false;
+
+	if (pThread->m_taskState = TASK_STATE_RUNNING)
+		return false;
+
+	pThread->m_waitingTime = 0;
+
+	return true;
+}

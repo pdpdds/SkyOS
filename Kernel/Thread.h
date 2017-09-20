@@ -32,4 +32,5 @@ public:
 
 	
 	registers_t m_contextSnapshot; //태스크의 컨텍스트 스냅샷(레지스터)
+	int			m_threadId;
 };
