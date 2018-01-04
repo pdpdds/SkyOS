@@ -123,7 +123,7 @@ bool DumpSystemInfo(multiboot_info* pBootInfo)
 	return true;
 }
 
-bool InitGraphics(multiboot_info* pInfo)
+bool InitGraphics(VesaModeInfo* pInfo)
 {
 	/* set video mode and map framebuffer. */
 	//VbeBochsSetMode(WIDTH, HEIGHT, BPP);

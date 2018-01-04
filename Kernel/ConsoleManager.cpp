@@ -244,6 +244,14 @@ void cmd_proc(char* pName) {
 		ProcessManager::GetInstance()->AddProcess(pProcess);
 }
 
+extern void TestV8086();
+// proc (process) command
+void cmd_gui(char* pName) {
+
+	TestV8086();
+	for (;;);
+}
+
 bool ConsoleManager::RunCommand(char* buf) 
 {
 
@@ -330,6 +338,10 @@ bool ConsoleManager::RunCommand(char* buf)
 
 		cmd_proc(buf);
 	}	
+	else if (strcmp(buf, "gui") == 0) {
+
+		cmd_gui(buf);
+	}
 	else
 	{			
 		char* directive = strtok(buf, " ");		

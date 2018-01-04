@@ -18,8 +18,11 @@
     <ClCompile Include="sprintf.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Math.c" />
     <ClCompile Include="SkyIO.c" />
+    <ClCompile Include="Math.cpp" />
+    <ClCompile Include="jsmn.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="string.h">
@@ -56,5 +59,38 @@
     <ClInclude Include="SkyIO.h" />
     <ClInclude Include="errno.h" />
     <ClInclude Include="setjmp.h" />
+    <ClInclude Include="Vector.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Stack.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="HashMap.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="jsmn.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="map.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="iostream.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="stl_pair.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="list_implement.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="list_iterator_implement.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="list_node_implement.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="list1.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

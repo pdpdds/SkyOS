@@ -161,6 +161,7 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="RAMDisk.cpp" />
+    <ClCompile Include="v8086\rme.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h">
@@ -305,5 +306,6 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="RAMDisk.h" />
+    <ClInclude Include="v8086\rme.h" />
   </ItemGroup>
 </Project>

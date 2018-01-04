@@ -1,6 +1,7 @@
 #pragma once
 #include "stdint.h"
 #include "MultiBoot.h"
+#include "vesa.h"
 
 extern void __cdecl  InitializeConstructors();
 
@@ -12,7 +13,7 @@ bool InitKeyboard();
 bool InitHardDrive();
 void TestHardDrive();
 
-bool InitGraphics(multiboot_info* pInfo);
+bool InitGraphics(VesaModeInfo* pInfo);
 
 bool DumpSystemInfo(multiboot_info* pBootInfo);
 

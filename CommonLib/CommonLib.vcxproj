@@ -107,7 +107,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cstd.cpp" />
-    <ClCompile Include="Math.c" />
+    <ClCompile Include="jsmn.cpp" />
+    <ClCompile Include="Math.cpp" />
     <ClCompile Include="SkyIO.c" />
     <ClCompile Include="sprintf.cpp" />
     <ClCompile Include="stdio.cpp" />
@@ -117,17 +118,28 @@
     <ClInclude Include="ChType.H" />
     <ClInclude Include="ctype.h" />
     <ClInclude Include="errno.h" />
+    <ClInclude Include="HashMap.h" />
+    <ClInclude Include="iostream.h" />
+    <ClInclude Include="jsmn.h" />
+    <ClInclude Include="list1.h" />
+    <ClInclude Include="list_implement.h" />
+    <ClInclude Include="list_iterator_implement.h" />
+    <ClInclude Include="list_node_implement.h" />
+    <ClInclude Include="map.hpp" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="setjmp.h" />
     <ClInclude Include="size_t.h" />
     <ClInclude Include="SkyIO.h" />
     <ClInclude Include="sprintf.h" />
+    <ClInclude Include="Stack.h" />
     <ClInclude Include="stdarg.h" />
     <ClInclude Include="stddef.h" />
     <ClInclude Include="stdint.h" />
     <ClInclude Include="stdio.h" />
+    <ClInclude Include="stl_pair.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="va_list.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
