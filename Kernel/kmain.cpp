@@ -8,6 +8,7 @@ BOOL kFormat(void);
 #include "jsmn.h"
 #include "map.hpp"
 #include "List1.h"
+#include "TestInteger.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -61,6 +62,8 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 
 void TestMap();
 void TestList();
+void TestCPP14();
+
 
 
 void kmain(unsigned long magic, unsigned long addr)
@@ -153,6 +156,7 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	//TestMap();
 	TestList();
+	TestCPP14();
 
 	int i;
 	int r;
@@ -263,6 +267,18 @@ void TestMap()
 	}
 
 	for (;;);
+}
+
+void TestCPP14()
+{
+	auto func = [x = 5]() { return x; };   
+	auto n1 = func();     
+	printf("Lamda n1:%d\n", n1);
+
+	constexpr TestInteger size(10);
+	int x[size];  
+	x[3] = 11; 
+	printf("constexor x[3]:%d\n", x[3]);
 }
 
 void TestList()

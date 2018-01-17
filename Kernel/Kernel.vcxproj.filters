@@ -307,5 +307,6 @@
     </ClInclude>
     <ClInclude Include="RAMDisk.h" />
     <ClInclude Include="v8086\rme.h" />
+    <ClInclude Include="TestInteger.h" />
   </ItemGroup>
 </Project>

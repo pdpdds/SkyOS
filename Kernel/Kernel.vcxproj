@@ -176,6 +176,7 @@
     <ClInclude Include="FAT12.h" />
     <ClInclude Include="FAT32VFSAdaptor.h" />
     <ClInclude Include="FloppyDisk.h" />
+    <ClInclude Include="TestInteger.h" />
     <ClInclude Include="v8086\rme.h" />
     <ClInclude Include="VFS.h" />
     <ClInclude Include="GDT.h" />

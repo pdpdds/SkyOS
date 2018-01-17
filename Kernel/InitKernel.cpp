@@ -148,7 +148,7 @@ void InitFloppyDrive()
 	//! install floppy disk to IR 38, uses IRQ 6
 	FloppyDisk::Install(38);
 	
-//! initialize FAT12 filesystem
+//파일 시스템 초기화
 	InitializeVFSFat12();
 }
 
