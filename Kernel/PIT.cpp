@@ -124,8 +124,8 @@ __declspec(naked) void i86_pit_irq()
 	}
 }
 
-//! starts a counter
-void i86_pit_start_counter(uint32_t freq, uint8_t counter, uint8_t mode) {
+//타이머를 시작
+void StartPITCounter(uint32_t freq, uint8_t counter, uint8_t mode) {
 
 	if (freq == 0)
 		return;
@@ -148,8 +148,8 @@ void i86_pit_start_counter(uint32_t freq, uint8_t counter, uint8_t mode) {
 }
 
 
-//! initialize minidriver
-void _cdecl i86_pit_initialize() {
+//PIT 초기화
+void _cdecl InitializePIT() {
 
 	//! Install our interrupt handler (irq 0 uses interrupt 32)
 	setvect(32, i86_pit_irq);

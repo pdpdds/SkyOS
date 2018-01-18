@@ -33,6 +33,7 @@ public:
 
 	uint32_t	m_imageBase; //파일로 부터 코드를 로드할 경우 사용됨. 파일에 메모리에 로드된 주소
 	uint32_t	m_imageSize; //파일의 크기
+	bool		m_IskernelProcess;
 
 private:
 	

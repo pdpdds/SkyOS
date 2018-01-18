@@ -237,11 +237,12 @@ extern "C"
 		if (cur == NULL || cur->m_processId == PROC_INVALID_ID)
 		{
 			SkyConsole::Print("Invailid Process Termination\n");
+			LeaveCriticalSection();
 			return;
 		}
 
 		//프로세스 매니저에서 해당 프로세스를 완전히 제거한다.
-		//태스크 목록에서도 제거되어 해당 프로세스는 더이상 스케쥴링 되지 않는다.
+		//태스크 목록에서도 제거되어 해당 프로세스는 더이상 스케쥴링 되지 않는다.		
 		ProcessManager::GetInstance()->DestroyProcess(cur);
 
 		LeaveCriticalSection();

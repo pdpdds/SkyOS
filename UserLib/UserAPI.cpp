@@ -1,17 +1,17 @@
-#include "sysapi.h"
+#include "UserAPI.h"
 
+//현재의 틱을 얻어온다.
 uint32_t GetTickCount()
 {
 	int address = 0;
 	__asm
 	{
 		mov eax, 5
-			int 0x80
-			mov address, eax
+		int 0x80
+		mov address, eax
 	}
 	return address;
 }
-typedef unsigned int   u32int;
 
 void free(void *p)
 {
@@ -36,6 +36,37 @@ u32int malloc(u32int sz)
 	return address;
 }
 
+//힙을 생성
+void CreateHeap()
+{
+	__asm {
+
+		mov eax, 4
+		int 0x80
+	}
+}
+
+//프로세스 종료
+void TerminateProcess()
+{
+	__asm 
+	{	
+		mov eax, 1
+		int 0x80
+	}
+}
+
+//커널 콘솔 화면에 문자열 출력
+int printf(const char* szMsg)
+{
+	__asm 
+	{		
+		mov ebx, szMsg
+		mov eax, 0
+		int 0x80
+	}
+}
+
 void *operator new(size_t size)
 {
 	return (void *)malloc(size);
@@ -56,9 +87,9 @@ void operator delete(void *p, size_t size)
 	free(p);
 }
 
+//순수 가상 함수 호출 에러에 대해서는 아무런 처리를 하지 않는다.
 int __cdecl _purecall()
-{
-	// Do nothing or print an error message.
+{	
 	return 0;
 }
 

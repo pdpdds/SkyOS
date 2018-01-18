@@ -6,6 +6,10 @@ typedef unsigned int   u32int;
 uint32_t GetTickCount();
 void free(void *p);
 u32int malloc(u32int sz);
+void CreateHeap();
+void TerminateProcess();
+int printf(const char* szMsg);
+
 void *operator new(size_t size);
 void *operator new[](size_t size);
 void operator delete(void *p);

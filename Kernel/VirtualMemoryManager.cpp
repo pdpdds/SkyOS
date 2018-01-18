@@ -211,7 +211,7 @@ namespace VirtualMemoryManager
 
 	bool Initialize()
 	{
-		SkyConsole::Print("Virtual Memory Manager Init\n");
+		SkyConsole::Print("Virtual Memory Manager Init..\n");
 
 		PageDirectory* dir = CreateCommonPageDirectory();
 
@@ -288,8 +288,10 @@ namespace VirtualMemoryManager
 
 		create_kernel_heap((u32int)pVirtualHeap, (uint32_t)endAddress, (uint32_t)endAddress, 0, 0);
 
+#ifdef _DEBUG
 		SkyConsole::Print("KernelHeap Physical Address 0x%x\n", m_pKernelHeapPhysicalMemory);
 		SkyConsole::Print("KernelHeap Virtual Address 0x%x\n", pVirtualHeap);
+#endif
 
 		return true;
 	}
@@ -304,7 +306,9 @@ namespace VirtualMemoryManager
 			MapPhysicalAddressToVirtualAddresss(dir, (uint32_t)KERNEL_VIRTUAL_HEAP_ADDRESS + i * PAGE_SIZE, (uint32_t)m_pKernelHeapPhysicalMemory + i * PAGE_SIZE, I86_PTE_PRESENT | I86_PTE_WRITABLE);
 		}
 
-		SkyConsole::Print("aaVirtual Memory Manager Init\n");
+#ifdef _DEBUG
+		SkyConsole::Print("Map Heap\n");
+#endif
 
 		return true;
 	}

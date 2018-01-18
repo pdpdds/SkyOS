@@ -33,7 +33,7 @@ public:
 	}
 	
 	Process* CreateConsoleProcess(LPTHREAD_START_ROUTINE lpStartAddress);
-	Process* CreateProcessFromMemory(LPTHREAD_START_ROUTINE lpStartAddress);
+	Process* CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress);
 	
 	Process* CreateProcessFromFile(char* appName, UINT32 processType);	
 	Thread* CreateThread(Process* pProcess, FILE* pFile, LPVOID param);

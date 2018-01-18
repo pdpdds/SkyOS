@@ -72,17 +72,17 @@ void InterruptDone(unsigned int intno) {
 
 	//! test if we need to send end-of-interrupt to second pic
 	if (intno >= 8)
-		i86_pic_send_command(I86_PIC_OCW2_MASK_EOI, 1);
+		SendCommandToPIC(I86_PIC_OCW2_MASK_EOI, 1);
 
 	//! always send end-of-interrupt to primary pic
-	i86_pic_send_command(I86_PIC_OCW2_MASK_EOI, 0);
+	SendCommandToPIC(I86_PIC_OCW2_MASK_EOI, 0);
 }
 
 //! sets new interrupt vector
 void setvect(int intno, void(&vect) (), int flags) {
 
 	//! install interrupt handler! This overwrites prev interrupt descriptor
-	i86_install_ir(intno, (uint16_t)(I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32 | flags), 0x8, vect);
+	InstallInterrputHandler(intno, (uint16_t)(I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32 | flags), 0x8, vect);
 }
 
 DWORD kReadFLAGS()

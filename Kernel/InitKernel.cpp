@@ -190,5 +190,5 @@ void SetInterruptVector()
 	setvect(33, (void(__cdecl &)(void))HandleInterrupt);
 	setvect(38, (void(__cdecl &)(void))HandleInterrupt);
 
-	//i86_install_ir(SYSTEM_TMR_INT_NUMBER, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32 | 0x0500, 0x8, (I86_IRQ_HANDLER)TMR_TSS_SEG);
+	//InstallInterrputHandler(SYSTEM_TMR_INT_NUMBER, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32 | 0x0500, 0x8, (I86_IRQ_HANDLER)TMR_TSS_SEG);
 }

@@ -25,9 +25,6 @@
     <Filter Include="HAL">
       <UniqueIdentifier>{f28e2cbc-40ef-4d94-ae8c-5d93396242a0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UnitTest">
-      <UniqueIdentifier>{b6f30009-68db-4eae-b56d-dc0cfd461382}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Video">
       <UniqueIdentifier>{317548d2-9076-414d-9403-486247cee5ad}</UniqueIdentifier>
     </Filter>
@@ -36,6 +33,9 @@
     </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{3251226d-ebfa-45ad-baf4-339098dfdc96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{b6f30009-68db-4eae-b56d-dc0cfd461382}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -121,10 +121,10 @@
       <Filter>Entry</Filter>
     </ClCompile>
     <ClCompile Include="ZetPlane.cpp">
-      <Filter>UnitTest</Filter>
+      <Filter>Test</Filter>
     </ClCompile>
     <ClCompile Include="Plane.cpp">
-      <Filter>UnitTest</Filter>
+      <Filter>Test</Filter>
     </ClCompile>
     <ClCompile Include="SkyAPI.cpp">
       <Filter>API</Filter>
@@ -144,7 +144,6 @@
     <ClCompile Include="SysAPI.cpp">
       <Filter>API</Filter>
     </ClCompile>
-    <ClCompile Include="user.cpp" />
     <ClCompile Include="ProcessUtil.cpp">
       <Filter>Process</Filter>
     </ClCompile>
@@ -162,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="RAMDisk.cpp" />
     <ClCompile Include="v8086\rme.cpp" />
+    <ClCompile Include="SkyTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h">
@@ -246,10 +248,10 @@
       <Filter>VFS</Filter>
     </ClInclude>
     <ClInclude Include="ZetPlane.h">
-      <Filter>UnitTest</Filter>
+      <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="Plane.h">
-      <Filter>UnitTest</Filter>
+      <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="SkyAPI.h">
       <Filter>API</Filter>
@@ -307,6 +309,11 @@
     </ClInclude>
     <ClInclude Include="RAMDisk.h" />
     <ClInclude Include="v8086\rme.h" />
-    <ClInclude Include="TestInteger.h" />
+    <ClInclude Include="TestInteger.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

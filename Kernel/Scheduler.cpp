@@ -17,7 +17,7 @@ extern uint32_t g_pageDirectory;
 
 void SwitchTask(int tick, registers_t& registers)
 {
-	if(systemOn == false)
+	if (systemOn == false)
 		return;
 
 	Scheduler::GetInstance()->DoSchedule(tick, registers);
@@ -34,8 +34,8 @@ Scheduler::~Scheduler()
 
 
 bool  Scheduler::DoSchedule(int tick, registers_t& registers)
-{	
-	
+{
+
 #ifdef _ORANGE_DEBUG
 	/*uint32_t currentTickCount = GetTickCount();
 
@@ -60,7 +60,7 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 
 		lastTickCount = currentTickCount;
 	}*/
-#endif
+#endif	
 
 	DoubleLinkedList* pTaskList = ProcessManager::GetInstance()->GetTaskList();
 
@@ -73,7 +73,7 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 		return true;
 
 	ListNode* pNode = pTaskList->GetHead();
-	Thread* pThread = (Thread*)pNode->_data;	
+	Thread* pThread = (Thread*)pNode->_data;
 
 	pThread->m_waitingTime--;
 
@@ -89,53 +89,56 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 	ListNode* pCandidate = pTaskList->GetHead();
 	Thread* pNextThread = (Thread*)pCandidate->_data;
 
-	
+	Process* pProcess = pNextThread->m_pParent;
 
 	if (pNextThread->m_taskState == TASK_STATE_INIT)
 	{
-
 		pNextThread->m_waitingTime = TASK_RUNNING_TIME;
 		pNextThread->m_taskState = TASK_STATE_RUNNING;
 
 		int entryPoint = (int)pNextThread->frame.eip;
 		unsigned int procStack = pNextThread->frame.esp;
 		LPVOID param = pNextThread->m_startParam;
-	
+
 		PageDirectory* pageDirectory = pNextThread->m_pParent->m_pPageDirectory;
 		VirtualMemoryManager::SetPageDirectoryInfo(pageDirectory);
 
-		_asm
+		//if (pProcess->m_IskernelProcess == true)
 		{
-			mov ecx, [entryPoint]
-			mov esp, procStack			
-			mov ebx, [param]
 
-			mov	eax, [pageDirectory]
-			mov	cr3, eax	 	// PDBR is cr3 register in i86
-		}
+			_asm
+			{
+				mov ecx, [entryPoint]
+				mov esp, procStack
+				mov ebx, [param]
 
-		__asm
-		{
-			mov     ax, 0x10;
-			mov     ds, ax
-			mov     es, ax
-			mov     fs, ax
-			mov     gs, ax
-			
-			//mov esp, procStack
+				mov	eax, [pageDirectory]
+				mov	cr3, eax	 	// PDBR is cr3 register in i86
+			}
 
-			push   ebx;
-			push    0x10;
-			push    0x200; EFLAGS
-			push    0x08; CS
-			push ecx; EIP
-			
-			mov al, 0x20
-			out 0x20, al
-			sti
 
-			iretd
-		}
+			__asm
+			{
+				mov     ax, 0x10;
+				mov     ds, ax
+				mov     es, ax
+				mov     fs, ax
+				mov     gs, ax			
+
+				push    ebx;
+				push    0x10;
+				push    0x200; EFLAGS
+				push    0x08; CS
+				push ecx; EIP
+
+				mov al, 0x20
+				out 0x20, al
+				sti
+
+				iretd
+			}
+		}		
+
 	}
 	else
 	{
@@ -158,7 +161,7 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 		SkyConsole::Print("es : %x\n", pNextThread->m_regs.es);
 		SkyConsole::Print("fs : %x\n", pNextThread->m_regs.fs);*/
 #endif		
-	
+
 		pNextThread->m_waitingTime = TASK_RUNNING_TIME;
 		pNextThread->m_taskState = TASK_STATE_RUNNING;
 

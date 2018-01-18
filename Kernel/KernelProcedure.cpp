@@ -123,12 +123,11 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
 	while (1)
 	{
 		__asm cli
-		ProcessManager::GetInstance()->RemoveTerminatedProcess();
 
+		ProcessManager::GetInstance()->RemoveTerminatedProcess();
 		Scheduler::GetInstance()->Yield(kGetCurrentThreadId());
 
-		__asm sti
-		
+		__asm sti		
 	}
 
 	return 0;

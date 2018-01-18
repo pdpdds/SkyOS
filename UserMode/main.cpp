@@ -1,35 +1,13 @@
-#include "sysapi.h"
+#include "UserAPI.h"
 #include "string.h"
 
-void CreateHeap()
+int main() 
 {
-	__asm {
-
-		mov eax, 4
-		int 0x80
-	}
-}
-
-int printf(const char* szMsg)
-{
-	__asm {
-
-		/* display message through kernel terminal */
-		mov ebx, szMsg
-		mov eax, 0
-		int 0x80
-	}
-}
-
-void EntryPoint() {
-
-	
-	
 
 	char* message = "Hello world!!\n";
 	printf(message);
 
-	int first = GetTickCount();
+	/*int first = GetTickCount();
 	int count = 4;
 	
 	while (count != 0)
@@ -43,15 +21,7 @@ void EntryPoint() {
 			first = GetTickCount();
 			count -= 1;
 		}
-	}
-
-	while (1)
-	{
-
-	}
-
-	CreateHeap();
-
+	}*/
 	
 
 	char* a = new char[100];
@@ -59,15 +29,6 @@ void EntryPoint() {
 
 	printf(a);
 
+	return 0;
 	
-
-	//for (;;);	
-
-	delete a;
-	
-	__asm {
-			/* terminate */
-			mov eax, 1
-			int 0x80
-	}	
 }

@@ -76,7 +76,6 @@ namespace KeyBoard
 
 	KEYCODE GetLastKeyCode() 
 	{
-
 		return (_keyBoardState._scancode != INVALID_SCANCODE) ? ((KEYCODE)KeyboardScanCode[_keyBoardState._scancode]) : (KEY_UNKNOWN);
 	}
 

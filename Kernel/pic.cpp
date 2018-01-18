@@ -87,33 +87,9 @@
 #define I86_PIC_ICW4_SFNM_NESTEDMODE	0x10		//10000
 #define I86_PIC_ICW4_SFNM_NOTNESTED		0			//a binary 2 (futurama joke hehe ;)
 
-//============================================================================
-//    IMPLEMENTATION PRIVATE CLASS PROTOTYPES / EXTERNAL CLASS REFERENCES
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE STRUCTURES / UTILITY CLASSES
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION REQUIRED EXTERNAL REFERENCES (AVOID)
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE DATA
-//============================================================================
-//============================================================================
-//    INTERFACE DATA
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE FUNCTION PROTOTYPES
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE FUNCTIONS
-//============================================================================
-//============================================================================
-//    INTERFACE FUNCTIONS
-//============================================================================
 
-//! send command to PICs
-inline void i86_pic_send_command (uint8_t cmd, uint8_t picNum) {
+//PIC로 명령을 보낸다
+inline void SendCommandToPIC(uint8_t cmd, uint8_t picNum) {
 
 	if (picNum > 1)
 		return;
@@ -123,8 +99,8 @@ inline void i86_pic_send_command (uint8_t cmd, uint8_t picNum) {
 }
 
 
-//! send data to PICs
-inline void i86_pic_send_data (uint8_t data, uint8_t picNum) {
+//PIC로 데이터를 보낸다.
+inline void SendDataToPIC(uint8_t data, uint8_t picNum) {
 
 	if (picNum > 1)
 		return;
@@ -134,8 +110,8 @@ inline void i86_pic_send_data (uint8_t data, uint8_t picNum) {
 }
 
 
-//! read data from PICs
-inline uint8_t i86_pic_read_data (uint8_t picNum) {
+//PIC로부터 1바이트를 읽는다
+inline uint8_t ReadDataFromPIC(uint8_t picNum) {
 
 	if (picNum > 1)
 		return 0;
@@ -144,7 +120,7 @@ inline uint8_t i86_pic_read_data (uint8_t picNum) {
 	return InPortByte(reg);
 }
 
-void i86_pic_initialize(uint8_t base0, uint8_t base1) {
+void PICInitialize(uint8_t base0, uint8_t base1) {
 
 	uint8_t		icw = 0;
 
@@ -152,24 +128,24 @@ void i86_pic_initialize(uint8_t base0, uint8_t base1) {
 	icw = (icw & ~I86_PIC_ICW1_MASK_INIT) | I86_PIC_ICW1_INIT_YES;
 	icw = (icw & ~I86_PIC_ICW1_MASK_IC4) | I86_PIC_ICW1_IC4_EXPECT;
 
-	i86_pic_send_command(icw, 0);
-	i86_pic_send_command(icw, 1);
+	SendCommandToPIC(icw, 0);
+	SendCommandToPIC(icw, 1);
 
 	//! PIC에 ICW2 명령을 보낸다. base0와 base1은 IRQ의 베이스 주소를 의미한다.
-	i86_pic_send_data(base0, 0);
-	i86_pic_send_data(base1, 1);
+	SendDataToPIC(base0, 0);
+	SendDataToPIC(base1, 1);
 
 	//PIC에 ICW3 명령을 보낸다. 마스터와 슬레이브 PIC와의 관계를 정립한다.
 	
-	i86_pic_send_data(0x04, 0);
-	i86_pic_send_data(0x02, 1);
+	SendDataToPIC(0x04, 0);
+	SendDataToPIC(0x02, 1);
 
 	//ICW4 명령을 보낸다. i86 모드를 활성화 한다.
 
 	icw = (icw & ~I86_PIC_ICW4_MASK_UPM) | I86_PIC_ICW4_UPM_86MODE;
 
-	i86_pic_send_data(icw, 0);
-	i86_pic_send_data(icw, 1);
+	SendDataToPIC(icw, 0);
+	SendDataToPIC(icw, 1);
 	//PIC 초기화 완료
 }
 

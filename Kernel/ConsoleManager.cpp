@@ -10,12 +10,9 @@
 #include "PIT.h"
 #include "FloppyDisk.h"
 
-extern void enter_usermode();
-
 ConsoleManager::ConsoleManager()
 {
 }
-
 
 ConsoleManager::~ConsoleManager()
 {
@@ -100,7 +97,7 @@ void cmd_memtask()
 {
 	EnterCriticalSection();
 
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory(SampleLoop2);
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("SampleLoop", SampleLoop2);
 	
 	LeaveCriticalSection();
 }
@@ -113,7 +110,7 @@ void cmd_killtask(int processId)
 
 	if (pProcess != NULL)
 	{
-		SkyConsole::Print("Destroy Kernel Process : %s, ID : %d\n", pProcess->m_processName, pProcess->m_processId);
+		SkyConsole::Print("kill process : %s, ID : %d\n", pProcess->m_processName, pProcess->m_processId);
 		ProcessManager::GetInstance()->DestroyKernelProcess(pProcess);
 	}
 
@@ -122,10 +119,10 @@ void cmd_killtask(int processId)
 
 
 
-void cmd_list() {
+void cmd_ProcessList() {
 
 	EnterCriticalSection();
-	SkyConsole::Print("Process List\n");
+	SkyConsole::Print(" ID : Process Name\n");
 
 	Sky::LinkedList* processlist = ProcessManager::GetInstance()->GetProcessList();
 
@@ -133,7 +130,7 @@ void cmd_list() {
 	{
 		Process* pProcess = (Process*)processlist->Get(i);
 
-		SkyConsole::Print("Process Name : %s, ID : %d\n", pProcess->m_processName, pProcess->m_processId);
+		SkyConsole::Print("  %d : %s\n", pProcess->m_processId, pProcess->m_processName);
 	}
 
 	LeaveCriticalSection();
@@ -199,36 +196,6 @@ void cmd_read() {
 	SkyConsole::Print("\n\n\r--------[EOF]--------");
 }
 
-extern void tss_set_stack(uint16_t, uint16_t);
-
-void go_user() {
-
-	int stack = 0;
-	_asm mov[stack], esp
-
-	
-	tss_set_stack(0x10, (uint16_t)stack & 0xffff);
-
-	SkyConsole::Print("entering\n");
-
-	enter_usermode();
-
-	char* testStr = "\n\rWe are inside of your computer...";
-
-	int j = 0;
-	int k = 5;
-	k = k / j;
-
-	//! call OS-print message
-	_asm xor eax, eax
-	_asm lea ebx, [testStr]
-	_asm int 0x80
-
-	//! cant do CLI+HLT here, so loop instead
-	while (1);
-}
-
-// proc (process) command
 void cmd_proc(char* pName) {
 
 	int ret = 0;	
@@ -241,7 +208,10 @@ void cmd_proc(char* pName) {
 		SkyConsole::Print("Can't Execute Process. %d\n", pName);
 	}
 	else
-		ProcessManager::GetInstance()->AddProcess(pProcess);
+	{		
+		pProcess->m_IskernelProcess = false;
+		ProcessManager::GetInstance()->AddProcess(pProcess);		
+	}
 }
 
 extern void TestV8086();
@@ -254,13 +224,8 @@ void cmd_gui(char* pName) {
 
 bool ConsoleManager::RunCommand(char* buf) 
 {
-
 	if (buf[0] == '\0')
 		return false;	
-
-	if (strcmp(buf, "user") == 0) {
-		go_user();
-	}
 
 	//! exit command
 	if (strcmp(buf, "exit") == 0) {
@@ -331,7 +296,7 @@ bool ConsoleManager::RunCommand(char* buf)
 		cmd_memtask();
 	}
 	else if (strcmp(buf, "list") == 0) {
-		cmd_list();
+		cmd_ProcessList();
 	}
 	//! run process
 	else if (strstr(buf, ".exe") > 0) {

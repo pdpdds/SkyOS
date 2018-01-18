@@ -82,7 +82,7 @@ gdt_descriptor* i86_gdt_get_descriptor (int i) {
 }
 
 //GDT 초기화 및 GDTR 레지스터에 GDT 로드
-int i86_gdt_initialize()
+int GDTInitialize()
 {
 	//GDTR 레지스터에 로드될 _gdtr 구조체의 값 초기화
 	//_gdtr 구조체의 주소는 페이징 전단계이며 실제 물리주소에 해당 변수가 할당되어 있다.

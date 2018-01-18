@@ -103,31 +103,10 @@ struct gdt_descriptor {
 #pragma pack (pop)
 #endif
 
-//============================================================================
-//    INTERFACE DATA DECLARATIONS
-//============================================================================
-//============================================================================
-//    INTERFACE FUNCTION PROTOTYPES
-//============================================================================
-
 //! Setup a descriptor in the Global Descriptor Table
 extern void gdt_set_descriptor(uint32_t i, uint64_t base, uint64_t limit, uint8_t access, uint8_t grand);
 
 //! returns descritor
 extern gdt_descriptor* i86_gdt_get_descriptor (int i);
-
-//! initializes gdt
-extern	int i86_gdt_initialize ();
-
-//============================================================================
-//    INTERFACE OBJECT CLASS DEFINITIONS
-//============================================================================
-//============================================================================
-//    INTERFACE TRAILING HEADERS
-//============================================================================
-//****************************************************************************
-//**
-//**    END [FILE NAME]
-//**
-//****************************************************************************
+extern	int GDTInitialize();
 #endif

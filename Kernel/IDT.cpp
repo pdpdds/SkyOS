@@ -5,86 +5,38 @@
 #include "..\Kernel\DebugDisplay.h"
 #endif
 
-
-#ifdef _MSC_VER
-#pragma pack (push, 1)
-#endif
-
-//! describes the structure for the processors idtr register
-struct idtr {
-
-	//! size of the interrupt descriptor table (idt)
-	uint16_t		limit;
-
-	//! base address of idt
-	uint32_t		base;
-};
-
-#ifdef _MSC_VER
-#pragma pack (pop, 1)
-#endif
-
-//============================================================================
-//    IMPLEMENTATION REQUIRED EXTERNAL REFERENCES (AVOID)
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE DATA
-//============================================================================
-
-//! interrupt descriptor table
+//인터럽트 디스크립터 테이블
 static struct idt_descriptor	_idt [I86_MAX_INTERRUPTS];
 
-//! idtr structure used to help define the cpu's idtr register
+//CPU의 IDTR 레지스터를 초기화하는데 도움을 주는 IDTR 구조체
 static struct idtr				_idtr;
 
-//============================================================================
-//    INTERFACE DATA
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE FUNCTION PROTOTYPES
-//============================================================================
-
-//! installs idtr into processors idtr register
-static void idt_install ();
-
-//! default int handler used to catch unregistered interrupts
-static void i86_default_handler ();
-
-//============================================================================
-//    IMPLEMENTATION PRIVATE FUNCTIONS
-//============================================================================
-
-//! installs idtr into processors idtr register
-static void idt_install () {
+//IDTR 레지스터에 IDT의 주소값을 넣는다.
+static void IDTInstall() {
 #ifdef _MSC_VER
 	_asm lidt [_idtr]
 #endif
 }
 
-
-//! default handler to catch unhandled system interrupts.
-static void i86_default_handler () {
-
-	//! clear interrupts to prevent double fault
+//다룰수 있는 핸들러가 존재하지 않을때 호출되는 기본 핸들러
+static void InterrputDefaultHandler () {
+	
 	EnterCriticalSection ();
 
-	//! print debug message and halt
+	//디버그 모드일시 메세지를 출력하고 시스템을 중지시킨다.
 #ifdef _DEBUG
 	DebugClrScr (0x18);
 	DebugGotoXY (0,0);
 	DebugSetColor (0x1e);
-	DebugSkyConsole::Print ("*** [i86 Hal] i86_default_handler: Unhandled Exception");
+	DebugSkyConsole::Print ("*** [i86 Hal] InterrputDefaultHandler : Unhandled Exception");
 #endif
 
 	for(;;);
 }
 
-//============================================================================
-//    INTERFACE FUNCTIONS
-//============================================================================
 
-//! returns interrupt descriptor
-idt_descriptor* i86_get_ir (uint32_t i) {
+//i번째 인터럽트 디스크립트를 얻어온다.
+idt_descriptor* GetInterruptDescriptor(uint32_t i) {
 
 	if (i>I86_MAX_INTERRUPTS)
 		return 0;
@@ -92,27 +44,25 @@ idt_descriptor* i86_get_ir (uint32_t i) {
 	return &_idt[i];
 }
 
-//! installs a new interrupt handler
-int i86_install_ir (uint32_t i, uint16_t flags, uint16_t sel, I86_IRQ_HANDLER irq) {
+//인터럽트 핸들러 설치
+bool InstallInterrputHandler(uint32_t i, uint16_t flags, uint16_t sel, I86_IRQ_HANDLER irq) {
 
 	if (i>I86_MAX_INTERRUPTS)
-		return 0;
+		return false;
 
 	if (!irq)
-		return 0;
+		return false;
 
-	//! get base address of interrupt handler
+	//인터럽트의 베이스 주소를 얻어온다.
 	uint64_t		uiBase = (uint64_t)&(*irq);
-
-	//memset((void*)&_idt[i], 0, sizeof(idt_descriptor));
-
+	
 	if ((flags & 0x0500) == 0x0500) {
 		_idt[i].sel = sel;
 		_idt[i].flags = uint8_t(flags);
 	}
 	else
 	{
-		//! store base address into idt
+		//포맷에 맞게 인터럽트 핸들러와 플래그 값을 디스크립터에 세팅한다.
 		_idt[i].baseLo = uint16_t(uiBase & 0xffff);
 		_idt[i].baseHi = uint16_t((uiBase >> 16) & 0xffff);
 		_idt[i].reserved = 0;
@@ -120,12 +70,11 @@ int i86_install_ir (uint32_t i, uint16_t flags, uint16_t sel, I86_IRQ_HANDLER ir
 		_idt[i].sel = sel;
 	}
 
-	return	0;
+	return	true;
 }
 
-
 //IDT를 초기화하고 디폴트 핸들러를 등록한다
-int i86_idt_initialize(uint16_t codeSel) {
+bool IDTInitialize(uint16_t codeSel) {
 
 	//IDTR 레지스터에 로드될 구조체 초기화
 	_idtr.limit = sizeof(struct idt_descriptor) * I86_MAX_INTERRUPTS - 1;
@@ -136,13 +85,13 @@ int i86_idt_initialize(uint16_t codeSel) {
 
 	//디폴트 핸들러 등록
 	for (int i = 0; i<I86_MAX_INTERRUPTS; i++)
-		i86_install_ir(i, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32,
-			codeSel, (I86_IRQ_HANDLER)i86_default_handler);
+		InstallInterrputHandler(i, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32,
+			codeSel, (I86_IRQ_HANDLER)InterrputDefaultHandler);
 
 	//IDTR 레지스터를 셋업한다
-	idt_install();
+	IDTInstall();
 
-	return 0;
+	return true;
 }
 
 

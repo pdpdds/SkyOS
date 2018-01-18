@@ -72,15 +72,13 @@ extern uint32_t i86_pit_set_tick_count(uint32_t i);
 extern uint32_t i86_pit_get_tick_count();
 
 
-extern void _cdecl i86_pit_initialize();
+extern void _cdecl InitializePIT();
 
-//! Test if interface is initialized
-extern bool _cdecl i86_pit_is_initialized();
 
 unsigned int GetTickCount();
 void _cdecl msleep(int ms);
 
-extern void i86_pit_start_counter(uint32_t freq, uint8_t counter, uint8_t mode);
+extern void StartPITCounter(uint32_t freq, uint8_t counter, uint8_t mode);
 class PIT
 {
 private:

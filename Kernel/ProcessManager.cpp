@@ -15,7 +15,7 @@ static int kernelStackIndex = 0;
 
 ProcessManager::ProcessManager()
 {
-	m_nextProcessId = 1;	
+	m_nextProcessId = 1;
 	m_nextThreadId = 1000;
 }
 
@@ -59,7 +59,11 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	memset(&pThread->frame, 0, sizeof(trapFrame));
 	pThread->frame.eip = (uint32_t)ntHeaders->OptionalHeader.AddressOfEntryPoint + ntHeaders->OptionalHeader.ImageBase;
 	pThread->frame.flags = 0x200;
-	
+
+
+#ifdef _DEBUG
+	SkyConsole::Print("Process ImageBase : 0x%X\n", ntHeaders->OptionalHeader.ImageBase);
+#endif	
 
 	int pageRest = 0;
 
@@ -67,12 +71,12 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 		pageRest = 1;
 
 	pProcess->m_dwPageCount = (pThread->m_imageSize / 4096) + pageRest;
-	 
-	 memory = (unsigned char*)PhysicalMemoryManager::AllocBlocks(pProcess->m_dwPageCount);
-	
+
+	memory = (unsigned char*)PhysicalMemoryManager::AllocBlocks(pProcess->m_dwPageCount);
+
 	/* map page into address space */
-	for (int i = 0; i <pProcess->m_dwPageCount; i++)
-	{		
+	for (int i = 0; i < pProcess->m_dwPageCount; i++)
+	{
 		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory,
 			ntHeaders->OptionalHeader.ImageBase + i * PAGE_SIZE,
 			(uint32_t)memory + i * PAGE_SIZE,
@@ -93,9 +97,10 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 			break;
 		volReadFile(file, memory + 512 * i, 512);
 	}
-		
+
 	/* close file and return process ID */
 	volCloseFile(file);
+
 
 
 	//스택을 생성하고 주소공간에 매핑한다.
@@ -108,7 +113,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 
 	/* map user process stack space */
 	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
-	
+
 	/* final initialization */
 	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE);
 	pThread->frame.esp = (uint32_t)pThread->m_initialStack;
@@ -121,14 +126,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	pThread->frame.esi = 0;
 	pThread->frame.edi = 0;
 
-	pProcess->AddThread(pThread);
-
-	ListNode* node = new ListNode();
-	node->_data = pThread;
-	m_taskList.AddToTail(node);
-
 	return pThread;
-
 }
 
 Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID param)
@@ -144,40 +142,32 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	memset(&pThread->frame, 0, sizeof(trapFrame));
 	pThread->frame.eip = (uint32_t)lpStartAddress;
 	pThread->frame.flags = 0x200;
-	pThread->m_startParam = param;	
-	
+	pThread->m_startParam = param;
 
-	
-
-//스택을 생성하고 주소공간에 매핑한다.
+	//스택을 생성하고 주소공간에 매핑한다.
 	void* stackVirtual = (void*)(KERNEL_PHYSICAL_STACK_ADDRESS + PAGE_SIZE * kernelStackIndex++);
 	//void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_kernelStackIndex++);
-	void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();	
+	void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
 
+#ifdef _DEBUG
 	SkyConsole::Print("Virtual Stack : %x\n", stackVirtual);
 	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
+#endif
 
 	/* map user process stack space */
 	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
-	
+
 	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE);
 	pThread->frame.esp = (uint32_t)pThread->m_initialStack;
-	pThread->frame.ebp = pThread->frame.esp;	
-
-	pProcess->AddThread(pThread);
-
-	ListNode* node = new ListNode();
-	node->_data = pThread;
-	m_taskList.AddToTail(node);
+	pThread->frame.ebp = pThread->frame.esp;
 
 	return pThread;
 }
 
-Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType)
+/*Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType)
 {
 	FILE file;
 
-	/* open file */
 	file = volOpenFile(appName);
 
 	if (file.flags == FS_INVALID)
@@ -186,7 +176,7 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType
 	if ((file.flags & FS_DIRECTORY) == FS_DIRECTORY)
 		return 0;
 
-	
+
 	PageDirectory* addressSpace = MapKernelSpace();
 
 	if (!addressSpace)
@@ -200,7 +190,6 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType
 	//MapSysAPIAddress(addressSpace);
 
 	Process* pProcess = new Process();
-
 	pProcess->m_processId = ProcessManager::GetInstance()->GetNextProcessId();
 	pProcess->m_pPageDirectory = addressSpace;
 	pProcess->m_dwPriority = 1;
@@ -209,93 +198,39 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType
 	strcpy(pProcess->m_processName, appName);
 
 	Thread* pThread = CreateThread(pProcess, &file, NULL);
+
 	pProcess->AddThread(pThread);
-	
+
 	return pProcess;
-}
+}*/
 
-Process* ProcessManager::FindProcess(int processId)
+Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType)
 {
-	for (int i = 0; i < m_processList.Count(); i++)
-	{
-		Process* pProcess = (Process*)m_processList.Get(i);
+	FILE file;
 
-		if (pProcess->m_processId == processId)
-			return pProcess;
+	file = volOpenFile(appName);
+
+	if (file.flags == FS_INVALID)
+		return NULL;
+
+	if ((file.flags & FS_DIRECTORY) == FS_DIRECTORY)
+		return NULL;
+
+
+	PageDirectory* addressSpace = MapKernelSpace();
+
+	if (!addressSpace)
+	{
+		volCloseFile(&file);
+		return NULL;
 	}
 
-	return NULL;
-}
-
-bool ProcessManager::AddProcess(Process* pProcess)
-{	
-	if (pProcess == 0)
-		return false;
-
-	int entryPoint = 0;
-	unsigned int procStack = 0;
-
-	if (pProcess->m_processId == PROC_INVALID_ID)
-		return false;
-
-	if (!pProcess->m_pPageDirectory)
-		return false;
-
-	Thread* pThread = pProcess->GetThread(0);
-	
-	/* get esp and eip of main thread */
-	entryPoint = pThread->frame.eip;
-	procStack = pThread->frame.esp;
-
-	SkyConsole::Print("eip : %x\n", pThread->frame.eip);
-	SkyConsole::Print("page directory : %x\n", pProcess->m_pPageDirectory);
-	SkyConsole::Print("procStack : %x\n", procStack);
-
-	Lock();	
-	m_processList.Add(pProcess);
-	Unlock();	
-	
-	return true;
-}
-
-
-Process* ProcessManager::CreateConsoleProcess(LPTHREAD_START_ROUTINE lpStartAddress)
-{
-	Process* pProcess = new Process();
-	pProcess->m_processId = GetNextProcessId();
-
-
-	pProcess->m_pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
-	pProcess->m_dwRunState = TASK_STATE_RUNNING;
-	strcpy(pProcess->m_processName, "System");
-
-	VirtualMemoryManager::MapHeap(pProcess->m_pPageDirectory);
-
-	pProcess->m_lpHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
-
-	pProcess->m_dwProcessType = PROCESS_KERNEL;
-	pProcess->m_dwPriority = 1;
-
-	Thread* pThread = CreateThread(pProcess, lpStartAddress, pProcess);
-
-	AddProcess(pProcess);
-
-	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
-
-	return pProcess;
-}
-
-//firstProcess가 true일 경우 커널의 최초 프로세스를 생성한다.
-//이 시점에서만 이전에 커널힙이 생성되었다고 가정한다.
-//이후 프로세스는 여기서 힙을 별도로 생성한다.
-Process* ProcessManager::CreateProcessFromMemory(LPTHREAD_START_ROUTINE lpStartAddress)
-{
 	Process* pProcess = new Process();
 	pProcess->m_processId = GetNextProcessId();
 
 	pProcess->m_pPageDirectory = VirtualMemoryManager::CreateAddressSpace();
 	pProcess->m_dwRunState = TASK_STATE_INIT;
-	strcpy(pProcess->m_processName, "System");
+	strcpy(pProcess->m_processName, appName);
 
 	PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
 	if (identityPageTable == NULL)
@@ -339,14 +274,168 @@ Process* ProcessManager::CreateProcessFromMemory(LPTHREAD_START_ROUTINE lpStartA
 
 	pProcess->m_dwProcessType = PROCESS_KERNEL;
 	pProcess->m_dwPriority = 1;
-	
-	Thread* pThread = CreateThread(pProcess, lpStartAddress, pProcess);
-	
-	AddProcess(pProcess);	
 
+	Thread* pThread = CreateThread(pProcess, &file, NULL);
+
+
+	pProcess->AddThread(pThread);
+
+	//AddProcess(pProcess);
+
+#ifdef _DEBUG
 	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
+#endif
 
-	
+	return pProcess;
+}
+
+Process* ProcessManager::FindProcess(int processId)
+{
+	for (int i = 0; i < m_processList.Count(); i++)
+	{
+		Process* pProcess = (Process*)m_processList.Get(i);
+
+		if (pProcess->m_processId == processId)
+			return pProcess;
+	}
+
+	return NULL;
+}
+
+bool ProcessManager::AddProcess(Process* pProcess)
+{
+	if (pProcess == 0)
+		return false;
+
+	int entryPoint = 0;
+	unsigned int procStack = 0;
+
+	if (pProcess->m_processId == PROC_INVALID_ID)
+		return false;
+
+	if (!pProcess->m_pPageDirectory)
+		return false;
+
+	Thread* pThread = pProcess->GetThread(0);
+
+	/* get esp and eip of main thread */
+	entryPoint = pThread->frame.eip;
+	procStack = pThread->frame.esp;
+
+
+
+#ifdef _DEBUG
+	SkyConsole::Print("eip : %x\n", pThread->frame.eip);
+	SkyConsole::Print("page directory : %x\n", pProcess->m_pPageDirectory);
+	SkyConsole::Print("procStack : %x\n", procStack);
+#endif	
+
+	Lock();
+	m_processList.Add(pProcess);
+
+	ListNode* node = new ListNode();
+	node->_data = pThread;
+	m_taskList.AddToTail(node);
+
+	Unlock();
+
+	return true;
+}
+
+Process* ProcessManager::CreateConsoleProcess(LPTHREAD_START_ROUTINE lpStartAddress)
+{
+	Process* pProcess = new Process();
+	pProcess->m_processId = GetNextProcessId();
+
+	pProcess->m_pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
+	pProcess->m_dwRunState = TASK_STATE_RUNNING;
+	strcpy(pProcess->m_processName, "ConsoleSystem");
+
+	VirtualMemoryManager::MapHeap(pProcess->m_pPageDirectory);
+
+	pProcess->m_lpHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
+
+	pProcess->m_dwProcessType = PROCESS_KERNEL;
+	pProcess->m_dwPriority = 1;
+
+	Thread* pThread = CreateThread(pProcess, lpStartAddress, pProcess);
+
+	pProcess->AddThread(pThread);
+
+	AddProcess(pProcess);
+
+#ifdef _DEBUG
+	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
+#endif
+
+	return pProcess;
+}
+
+//firstProcess가 true일 경우 커널의 최초 프로세스를 생성한다.
+//이 시점에서만 이전에 커널힙이 생성되었다고 가정한다.
+//이후 프로세스는 여기서 힙을 별도로 생성한다.
+Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress)
+{
+	Process* pProcess = new Process();
+	pProcess->m_processId = GetNextProcessId();
+
+	pProcess->m_pPageDirectory = VirtualMemoryManager::CreateAddressSpace();
+	pProcess->m_dwRunState = TASK_STATE_INIT;
+	strcpy(pProcess->m_processName, appName);
+
+	PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
+	if (identityPageTable == NULL)
+		return false;
+
+	//0-4MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
+	for (int i = 0, frame = 0x0, virt = 0x00000000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
+	{
+		PTE page = 0;
+		PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
+		PageTableEntry::SetFrame(&page, frame);
+
+		identityPageTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
+	}
+
+	PDE* identityEntry = &pProcess->m_pPageDirectory->m_entries[PAGE_DIRECTORY_INDEX(0x00000000)];
+	PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_PRESENT);
+	PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_WRITABLE);
+	PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
+
+
+	int flags = I86_PTE_PRESENT | I86_PTE_WRITABLE;
+
+	//커널 이미지를 주소공간에 매핑. 커널 크기는 4메가가 넘지 않는다고 가정한다
+	//1024 * PAGE_SIZE = 4MB
+	uint32_t virtualAddr = KERNEL_PHYSICAL_BASE_ADDRESS;
+	uint32_t physAddr = KERNEL_PHYSICAL_BASE_ADDRESS;
+
+	for (uint32_t i = 0; i < PAGES_PER_TABLE; i++)
+	{
+		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), flags);
+	}
+
+	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, I86_PTE_PRESENT | I86_PTE_WRITABLE);
+
+	//20161109
+	pProcess->m_pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
+
+
+	pProcess->m_lpHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
+
+	pProcess->m_dwProcessType = PROCESS_KERNEL;
+	pProcess->m_dwPriority = 1;
+
+	Thread* pThread = CreateThread(pProcess, lpStartAddress, pProcess);
+
+
+	pProcess->AddThread(pThread);
+
+	AddProcess(pProcess);
+
+#ifdef _DEBUG
+	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
+#endif
 
 	return pProcess;
 }
@@ -384,7 +473,7 @@ bool ProcessManager::RemoveFromTaskList(Process* pProcess)
 
 	for (int i = 0; i < threadCount; i++)
 	{
-		Thread* pThread = pProcess->GetThread(i);	
+		Thread* pThread = pProcess->GetThread(i);
 
 		ListNode* pNode = m_taskList.Remove(pThread);
 
@@ -401,7 +490,7 @@ bool ProcessManager::RemoveFromTaskList(Process* pProcess)
 	return true;
 }
 
-bool ProcessManager::DestroyProcess(Process* pProcess)
+/*bool ProcessManager::DestroyProcess(Process* pProcess)
 {
 	//태스크 목록에서 프로세스의 태스크들을 제거한다.
 	RemoveFromTaskList(pProcess);
@@ -411,7 +500,7 @@ bool ProcessManager::DestroyProcess(Process* pProcess)
 	ReleaseThreadContext(pProcess);
 
 	for (uint32_t page = 0; page < pProcess->m_dwPageCount; page++)
-	{					
+	{
 		uint32_t virt = pProcess->m_imageBase + (page * PAGE_SIZE);
 
 		VirtualMemoryManager::UnmapPhysicalAddress(pProcess->m_pPageDirectory, virt);
@@ -428,9 +517,9 @@ bool ProcessManager::DestroyProcess(Process* pProcess)
 
 	//페이지 디렉토리 회수
 	//페이지 디렉토리는 물리 주소임
-	PhysicalMemoryManager::FreeBlock(pProcess->m_pPageDirectory);	
+	PhysicalMemoryManager::FreeBlock(pProcess->m_pPageDirectory);
 	m_processList.Delete(pProcess);
-	//프로세스 객체 완전히 제거	
+	//프로세스 객체 완전히 제거
 #ifdef _ORANGE_DEBUG
 	SkyConsole::Print("terminate %s\n", pProcess->m_processName);
 #endif // _ORANGE_DEBUG
@@ -438,7 +527,17 @@ bool ProcessManager::DestroyProcess(Process* pProcess)
 	delete pProcess;
 
 	return true;
+}*/
+
+bool ProcessManager::DestroyProcess(Process* pProcess)
+{
+	ListNode* node = new ListNode();
+	node->_data = pProcess->GetThread(0);
+	m_terminatedTaskList.AddToTail(node);
+
+	return true;
 }
+
 
 bool ProcessManager::RemoveTerminatedProcess()
 {
@@ -476,7 +575,7 @@ bool ProcessManager::DestroyKernelProcess(Process* pProcess)
 	//스레드 관련 Context 자원을 해제한다.
 	//가상 주소를 운영하기 위해 할당했던 페이지 테이블, 스택 등을 회수 등등
 	//ReleaseThreadContext(pProcess);
-	
+
 	//페이지 디렉토리 회수
 	//페이지 디렉토리는 물리 주소임
 	//PhysicalMemoryManager::FreeBlock(pProcess->m_pPageDirectory);

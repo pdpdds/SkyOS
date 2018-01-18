@@ -381,7 +381,7 @@ namespace SkyConsole
 			}
 
 			//! wait for next key. You may need to adjust this to suite your needs
-			msleep(10);
+			//msleep(10);
 		}
 
 		//! null terminate the string
@@ -410,6 +410,9 @@ namespace SkyConsole
 
 				first = GetTickCount();
 			}*/
+
+			if (key == KEY_UNKNOWN)
+				msleep(1);
 			
 		}
 
