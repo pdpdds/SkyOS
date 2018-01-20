@@ -19,9 +19,6 @@
     <Filter Include="Device">
       <UniqueIdentifier>{ea585816-6afa-4911-9e22-08268e6babcb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="VFS">
-      <UniqueIdentifier>{d43a5571-5d81-411c-8f65-dec866f99256}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HAL">
       <UniqueIdentifier>{f28e2cbc-40ef-4d94-ae8c-5d93396242a0}</UniqueIdentifier>
     </Filter>
@@ -36,6 +33,9 @@
     </Filter>
     <Filter Include="Test">
       <UniqueIdentifier>{b6f30009-68db-4eae-b56d-dc0cfd461382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FileSystem">
+      <UniqueIdentifier>{d43a5571-5d81-411c-8f65-dec866f99256}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,10 +109,10 @@
       <Filter>Device</Filter>
     </ClCompile>
     <ClCompile Include="VFS.cpp">
-      <Filter>VFS</Filter>
+      <Filter>FileSystem</Filter>
     </ClCompile>
     <ClCompile Include="FAT32VFSAdaptor.cpp">
-      <Filter>VFS</Filter>
+      <Filter>FileSystem</Filter>
     </ClCompile>
     <ClCompile Include="kmain.cpp">
       <Filter>Entry</Filter>
@@ -159,10 +159,12 @@
     <ClCompile Include="Scheduler.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="RAMDisk.cpp" />
     <ClCompile Include="v8086\rme.cpp" />
     <ClCompile Include="SkyTest.cpp">
       <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="RAMDisk.cpp">
+      <Filter>FileSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,10 +244,10 @@
       <Filter>Device</Filter>
     </ClInclude>
     <ClInclude Include="VFS.h">
-      <Filter>VFS</Filter>
+      <Filter>FileSystem</Filter>
     </ClInclude>
     <ClInclude Include="FAT32VFSAdaptor.h">
-      <Filter>VFS</Filter>
+      <Filter>FileSystem</Filter>
     </ClInclude>
     <ClInclude Include="ZetPlane.h">
       <Filter>Test</Filter>
@@ -307,13 +309,15 @@
     <ClInclude Include="Scheduler.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="RAMDisk.h" />
     <ClInclude Include="v8086\rme.h" />
     <ClInclude Include="TestInteger.h">
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="SkyTest.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="RAMDisk.h">
+      <Filter>FileSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

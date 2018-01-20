@@ -104,8 +104,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 
 
 	//스택을 생성하고 주소공간에 매핑한다.
-	void* stackVirtual = (void*)(KERNEL_PHYSICAL_STACK_ADDRESS + PAGE_SIZE * kernelStackIndex++);
-	//void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_kernelStackIndex++);
+	void* stackVirtual = (void*)(USER_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_stackIndex++);
 	void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
 
 	SkyConsole::Print("Virtual Stack : %x\n", stackVirtual);

@@ -1,50 +1,45 @@
 #include <VFS.h>
 #include <string.h>
 
+//저장장치는 최대 26개
 #define DEVICE_MAX 26
 
 PFILESYSTEM _FileSystems[DEVICE_MAX];
 
-/**
-*	Opens a file
-*/
+//파일 열기
 FILE volOpenFile (const char* fname) {
 
 	if (fname) {
 
-		//! default to device 'a'
+		//기본 시작 드라이브는 a
 		unsigned char device = 'a';
-
-		//! filename
+		
 		char* filename = (char*) fname;
 
-		//! in all cases, if fname[1]==':' then the first character must be device letter
-		//! FIXME: Using fname[2] do to BUG 2. Please see main.cpp for info
-		if (fname[2]==':') {
+		// a: b: c: 드라이브를 지정해서 파일을 여는지 확인한다.
+		if (fname[1]==':') {
 
 			device = fname[0];
 			filename += 3; //strip it from pathname
 		}
 
 		//! call filesystem
-		if (_FileSystems [device - 'a']) {
-			
-			//! set volume specific information and return file
+		if (_FileSystems [device - 'a']) 
+		{			
+			//파일을 사용할 수 있으면 디바이스 아이디를 세팅하고 리턴한다.
 			FILE file = _FileSystems[device - 'a']->Open (filename);
 			file.deviceID = device;
 			return file;
 		}
 	}
 
-	//! return invalid file
+	//유효하지 않음
 	FILE file;
 	file.flags = FS_INVALID;
 	return file;
 }
 
-/**
-*	Reads file
-*/
+//파일 읽기
 void volReadFile (PFILE file, unsigned char* Buffer, unsigned int Length) {
 
 	if (file)
@@ -52,9 +47,7 @@ void volReadFile (PFILE file, unsigned char* Buffer, unsigned int Length) {
 			_FileSystems[file->deviceID - 'a']->Read (file,Buffer,Length);
 }
 
-/**
-*	Close file
-*/
+//파일 닫기
 void volCloseFile (PFILE file) {
 
 	if (file)
@@ -63,9 +56,7 @@ void volCloseFile (PFILE file) {
 }
 
 
-/**
-*	Registers a filesystem
-*/
+//파일 시스템 등록
 void volRegisterFileSystem (PFILESYSTEM fsys, unsigned int deviceID) {
 
 	static int i=0;
@@ -78,9 +69,7 @@ void volRegisterFileSystem (PFILESYSTEM fsys, unsigned int deviceID) {
 		}
 }
 
-/**
-*	Unregister file system
-*/
+//파일 시스템에서 해제
 void volUnregisterFileSystem (PFILESYSTEM fsys) {
 
 	for (int i=0;i < DEVICE_MAX; i++)
@@ -88,9 +77,7 @@ void volUnregisterFileSystem (PFILESYSTEM fsys) {
 			_FileSystems[i]=0;
 }
 
-/**
-*	Unregister file system
-*/
+//디바이스 아이디로 파일 시스템에서 해제
 void volUnregisterFileSystemByID (unsigned int deviceID) {
 
 	if (deviceID < DEVICE_MAX)

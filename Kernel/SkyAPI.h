@@ -7,7 +7,6 @@
 #include "ProcessUtil.h"
 #include "PIT.h"
 
-
 void SKYASSERT(bool result, const char* pMsg);
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,8 +1,11 @@
-
-#ifndef _FSYS_H
-#define _FSYS_H
-
+#pragma once
 #include <stdint.h>
+
+//File flags
+#define FS_FILE       0
+#define FS_DIRECTORY  1
+#define FS_INVALID    2
+
 
 typedef struct _FILE {
 
@@ -31,14 +34,6 @@ typedef struct _FILE_SYSTEM {
 
 }FILESYSTEM, *PFILESYSTEM;
 
-/**
-*	File flags
-*/
-#define FS_FILE       0
-#define FS_DIRECTORY  1
-#define FS_INVALID    2
-
-
 extern FILE volOpenFile (const char* fname);
 extern void volReadFile (PFILE file, unsigned char* Buffer, unsigned int Length);
 extern void volCloseFile (PFILE file);
@@ -46,4 +41,3 @@ extern void volRegisterFileSystem (PFILESYSTEM, unsigned int deviceID);
 extern void volUnregisterFileSystem (PFILESYSTEM);
 extern void volUnregisterFileSystemByID (unsigned int deviceID);
 
-#endif

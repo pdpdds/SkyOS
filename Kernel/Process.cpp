@@ -7,7 +7,7 @@ Process::Process()
 
 	m_dwRunningTime = TASK_RUNNING_TIME;	
 	m_pPageDirectory = NULL;
-	m_kernelStackIndex = 0;
+	m_stackIndex = 0;
 	m_IskernelProcess = true;
 }
 
