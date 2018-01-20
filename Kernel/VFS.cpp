@@ -1,5 +1,6 @@
 #include <VFS.h>
 #include <string.h>
+#include "ctype.h"
 
 //저장장치는 최대 26개
 #define DEVICE_MAX 26
@@ -20,15 +21,19 @@ FILE volOpenFile (const char* fname) {
 		if (fname[1]==':') {
 
 			device = fname[0];
-			filename += 3; //strip it from pathname
+
+			//filename += 2; //strip it from pathname
 		}
 
+		unsigned char deviceLower = tolower(device);
+
 		//! call filesystem
-		if (_FileSystems [device - 'a']) 
+		if (_FileSystems [deviceLower - 'a'])
 		{			
 			//파일을 사용할 수 있으면 디바이스 아이디를 세팅하고 리턴한다.
-			FILE file = _FileSystems[device - 'a']->Open (filename);
-			file.deviceID = device;
+			FILE file = _FileSystems[deviceLower - 'a']->Open (filename);
+			strcpy(file.name, filename);
+			file.deviceID = deviceLower;
 			return file;
 		}
 	}

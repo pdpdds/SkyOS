@@ -16,8 +16,12 @@ FILE fsysFat32Directory(const char* DirectoryName) {
 */
 void fsysFat32Read(PFILE file, unsigned char* Buffer, unsigned int Length) {
 
+	int readLen = 0;
 	if (file) {
-		FATReadFile(file->id, Length, Buffer);
+		readLen = FATReadFile(file->id, Length, Buffer);
+
+		if (readLen != Length)
+			file->eof = 1;
 	}
 }
 
@@ -66,7 +70,7 @@ bool InitializeVFSFat32()
 	g_fat32FileSys.Read = fsysFat32Read;
 	g_fat32FileSys.Close = fsysFat32Close;
 
-	volRegisterFileSystem(&g_fat32FileSys, 2);
+	volRegisterFileSystem(&g_fat32FileSys, 'c' - 'a');
 
 	return true;
 }

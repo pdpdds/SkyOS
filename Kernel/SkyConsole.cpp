@@ -350,6 +350,7 @@ namespace SkyConsole
 					//! go back one char
 					uint y, x;
 					GetCursorPos(x, y);
+
 					if (x > 0)
 						MoveCursor(x, y);
 					else {
@@ -385,7 +386,7 @@ namespace SkyConsole
 		}
 
 		//! null terminate the string
-		commandBuffer[i] = '\0';
+		commandBuffer[i] = 0;
 	}
 
 	//리팩토링

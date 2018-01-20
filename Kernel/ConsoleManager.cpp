@@ -149,29 +149,29 @@ void cmd_memstate() {
 void cmd_read() {
 
 	//! get pathname
-	char path[32];
+	char path[MAXPATH];
 	SkyConsole::Print("ex: \"file.txt\", \"a:\\file.txt\", \"a:\\folder\\file.txt\"\n\rFilename> ");
-	SkyConsole::GetCommand(path, 30);
+	SkyConsole::GetCommand(path, MAXPATH-2);
+	SkyConsole::Print("\n");
 
-	//! open file
 	FILE file = volOpenFile(path);
 
 	//! test for invalid file
 	if (file.flags == FS_INVALID) {
 
-		SkyConsole::Print("Unable to open file\n\r");
+		SkyConsole::Print("Unable to open file\n");
 		return;
 	}
 
 	//! cant display directories
 	if ((file.flags & FS_DIRECTORY) == FS_DIRECTORY) {
 
-		SkyConsole::Print("Unable to display contents of directory.\n\r");
+		SkyConsole::Print("Unable to display contents of directory.\n");
 		return;
 	}
 
 	//! top line
-	SkyConsole::Print("\n\n\r-------[%s]-------\n\r", file.name);
+	SkyConsole::Print("\n-------[%s]-------\n", file.name);
 
 	//! display file contents
 	while (file.eof != 1) {
@@ -186,14 +186,13 @@ void cmd_read() {
 
 		//! wait for input to continue if not EOF
 		if (file.eof != 1) {
-			SkyConsole::Print("\n\r------[Press a key to continue]------");
+			SkyConsole::Print("\n------[Press a key to continue]------");
 			SkyConsole::GetChar();
-			SkyConsole::Print("\r"); //clear last line
 		}
 	}
 
 	//! done :)
-	SkyConsole::Print("\n\n\r--------[EOF]--------");
+	SkyConsole::Print("\n\n--------[EOF]--------\n");
 }
 
 void cmd_proc(char* pName) {

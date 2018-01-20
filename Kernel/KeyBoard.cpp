@@ -151,7 +151,7 @@ namespace KeyBoard
 				if (key >= 'a' && key <= 'z')
 					key -= 32;
 
-			if (_keyBoardState._shift && !_keyBoardState._capslock)
+			if (_keyBoardState._shift)
 				if (key >= '0' && key <= '9')
 					switch (key) {
 
@@ -353,8 +353,7 @@ namespace KeyBoard
 				else 
 				{
 
-					//스캔 코드 저장
-					_keyBoardState._scancode = code;
+					
 
 					//특수키가 눌려졌는지 확인한다.
 					int key = KeyboardScanCode[code];
@@ -390,6 +389,10 @@ namespace KeyBoard
 						_keyBoardState._scrolllock = (_keyBoardState._scrolllock) ? false : true;
 						SetLeds(_keyBoardState._numlock, _keyBoardState._capslock, _keyBoardState._scrolllock);
 						break;
+					default:
+						//스캔 코드 저장
+						_keyBoardState._scancode = code;
+
 					}
 				}
 			}

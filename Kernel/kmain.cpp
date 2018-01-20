@@ -1,5 +1,6 @@
 ﻿#include "kmain.h"
 #include "stdio.h"
+#include "FAT32VFSAdaptor.h"
 
 extern bool systemOn;
 void HardwareInitiize();
@@ -73,18 +74,19 @@ void kmain(unsigned long magic, unsigned long addr)
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
 	LeaveCriticalSection();
-	/*if (true == InitHardDrive())
+	if (true == InitHardDrive())
 	{
 		InitFATFileSystem();
 #ifdef _SKY_DEBUG
 		TestHardDrive();
 #endif
+		InitializeVFSFat32();
 		SkyConsole::Print("Harddisk Init..\n");
 	}
 	else
 	{
 		SkyConsole::Print("Harddisk not detected..\n");
-	}*/	
+	}
 
 	//DumpSystemInfo(pBootInfo);
 	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
