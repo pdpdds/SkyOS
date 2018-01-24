@@ -1,4 +1,5 @@
 #pragma once
+#include "limits.h"
 
  #define DLLEXPORT __declspec(dllexport)
  #define DLLIMPORT __declspec(dllimport)
@@ -6,7 +7,7 @@
 #define SKYAPI
 
 #define KERNELDLL 
-
+/*
   #define CHAR_BIT            8
 
   #define CHAR_MAX            127
@@ -21,7 +22,7 @@
 
   #define LONG_MAX            0x7FFFFFFFL
   #define LONG_MIN            ((long)0x80000000L)
-  #define ULONG_MAX           0xFFFFFFFFUL
+  #define ULONG_MAX           0xFFFFFFFFUL*/
 
 #define MAXPATH	256
 
@@ -97,6 +98,12 @@ typedef          char  s8int;
   typedef LPSTR LPTCH, PTCH;
   typedef LPSTR PTSTR, LPTSTR;
   typedef LPCSTR LPCTSTR;
+
+//20180124
+	
+  #define offsetof(st, m) ((size_t)&(((st *)0)->m))
+  #define HUGE_VAL 10000000
+  #define DBL_MAX_10_EXP                +308
 
   #ifndef NULL
       #define NULL 0

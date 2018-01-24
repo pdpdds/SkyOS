@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
-#include <limits.h>
+#include "limits.h"
 #include "sprintf.h"
 
 //! writes formatted string to buffer

@@ -22,7 +22,8 @@ char *strpbrk(const char *strSrc, const char *str);
 char * strtok(char *s1, const char *delimit);
 int strspn(const char *strSrc, const char *str);
 
-char *strncpy(char * Dest, const char * Source, unsigned short Length);
+//char *strncpy(char * Dest, const char * Source, unsigned short Length);
+char *strncpy(char *string1, const char *string2, size_t count);
 int strnicmp(const char * String1, const char * String2, unsigned int Len);
 const char *StrRChr(const char * String, char const Character);
 

@@ -249,14 +249,14 @@ int strspn(const char *strSrc, const char *str)
 	}
 	return 0;
 }
-
+/*
 char *strncpy(char * Dest, const char * Source, unsigned short Length)
 {
 	unsigned int Len = strlen(Source), i;
 	for (i = 0; i<Len && i<Length; i++)
 		Dest[i] = Source[i];
 	return Dest;
-}
+}*/
 
 int strnicmp(const char * String1, const char * String2, unsigned int Len)
 {

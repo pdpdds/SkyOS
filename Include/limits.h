@@ -1,15 +1,6 @@
-/************************************************************************
-*                                                                       *
-*	limits.h - type limits												*
-*                                                                       *
-*   Copyright (c) BrokenThorn Entertainment Co. All Rights Reserved.	*
-*                                                                       *
-************************************************************************/
+#pragma once
 
-#ifndef LIMITS_H
-#define LIMITS_H
-
-#include <float.h>
+#include "float.h"
 
 /*
  * Sizes of integral types
@@ -221,5 +212,3 @@ extern long _sysconf(int);	/* System Private interface to sysconf() */
 extern long _sysconf(int);	/* System Private interface to sysconf() */
 #define	PTHREAD_STACK_MIN	_sysconf(_SC_THREAD_STACK_MIN)
 #endif	/* defined(__EXTENSIONS__) || (_POSIX_C_SOURCE >= 199506L) */
-
-#endif
