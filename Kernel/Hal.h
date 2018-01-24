@@ -68,5 +68,5 @@ typedef struct registers
 } registers_t;
 #pragma pack (pop)
 
-BOOL kSetInterruptFlag(BOOL bEnableInterrupt);
+bool kSetInterruptFlag(bool bEnableInterrupt);
 extern void _cdecl msleep(int ms);

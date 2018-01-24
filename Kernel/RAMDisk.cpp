@@ -17,7 +17,7 @@ static RDDMANAGER gs_stRDDManager;
 /**
  *  램 디스크 디바이스 드라이버 초기화 함수
  */
-BOOL kInitializeRDD( DWORD dwTotalSectorCount )
+bool kInitializeRDD( DWORD dwTotalSectorCount )
 {
     // 자료구조 초기화
     memset( &gs_stRDDManager, 0, sizeof( gs_stRDDManager ) );
@@ -38,7 +38,7 @@ BOOL kInitializeRDD( DWORD dwTotalSectorCount )
 /**
  *  램 디스크의 정보를 반환
  */
-BOOL kReadRDDInformation( BOOL bPrimary, BOOL bMaster, 
+bool kReadRDDInformation(bool bPrimary, bool bMaster,
         HDDINFORMATION* pstHDDInformation )
 {
     // 자료구조 초기화
@@ -55,7 +55,7 @@ BOOL kReadRDDInformation( BOOL bPrimary, BOOL bMaster,
 /**
  *  램 디스크에서 여러 섹터를 읽어서 반환
  */
-int kReadRDDSector( BOOL bPrimary, BOOL bMaster, DWORD dwLBA, int iSectorCount, 
+int kReadRDDSector(bool bPrimary, bool bMaster, DWORD dwLBA, int iSectorCount,
         char* pcBuffer )
 {
     int iRealReadCount;
@@ -75,7 +75,7 @@ int kReadRDDSector( BOOL bPrimary, BOOL bMaster, DWORD dwLBA, int iSectorCount,
 /**
  *  램 디스크에 여러 섹터를 씀
  */
-int kWriteRDDSector( BOOL bPrimary, BOOL bMaster, DWORD dwLBA, int iSectorCount, 
+int kWriteRDDSector(bool bPrimary, bool bMaster, DWORD dwLBA, int iSectorCount,
         char* pcBuffer )
 {
     int iRealWriteCount;

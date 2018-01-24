@@ -11,7 +11,7 @@
 #include "list1.h"
 #include "TestInteger.h"
 #include "SkyConsole.h"
-
+#include "SkyQueue.h"
 
 #define kprintf SkyConsole::Print
 
@@ -32,6 +32,7 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 void TestMap();
 void TestList();
 void TestCPP14();
+void TestJson();
 
 
 void SkyTest()
@@ -72,67 +73,7 @@ void SkyTest()
 	TestList();
 	TestCPP14();
 
-	int i;
-	int r;
-	jsmn_parser p;
-	jsmntok_t t[128]; /* We expect no more than 128 tokens */
-
-	jsmn_init(&p);
-	r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t) / sizeof(t[0]));
-	if (r < 0) {
-		kprintf("Failed to parse JSON: %d\n", r);
-		return;
-	}
-
-	/* Assume the top-level element is an object */
-	if (r < 1 || t[0].type != JSMN_OBJECT) {
-		kprintf("Object expected\n");
-		return;
-	}
-
-	char buf[256];
-	memset(buf, 0, 256);
-
-
-	/* Loop over all keys of the root object */
-	for (i = 1; i < r; i++) {
-		if (jsoneq(JSON_STRING, &t[i], "user") == 0) {
-			/* We may use strndup() to fetch string value */
-			memcpy(buf, JSON_STRING + t[i + 1].start, t[i + 1].end - t[i + 1].start);
-			kprintf("- User: %s\n", buf);
-			i++;
-		}
-		/*else if (jsoneq(JSON_STRING, &t[i], "admin") == 0) {
-
-		printf("- Admin: %.*s\n", t[i + 1].end - t[i + 1].start,
-		JSON_STRING + t[i + 1].start);
-		i++;
-		}
-		else if (jsoneq(JSON_STRING, &t[i], "uid") == 0) {
-
-		printf("- UID: %.*s\n", t[i + 1].end - t[i + 1].start,
-		JSON_STRING + t[i + 1].start);
-		i++;
-		}
-		else if (jsoneq(JSON_STRING, &t[i], "groups") == 0) {
-		int j;
-		printf("- Groups:\n");
-		if (t[i + 1].type != JSMN_ARRAY) {
-		continue;
-		}
-		for (j = 0; j < t[i + 1].size; j++) {
-		jsmntok_t *g = &t[i + j + 2];
-		printf("  * %.*s\n", g->end - g->start, JSON_STRING + g->start);
-		}
-		i += t[i + 1].size + 1;
-		}
-		else {
-		printf("Unexpected key: %.*s\n", t[i].end - t[i].start,
-		JSON_STRING + t[i].start);
-		}*/
-	}
-
-	for (;;);
+	
 
 	//TestV8086();
 
@@ -168,6 +109,88 @@ void TestMap()
 		//cout << (*it1).first << "   " << (*it1).second << endl;
 		kprintf("%d  %d\n", (*it1).first, (*it1).second);
 		i++;
+	}
+
+	for (;;);
+}
+
+void TestQueue()
+{
+	SkyQueue queue;
+	QueueNode* pNode = new QueueNode();
+	pNode->_data = (void*)5;
+	queue.Enqueue(pNode);
+
+	QueueNode* pNode2 = new QueueNode();
+	pNode2->_data = (void*)10;
+	queue.Enqueue(pNode2);
+
+	QueueNode* result = queue.Dequeue();
+	delete result;
+	result = queue.Dequeue();
+	delete result;
+}
+
+void TestJson()
+{
+	int i;
+	int r;
+	jsmn_parser p;
+	jsmntok_t t[128]; /* We expect no more than 128 tokens */
+
+	jsmn_init(&p);
+	r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t) / sizeof(t[0]));
+	if (r < 0) {
+		kprintf("Failed to parse JSON: %d\n", r);
+		return;
+	}
+
+	/* Assume the top-level element is an object */
+	if (r < 1 || t[0].type != JSMN_OBJECT) {
+		kprintf("Object expected\n");
+		return;
+	}
+
+	char buf[256];
+	memset(buf, 0, 256);
+
+
+	/* Loop over all keys of the root object */
+	for (i = 1; i < r; i++) {
+		if (jsoneq(JSON_STRING, &t[i], "user") == 0) {
+			/* We may use strndup() to fetch string value */
+			memcpy(buf, JSON_STRING + t[i + 1].start, t[i + 1].end - t[i + 1].start);
+			kprintf("- User: %s\n", buf);
+			i++;
+		}
+		else if (jsoneq(JSON_STRING, &t[i], "admin") == 0) {
+
+			kprintf("- Admin: %.*s\n", t[i + 1].end - t[i + 1].start,
+				JSON_STRING + t[i + 1].start);
+			i++;
+		}
+		else if (jsoneq(JSON_STRING, &t[i], "uid") == 0) {
+
+			kprintf("- UID: %.*s\n", t[i + 1].end - t[i + 1].start,
+				JSON_STRING + t[i + 1].start);
+			i++;
+		}
+		else if (jsoneq(JSON_STRING, &t[i], "groups") == 0) {
+			int j;
+			kprintf("- Groups:\n");
+			if (t[i + 1].type != JSMN_ARRAY) {
+				continue;
+			}
+			for (j = 0; j < t[i + 1].size; j++) {
+				jsmntok_t *g = &t[i + j + 2];
+				kprintf("  * %.*s\n", g->end - g->start, JSON_STRING + g->start);
+			}
+			i += t[i + 1].size + 1;
+		}
+		else {
+			kprintf("Unexpected key: %.*s\n", t[i].end - t[i].start,
+				JSON_STRING + t[i].start);
+		}
 	}
 
 	for (;;);

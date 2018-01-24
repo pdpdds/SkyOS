@@ -75,7 +75,7 @@ typedef          char  s8int;
   typedef long               ISIZE;
   typedef unsigned long      LSIZE;
   typedef unsigned long      USIZE;
-  typedef bool BOOL;
+
 
   /* 32 bit data types*/
   typedef long INT32;

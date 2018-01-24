@@ -30,7 +30,7 @@ namespace Sky
 	}
 	
 //중복해서 같은 값을 집어 넣을수 있으므로 주의한다.
-	BOOL LinkedList::Add(void * ptrData)
+	bool LinkedList::Add(void * ptrData)
 	{
 		ListNode* pList = NULL;
 		ListNode* newNode = NULL;
@@ -53,7 +53,7 @@ namespace Sky
 		return true;
 	}
 	
-	BOOL LinkedList::Delete(void* ptrData)
+	bool LinkedList::Delete(void* ptrData)
 	{
 		ListNode* pList;
 		ListNode* tmpList;		

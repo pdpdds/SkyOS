@@ -15,8 +15,8 @@ namespace Sky
 	public:
 		LinkedList();
 		int Count();
-		BOOL Add(void* ptrData);
-		BOOL Delete(void* ptrData);
+		bool Add(void* ptrData);
+		bool Delete(void* ptrData);
 		void* Get(int index);
 
 	private:

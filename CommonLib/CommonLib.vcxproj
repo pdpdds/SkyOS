@@ -108,6 +108,7 @@
   <ItemGroup>
     <ClCompile Include="cstd.cpp" />
     <ClCompile Include="jsmn.cpp" />
+    <ClCompile Include="lua\lstate.c" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="SkyIO.c" />
     <ClCompile Include="sprintf.cpp" />
@@ -125,6 +126,34 @@
     <ClInclude Include="list_implement.h" />
     <ClInclude Include="list_iterator_implement.h" />
     <ClInclude Include="list_node_implement.h" />
+    <ClInclude Include="lua\lapi.h" />
+    <ClInclude Include="lua\lauxlib.h" />
+    <ClInclude Include="lua\lcode.h" />
+    <ClInclude Include="lua\lctype.h" />
+    <ClInclude Include="lua\ldebug.h" />
+    <ClInclude Include="lua\ldo.h" />
+    <ClInclude Include="lua\lfunc.h" />
+    <ClInclude Include="lua\lgc.h" />
+    <ClInclude Include="lua\llex.h" />
+    <ClInclude Include="lua\llimits.h" />
+    <ClInclude Include="lua\lmem.h" />
+    <ClInclude Include="lua\lobject.h" />
+    <ClInclude Include="lua\lopcodes.h" />
+    <ClInclude Include="lua\lparser.h" />
+    <ClInclude Include="lua\lprefix.h" />
+    <ClInclude Include="lua\lstate.h" />
+    <ClInclude Include="lua\lstring.h" />
+    <ClInclude Include="lua\ltable.h" />
+    <ClInclude Include="lua\ltm.h" />
+    <ClInclude Include="lua\lua.h" />
+    <ClInclude Include="lua\lua.hpp" />
+    <ClInclude Include="lua\luaconf.h" />
+    <ClInclude Include="lua\lualib.h" />
+    <ClInclude Include="lua\lundump.h" />
+    <ClInclude Include="lua\lvm.h" />
+    <ClInclude Include="lua\lzio.h" />
+    <ClInclude Include="lua\signal.h" />
+    <ClInclude Include="lua\_mingw.h" />
     <ClInclude Include="map.hpp" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="setjmp.h" />
@@ -138,6 +167,7 @@
     <ClInclude Include="stdio.h" />
     <ClInclude Include="stl_pair.h" />
     <ClInclude Include="string.h" />
+    <ClInclude Include="time.h" />
     <ClInclude Include="va_list.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

@@ -98,7 +98,7 @@ DWORD kReadFLAGS()
 	return flag;
 }
 
-BOOL kSetInterruptFlag(BOOL bEnableInterrupt)
+bool kSetInterruptFlag(bool bEnableInterrupt)
 {
 	DWORD dwRFLAGS;
 

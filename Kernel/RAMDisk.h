@@ -154,12 +154,12 @@ typedef struct kRDDManagerStruct
 //  ÇÔ¼ö
 //
 ////////////////////////////////////////////////////////////////////////////////
-BOOL kInitializeRDD( DWORD dwTotalSectorCount );
-BOOL kReadRDDInformation( BOOL bPrimary, BOOL bMaster, 
+bool kInitializeRDD( DWORD dwTotalSectorCount );
+bool kReadRDDInformation(bool bPrimary, bool bMaster,
         HDDINFORMATION* pstHDDInformation );
-int kReadRDDSector( BOOL bPrimary, BOOL bMaster, DWORD dwLBA, int iSectorCount, 
+int kReadRDDSector(bool bPrimary, bool bMaster, DWORD dwLBA, int iSectorCount,
         char* pcBuffer );
-int kWriteRDDSector( BOOL bPrimary, BOOL bMaster, DWORD dwLBA, int iSectorCount, 
+int kWriteRDDSector(bool bPrimary, bool bMaster, DWORD dwLBA, int iSectorCount,
         char* pcBuffer );
 
 #endif /*__RAMDISK_H__*/

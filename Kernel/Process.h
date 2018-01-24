@@ -12,7 +12,7 @@ public:
 	Process();
 	virtual ~Process();
 
-	BOOL AddThread(Thread* pThread); //스레드를 추가한다.
+	bool AddThread(Thread* pThread); //스레드를 추가한다.
 	Thread* GetThread(int index); //스레드를 삭제한다.
 
 	void SetPDBR();

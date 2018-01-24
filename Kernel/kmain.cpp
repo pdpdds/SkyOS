@@ -243,8 +243,8 @@ void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
 }
 
 
-BOOL kFormat(void);
-BOOL kFormat(void)
+bool kFormat(void);
+bool kFormat(void)
 {
 	HDDINFORMATION hddInfo;
 	MBR* pstMBR;

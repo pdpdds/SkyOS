@@ -34,19 +34,18 @@ void PrintHDDInfo()
 		HDDInfo = (struct __HDDInfo *)__SysHDDHandler->GetHDDInfo(Key);
 		if (HDDInfo != NULL)
 		{
-			UINT16 i;
 			SkyConsole::Print("\n%s Device ( %s ) :: ", HDDInfo->DeviceNumber ? "Slave " : "Master", Key);
 			if (HDDInfo->ModelNumber[0] == 0)
 				SkyConsole::Print(" N/A ");
 			else
-				for (i = 0; i<20; i++)
-					SkyConsole::WriteChar(HDDInfo->ModelNumber[i]);
+				for (BYTE j = 0; j<20; j++)
+					SkyConsole::WriteChar(HDDInfo->ModelNumber[j]);
 			SkyConsole::Print(" - ");
 			if (HDDInfo->SerialNumber[0] == 0)
 				SkyConsole::Print(" N/A ");
 			else
-				for (BYTE i = 0; i<20; i++)
-					SkyConsole::WriteChar(HDDInfo->SerialNumber[i]);
+				for (BYTE j = 0; j<20; j++)
+					SkyConsole::WriteChar(HDDInfo->SerialNumber[j]);
 			SkyConsole::Print("\n\r Cylinders %d Heads %d Sectors %d. LBA Sectors %d\n", HDDInfo->CHSCylinderCount, HDDInfo->CHSHeadCount, HDDInfo->CHSSectorCount, HDDInfo->LBACount);
 		}
 		Key[1]++;
@@ -66,6 +65,8 @@ void TestHardDrive()
 		FATReadFile(handle, 512, buffer);
 
 		SkyConsole::Print("%s\n", buffer);
+
+		delete buffer;
 	}
 }
 
@@ -137,7 +138,7 @@ bool InitGraphics(VesaModeInfo* pInfo)
 }
 
 extern bool FddInitializeDriver(VOID);
-extern BOOL FsInitializeModule(VOID);
+extern bool FsInitializeModule(VOID);
 
 void InitFloppyDrive()
 {

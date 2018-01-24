@@ -15,7 +15,7 @@ Process::~Process()
 {
 }
 
-BOOL Process::AddThread(Thread* pThread)
+bool Process::AddThread(Thread* pThread)
 {
 	ListNode* node = new ListNode();
 	node->_data = pThread;
