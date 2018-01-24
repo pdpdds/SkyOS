@@ -66,8 +66,6 @@ typedef struct LG {
   global_State g;
 } LG;
 
-
-#define offsetof(st, m) ((size_t)&(((st *)0)->m))
 #define fromstate(L)	(cast(LX *, cast(lu_byte *, (L)) - offsetof(LX, l)))
 
 
