@@ -37,6 +37,9 @@
     <Filter Include="FileSystem">
       <UniqueIdentifier>{d43a5571-5d81-411c-8f65-dec866f99256}</UniqueIdentifier>
     </Filter>
+    <Filter Include="v8086">
+      <UniqueIdentifier>{5d2e9c4f-3ba0-401b-a238-73c652354809}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="exception.cpp">
@@ -159,7 +162,6 @@
     <ClCompile Include="Scheduler.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="v8086\rme.cpp" />
     <ClCompile Include="SkyTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
@@ -171,6 +173,9 @@
     </ClCompile>
     <ClCompile Include="Graphics.cpp">
       <Filter>Video</Filter>
+    </ClCompile>
+    <ClCompile Include="v8086\rme.cpp">
+      <Filter>v8086</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -315,7 +320,6 @@
     <ClInclude Include="Scheduler.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="v8086\rme.h" />
     <ClInclude Include="TestInteger.h">
       <Filter>Test</Filter>
     </ClInclude>
@@ -336,6 +340,9 @@
     </ClInclude>
     <ClInclude Include="Graphics.h">
       <Filter>Video</Filter>
+    </ClInclude>
+    <ClInclude Include="v8086\rme.h">
+      <Filter>v8086</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

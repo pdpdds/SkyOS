@@ -15,10 +15,8 @@
 
 #define outb OutPortByte
 #define outw OutPortWord
-#define outl outportl
 #define inb  InPortByte
 #define inw  InPortWord
-#define inl  inportl
 
 typedef uint8_t  Uint8;
 typedef uint16_t Uint16;
