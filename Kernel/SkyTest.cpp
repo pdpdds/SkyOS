@@ -12,6 +12,8 @@
 #include "TestInteger.h"
 #include "SkyConsole.h"
 #include "SkyQueue.h"
+#include "stl\stl_string.h"
+#include "stl\deque.h"
 
 #define kprintf SkyConsole::Print
 
@@ -33,28 +35,12 @@ void TestMap();
 void TestList();
 void TestCPP14();
 void TestJson();
+void TestString();
+void TestVector();
 
 
 void SkyTest()
 {
-	/*Vector<int> vec;
-	vec.push_back(5);
-	vec.push_back(1);
-	vec.push_back(3);
-	vec.push_back(4);
-
-
-
-	while (vec.size() > 0)
-	{
-	int data = vec.back();
-	SkyConsole::Print("%d\n", data);
-	vec.pop_back();
-	}
-
-	for (;;);
-	*/
-
 	/*
 	Stack<int> s;
 	s.push(10);
@@ -77,6 +63,45 @@ void SkyTest()
 
 	//TestV8086();
 
+}
+
+void TestString()
+{
+	std::string str("abc");
+	SkyConsole::Print("%s\n", str.c_str());
+
+	std::string str2 = str;
+	str2 = "cdf";
+	SkyConsole::Print("%s\n", str2.c_str());
+}
+
+void TestDeque()
+{
+	std::deque<int> a;
+	
+	for (int i = 1; i < 6; i++)
+		a.push_front(i);
+
+	for (int i = 0; i < 5; i++)
+		SkyConsole::Print("%d\n", a[i]);		
+}
+
+void TestVector()
+{
+	Vector<int> vec;
+	vec.push_back(5);
+	vec.push_back(1);
+	vec.push_back(3);
+	vec.push_back(4);
+
+	while (vec.size() > 0)
+	{
+		int data = vec.back();
+		SkyConsole::Print("%d\n", data);
+		vec.pop_back();
+	}
+
+	for (;;);
 }
 
 

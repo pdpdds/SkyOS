@@ -33,7 +33,7 @@ BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime);
 
 int printf(const char* str, ...);
 HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreateionFlags, LPDWORD lpThreadId);
-
+void PauseSystem(const char* msg);
 
 extern "C"
 {

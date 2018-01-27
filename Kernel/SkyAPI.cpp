@@ -250,3 +250,8 @@ extern "C"
 		for (;;);
 	}
 }
+
+void PauseSystem(const char* msg)
+{
+	for (;;);
+}

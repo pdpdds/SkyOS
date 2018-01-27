@@ -7,6 +7,9 @@
     <Filter Include="Source\lua">
       <UniqueIdentifier>{a327c23b-fcfe-42d0-8bf6-b1e84d3df9e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\stl">
+      <UniqueIdentifier>{797df97c-1078-4895-8f27-c2edd9a0521d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="string.cpp">
@@ -109,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="lua\lmem.c">
       <Filter>Source\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="stl\stl_string.cpp">
+      <Filter>Source\stl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -262,6 +268,21 @@
     </ClInclude>
     <ClInclude Include="lua\lzio.h">
       <Filter>Source\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\stl_string.h">
+      <Filter>Source\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\darray.h">
+      <Filter>Source\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\darray.hpp">
+      <Filter>Source\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\deque.hpp">
+      <Filter>Source\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\deque.h">
+      <Filter>Source\stl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

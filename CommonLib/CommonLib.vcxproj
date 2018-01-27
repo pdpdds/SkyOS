@@ -57,7 +57,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./;../include;./lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../include;./lua;./util</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ARCH_X86;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>false</StringPooling>
@@ -140,6 +140,7 @@
     <ClCompile Include="SkyIO.c" />
     <ClCompile Include="sprintf.cpp" />
     <ClCompile Include="stdio.cpp" />
+    <ClCompile Include="stl\stl_string.cpp" />
     <ClCompile Include="string.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +192,11 @@
     <ClInclude Include="stddef.h" />
     <ClInclude Include="stdint.h" />
     <ClInclude Include="stdio.h" />
+    <ClInclude Include="stl\darray.h" />
+    <ClInclude Include="stl\darray.hpp" />
+    <ClInclude Include="stl\deque.h" />
+    <ClInclude Include="stl\deque.hpp" />
+    <ClInclude Include="stl\stl_string.h" />
     <ClInclude Include="stl_pair.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="time.h" />
