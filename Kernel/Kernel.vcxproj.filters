@@ -166,6 +166,12 @@
     <ClCompile Include="RAMDisk.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
+    <ClCompile Include="commands.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Video</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h">
@@ -318,6 +324,18 @@
     </ClInclude>
     <ClInclude Include="RAMDisk.h">
       <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="commandMacros.h">
+      <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="commandTable.h">
+      <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="commands.h">
+      <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Video</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

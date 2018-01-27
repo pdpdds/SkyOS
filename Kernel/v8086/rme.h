@@ -10,7 +10,8 @@
  */
 #ifndef _RME_H_
 #define _RME_H_
-
+#include "windef.h"
+#include "stdint.h"
 /**
  * \file rme.h
  * \brief Realmode Emulator Header

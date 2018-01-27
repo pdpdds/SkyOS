@@ -9,6 +9,79 @@
 #include "ZetPlane.h"
 #include "PIT.h"
 #include "FloppyDisk.h"
+#include "commandTable.h"
+
+void showHelp(void)
+{
+	SkyConsole::Print("Framework Version: %s\n", gFrameWorkVersion);
+	SkyConsole::Print("\n");
+
+	for (ULONG i = 0; i < g_NumberOfCommands; i++)
+	{
+		if (g_Commands[i].szCommand[0] != '_')
+		{
+			SkyConsole::Print(("%s : %s\n"), (const char*)(g_Commands[i].szCommand), (const char*)(g_Commands[i].comments));
+		}
+	}
+
+	SkyConsole::Print("\n");
+}
+
+long processCommandLine(char *a_szCommand)
+{
+	ULONG   i;
+	char   szCmdCopy[256];
+	char   szDelim[] = " ";
+	char  *pCurrentToken;
+
+	// Make sure that there is a command to process.
+	if (0 == strlen(a_szCommand))
+		return FALSE;
+
+	// Check whether we asked for help.
+	if (0 == strcmp(a_szCommand, g_Commands[1].szCommand))
+	{
+		showHelp();
+
+		return 0;
+	}
+
+	// Find if it is any of the supported commands (except QUIT on index 0)
+	for (i = 2; i<g_NumberOfCommands; i++)
+	{
+		if (g_Commands[i].bHasArguments)
+		{
+			// Copy the command.
+			strcpy(szCmdCopy, a_szCommand);
+
+			// This returns the command sub-string.
+			pCurrentToken = strtok(szCmdCopy, szDelim);
+
+			if (0 == stricmp(pCurrentToken, g_Commands[i].szCommand))
+			{
+				pCurrentToken = strtok(NULL, szDelim);
+				g_Commands[i].ProcessingFunc(pCurrentToken);
+				return 0;
+			}
+		}
+		else
+		{
+			// Since we have no arguments, we do an exact match.
+			if (0 == stricmp(a_szCommand, g_Commands[i].szCommand))
+			{
+				g_Commands[i].ProcessingFunc(NULL);  // MOD120203: use NULL instead of a_szCommand
+				return 0;
+			}
+		}
+	}
+
+	if (i == g_NumberOfCommands)
+	{
+		SkyConsole::Print("Command not found....\n");
+	}
+
+	return FALSE;
+}
 
 ConsoleManager::ConsoleManager()
 {
@@ -18,313 +91,23 @@ ConsoleManager::~ConsoleManager()
 {
 }
 
-void cmd_alloc()
-{
-	for (int i = 0; i < 1000; i++)
-	{
-		ZetPlane* pPlane = new ZetPlane();
-		pPlane->SetX(i);
-		pPlane->SetY(i + 5);
-
-		pPlane->IsRotate();
-
-		SkyConsole::Print("Plane X : %d, Plane Y : %d\n", pPlane->GetX(), pPlane->GetY());		
-
-		delete pPlane;
-	}
-}
-
-/* video mode info. */
-#define WIDTH           800
-#define HEIGHT          600
-#define BPP             32
-#define BYTES_PER_PIXEL 4
-
-/* BGA LFB is at LFB_PHYSICAL. */
-#define LFB_PHYSICAL 0xE0000000
-#define LFB_VIRTUAL  0x300000
-
-/* render rectangle in 32 bpp modes. */
-void rect32(int x, int y, int w, int h, int col) {
-	int* lfb = (int*)LFB_VIRTUAL;
-	for (int k = 0; k < h; k++)
-		for (int j = 0; j < w; j++)
-			lfb[(j + x) + (k + y) * WIDTH] = col;
-}
-
-/* thread cycles through colors of red. */
-DWORD WINAPI kthread_1(LPVOID parameter) {
-	int col = 0;
-	bool dir = true;
-	while (1) {
-		rect32(200, 250, 100, 100, col << 16);
-		if (dir) {
-			if (col++ == 0xfe)
-				dir = false;
-		}
-		else
-			if (col-- == 1)
-				dir = true;
-	}
-
-	return 0;
-}
-
-DWORD WINAPI SampleLoop2(LPVOID parameter) 
-{
-	char* str = "Hello world3!";
-
-	int first = GetTickCount();
-	while (1)
-	{
-
-		int second = GetTickCount();
-		if (second - first > 100)
-		{
-			SkyConsole::Print("%s\n", str);
-
-			first = GetTickCount();
-		}
-
-
-	}
-
-	for (;;);
-	return 0;
-}
-
-void cmd_memtask()
-{
-	EnterCriticalSection();
-
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("SampleLoop", SampleLoop2);
-	
-	LeaveCriticalSection();
-}
-
-void cmd_killtask(int processId)
-{
-	EnterCriticalSection();
-
-	Process* pProcess = ProcessManager::GetInstance()->FindProcess(processId);
-
-	if (pProcess != NULL)
-	{
-		SkyConsole::Print("kill process : %s, ID : %d\n", pProcess->m_processName, pProcess->m_processId);
-		ProcessManager::GetInstance()->DestroyKernelProcess(pProcess);
-	}
-
-	LeaveCriticalSection();
-}
-
-
-
-void cmd_ProcessList() {
-
-	EnterCriticalSection();
-	SkyConsole::Print(" ID : Process Name\n");
-
-	Sky::LinkedList* processlist = ProcessManager::GetInstance()->GetProcessList();
-
-	for (int i = 0; i < processlist->Count(); i++)
-	{
-		Process* pProcess = (Process*)processlist->Get(i);
-
-		SkyConsole::Print("  %d : %s\n", pProcess->m_processId, pProcess->m_processName);
-	}
-
-	LeaveCriticalSection();
-}
-
-
-void cmd_memstate() {
-		
-	SkyConsole::Print("free block count %d\n", PhysicalMemoryManager::GetFreeBlockCount());
-	SkyConsole::Print("total block count %d\n", PhysicalMemoryManager::GetTotalBlockCount());
-	SkyConsole::Print("\n");	
-}
-
-
-//! read command
-void cmd_read() {
-
-	//! get pathname
-	char path[MAXPATH];
-	SkyConsole::Print("ex: \"file.txt\", \"a:\\file.txt\", \"a:\\folder\\file.txt\"\n\rFilename> ");
-	SkyConsole::GetCommand(path, MAXPATH-2);
-	SkyConsole::Print("\n");
-
-	FILE file = volOpenFile(path);
-
-	//! test for invalid file
-	if (file.flags == FS_INVALID) {
-
-		SkyConsole::Print("Unable to open file\n");
-		return;
-	}
-
-	//! cant display directories
-	if ((file.flags & FS_DIRECTORY) == FS_DIRECTORY) {
-
-		SkyConsole::Print("Unable to display contents of directory.\n");
-		return;
-	}
-
-	//! top line
-	SkyConsole::Print("\n-------[%s]-------\n", file.name);
-
-	//! display file contents
-	while (file.eof != 1) {
-
-		//! read cluster
-		unsigned char buf[512];
-		volReadFile(&file, buf, 512);
-
-		//! display file
-		for (int i = 0; i<512; i++)
-			SkyConsole::WriteChar(buf[i]);
-
-		//! wait for input to continue if not EOF
-		if (file.eof != 1) {
-			SkyConsole::Print("\n------[Press a key to continue]------");
-			SkyConsole::GetChar();
-		}
-	}
-
-	//! done :)
-	SkyConsole::Print("\n\n--------[EOF]--------\n");
-}
-
-void cmd_proc(char* pName) {
-
-	int ret = 0;	
-	if (pName == NULL)
-		return;
-
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromFile(pName, PROCESS_KERNEL);
-	if (pProcess == 0)
-	{
-		SkyConsole::Print("Can't Execute Process. %d\n", pName);
-	}
-	else
-	{		
-		pProcess->m_IskernelProcess = false;
-		ProcessManager::GetInstance()->AddProcess(pProcess);		
-	}
-}
-
-extern void TestV8086();
-// proc (process) command
-void cmd_gui(char* pName) {
-
-	TestV8086();
-	for (;;);
-}
 
 bool ConsoleManager::RunCommand(char* buf) 
 {
 	if (buf[0] == '\0')
 		return false;	
 
-	//! exit command
-	if (strcmp(buf, "exit") == 0) {
+	if (strcmp(buf, "exit") == 0) 
+	{
 		return true;
 	}
-
-	//! clear screen
-	else if (strcmp(buf, "cls") == 0) {
-		SkyConsole::Clear();
-	}
-
-	//! help
-	else if (strcmp(buf, "help") == 0) {
-
-		SkyConsole::Print("Orange OS Console Help\n");		
-		SkyConsole::Print(" - exit: quits and halts the system\n");
-		SkyConsole::Print(" - list: displays process list\n");
-		SkyConsole::Print(" - cls: clears the display\n");
-		SkyConsole::Print(" - help: displays this message\n");
-		SkyConsole::Print(" - read: reads a file\n");
-		SkyConsole::Print(" - reset: Resets and recalibrates floppy for reading\n");
-		SkyConsole::Print(" - proc: Run process\n");		
-	}
-
-	//! read sector
-	else if (strcmp(buf, "read") == 0) {
-		cmd_read();
-		
-		/*uint32_t sectornum = 0;
-		char sectornumbuf[4];
-		uint8_t* sector = 0;
-		
-		sectornum = 1;
-
-		//DebugSkyConsole::Print("\n\rSector %i contents:\n\n\r", sectornum);
-
-		//! read sector from disk
-		sector = flpydsk_read_sector(sectornum);
-
-		//! display sector
-		if (sector != 0) {
-
-			int i = 0;
-			for (int c = 0; c < 1; c++) {
-
-				for (int j = 0; j < 128; j++)									
-					SkyConsole::Print("0x%x ", sector[i + j]);
-				i += 128;
-
-				SkyConsole::Print("Press any key to continue\n");				
-			}
-		}
-		else
-			SkyConsole::Print("*** Error reading sector from disk\n");
-
-		SkyConsole::Print("Done.\n");*/
-
-
-
-	}
-	else if (strcmp(buf, "memstate") == 0) {
-		cmd_memstate();
-	}
-	else if (strcmp(buf, "alloc") == 0) {
-		cmd_alloc();
-	}
-	else if (strcmp(buf, "memtask") == 0) {
-		cmd_memtask();
-	}
-	else if (strcmp(buf, "list") == 0) {
-		cmd_ProcessList();
-	}
-	//! run process
 	else if (strstr(buf, ".exe") > 0) {
 
-		cmd_proc(buf);
-	}	
-	else if (strcmp(buf, "gui") == 0) {
-
-		cmd_gui(buf);
+		cmdProc(buf);
+		return false;
 	}
-	else
-	{			
-		char* directive = strtok(buf, " ");		
 
-		if (directive != NULL && strcmp(directive, "kill") == 0)
-		{
-			char* processId = strtok(NULL, " ");
-
-			if(processId == NULL)
-				SkyConsole::Print("Argument insufficient\n", processId);
-			else
-			{
-				int id = atoi(processId);
-				cmd_killtask(id);
-			}
-		}
-		else
-			SkyConsole::Print("Unknown Command\n");		
-	}
+	processCommandLine(buf);
 
 	return false;
 }

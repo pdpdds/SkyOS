@@ -59,7 +59,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>../CommonLib;./;../Include;./.;./v8086;</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_RME_C_;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
       </StringPooling>
@@ -116,6 +116,8 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="commands.cpp" />
+    <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="RAMDisk.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
@@ -166,7 +168,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collect.h" />
+    <ClInclude Include="commandMacros.h" />
+    <ClInclude Include="commands.h" />
+    <ClInclude Include="commandTable.h" />
     <ClInclude Include="FloppyDiskIO.h" />
+    <ClInclude Include="Graphics.h" />
     <ClInclude Include="RAMDisk.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="ConsoleManager.h" />

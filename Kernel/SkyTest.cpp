@@ -17,8 +17,6 @@
 
 #define kprintf SkyConsole::Print
 
-void TestV8086();
-
 static const char *JSON_STRING =
 "{\"user\": \"johndoe\", \"admin\": false, \"uid\": 1000,\n  "
 "\"groups\": [\"users\", \"wheel\", \"audio\", \"video\"]}";
@@ -31,17 +29,28 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 	return -1;
 }
 
+void TestV8086();
 void TestMap();
 void TestList();
 void TestCPP14();
 void TestJson();
 void TestString();
 void TestVector();
+void TestStack();
 
 
 void SkyTest()
 {
-	/*
+	TestMap();
+	TestList();
+	TestCPP14();	
+
+	//TestV8086();
+}
+
+void TestStack()
+{
+	
 	Stack<int> s;
 	s.push(10);
 	s.push(20);
@@ -49,20 +58,9 @@ void SkyTest()
 
 	while (s.size() > 0)
 	{
-	int data = s.pop();
-	SkyConsole::Print("%d\n", data);
-
-	}*/
-
-
-	//TestMap();
-	TestList();
-	TestCPP14();
-
-	
-
-	//TestV8086();
-
+		int data = s.pop();
+		SkyConsole::Print("%d\n", data);
+	}
 }
 
 void TestString()
@@ -221,217 +219,6 @@ void TestJson()
 	for (;;);
 }
 
-#include "./v8086/rme.h"
-#include "vesa.h"
-#include "Math.h"
-
-#define PROMPT_FOR_MODE 1
-
-/* Friggin' frick, this should be a config option
-* because it's 4096 on some instances of Qemu,
-* ie the one on my laptop, but it's 2048 on
-* the EWS machines. */
-#define BOCHS_BUFFER_SIZE 2048
-#define PREFERRED_VY 4096
-#define PREFERRED_B 32
-
-uint16_t bochs_resolution_x = 0;
-uint16_t bochs_resolution_y = 0;
-uint16_t bochs_resolution_b = 0;
-
-
-/* vm86 Helpers */
-typedef uint32_t  FARPTR;
-typedef uintptr_t addr_t;
-#define MK_FP(seg, off)        ((FARPTR) (((uint32_t) (seg) << 16) | (uint16_t) (off)))
-#define FP_SEG(fp)             (((FARPTR) fp) >> 16)
-#define FP_OFF(fp)             (((FARPTR) fp) & 0xffff)
-#define FP_TO_LINEAR(seg, off) ((void*) ((((uint16_t) (seg)) << 4) + ((uint16_t) (off))))
-#define LINEAR_TO_FP(ptr)      (MK_FP(((addr_t) (ptr) - ((addr_t) (ptr) & 0xf)) / 16, ((addr_t)(ptr) & 0xf)))
-
-uint8_t * bochs_vid_memory = (uint8_t *)0xE0000000;
-
-static void finalize_graphics(uint16_t x, uint16_t y, uint16_t b) {
-	bochs_resolution_x = x;
-	bochs_resolution_y = y;
-	bochs_resolution_b = b;
-}
-
-void graphics_install_vesa(uint16_t resX, uint16_t resY)
-{
-	/* VESA Structs */
-	struct VesaControllerInfo *info = (VesaControllerInfo*)0x10000;
-	struct VesaModeInfo *modeinfo = (VesaModeInfo*)0x9000;
-
-	/* 8086 Emulator Status */
-	tRME_State *emu;
-	void * lowCache;
-	lowCache = (void *)new BYTE[RME_BLOCK_SIZE];
-	memcpy(lowCache, NULL, RME_BLOCK_SIZE);
-	emu = RME_CreateState();
-	emu->Memory[0] = (uint8_t*)lowCache;
-	for (int i = RME_BLOCK_SIZE; i < 0x100000; i += RME_BLOCK_SIZE) {
-		emu->Memory[i / RME_BLOCK_SIZE] = (uint8_t*)i;
-	}
-	int ret, mode;
-
-	/* Find modes */
-	uint16_t * modes;
-	memcpy(info->Signature, "VBE2", 4);
-	emu->AX.W = 0x4F00;
-	emu->ES = 0x1000;
-	emu->DI.W = 0;
-	ret = RME_CallInt(emu, 0x10);
-	if (info->Version < 0x200 || info->Version > 0x300)
-	{
-		SkyConsole::Print("\033[JYou have attempted to use the VESA/VBE2 driver\nwith a card that does not support VBE2.\n");
-		SkyConsole::Print("\nSystem responded to VBE request with version: 0x%x\n", info->Version);
-
-		HaltSystem("");
-	}
-	modes = (uint16_t*)FP_TO_LINEAR(info->Videomodes.Segment, info->Videomodes.Offset);
-
-	uint16_t best_x = 0;
-	uint16_t best_y = 0;
-	uint16_t best_b = 0;
-	uint16_t best_mode = 0;
-
-	for (int i = 1; modes[i] != 0xFFFF; ++i) {
-		emu->AX.W = 0x4F01;
-		emu->CX.W = modes[i];
-		emu->ES = 0x0900;
-		emu->DI.W = 0x0000;
-		RME_CallInt(emu, 0x10);
-#if PROMPT_FOR_MODE
-		SkyConsole::Print("%d = %dx%d:%d %d\n", i, modeinfo->Xres, modeinfo->Yres, modeinfo->bpp, modeinfo->physbase);
-	}
-
-	SkyConsole::Print("Please select a mode: ");
-	KeyBoard::KEYCODE key = SkyConsole::GetChar();
-	char selected = KeyBoard::ConvertKeyToAscii(key);
-	char buf[10];
-	buf[0] = selected;
-	buf[1] = '\n';
-
-	mode = atoi(buf);
-#else
-		if ((abs(modeinfo->Xres - resX) < abs(best_x - resX)) && (abs(modeinfo->Yres - resY) < abs(best_y - resY))) {
-			best_mode = i;
-			best_x = modeinfo->Xres;
-			best_y = modeinfo->Yres;
-			best_b = modeinfo->bpp;
-		}
-}
-	for (int i = 1; modes[i] != 0xFFFF; ++i) {
-		emu->AX.W = 0x4F01;
-		emu->CX.W = modes[i];
-		emu->ES = 0x0900;
-		emu->DI.W = 0x0000;
-		RME_CallInt(emu, 0x10);
-		if (modeinfo->Xres == best_x && modeinfo->Yres == best_y) {
-			if (modeinfo->bpp > best_b) {
-				best_mode = i;
-				best_b = modeinfo->bpp;
-			}
-		}
-	}
-
-	if (best_b < 24) {
-		SkyConsole::Print("!!! Rendering at this bit depth (%d) is not currently supported.\n", best_b);
-		HaltSystem("");
-	}
-
-	mode = best_mode;
-
-#endif
-
-	emu->AX.W = 0x4F01;
-	if (mode < 100) {
-		emu->CX.W = modes[mode];
-	}
-	else {
-		emu->CX.W = mode;
-	}
-	emu->ES = 0x0900;
-	emu->DI.W = 0x0000;
-	RME_CallInt(emu, 0x10);
-
-	HaltSystem("sadsd");
-
-	emu->AX.W = 0x4F02;
-	emu->BX.W = modes[mode];
-	RME_CallInt(emu, 0x10);
-
-	uint16_t actual_x = modeinfo->Xres;
-	uint16_t actual_y = modeinfo->Yres;
-	uint16_t actual_b = modeinfo->bpp;
-
-	bochs_vid_memory = (uint8_t *)modeinfo->physbase;
-
-	/*uint32_t* lfb = (uint32_t*)bochs_vid_memory;
-	for (uint32_t c = 0; c<actual_x*actual_y; c++)
-	lfb[c] = 0x90;
-
-	SkyConsole::GetChar();*/
-
-	/*int* lfb = (int*)bochs_vid_memory;
-	for (int j = 0; j < actual_x; j++)
-	for (int k = 0; k < actual_y; k++)
-	lfb[k + (j) * actual_x] = 255;*/
-
-	/*for (;;);
-
-	if(bochs_vid_memory == 0)
-	HaltSystem("Sdfdsdfd");*/
-
-	/*if (!bochs_vid_memory)
-	{
-	uint32_t * herp = (uint32_t *)0xA0000;
-	herp[0] = 0xA5ADFACE;
-
-	// Enable the higher memory
-	for (uintptr_t i = 0xE0000000; i <= 0xE0FF0000; i += 0x1000)
-	{
-
-	dma_frame(get_page(i, 1, kernel_directory), 0, 1, i);
-	}
-	for (uintptr_t i = 0xF0000000; i <= 0xF0FF0000; i += 0x1000) {
-	dma_frame(get_page(i, 1, kernel_directory), 0, 1, i);
-	}
-
-
-	// Go find it
-	for (uintptr_t x = 0xE0000000; x < 0xE0FF0000; x += 0x1000) {
-	if (((uintptr_t *)x)[0] == 0xA5ADFACE) {
-	bochs_vid_memory = (uint8_t *)x;
-	goto mem_found;
-	}
-	}
-	for (uintptr_t x = 0xF0000000; x < 0xF0FF0000; x += 0x1000) {
-	if (((uintptr_t *)x)[0] == 0xA5ADFACE) {
-	bochs_vid_memory = (uint8_t *)x;
-	goto mem_found;
-	}
-	}
-	}*/
-mem_found:
-
-	/*
-	* Finalize the graphics setup with the actual selected resolution.
-	*/
-	finalize_graphics(actual_x, actual_y, actual_b);
-
-	//InitGraphics(modeinfo);
-}
-
-
-void rect32A(int x, int y, int w, int h, int col) {
-	int* lfb = (int*)bochs_vid_memory;
-	for (int k = 0; k < h; k++)
-		for (int j = 0; j < w; j++)
-			lfb[(j + x) + (k + y) * bochs_resolution_x] = col;
-}
-
 void TestCPP14()
 {
 	auto func = [x = 5]() { return x; };
@@ -488,25 +275,4 @@ void TestList()
 
 }
 
-void TestV8086()
-{
-	graphics_install_vesa(1024, 768);
 
-
-
-	//HaltSystem("ff");
-
-	int col = 0;
-	bool dir = true;
-	SkyConsole::Print("RectGenerate\n");
-	while (1) {
-		rect32A(200, 380, 100, 100, 0x80);
-		if (dir) {
-			if (col++ == 0xfe)
-				dir = false;
-		}
-		else
-			if (col-- == 1)
-				dir = true;
-	}
-}
