@@ -177,6 +177,9 @@
     <ClCompile Include="v8086\rme.cpp">
       <Filter>v8086</Filter>
     </ClCompile>
+    <ClCompile Include="KeyboardController.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h">
@@ -343,6 +346,9 @@
     </ClInclude>
     <ClInclude Include="v8086\rme.h">
       <Filter>v8086</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardController.h">
+      <Filter>Device</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

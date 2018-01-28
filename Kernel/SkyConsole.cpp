@@ -6,12 +6,13 @@
 #include "Hal.h"
 #include "sysapi.h"
 #include "KeyBoard.h"
+#include "KeyboardController.h"
 
 using namespace KeyBoard;
 
 namespace SkyConsole
 {
-	
+
 	static ConsoleColor m_Color;
 	static ConsoleColor m_Text;
 	static ConsoleColor m_backGroundColor;
@@ -22,7 +23,7 @@ namespace SkyConsole
 	static ushort* m_pVideoMemory; //Just a pointer to video memory
 	static unsigned int m_ScreenHeight;
 	static unsigned int m_ScreenWidth;
-	static unsigned short m_VideoCardType;	
+	static unsigned short m_VideoCardType;
 
 	void Initialize()
 	{
@@ -119,7 +120,7 @@ namespace SkyConsole
 			break;
 		}
 
-		if (m_xPos>= m_ScreenWidth)
+		if (m_xPos >= m_ScreenWidth)
 			m_yPos++;
 
 		if (m_yPos == m_ScreenHeight)			// the cursor moved off of the screen?
@@ -128,7 +129,7 @@ namespace SkyConsole
 			m_yPos--;						// and move the cursor back
 		}
 		// and finally, set the cursor
-		
+
 		MoveCursor(m_xPos + 1, m_yPos);
 	}
 
@@ -321,7 +322,7 @@ namespace SkyConsole
 	}
 
 	//Get Command from prompt
-	void GetCommand(char* commandBuffer, int bufSize)
+	/*void GetCommand(char* commandBuffer, int bufSize)
 	{
 		KEYCODE key = KEY_UNKNOWN;
 		bool	BufChar;
@@ -388,11 +389,11 @@ namespace SkyConsole
 
 		//! null terminate the string
 		commandBuffer[i] = 0;
-	}
+	}*/
 
 	//리팩토링
 	//! wait for key stroke
-	KEYCODE	GetChar()
+	/*KEYCODE	GetChar()
 	{
 		KEYCODE key = KEY_UNKNOWN;
 		int first = GetTickCount();
@@ -405,21 +406,98 @@ namespace SkyConsole
 			__asm sti
 
 
-			/*int second = GetTickCount();
-			if (second - first > 100)
-			{
-				SkyConsole::Print("%d\n", second);
+			int second = GetTickCount();
+			//if (second - first > 100)
+			//{
+				//SkyConsole::Print("%d\n", second);
 
-				first = GetTickCount();
-			}*/
+				//first = GetTickCount();
+			//}
 
 			if (key == KEY_UNKNOWN)
 				msleep(1);
-			
+
 		}
 
 		//! discard last keypress (we handled it) and return
 		KeyBoard::DiscardLastKeyCode();
 		return key;
+	}*/
+
+
+	char	GetChar()
+	{
+		char c = KeyboardController::GetInput();
+		return c;
+	}
+
+
+	void GetCommand(char* commandBuffer, int bufSize)
+	{
+		char c = 0;
+		bool	BufChar;
+
+		//! get command string
+		int i = 0;
+		while (i < bufSize) {
+
+			//! buffer the next char
+			BufChar = true;
+
+			//! grab next char
+			c = KeyboardController::GetInput();
+
+			//return
+			if (c == 0x0d)
+				break;
+
+			//backspace
+			if (c == 0x08) {
+
+				//! dont buffer this char
+				BufChar = false;
+
+				if (i > 0) {
+
+					//! go back one char
+					uint y, x;
+					GetCursorPos(x, y);
+
+					if (x > 0)
+						MoveCursor(x, y);
+					else {
+						//! x is already 0, so go back one line
+						y--;
+						x = 80;
+					}
+
+					//! erase the character from display
+					WriteChar(' ');
+					MoveCursor(x, y);
+
+					//! go back one char in cmd buf
+					i--;
+				}
+			}
+
+			//! only add the char if it is to be buffered
+			if (BufChar) {
+
+				//! convert key to an ascii char and put it in buffer
+				//char c = KeyBoard::ConvertKeyToAscii(key);
+				//if (c != 0 && KEY_SPACE != c) { //insure its an ascii char
+				if (c != 0) { //insure its an ascii char
+
+					WriteChar(c);
+					commandBuffer[i++] = c;
+				}
+			}
+
+			//! wait for next key. You may need to adjust this to suite your needs
+			//msleep(10);
+		}
+
+		//! null terminate the string
+		commandBuffer[i] = 0;
 	}
 }

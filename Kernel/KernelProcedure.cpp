@@ -24,7 +24,7 @@ void NativeConsole()
 		SkyConsole::Print("Command> ");
 		memset(commandBuffer, 0, MAXPATH);
 		//SkyConsole::Print("commandBuffer Address : 0x%x\n", &commandBuffer);	
-
+		
 		SkyConsole::GetCommand(commandBuffer, MAXPATH - 2);
 		SkyConsole::Print("\n");
 

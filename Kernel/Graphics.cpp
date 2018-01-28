@@ -16,6 +16,13 @@ static void finalize_graphics(uint16_t x, uint16_t y, uint16_t b) {
 	bochs_resolution_b = b;
 }
 
+void rect32A(int x, int y, int w, int h, int col) {
+	int* lfb = (int*)bochs_vid_memory;
+	for (int k = 0; k < h; k++)
+		for (int j = 0; j < w; j++)
+			lfb[(j + x) + (k + y) * bochs_resolution_x] = col;
+}
+
 void graphics_install_vesa(uint16_t resX, uint16_t resY)
 {
 	/* VESA Structs */
@@ -46,7 +53,7 @@ void graphics_install_vesa(uint16_t resX, uint16_t resY)
 		SkyConsole::Print("\033[JYou have attempted to use the VESA/VBE2 driver\nwith a card that does not support VBE2.\n");
 		SkyConsole::Print("\nSystem responded to VBE request with version: 0x%x\n", info->Version);
 
-		HaltSystem("");
+		HaltSystem("graphics_install_vesa");
 	}
 	modes = (uint16_t*)FP_TO_LINEAR(info->Videomodes.Segment, info->Videomodes.Offset);
 
@@ -66,8 +73,7 @@ void graphics_install_vesa(uint16_t resX, uint16_t resY)
 	}
 
 	SkyConsole::Print("Please select a mode: ");
-	KeyBoard::KEYCODE key = SkyConsole::GetChar();
-	char selected = KeyBoard::ConvertKeyToAscii(key);
+	char selected = SkyConsole::GetChar();
 	char buf[10];
 	buf[0] = selected;
 	buf[1] = '\n';
@@ -130,11 +136,13 @@ void graphics_install_vesa(uint16_t resX, uint16_t resY)
 
 	bochs_vid_memory = (uint8_t *)modeinfo->physbase;
 
-	/*uint32_t* lfb = (uint32_t*)bochs_vid_memory;
+	//rect32A(100, 100, 200, 200, 0xaaaaaaaa);
+
+	uint32_t* lfb = (uint32_t*)bochs_vid_memory;
 	for (uint32_t c = 0; c<actual_x*actual_y; c++)
 	lfb[c] = 0x90;
 
-	SkyConsole::GetChar();*/
+	SkyConsole::GetChar();
 
 	/*int* lfb = (int*)bochs_vid_memory;
 	for (int j = 0; j < actual_x; j++)
@@ -187,12 +195,7 @@ mem_found:
 }
 
 
-void rect32A(int x, int y, int w, int h, int col) {
-	int* lfb = (int*)bochs_vid_memory;
-	for (int k = 0; k < h; k++)
-		for (int j = 0; j < w; j++)
-			lfb[(j + x) + (k + y) * bochs_resolution_x] = col;
-}
+
 
 void TestV8086()
 {

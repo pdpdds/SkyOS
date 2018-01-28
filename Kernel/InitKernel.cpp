@@ -12,10 +12,13 @@
 #include "HardDisk.h"
 #include "ZetPlane.h"
 #include "FAT32.h"
+#include "KeyboardController.h"
 
 bool InitKeyboard()
 {
-	KeyBoard::Install(33);
+	//KeyBoard::Install(33);
+
+	KeyboardController::SetupInterrupts();
 
 	return true;
 }

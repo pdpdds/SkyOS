@@ -49,8 +49,7 @@ void SkyTest()
 }
 
 void TestStack()
-{
-	
+{	
 	Stack<int> s;
 	s.push(10);
 	s.push(20);
@@ -71,6 +70,108 @@ void TestString()
 	std::string str2 = str;
 	str2 = "cdf";
 	SkyConsole::Print("%s\n", str2.c_str());
+
+	/*void test(String str)
+	{
+	cout << str << endl;
+	}
+
+	int main()
+	{
+	String bar = "Hello";
+	cout << ("a" + String("b")) << endl;
+	}*/
+
+	/*int main()
+	{
+	String a = "foo";
+	String b = "bar";
+	a = b;
+	cout << a << endl;
+	}*/
+
+	/*int main()
+	{
+		cout << "|" << String("  baz  ").trim() << "|" << endl;
+		cout << "|" << String("  baz  ").trimleft() << "|" << endl;
+		cout << "|" << String("  baz  ").trimright() << "|" << endl;
+		cout << "|" << String("  ").trim() << "|" << endl;
+		cout << "|" << String("b  ").trim() << "|" << endl;
+		cout << "|" << String(" b  ").trim() << "|" << endl;
+		cout << "|" << String("  b").trim() << "|" << endl;
+		cout << "|" << String("  b ").trim() << "|" << endl;
+	}
+
+	int main()
+	{
+	String str;
+
+	int count = str.getline(cin);
+
+	cout << str << endl;
+	cout << count << endl;
+	}*/
+
+	/*void test(const String &a, String b)
+	{
+	cout << a << b << endl;
+	}
+
+	int main()
+	{
+	String a = "foo";
+	cout << a << endl;
+	cout << "---" << endl;
+
+	cout << strlen(a) << " should equal " << a.length() << endl;
+	cout << a + "bar" << endl;
+	test("foo", "bar");
+	cout << "---" << endl;
+
+	cout << a << endl;
+
+	cout << a.substr(0, 2) << endl;
+	cout << a.substr(1, 2) << endl;
+	cout << a.substr(0, 4) << endl;
+	cout << a.substr(3) << endl;
+	cout << a.substr(3, 3) << endl;
+	cout << a.substr(-2) << endl;
+	cout << a.substr(-2, 2) << endl;
+	cout << a.substr(-3) << endl;
+	cout << a.substr(-3, 2) << endl;
+	cout << a.substr(-3, 3) << endl;
+	cout << a.substr(-4) << endl;
+	cout << a.substr(-4, 4) << endl;
+	cout << a.substr(-4, 5) << endl;
+	cout << "---" << endl;
+
+	cout << a[0] << endl;
+	cout << a.get(0) << endl;
+	cout << a[-3] << endl;
+	cout << a.get(-3) << endl;
+
+	a.set(0, 'F');
+	cout << a << endl;
+	a.set(-3, 'B');
+	cout << a << endl;
+
+	cout << a.set(4, 'A') << endl;
+	cout << a.set(-4, 'A') << endl;
+	cout << a.set(0, '\0') << endl;
+	cout << a << endl;
+	cout << "---" << endl;
+
+	String c = "123";
+	cout << (atoi(c) + 1) << endl;
+	cout << "---" << endl;
+
+	String d;
+	cout << "Enter some text and then press enter:" << endl;
+	cout << "Entered " << d.getline(cin) << " characters." << endl;
+	cout << d << endl;
+
+	return 0;
+	}*/
 }
 
 void TestDeque()
@@ -233,7 +334,6 @@ void TestCPP14()
 
 void TestList()
 {
-
 	std::List<int> fstList = std::List<int>();
 	std::List<int> scndList = std::List<int>();
 	int counter = 0;
