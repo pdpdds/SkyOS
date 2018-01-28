@@ -5,7 +5,7 @@
 
 static void* _syscalls[] = {
 
-	printf,
+	kprintf,
 	TerminateProcess,
 	MemoryAlloc,
 	MemoryFree,

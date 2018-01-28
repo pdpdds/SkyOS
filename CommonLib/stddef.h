@@ -11,6 +11,7 @@ typedef int              intptr_t;
 #endif
 
 #define BUFSIZ	512
+#define EOF -1
 
 typedef int sig_atomic_t;
 

@@ -8,7 +8,8 @@ void free(void *p);
 u32int malloc(u32int sz);
 void CreateHeap();
 void TerminateProcess();
-int printf(const char* szMsg);
+extern "C" void printf(const char* szMsg, ...);
+char GetKeyboardInput();
 
 void *operator new(size_t size);
 void *operator new[](size_t size);

@@ -17,11 +17,11 @@ namespace std
 			IStream& operator >> (unsigned char *ucp);
 			IStream& operator >> (unsigned char &uc);
 
-		private:
-			char buffer[BUFFSIZE];
-
 			unsigned int getString();
 			void getWord(char *str1, char *p1);
+
+		private:
+			char buffer[BUFFSIZE];			
 	};
 
 	extern IStream cin;

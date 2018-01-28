@@ -11,17 +11,18 @@ using namespace KeyBoard;
 
 namespace SkyConsole
 {
+	
+	static ConsoleColor m_Color;
+	static ConsoleColor m_Text;
+	static ConsoleColor m_backGroundColor;
+
 	static uint m_xPos;
 	static uint m_yPos;
 
 	static ushort* m_pVideoMemory; //Just a pointer to video memory
 	static unsigned int m_ScreenHeight;
 	static unsigned int m_ScreenWidth;
-	static unsigned short m_VideoCardType;
-
-	static ConsoleColor m_Color;
-	static ConsoleColor m_Text;
-	static ConsoleColor m_backGroundColor;
+	static unsigned short m_VideoCardType;	
 
 	void Initialize()
 	{

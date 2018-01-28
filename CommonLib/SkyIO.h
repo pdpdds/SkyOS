@@ -8,7 +8,6 @@ typedef struct _iobuf
 	void* _Placeholder;
 } FILE;
 #endif
-#define EOF -1
 
 size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
 FILE *fopen(const char *filename, const char *mode);

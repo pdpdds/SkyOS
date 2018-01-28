@@ -1,8 +1,7 @@
 //stdlib.cpp
 #include "OStream.h"
-#include "console.h"
 
-extern Console console;
+extern void printf(const char* str, ...);
 
 namespace std
 {
@@ -10,25 +9,25 @@ namespace std
 
 	OStream& OStream::operator<<(char *cp)
 	{
-		console.Write(cp) ;
+		printf(cp);
 		return *this;
 	}
 
 	OStream& OStream::operator<<(char c)
 	{
-		console.WriteChar(c) ;
+		printf("%c", c);
 		return *this;
 	}
 
 	OStream& OStream::operator<<(unsigned char *cq)
 	{
-		console.Write((char*)cq);
+		printf((char*)cq);		
 		return *this;
 	}
 
 	OStream& OStream::operator<<(unsigned char c1)
 	{
-		console.WriteChar(c1) ;
+		printf("%c", (char)c1);
 		return *this;
 	}
 }

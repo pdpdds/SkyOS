@@ -10,7 +10,8 @@
 */
 
 #include "IStream.h"
-#include "KeyboardController.h"
+
+extern char GetKeyboardInput();
 
 namespace std
 {
@@ -23,7 +24,7 @@ namespace std
 
 		while(1)
 		{
-			input = KeyboardController::GetInput();
+			input = GetKeyboardInput();
 
 			if(input == '\r')
 			{

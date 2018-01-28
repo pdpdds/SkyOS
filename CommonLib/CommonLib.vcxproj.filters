@@ -113,6 +113,12 @@
     <ClCompile Include="lua\lmem.c">
       <Filter>Source\lua</Filter>
     </ClCompile>
+    <ClCompile Include="stl\IStream.cpp">
+      <Filter>Source\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="stl\OStream.cpp">
+      <Filter>Source\stl</Filter>
+    </ClCompile>
     <ClCompile Include="stl\stl_string.cpp">
       <Filter>Source\stl</Filter>
     </ClCompile>
@@ -269,9 +275,6 @@
     <ClInclude Include="lua\lzio.h">
       <Filter>Source\lua</Filter>
     </ClInclude>
-    <ClInclude Include="stl\stl_string.h">
-      <Filter>Source\stl</Filter>
-    </ClInclude>
     <ClInclude Include="stl\darray.h">
       <Filter>Source\stl</Filter>
     </ClInclude>
@@ -282,6 +285,18 @@
       <Filter>Source\stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\deque.h">
+      <Filter>Source\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\IOStream.h">
+      <Filter>Source\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\IStream.h">
+      <Filter>Source\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\OStream.h">
+      <Filter>Source\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\stl_string.h">
       <Filter>Source\stl</Filter>
     </ClInclude>
   </ItemGroup>

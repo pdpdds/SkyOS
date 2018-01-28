@@ -2,6 +2,9 @@
 #include "SkyConsole.h"
 #include "ProcessManager.h"
 #include "string.h"
+#include "va_list.h"
+#include "stdarg.h"
+#include "sprintf.h"
 
 void SKYASSERT(bool result, const char* pMsg)
 {
@@ -140,10 +143,93 @@ BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime)
 	return 1;
 }
 
-int printf(const char* str, ...)
+int kprintf(const char* str)
 {
 	SkyConsole::Write(str);
 	return 0;
+}
+
+void printf(const char* str, ...)
+{
+	if(!str)
+		return;
+
+	va_list		args;
+	va_start(args, str);
+	size_t i;
+	for (i = 0; i < strlen(str); i++) {
+
+		switch (str[i]) {
+
+		case '%':
+
+			switch (str[i + 1]) {
+
+				/*** characters ***/
+			case 'c': {
+				char c = va_arg(args, char);
+				SkyConsole::WriteChar(c);
+				i++;		// go to next character
+				break;
+			}
+
+					  /*** address of ***/
+			case 's': {
+				int c = (int&)va_arg(args, char);
+				char str[256];
+				strcpy(str, (const char*)c);
+				SkyConsole::Write(str);
+				i++;		// go to next character
+				break;
+			}
+
+					  /*** integers ***/
+			case 'd':
+			case 'i': {
+				int c = va_arg(args, int);
+				char str[32] = { 0 };
+				itoa_s(c, 10, str);
+				SkyConsole::Write(str);
+				i++;		// go to next character
+				break;
+			}
+
+					  /*** display in hex ***/
+					  /*int*/
+			case 'X': {
+				int c = va_arg(args, int);
+				char str[32] = { 0 };
+				itoa_s(c, 16, str);
+				SkyConsole::Write(str);
+				i++;		// go to next character
+				break;
+			}
+					  /*unsigned int*/
+			case 'x': {
+				unsigned int c = va_arg(args, unsigned int);
+				char str[32] = { 0 };
+				itoa_s(c, 16, str);
+				SkyConsole::Write(str);
+				i++;		// go to next character
+				break;
+			}
+
+			default:
+				va_end(args);
+				return;
+			}
+
+			break;
+
+		default:
+			SkyConsole::WriteChar(str[i]);
+			break;
+		}
+
+	}
+
+	va_end(args);
+	return;
 }
 
 HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreateionFlags, LPDWORD lpThreadId)
