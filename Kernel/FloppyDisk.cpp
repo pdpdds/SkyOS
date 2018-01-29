@@ -317,8 +317,7 @@ namespace FloppyDisk
 
 	void WaitIrq() 
 	{
-		__asm sti
-		
+		//__asm sti		
 
 		while (_floppyDiskIRQ == false)
 			;

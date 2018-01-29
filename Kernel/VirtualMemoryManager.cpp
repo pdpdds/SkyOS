@@ -319,4 +319,15 @@ namespace VirtualMemoryManager
 
 		return true;
 	}
+
+	bool CreateVideoDMAVirtualAddress(uintptr_t start, uintptr_t end)
+	{
+		//void* memory = PhysicalMemoryManager::AllocBlocks((end - start)/ PAGE_SIZE);
+		for (int i = 0; start <= end; start += 0x1000, i++)
+		{
+			MapPhysicalAddressToVirtualAddresss(GetCurPageDirectory(), (uint32_t)start, (uint32_t)start + i * PAGE_SIZE, I86_PTE_PRESENT | I86_PTE_WRITABLE);
+		}
+
+		return true;
+	}
 }

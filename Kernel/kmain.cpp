@@ -50,7 +50,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	//헥사를 표시할 때 %X는 integer, %x는 unsigned integer의 헥사값을 표시한다.	
 	SkyConsole::Print("*** Sky OS Console System Init ***\n");
 
-	EnterCriticalSection();
+	kEnterCriticalSection(&g_criticalSection);
 
 	HardwareInitiize();
 	SkyConsole::Print("Hardware Init..\n");
@@ -68,13 +68,13 @@ void kmain(unsigned long magic, unsigned long addr)
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
 	InitMemoryManager(pBootInfo, 0);
 
-	InitFloppyDrive();
-	SkyConsole::Print("Floppy Disk Init..\n");
+	//InitFloppyDrive();
+	//SkyConsole::Print("Floppy Disk Init..\n");
 
-	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
+	//StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
-	LeaveCriticalSection();
-	if (true == InitHardDrive())
+	//kLeaveCriticalSection(&g_criticalSection);
+	/*if (true == InitHardDrive())
 	{
 		InitFATFileSystem();
 #ifdef _SKY_DEBUG
@@ -86,7 +86,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	else
 	{
 		SkyConsole::Print("Harddisk not detected..\n");
-	}
+	}*/
 
 	//DumpSystemInfo(pBootInfo);
 	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
@@ -183,7 +183,7 @@ bool InitMemoryManager(multiboot_info* bootinfo, uint32_t kernelSize)
 		alignedMemoryMapSize += 4096;
 
 	PhysicalMemoryManager::SetAvailableMemory(FREE_MEMORY_SPACE_ADDRESS + alignedMemoryMapSize, freeSpaceMemorySize - (FREE_MEMORY_SPACE_ADDRESS + alignedMemoryMapSize));
-	//PhysicalMemoryManager::Dump();
+	PhysicalMemoryManager::Dump();
 
 //가상 메모리 매니저 초기화	
 	VirtualMemoryManager::Initialize();
@@ -196,14 +196,16 @@ bool InitMemoryManager(multiboot_info* bootinfo, uint32_t kernelSize)
 
 void StartConsoleSystem()
 {
-	EnterCriticalSection();
-
+	//kEnterCriticalSection(&g_criticalSection);
+	
 	Process* pProcess = ProcessManager::GetInstance()->CreateConsoleProcess(SystemConsoleProc);
-	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc);
-	ProcessManager::GetInstance()->CreateProcessFromMemory("ProcessRemover", ProcessRemoverProc);
 
 	if (pProcess == nullptr)
 		HaltSystem("Console Creation Fail!!");
+
+	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc);
+	ProcessManager::GetInstance()->CreateProcessFromMemory("ProcessRemover", ProcessRemoverProc);
+	
 
 	SkyConsole::Print("Init Console....\n");
 
@@ -212,11 +214,10 @@ void StartConsoleSystem()
 
 	int entryPoint = (int)pThread->frame.eip;
 	unsigned int procStack = pThread->frame.esp;
+	
+	kLeaveCriticalSection(&g_criticalSection);
 
 	JumpToNewKernelEntry(entryPoint, procStack);
-
-	//쓸모없는 코드지만 쌍을 맞추기 위해
-	LeaveCriticalSection();
 }
 
 void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
@@ -236,8 +237,7 @@ void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
 			push	0x10;
 		push    0x200; EFLAGS
 			push    0x08; CS
-			push entryPoint; EIP
-			sti
+			push entryPoint; EIP			
 			iretd
 	}
 }

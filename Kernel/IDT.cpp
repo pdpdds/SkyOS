@@ -1,6 +1,7 @@
 #include "idt.h"
 #include <string.h>
 #include <hal.h>
+#include "SkyAPI.h"
 #ifdef _DEBUG
 #include "..\Kernel\DebugDisplay.h"
 #endif
@@ -21,7 +22,7 @@ static void IDTInstall() {
 //다룰수 있는 핸들러가 존재하지 않을때 호출되는 기본 핸들러
 static void InterrputDefaultHandler () {
 	
-	EnterCriticalSection ();
+	kEnterCriticalSection (&g_criticalSection);
 
 	//디버그 모드일시 메세지를 출력하고 시스템을 중지시킨다.
 #ifdef _DEBUG

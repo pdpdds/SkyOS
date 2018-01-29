@@ -1,5 +1,7 @@
 #include "KeyboardController.h"
 #include "Hal.h"
+#include "SkyAPI.h"
+#include "SkyConsole.h"
 
 Func_Key FKey[10] =		//A table for assigning functions to the function keys
 {						// this is done through the keyboard driver
@@ -322,9 +324,14 @@ void KeyboardController::SetLEDs(bool scroll, bool num, bool caps)
 char KeyboardController::GetInput()		// Waits for a key to enter the buffer and returns it
 {
 	int i = 0;
-	while(buffend == 0);
+	while (buffend == 0)
+	{		
+		//kEnterCriticalSection(&g_criticalSection);		//Disable interrupts while we modify the buffer
+//		kLeaveCriticalSection(&g_criticalSection);		//Disable interrupts while we modify the buffer
+		//msleep(10);
+	}
 
-	EnterCriticalSection();		//Disable interrupts while we modify the buffer
+	kEnterCriticalSection(&g_criticalSection);		//Disable interrupts while we modify the buffer
 
 	for(; i < buffend; i++)
 	{
@@ -332,7 +339,7 @@ char KeyboardController::GetInput()		// Waits for a key to enter the buffer and 
 	}
 	buffend--;
 
-	LeaveCriticalSection();
+	kLeaveCriticalSection(&g_criticalSection);
 
 	return buffer[0];
 }
@@ -340,8 +347,8 @@ char KeyboardController::GetInput()		// Waits for a key to enter the buffer and 
 void KeyboardController::HandleKeyboardInterrupt()
 {	
 	unsigned char asciiCode;
-	EnterCriticalSection();			//Don't let interrupts bother us while handling one.
-
+	kEnterCriticalSection(&g_criticalSection);			//Don't let interrupts bother us while handling one.
+	
 	scanCode = InPortByte(0x60);	//retrieve scan code
 
 		if(!(kb_special(scanCode) | (scanCode >= 0x80)))
@@ -376,6 +383,6 @@ void KeyboardController::HandleKeyboardInterrupt()
 			buffer[buffend] = asciiCode;
 		}
 
-	LeaveCriticalSection();			//Enable interrupts
+	kLeaveCriticalSection(&g_criticalSection);			//Enable interrupts
 }
 

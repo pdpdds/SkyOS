@@ -19,6 +19,8 @@ typedef struct _CRITICAL_SECTION {
 	      
 } CRITICAL_SECTION, *LPCRITICAL_SECTION;;
 
+extern CRITICAL_SECTION g_criticalSection;
+
 void SKYAPI kEnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void SKYAPI kInitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void SKYAPI kLeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);

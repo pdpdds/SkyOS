@@ -15,9 +15,15 @@ void NativeConsole();
 void NativeConsole()
 {
 	systemOn = true;
+	
+	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
+
+	__asm sti;
+	g_criticalSection.LockRecursionCount = 0;
+
 	ConsoleManager manager;
 
-	char	commandBuffer[MAXPATH];
+	char	commandBuffer[MAXPATH];	
 
 	while (1)
 	{
@@ -122,35 +128,12 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
 	
 	while (1)
 	{
-		__asm cli
+		kEnterCriticalSection(&g_criticalSection);
 
 		ProcessManager::GetInstance()->RemoveTerminatedProcess();
 		Scheduler::GetInstance()->Yield(kGetCurrentThreadId());
 
-		__asm sti		
-	}
-
-	return 0;
-}
-
-/* render rectangle in 32 bpp modes. */
-extern void rect32(int x, int y, int w, int h, int col);
-
-
-DWORD WINAPI RectGenerate(LPVOID parameter)
-{
-	int col = 0;
-	bool dir = true;
-	SkyConsole::Print("RectGenerate\n");
-	while (1) {
-		rect32(200, 250, 100, 100, col << 16);
-		if (dir) {
-			if (col++ == 0xfe)
-				dir = false;
-		}
-		else
-			if (col-- == 1)
-				dir = true;
+		kLeaveCriticalSection(&g_criticalSection);
 	}
 
 	return 0;

@@ -9,6 +9,7 @@
 #include "VirtualMemoryManager.h"
 #include "Hal.h"
 #include "SkyConsole.h"
+#include "SkyAPI.h"
 
 // end is defined in the linker script.
 //extern u32int end;
@@ -53,9 +54,9 @@ u32int kmalloc_int(u32int sz, int align, u32int *phys)
 
 void kfree(void *p)
 {
-	EnterCriticalSection();
+	kEnterCriticalSection(&g_criticalSection);
 	free(p, &kheap);
-	LeaveCriticalSection();
+	kLeaveCriticalSection(&g_criticalSection);
 }
 
 u32int kmalloc_a(u32int sz)
@@ -75,9 +76,9 @@ u32int kmalloc_ap(u32int sz, u32int *phys)
 
 u32int kmalloc(u32int sz)
 {
-	EnterCriticalSection();	
+	kEnterCriticalSection(&g_criticalSection);
 	u32int buffer = kmalloc_int(sz, 0, 0);
-	LeaveCriticalSection();
+	kLeaveCriticalSection(&g_criticalSection);
 	return buffer;
 }
 

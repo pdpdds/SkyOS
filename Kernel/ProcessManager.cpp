@@ -329,14 +329,14 @@ bool ProcessManager::AddProcess(Process* pProcess)
 	SkyConsole::Print("procStack : %x\n", procStack);
 #endif	
 
-	Lock();
+	kEnterCriticalSection(&g_criticalSection);
 	m_processList.Add(pProcess);
 
 	ListNode* node = new ListNode();
 	node->_data = pThread;
 	m_taskList.AddToTail(node);
 
-	Unlock();
+	kLeaveCriticalSection(&g_criticalSection);
 
 	return true;
 }

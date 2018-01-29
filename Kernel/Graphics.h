@@ -4,7 +4,7 @@
 #include "vesa.h"
 #include "Math.h"
 
-#define PROMPT_FOR_MODE 1
+#define PROMPT_FOR_MODE 0
 
 /* Friggin' frick, this should be a config option
 * because it's 4096 on some instances of Qemu,

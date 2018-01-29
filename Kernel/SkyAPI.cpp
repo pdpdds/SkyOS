@@ -6,6 +6,9 @@
 #include "stdarg.h"
 #include "sprintf.h"
 
+
+CRITICAL_SECTION g_criticalSection;
+
 void SKYASSERT(bool result, const char* pMsg)
 {
 	if (result == false)
@@ -23,34 +26,35 @@ void SKYAPI kInitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
 
 void SKYAPI kEnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
 {
-	_asm cli
-
-	DWORD threadId = kGetCurrentThreadId();
-
-	SKYASSERT((HANDLE)threadId == lpCriticalSection->OwningThread || lpCriticalSection->OwningThread == 0, "kEnterCriticalSection");
-
-	if (lpCriticalSection->OwningThread == (HANDLE)threadId)
+	if (lpCriticalSection->LockRecursionCount == 0)
 	{
-		lpCriticalSection->LockRecursionCount++;
+		_asm cli
 	}
+
+	lpCriticalSection->LockRecursionCount++;
+
+	//DWORD threadId = kGetCurrentThreadId();
+	//SKYASSERT((HANDLE)threadId == lpCriticalSection->OwningThread || lpCriticalSection->OwningThread == 0, "kEnterCriticalSection");
+
+	//if (lpCriticalSection->OwningThread == (HANDLE)threadId)
+	//{
+		//lpCriticalSection->LockRecursionCount++;
+	/*
 	else
 	{
 		lpCriticalSection->OwningThread = (HANDLE)threadId;
 		lpCriticalSection->LockRecursionCount = 1;
-	}
+	}*/
 }
 
 void SKYAPI kLeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
 {
-	DWORD threadId = kGetCurrentThreadId();
-
-	SKYASSERT((HANDLE)threadId == lpCriticalSection->OwningThread, "kLeaveCriticalSection");
-
+	//DWORD threadId = kGetCurrentThreadId();
+	//SKYASSERT((HANDLE)threadId == lpCriticalSection->OwningThread, "kLeaveCriticalSection");
 	lpCriticalSection->LockRecursionCount--;
-
-	if (lpCriticalSection->LockRecursionCount == 0)
+	//if (lpCriticalSection->LockRecursionCount == 0)
 	{
-		lpCriticalSection->OwningThread = 0;
+	//	lpCriticalSection->OwningThread = 0;
 		_asm sti
 	}
 }
@@ -272,16 +276,16 @@ extern "C"
 		//힙은 스레드가 모두 공유한다.
 		//따라서 메모리를 해제할시 컨텍스트 스위칭이 일어나서 다른 스레드가 같은 자원(힙)에 접근할 수 있는 가능성이 생기므로
 		//인터럽트가 일어나지 않게 처리한다.
-		EnterCriticalSection();
+		kEnterCriticalSection(&g_criticalSection);
 		Process* pProcess = ProcessManager::GetInstance()->GetCurrentProcess();
 		free(p, (heap_t*)pProcess->m_lpHeap);
-		LeaveCriticalSection();
+		kLeaveCriticalSection(&g_criticalSection);
 	}
 
 	//프로세스 전용의 디폴트 힙을 생성한다
 	void CreateDefaultHeap()
 	{
-		EnterCriticalSection();
+		kEnterCriticalSection(&g_criticalSection);
 
 		Process* pProcess = ProcessManager::GetInstance()->GetCurrentProcess();
 		Thread* pThread = pProcess->GetThread(0);
@@ -310,20 +314,20 @@ extern "C"
 		pProcess->m_lpHeap = create_heap((u32int)heapAddess, (uint32_t)heapAddess + DEFAULT_HEAP_PAGE_COUNT * PAGE_SIZE,
 			(uint32_t)heapAddess + DEFAULT_HEAP_PAGE_COUNT * PAGE_SIZE, 0, 0);
 
-		LeaveCriticalSection();
+		kLeaveCriticalSection(&g_criticalSection);
 	}
 
 	//프로세스 종료	
 	extern "C" void TerminateProcess()
 	{
-		EnterCriticalSection();
+		kEnterCriticalSection(&g_criticalSection);
 
 		Process* cur = ProcessManager::GetInstance()->GetCurrentProcess();
 
 		if (cur == NULL || cur->m_processId == PROC_INVALID_ID)
 		{
 			SkyConsole::Print("Invailid Process Termination\n");
-			LeaveCriticalSection();
+			kLeaveCriticalSection(&g_criticalSection);
 			return;
 		}
 
@@ -331,7 +335,7 @@ extern "C"
 		//태스크 목록에서도 제거되어 해당 프로세스는 더이상 스케쥴링 되지 않는다.		
 		ProcessManager::GetInstance()->DestroyProcess(cur);
 
-		LeaveCriticalSection();
+		kLeaveCriticalSection(&g_criticalSection);
 
 		for (;;);
 	}

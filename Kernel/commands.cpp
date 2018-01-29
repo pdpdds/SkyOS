@@ -8,11 +8,12 @@
 #include "PIT.h"
 #include "KernelProcedure.h"
 #include "Graphics.h"
+#include "SkyAPI.h"
 
 long cmdProcessList(char *theCommand) 
 {
 
-	EnterCriticalSection();
+	kEnterCriticalSection(&g_criticalSection);
 	SkyConsole::Print(" ID : Process Name\n");
 
 	Sky::LinkedList* processlist = ProcessManager::GetInstance()->GetProcessList();
@@ -24,7 +25,7 @@ long cmdProcessList(char *theCommand)
 		SkyConsole::Print("  %d : %s\n", pProcess->m_processId, pProcess->m_processName);
 	}
 
-	LeaveCriticalSection();
+	kLeaveCriticalSection(&g_criticalSection);
 
 	return false;
 }
@@ -72,7 +73,7 @@ long cmdKillTask(char *theCommand)
 	int id = atoi(theCommand);
 	
 
-	EnterCriticalSection();
+	kEnterCriticalSection(&g_criticalSection);
 
 	Process* pProcess = ProcessManager::GetInstance()->FindProcess(id);
 
@@ -84,7 +85,7 @@ long cmdKillTask(char *theCommand)
 	else
 		SkyConsole::Print("process don't exist(%d)\n", id);
 
-	LeaveCriticalSection();
+	kLeaveCriticalSection(&g_criticalSection);
 	return false;
 }
 
@@ -160,56 +161,20 @@ long cmdProc(char* pName) {
 
 long cmdTesttask(char* pName)
 {
-	EnterCriticalSection();
+	kEnterCriticalSection(&g_criticalSection);
 
 	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("SampleLoop", SampleLoop);
 
-	LeaveCriticalSection();
+	kLeaveCriticalSection(&g_criticalSection);
 
 	return false;
-}
-	
-/* video mode info. */
-#define WIDTH           800
-#define HEIGHT          600
-#define BPP             32
-#define BYTES_PER_PIXEL 4
-
-/* BGA LFB is at LFB_PHYSICAL. */
-#define LFB_PHYSICAL 0xE0000000
-#define LFB_VIRTUAL  0x300000
-
-/* render rectangle in 32 bpp modes. */
-void rect32(int x, int y, int w, int h, int col) {
-	int* lfb = (int*)LFB_VIRTUAL;
-	for (int k = 0; k < h; k++)
-		for (int j = 0; j < w; j++)
-			lfb[(j + x) + (k + y) * WIDTH] = col;
-}
-
-/* thread cycles through colors of red. */
-DWORD WINAPI kthread_1(LPVOID parameter) {
-	int col = 0;
-	bool dir = true;
-	while (1) {
-		rect32(200, 250, 100, 100, col << 16);
-		if (dir) {
-			if (col++ == 0xfe)
-				dir = false;
-		}
-		else
-			if (col-- == 1)
-				dir = true;
-	}
-
-	return 0;
-}
+}	
 
 extern void TestV8086();
 
 long cmdGUI(char *theCommand)
 {
 	graphics_install_vesa(1024,768);
-	for (;;);
+	
 	return false;
 }
