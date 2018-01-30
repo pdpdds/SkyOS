@@ -19,7 +19,7 @@ FILE *freopen(const char *filename, const char *mode, FILE *stream);
 int fseek(FILE *stream, long int offset, int whence);
 long int ftell(FILE *stream);
 size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
-int getc(FILE * stream);
+int getc(FILE * stream); 
 
 char *	strerror(int errnum);
 

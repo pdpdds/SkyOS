@@ -52,8 +52,6 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	pThread->m_taskState = TASK_STATE_INIT;
 	pThread->m_initialStack = 0;
 	pThread->m_stackLimit = PAGE_SIZE;
-	pThread->m_imageBase = ntHeaders->OptionalHeader.ImageBase;
-	pThread->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;
 	pThread->m_threadId = m_nextThreadId++;
 
 	memset(&pThread->frame, 0, sizeof(trapFrame));
