@@ -12,6 +12,7 @@ namespace std
 		public:
 			OStream& operator<<(char *cp);
 			OStream& operator<<(char c);
+			OStream& operator<<(int value);
 			OStream& operator<<(unsigned char *cq);
 			OStream& operator<<(unsigned char c1);
 

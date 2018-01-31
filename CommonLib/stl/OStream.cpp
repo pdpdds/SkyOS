@@ -19,6 +19,12 @@ namespace std
 		return *this;
 	}
 
+	OStream& OStream::operator<<(int value)
+	{
+		printf("%d", value);
+		return *this;
+	}
+
 	OStream& OStream::operator<<(unsigned char *cq)
 	{
 		printf((char*)cq);		
