@@ -52,24 +52,8 @@ void isr_handler(registers_t regs)
 	//SkyConsole::Print("rrrr : %d\n", _pit_ticks);
 }
 
-/*__declspec(naked) void  _cdecl i86_pit_irq()
-{
-	_asm {
-		pushad
-	}
-	_pit_ticks++;
-	SkyConsole::Print("rrrr : %d\n", _pit_ticks);
-	_asm {
-		mov al, 0x20
-		out 0x20, al
-		popad
-		iretd
-	}
-}*/
-
-
 //!	pit timer interrupt handler
-__declspec(naked) void i86_pit_irq() 
+__declspec(naked) void InterruptPITHandler() 
 {	
 	_asm
 	{
@@ -149,11 +133,9 @@ void StartPITCounter(uint32_t freq, uint8_t counter, uint8_t mode) {
 
 
 //PIT √ ±‚»≠
-void _cdecl InitializePIT() {
-
-	//! Install our interrupt handler (irq 0 uses interrupt 32)
-	setvect(32, i86_pit_irq);
-	
+void _cdecl InitializePIT()
+{
+	setvect(32, InterruptPITHandler);
 }
 
 

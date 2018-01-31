@@ -153,6 +153,13 @@ int kprintf(const char* str)
 	return 0;
 }
 
+void ksleep(int millisecond)
+{
+	msleep(millisecond);
+}
+
+
+
 void printf(const char* str, ...)
 {
 	if(!str)

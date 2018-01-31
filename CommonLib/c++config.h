@@ -26,7 +26,7 @@
  *  This is an internal header file, included by other library headers.
  *  Do not attempt to use it directly. @headername{iosfwd}
  */
-#include "stddef.h"
+//#include "stddef.h"
 #ifndef _GLIBCXX_CXX_CONFIG_H
 #define _GLIBCXX_CXX_CONFIG_H 1
 

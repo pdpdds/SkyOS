@@ -173,6 +173,16 @@ char GetKeyboardInput()
 	}
 }
 
+void sleep(int millisecond)
+{
+	__asm {
+
+		mov ebx, millisecond
+		mov eax, 7
+		int 0x80
+	}
+}
+
 void *operator new(size_t size)
 {
 	return (void *)malloc(size);

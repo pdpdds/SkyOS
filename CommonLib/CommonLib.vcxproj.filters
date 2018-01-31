@@ -173,9 +173,6 @@
     <ClInclude Include="map.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="iostream.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="stl_pair.h">
       <Filter>Source</Filter>
     </ClInclude>

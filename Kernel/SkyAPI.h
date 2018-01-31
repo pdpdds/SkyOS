@@ -35,6 +35,7 @@ BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime);
 
 void printf(const char* str, ...);
 int kprintf(const char* str);
+void ksleep(int millisecond);
 char GetKeyboardInput();
 HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreateionFlags, LPDWORD lpThreadId);
 void PauseSystem(const char* msg);

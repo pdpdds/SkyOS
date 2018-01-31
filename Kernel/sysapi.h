@@ -1,7 +1,7 @@
 #pragma once
 #include "SkyAPI.h"
 
-#define MAX_SYSCALL 7
+#define MAX_SYSCALL 8
 
 static void* _syscalls[] = {
 
@@ -12,6 +12,7 @@ static void* _syscalls[] = {
 	CreateDefaultHeap,
 	GetTickCount,
 	CreateThread,
+	ksleep,
 };
 
 void *operator new(size_t size);

@@ -39,7 +39,7 @@
   typedef unsigned long UINT32;
   typedef unsigned int UINT;
   typedef unsigned long DWORD;
-  
+  typedef int              ptrdiff_t;
 typedef unsigned long  ulong;			//32 bit unsigined integer
 typedef unsigned int   uint;			//32 bit unsigined integer
 typedef unsigned short ushort;			//16 bit integer

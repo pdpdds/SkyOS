@@ -20,6 +20,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UserLib", "UserLib\UserLib.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PackageManager", "PackageManager\PackageManager.vcxproj", "{64EF4EB4-1D41-4DFA-9094-095CB857F78D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "App1", "App1\App1.vcxproj", "{C1C0AB99-8EA6-49E1-82B4-2D88862833C7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{83EE476C-AA21-4A23-9D6F-4FE675115B13} = {83EE476C-AA21-4A23-9D6F-4FE675115B13}
+		{7C8789FA-5DAE-4F62-966D-DB73CBCA4271} = {7C8789FA-5DAE-4F62-966D-DB73CBCA4271}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -60,6 +66,12 @@ Global
 		{64EF4EB4-1D41-4DFA-9094-095CB857F78D}.Release|Win32.Build.0 = Release|Win32
 		{64EF4EB4-1D41-4DFA-9094-095CB857F78D}.Release|x64.ActiveCfg = Release|x64
 		{64EF4EB4-1D41-4DFA-9094-095CB857F78D}.Release|x64.Build.0 = Release|x64
+		{C1C0AB99-8EA6-49E1-82B4-2D88862833C7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C1C0AB99-8EA6-49E1-82B4-2D88862833C7}.Debug|Win32.Build.0 = Debug|Win32
+		{C1C0AB99-8EA6-49E1-82B4-2D88862833C7}.Debug|x64.ActiveCfg = Debug|Win32
+		{C1C0AB99-8EA6-49E1-82B4-2D88862833C7}.Release|Win32.ActiveCfg = Release|Win32
+		{C1C0AB99-8EA6-49E1-82B4-2D88862833C7}.Release|Win32.Build.0 = Release|Win32
+		{C1C0AB99-8EA6-49E1-82B4-2D88862833C7}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
