@@ -272,8 +272,7 @@ extern "C"
 		void *addr = alloc(size, (u8int)0, (heap_t*)pProcess->m_lpHeap);
 
 #ifdef _ORANGE_DEBUG
-		SkyConsole::Print("process heap alloc, %d %x\n", size, pProcess->m_lpHeap);
-		SkyConsole::Print("process heap alloc, %d %x\n", size, pProcess->m_lpHeap);
+		SkyConsole::Print("process heap alloc, %d %x\n", size, pProcess->m_lpHeap);		
 #endif			
 		return (u32int)addr;
 	}
@@ -305,12 +304,12 @@ extern "C"
 		heapAddess -= (heapAddess % PAGE_SIZE);
 
 #ifdef _ORANGE_DEBUG
-		SkyConsole::Print("heap adress %x\n", heapAddess);
+		SkyConsole::Print("heap address %x\n", heapAddess);
 #endif // _ORANGE_DEBUG
 
 		for (int i = 0; i < DEFAULT_HEAP_PAGE_COUNT; i++)
 		{
-			VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory,
+			VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(),
 				(uint32_t)heapAddess + i * PAGE_SIZE,
 				(uint32_t)pHeapPhys + i * PAGE_SIZE,
 				I86_PTE_PRESENT | I86_PTE_WRITABLE | I86_PTE_USER);
@@ -322,6 +321,10 @@ extern "C"
 			(uint32_t)heapAddess + DEFAULT_HEAP_PAGE_COUNT * PAGE_SIZE, 0, 0);
 
 		kLeaveCriticalSection(&g_criticalSection);
+
+#ifdef _ORANGE_DEBUG
+		SkyConsole::Print("CreateDefaultHeap End\n");
+#endif // _ORANGE_DEBUG
 	}
 
 	//프로세스 종료	

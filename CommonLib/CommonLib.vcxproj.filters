@@ -10,6 +10,9 @@
     <Filter Include="Source\stl">
       <UniqueIdentifier>{797df97c-1078-4895-8f27-c2edd9a0521d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\stl\tinystl">
+      <UniqueIdentifier>{a27a6c11-f9fb-4569-a8c5-089dfad4cca1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="string.cpp">
@@ -295,6 +298,90 @@
     </ClInclude>
     <ClInclude Include="stl\stl_string.h">
       <Filter>Source\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\algo.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\algobase.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\alloc.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\bvector.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\defalloc.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\deque.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\function.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\hash_map.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\hash_set.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\hashtable.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\heap.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\iterator.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\list.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\map.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\multimap.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\multiset.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\pair.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\pthread_alloc.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\rope.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\ropeimpl.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\set.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\slist.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\stack.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\stl_config.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\tempbuf.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\tree.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\type_traits.h">
+      <Filter>Source\stl\tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tinystl\vector.h">
+      <Filter>Source\stl\tinystl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

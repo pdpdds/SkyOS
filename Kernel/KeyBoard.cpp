@@ -141,7 +141,7 @@ namespace KeyBoard
 	char ConvertKeyToAscii(KEYCODE code) 
 	{
 
-		uint8_t key = code;
+		uint8_t key = (uint8_t)code;
 
 		//아스키코드인지 확인
 		if (isascii(key)) {
@@ -308,7 +308,7 @@ namespace KeyBoard
 	void ProcessKeyBoardInterrupt()
 	{
 		static bool _extended = false;
-		int code = 0;
+		uint8_t code = 0;
 
 		//버퍼에 키입력 데이터가 들어왔는지 확인한다.
 		if (ReadStatus() & KYBRD_CTRL_STATS_MASK_OUT_BUF)

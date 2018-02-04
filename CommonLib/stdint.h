@@ -170,8 +170,9 @@ inline uint8_t SetBit(uint8_t word, uint8_t mask) {
 	return word | mask;
 }
 
+/*
 //! Clears bit
-static uint8_t ClrBit(uint8_t word, uint8_t mask) 
+static uint8_t ClrBit(uint8_t word, uint8_t mask)
 {
 	return word & (~mask);
 }
@@ -180,6 +181,6 @@ static uint8_t ClrBit(uint8_t word, uint8_t mask)
 static uint8_t AssignBit(uint8_t word, uint8_t mask, uint8_t value)
 {
 	return value ? SetBit(word, mask) : ClrBit(word, mask);
-}
+}*/
 
 #endif

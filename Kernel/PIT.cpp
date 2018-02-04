@@ -45,11 +45,17 @@ void PIT::Disable()
 volatile uint32_t			_pit_ticks = 0;
 int g_esp = 0;
 uint32_t g_pageDirectory = 0;
+uint32_t g_pageDirectory1 = 0;
 
 void isr_handler(registers_t regs)
 {	
 	SwitchTask(_pit_ticks, regs);
 	//SkyConsole::Print("rrrr : %d\n", _pit_ticks);
+}
+
+void isr_handler2()
+{
+	while(1);
 }
 
 //!	pit timer interrupt handler
@@ -79,8 +85,7 @@ __declspec(naked) void InterruptPITHandler()
 	
 
 	_asm
-	{
-		
+	{		
 		call isr_handler		
 	}
 		
@@ -88,13 +93,26 @@ __declspec(naked) void InterruptPITHandler()
 	{
 		cmp g_pageDirectory, 0
 		jz pass
-		mov	eax, [g_pageDirectory]
-		mov	cr3, eax		// PDBR is cr3 register in i86
-		pass:
 
 		mov eax, g_esp
-		mov esp, eax
+		mov esp, eax		
+		
+		mov	eax, [g_pageDirectory]
+		mov	cr3, eax		// PDBR is cr3 register in i86
+					
+		pop gs
+		pop fs
+		pop es
+		pop ds
 
+		popad;	
+
+		mov al, 0x20
+		out 0x20, al
+		sti
+		iretd;
+						
+pass :
 		pop gs
 		pop fs
 		pop es

@@ -106,6 +106,7 @@ namespace std
 		this->len = length + strlen(other);
 		// Allocate a new internal cstring.
 		this->str = new char[this->len + 1];
+		memset(this->str, 0, this->len + 1);
 
 		// Copy the data from the original internal cstring (temp)
 		strcpy(this->str, temp);
@@ -130,6 +131,7 @@ namespace std
 		this->len = length + 1;
 		// Allocate a new internal cstring.
 		this->str = new char[this->len + 1];
+		memset(this->str, 0, this->len + 1);
 
 		// Copy the data from the original internal cstring (temp)
 		strcpy(this->str, temp);

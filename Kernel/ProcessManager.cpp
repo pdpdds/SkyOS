@@ -47,6 +47,8 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	pThread->m_pParent = pProcess;
 	pProcess->m_imageBase = ntHeaders->OptionalHeader.ImageBase;
 	pProcess->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;
+	pThread->m_imageBase = ntHeaders->OptionalHeader.ImageBase;
+	pThread->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;
 	pThread->kernelStack = 0;
 	pThread->m_dwPriority = 1;
 	pThread->m_taskState = TASK_STATE_INIT;
@@ -75,7 +77,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	/* map page into address space */
 	for (int i = 0; i < pProcess->m_dwPageCount; i++)
 	{
-		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory,
+		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(),
 			ntHeaders->OptionalHeader.ImageBase + i * PAGE_SIZE,
 			(uint32_t)memory + i * PAGE_SIZE,
 			I86_PTE_PRESENT | I86_PTE_WRITABLE);
@@ -109,7 +111,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
 
 	/* map user process stack space */
-	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
+	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
 
 	/* final initialization */
 	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE);
@@ -133,6 +135,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	pThread->m_threadId = m_nextThreadId++;
 	pThread->m_dwPriority = 1;
 	pThread->m_taskState = TASK_STATE_INIT;
+	pThread->m_waitingTime = TASK_RUNNING_TIME;
 	pThread->m_stackLimit = PAGE_SIZE;
 	pThread->m_imageBase = 0;
 	pThread->m_imageSize = 0;
@@ -151,8 +154,12 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
 #endif
 
+	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
+
 	/* map user process stack space */
-	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
+	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
+
+	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
 
 	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE);
 	pThread->frame.esp = (uint32_t)pThread->m_initialStack;
@@ -201,6 +208,39 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	return pProcess;
 }*/
 
+Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress)
+{	
+	int flags = I86_PTE_PRESENT | I86_PTE_WRITABLE;
+
+	Process* pProcess = new Process();
+	pProcess->m_processId = GetNextProcessId();
+
+	PageDirectory* pPageDirectory = VirtualMemoryManager::CreateCommonPageDirectory();
+	pProcess->SetPageDirectory(pPageDirectory);
+
+	pProcess->m_dwRunState = TASK_STATE_INIT;
+	strcpy(pProcess->m_processName, appName);
+	
+
+	pProcess->m_dwProcessType = PROCESS_KERNEL;
+	pProcess->m_dwPriority = 1;
+
+	VirtualMemoryManager::MapHeap(pPageDirectory);
+
+	Thread* pThread = CreateThread(pProcess, lpStartAddress, this);
+
+
+	pProcess->AddThread(pThread);
+
+	AddProcess(pProcess);
+
+#ifdef _DEBUG
+	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
+#endif
+
+	return pProcess;
+}
+
 Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType)
 {
 	FILE file;
@@ -225,11 +265,13 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType
 	Process* pProcess = new Process();
 	pProcess->m_processId = GetNextProcessId();
 
-	pProcess->m_pPageDirectory = VirtualMemoryManager::CreateAddressSpace();
+	pProcess->SetPageDirectory(addressSpace);
+	//PageDirectory* pPageDirectory = VirtualMemoryManager::CreatePageDirectory();
+	//pProcess->SetPageDirectory(pPageDirectory);	
 	pProcess->m_dwRunState = TASK_STATE_INIT;
 	strcpy(pProcess->m_processName, appName);
 
-	PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
+	/*PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
 	if (identityPageTable == NULL)
 		return false;
 
@@ -243,7 +285,8 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType
 		identityPageTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
 	}
 
-	PDE* identityEntry = &pProcess->m_pPageDirectory->m_entries[PAGE_DIRECTORY_INDEX(0x00000000)];
+	PageDirectory* pPageDirectroy = pProcess->GetPageDirectory();
+	PDE* identityEntry = (PDE*)&(pPageDirectroy->m_entries[PAGE_DIRECTORY_INDEX(0x00000000)]);	
 	PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_PRESENT);
 	PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_WRITABLE);
 	PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
@@ -258,13 +301,15 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType
 
 	for (uint32_t i = 0; i < PAGES_PER_TABLE; i++)
 	{
-		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), flags);
+		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), flags);
 	}
+	*/
+	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)pProcess->GetPageDirectory(), (uint32_t)pProcess->GetPageDirectory(), I86_PTE_PRESENT | I86_PTE_WRITABLE);
+	
+	//20161109	
+	//pProcess->SetPageDirectory(VirtualMemoryManager::GetCurPageDirectory());
 
-	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, I86_PTE_PRESENT | I86_PTE_WRITABLE);
-
-	//20161109
-	pProcess->m_pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
+	VirtualMemoryManager::MapHeap(pProcess->GetPageDirectory());
 
 
 	pProcess->m_lpHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
@@ -310,7 +355,7 @@ bool ProcessManager::AddProcess(Process* pProcess)
 	if (pProcess->m_processId == PROC_INVALID_ID)
 		return false;
 
-	if (!pProcess->m_pPageDirectory)
+	if (!pProcess->GetPageDirectory())
 		return false;
 
 	Thread* pThread = pProcess->GetThread(0);
@@ -339,16 +384,21 @@ bool ProcessManager::AddProcess(Process* pProcess)
 	return true;
 }
 
-Process* ProcessManager::CreateConsoleProcess(LPTHREAD_START_ROUTINE lpStartAddress)
+//firstProcess가 true일 경우 커널의 최초 프로세스를 생성한다.
+//이 시점에서만 이전에 커널힙이 생성되었다고 가정한다.
+//이후 프로세스는 여기서 힙을 별도로 생성한다.
+Process* ProcessManager::CreateKernelProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress)
 {
 	Process* pProcess = new Process();
 	pProcess->m_processId = GetNextProcessId();
 
-	pProcess->m_pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
+	PageDirectory* pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
+	pProcess->SetPageDirectory(pPageDirectory);
+	
 	pProcess->m_dwRunState = TASK_STATE_RUNNING;
-	strcpy(pProcess->m_processName, "ConsoleSystem");
+	strcpy(pProcess->m_processName, appName);
 
-	VirtualMemoryManager::MapHeap(pProcess->m_pPageDirectory);
+	//VirtualMemoryManager::MapHeap(pProcess->m_pPageDirectory);
 
 	pProcess->m_lpHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
 
@@ -371,7 +421,7 @@ Process* ProcessManager::CreateConsoleProcess(LPTHREAD_START_ROUTINE lpStartAddr
 //firstProcess가 true일 경우 커널의 최초 프로세스를 생성한다.
 //이 시점에서만 이전에 커널힙이 생성되었다고 가정한다.
 //이후 프로세스는 여기서 힙을 별도로 생성한다.
-Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress)
+/*Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress)
 {
 	Process* pProcess = new Process();
 	pProcess->m_processId = GetNextProcessId();
@@ -399,6 +449,9 @@ Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_S
 	PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_WRITABLE);
 	PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
 
+	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, I86_PTE_PRESENT | I86_PTE_WRITABLE);
+	VirtualMemoryManager::MapHeap(pProcess->m_pPageDirectory);
+
 
 	int flags = I86_PTE_PRESENT | I86_PTE_WRITABLE;
 
@@ -411,11 +464,6 @@ Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_S
 	{
 		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), flags);
 	}
-
-	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, I86_PTE_PRESENT | I86_PTE_WRITABLE);
-
-	//20161109
-	pProcess->m_pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
 
 
 	pProcess->m_lpHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
@@ -435,7 +483,7 @@ Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_S
 #endif
 
 	return pProcess;
-}
+}*/
 
 PageDirectory* ProcessManager::MapKernelSpace()
 {
@@ -595,7 +643,7 @@ bool ProcessManager::ReleaseThreadContext(Process* pProcess)
 	{
 		Thread* pThread = pProcess->GetThread(i);
 		//스택 페이지 회수
-		VirtualMemoryManager::UnmapPhysicalAddress(pProcess->m_pPageDirectory, (uint32_t)pThread->m_initialStack);
+		VirtualMemoryManager::UnmapPhysicalAddress(pProcess->GetPageDirectory(), (uint32_t)pThread->m_initialStack);
 
 		// TLS 등등을 회수		
 	}

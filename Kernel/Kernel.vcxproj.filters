@@ -180,6 +180,7 @@
     <ClCompile Include="KeyboardController.cpp">
       <Filter>Device</Filter>
     </ClCompile>
+    <ClCompile Include="Beep.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h">
@@ -350,5 +351,6 @@
     <ClInclude Include="KeyboardController.h">
       <Filter>Device</Filter>
     </ClInclude>
+    <ClInclude Include="Beep.h" />
   </ItemGroup>
 </Project>

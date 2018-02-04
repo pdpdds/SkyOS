@@ -6,8 +6,7 @@ extern int main();
 
 extern "C" void EntryPoint() 
 {
-	CreateHeap();
-
+	CreateHeap();	
 	int result = main();
 
 	TerminateProcess();

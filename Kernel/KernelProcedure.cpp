@@ -19,6 +19,7 @@ void NativeConsole()
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
 	__asm sti;
+
 	g_criticalSection.LockRecursionCount = 0;
 
 	ConsoleManager manager;
@@ -75,7 +76,7 @@ DWORD WINAPI SampleLoop(LPVOID parameter)
 
 	Process* pProcess = (Process*)parameter;
 	SkyConsole::Print("Thread Routine Process Address %x\n", pProcess);
-
+	
 	while (bExit == false)
 	{
 		static int count = 0;
@@ -85,8 +86,9 @@ DWORD WINAPI SampleLoop(LPVOID parameter)
 			SkyConsole::Print("%s", str);
 
 			first = GetTickCount();
+			
 			count++;
-		}
+		}		
 	}
 
 	return 0;
@@ -138,3 +140,12 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
 
 	return 0;
 }
+
+DWORD WINAPI TestProc(LPVOID parameter)
+{
+
+	while (1);
+
+	return 0;
+}
+

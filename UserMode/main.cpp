@@ -3,9 +3,9 @@
 
 int main() 
 {
-
+	
 	char* message = "Hello world!!\n";
-	printf(message);
+	printf(message);	
 
 	/*int first = GetTickCount();
 	int count = 4;
@@ -28,6 +28,8 @@ int main()
 	strcpy(a, "Process2 Reply\n");
 
 	printf(a);
+
+	delete a;
 
 	return 0;
 	

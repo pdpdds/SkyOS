@@ -163,12 +163,29 @@ long cmdTesttask(char* pName)
 {
 	kEnterCriticalSection(&g_criticalSection);
 
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("SampleLoop", SampleLoop);
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc);
+
+	if (pProcess == 0)
+	{
+		SkyConsole::Print("Can't Execute Process. %d\n", pName);
+	}	
+		
 
 	kLeaveCriticalSection(&g_criticalSection);
 
 	return false;
 }	
+
+
+extern void Beep();
+
+
+long cmdBeep(char* pName)
+{
+	Beep();
+
+	return false;
+}
 
 extern void TestV8086();
 

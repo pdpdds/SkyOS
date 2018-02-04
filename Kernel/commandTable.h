@@ -14,7 +14,8 @@ START_COMMAND_TABLE
 	CMD_ENTRY("process", false, cmdProcessList, "Print process list")
 	CMD_ENTRY("kill", true, cmdKillTask, "Kill process with process id")
 	CMD_ENTRY("read", true, cmdRead, "reads a file")
-	CMD_ENTRY("gui", false, cmdGUI, "Jump to graphic user interface")
+	CMD_ENTRY("gui", false, cmdGUI, "jump to graphic user interface")
+	CMD_ENTRY("beep", false, cmdBeep, "test beep sound")
 
 END_COMMAND_TABLE
 

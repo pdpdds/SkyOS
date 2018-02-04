@@ -18,9 +18,9 @@ void fsysFat32Read(PFILE file, unsigned char* Buffer, unsigned int Length) {
 
 	int readLen = 0;
 	if (file) {
-		readLen = FATReadFile(file->id, Length, Buffer);
+		readLen = FATReadFile((UINT16)file->id, Length, Buffer);
 
-		if (readLen != Length)
+		if (readLen != (int)Length)
 			file->eof = 1;
 	}
 }
@@ -31,7 +31,7 @@ void fsysFat32Read(PFILE file, unsigned char* Buffer, unsigned int Length) {
 void fsysFat32Close(PFILE file) {
 
 	if (file->flags == FS_FILE && file->id != 0)
-		FATIsEndOfFile(file->id);
+		FATIsEndOfFile((UINT16)file->id);
 }
 
 

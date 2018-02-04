@@ -13,3 +13,4 @@ long cmdRead(char *theCommand);
 long cmdProc(char *theCommand);
 long cmdGUI(char *theCommand);
 long cmdTesttask(char* pName);
+long cmdBeep(char* pName);

@@ -162,7 +162,7 @@ unsigned short *memsetw(unsigned short *dest, unsigned short val, size_t count)
 }
 
 //! locates first occurance of character in string
-char* strchr (char * str, int character ) {
+char* strchr (const char * str, int character ) {
 
 	do {
 		if ( *str == character )

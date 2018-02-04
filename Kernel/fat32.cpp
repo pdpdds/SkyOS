@@ -19,7 +19,7 @@ FATInfo::FATInfo(BYTE * DPF, struct _Partition * DiskPart, BYTE * FirstSector)
 void FATInfo::Initialize(BYTE * DPF, struct _Partition * DiskPart, BYTE * FirstSector)
 {
 	this->Part.Initialize(DiskPart);
-	memcpy(this->DPF, DPF, 5);
+	memcpy(this->m_DPF, DPF, 5);
 	DPF[6] = 0;
 	memcpy((BYTE *)&this->FDI._BS, (BYTE *)&FirstSector[0], sizeof(struct BootSectorStart));
 	memcpy((BYTE *)&this->FDI._BPB, (BYTE *)&FirstSector[11], sizeof(struct BPB));
@@ -42,7 +42,7 @@ void FATInfo::Initialize(BYTE * DPF, struct _Partition * DiskPart, BYTE * FirstS
 }
 inline BYTE * FATInfo::GetDPF()
 {
-	return DPF;
+	return m_DPF;
 }
 inline Partition * FATInfo::GetPartition()
 {
@@ -92,7 +92,8 @@ inline UINT16 FATInfo::GetFATStartSector(BYTE FATNo)
 {
 	if (FATNo >= this->FDI._BPB.NumberFATs)
 		return 0;
-	return this->FDI._BPB.HiddenSectors + this->FDI._BPB.ReservedSectors + (GetFATSize()*FATNo);
+
+	return (UINT16)(this->FDI._BPB.HiddenSectors + this->FDI._BPB.ReservedSectors + (GetFATSize()*FATNo));
 }
 inline UINT32 FATInfo::DataAreaStartSector()
 {
@@ -106,16 +107,16 @@ inline UINT32 FATInfo::FirstSectorOfCluster(UINT32 Cluster)
 inline UINT16 FATInfo::RootDirStartSector()
 {
 	if (this->FDI._FATType == 12 || this->FDI._FATType == 16)
-		return this->FDI._BPB.ReservedSectors + (this->FDI._BPB.NumberFATs * this->FDI._BPB.FATSize16);
+		return (UINT16)(this->FDI._BPB.ReservedSectors + (this->FDI._BPB.NumberFATs * this->FDI._BPB.FATSize16));
 	else
-		return GetLogicalSector(this->FDI._FAT32.RootCluster, 0);
+		return (UINT16)(GetLogicalSector(this->FDI._FAT32.RootCluster, 0));
 }
 inline UINT16 FATInfo::RootDirStartCluster()
 {
 	if (this->FDI._FATType == 12 || this->FDI._FATType == 16)
-		return GetClusterCluster(this->FDI._BPB.ReservedSectors + (this->FDI._BPB.NumberFATs * this->FDI._BPB.FATSize16));
+		return (UINT16)GetClusterCluster(this->FDI._BPB.ReservedSectors + (this->FDI._BPB.NumberFATs * this->FDI._BPB.FATSize16));
 	else
-		return this->FDI._FAT32.RootCluster;
+		return (UINT16)(this->FDI._FAT32.RootCluster);
 }
 inline UINT32 FATInfo::GetClusterCluster(UINT32 LogicalSector)
 {
@@ -159,7 +160,7 @@ inline UINT32 FATInfo::FATSectorOffset(UINT32 Cluster)
 // This is not the Data Area Sector, it is the FAT Area
 inline UINT32 FATInfo::GetFATEntry(UINT32 Cluster, BYTE * Sector)
 {
-	UINT16 FATOffset = FATSectorOffset(Cluster);
+	UINT16 FATOffset = (UINT16)FATSectorOffset(Cluster);
 	if (this->FDI._FATType == 12)
 	{
 		UINT16 Result = *((WORD *)&Sector[FATOffset]);
@@ -666,7 +667,7 @@ UINT16 FATReadFile(UINT16 HandleID, UINT32 SizeInBytes, BYTE * Buffer)
 		memcpy(Buffer, &FATFileInfo->Buffer[FATFileInfo->BufferOffset], BufferTotalBytes);
 		TotReadBytes = BufferTotalBytes;
 		FATFileInfo->TotalBytesPassed += BufferTotalBytes;
-		FATFileInfo->BufferOffset += BufferTotalBytes;
+		FATFileInfo->BufferOffset += (UINT16)BufferTotalBytes;
 		if (FATFileInfo->BufferOffset >= BufferSize)
 			FATFileInfo->BufferIsValid = FALSE;
 	}
@@ -674,7 +675,7 @@ UINT16 FATReadFile(UINT16 HandleID, UINT32 SizeInBytes, BYTE * Buffer)
 	{
 		UINT32 BufferBytes = BufferSize;
 		if (!FATReadFileCluster(FATFileInfo, FInfo))
-			return TotReadBytes;
+			return (UINT16)TotReadBytes;
 		if (TotReadBytes + BufferBytes > SizeInBytes)
 			BufferBytes = SizeInBytes - TotReadBytes;
 		if (FATFileInfo->TotalBytesPassed + BufferBytes > FATFileInfo->DEInfo.FileSize)
@@ -684,10 +685,10 @@ UINT16 FATReadFile(UINT16 HandleID, UINT32 SizeInBytes, BYTE * Buffer)
 		}
 		memcpy((BYTE *)&Buffer[TotReadBytes], (BYTE *)FATFileInfo->Buffer, BufferBytes);
 		TotReadBytes += BufferBytes;
-		FATFileInfo->BufferOffset += BufferBytes;
+		FATFileInfo->BufferOffset += (UINT16)BufferBytes;
 		FATFileInfo->TotalBytesPassed += BufferBytes;
 	};
-	return TotReadBytes;
+	return (UINT16)TotReadBytes;
 }
 static  char * MaxPtr(char *p1, char *p2)
 {

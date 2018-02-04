@@ -11,7 +11,7 @@ void printf(const char* str, ...)
 {
 	if (!str)
 		return;
-
+	
 	std::string buffer;
 
 	va_list		args;
@@ -28,7 +28,7 @@ void printf(const char* str, ...)
 				/*** characters ***/
 			case 'c': {
 				char c = va_arg(args, char);
-				buffer += 'c';				
+				buffer += c;				
 				i++;		// go to next character
 				break;
 			}

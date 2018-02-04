@@ -12,10 +12,7 @@ namespace VirtualMemoryManager
 {
 	int heapFrameCount = 0;
 	//! current directory table
-	PageDirectory*		_cur_directory = 0;
-
-	//! current page directory base register
-	uint32_t	_cur_pdbr = 0;
+	PageDirectory*		_cur_directory = 0;	
 
 	//Physical Heap Address	
 	void* m_pKernelHeapPhysicalMemory = 0;
@@ -53,11 +50,17 @@ namespace VirtualMemoryManager
 	//가상주소를 물리 주소에 매핑
 	void MapPhysicalAddressToVirtualAddresss(PageDirectory* dir, uint32_t virt, uint32_t phys, uint32_t flags)
 	{
-		PDE* pageDir = dir->m_entries;		
+		PDE* pageDir = dir->m_entries;				
 
 		if (pageDir[virt >> 22] == 0)
+		{
 			CreatePageTable(dir, virt, flags);
-		((uint32_t*)(pageDir[virt >> 22] & ~0xfff))[virt << 10 >> 10 >> 12] = phys | flags;
+		}
+
+		uint32_t mask = (uint32_t)(~0xfff);
+		uint32_t* pageTable = (uint32_t*)(pageDir[virt >> 22] & mask);
+
+		pageTable[virt << 10 >> 10 >> 12] = phys | flags;
 	}
 
 	void UnmapPageTable(PageDirectory* dir, uint32_t virt)
@@ -82,7 +85,7 @@ namespace VirtualMemoryManager
 			UnmapPageTable(dir, virt);
 	}
 
-	PageDirectory* CreateAddressSpace()
+	PageDirectory* CreatePageDirectory()
 	{
 		PageDirectory* dir = NULL;
 
@@ -209,7 +212,7 @@ namespace VirtualMemoryManager
 		}
 
 		return dir;
-	}
+	}	
 
 	bool Initialize()
 	{
@@ -221,7 +224,7 @@ namespace VirtualMemoryManager
 			return false;
 
 		//페이지 디렉토리를 PDBR 레지스터에 로드한다
-		if (false == SetPageDirectoryInfo(dir))
+		if (false == SetCurPageDirectory(dir))
 			return false;
 
 
@@ -240,13 +243,12 @@ namespace VirtualMemoryManager
 	}
 
 
-	bool SetPageDirectoryInfo(PageDirectory* dir)
+	bool SetCurPageDirectory(PageDirectory* dir)
 	{
 		if (dir == NULL)
 			return false;
 
-		_cur_directory = dir;
-		_cur_pdbr = (uint32_t)&dir->m_entries;
+		_cur_directory = dir;		
 
 		return true;
 	}
@@ -290,8 +292,11 @@ namespace VirtualMemoryManager
 
 		int endAddress = (uint32_t)pVirtualHeap + heapFrameCount * PMM_BLOCK_SIZE;
 
+		SkyConsole::Print("MapHeap\n");
 		
 		MapHeap(dir);
+
+		SkyConsole::Print("MapHeap End\n");
 
 		create_kernel_heap((u32int)pVirtualHeap, (uint32_t)endAddress, (uint32_t)endAddress, 0, 0);
 

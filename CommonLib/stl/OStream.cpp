@@ -11,9 +11,9 @@ namespace std
 	{
 		printf(cp);
 		return *this;
-	}
+	}	
 
-	OStream& OStream::operator<<(char c)
+	OStream& OStream::operator<<(const char c)
 	{
 		printf("%c", c);
 		return *this;

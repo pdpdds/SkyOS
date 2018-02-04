@@ -68,8 +68,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
 	InitMemoryManager(pBootInfo, 0);
 
-	//InitFloppyDrive();
-	//SkyConsole::Print("Floppy Disk Init..\n");
+	InitFloppyDrive();
+	SkyConsole::Print("Floppy Disk Init..\n");
 
 	//StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
@@ -168,6 +168,8 @@ bool InitMemoryManager(multiboot_info* bootinfo, uint32_t kernelSize)
 
 	uint32_t freeSpaceMemorySize = GetFreeSpaceMemory(bootinfo);
 
+	freeSpaceMemorySize = 4096 * 1024 * 200;
+
 	//SkyConsole::Print("KernelSize : %d Bytes\n", kernelSize);
 	SkyConsole::Print("FreeSpace MemorySize From 0x%x: 0x%x Bytes\n", FREE_MEMORY_SPACE_ADDRESS, freeSpaceMemorySize);
 
@@ -188,6 +190,7 @@ bool InitMemoryManager(multiboot_info* bootinfo, uint32_t kernelSize)
 //가상 메모리 매니저 초기화	
 	VirtualMemoryManager::Initialize();
 
+	SkyConsole::Print("Init Complete\n");
 	//커널 힙을 생성한다
 	VirtualMemoryManager::CreateKernelHeap();
 
@@ -198,13 +201,15 @@ void StartConsoleSystem()
 {
 	//kEnterCriticalSection(&g_criticalSection);
 	
-	Process* pProcess = ProcessManager::GetInstance()->CreateConsoleProcess(SystemConsoleProc);
+	Process* pProcess = ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ConsoleSystem", SystemConsoleProc);
 
 	if (pProcess == nullptr)
 		HaltSystem("Console Creation Fail!!");
 
-	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc);
-	ProcessManager::GetInstance()->CreateProcessFromMemory("ProcessRemover", ProcessRemoverProc);
+	ProcessManager::GetInstance()->CreateKernelProcessFromMemory("WatchDog", WatchDogProc);
+	ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ProcessRemover", ProcessRemoverProc);
+	ProcessManager::GetInstance()->CreateProcessFromMemory("SampleLoop", SampleLoop);
+	ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc);
 	
 
 	SkyConsole::Print("Init Console....\n");
@@ -226,19 +231,19 @@ void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
 	{
 		mov     ax, 0x10;
 		mov     ds, ax
-			mov     es, ax
-			mov     fs, ax
-			mov     gs, ax
+		mov     es, ax
+		mov     fs, ax
+		mov     gs, ax
 
-			; create stack frame
-			; push   0x10;
-		; push procStack; stack
-			mov esp, procStack
-			push	0x10;
+			//; create stack frame
+			//; push   0x10;
+		//; push procStack; stack
+		mov     esp, procStack
+		push	0x10;
 		push    0x200; EFLAGS
-			push    0x08; CS
-			push entryPoint; EIP			
-			iretd
+		push    0x08; CS
+		push    entryPoint; EIP
+		iretd
 	}
 }
 

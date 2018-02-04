@@ -31,8 +31,8 @@ public:
 
 		return m_processManager;
 	}
-	
-	Process* CreateConsoleProcess(LPTHREAD_START_ROUTINE lpStartAddress);
+		
+	Process* CreateKernelProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress);
 	Process* CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress);
 	
 	Process* CreateProcessFromFile(char* appName, UINT32 processType);	

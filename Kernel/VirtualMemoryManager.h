@@ -73,7 +73,7 @@ namespace VirtualMemoryManager
 	PageDirectory* CreateCommonPageDirectory();
 
 	//페이지 디렉토리를 PDTR 레지스터에 세트한다
-	bool SetPageDirectoryInfo(PageDirectory* dir);
+	bool SetCurPageDirectory(PageDirectory* dir);
 
 	//현재 페이지 디렉토리를 가져온다
 	PageDirectory* GetCurPageDirectory();
@@ -105,7 +105,7 @@ namespace VirtualMemoryManager
 	void UnmapPhysicalAddress(PageDirectory* dir, uint32_t virt);
 
 	//페이지 디렉토리를 생성한다. 즉 가상주소공간을 생성한다는 의미다
-	PageDirectory* CreateAddressSpace();
+	PageDirectory* CreatePageDirectory();
 
 	//커널 힙을 생성한다
 	bool CreateKernelHeap();
