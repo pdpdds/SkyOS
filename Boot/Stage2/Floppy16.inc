@@ -82,9 +82,9 @@ LBACHS:
 ;************************************************;
 
 ReadSectors:
-     .MAIN
-          mov     di, 0x0005                          ; five retries for error
-     .SECTORLOOP
+     READMAIN:
+          mov     di, 0x0005
+     SECTORLOOP:
           push    ax
           push    bx
           push    cx
@@ -96,22 +96,22 @@ ReadSectors:
           mov     dh, BYTE [absoluteHead]             ; head
           mov     dl, BYTE [bsDriveNumber]            ; drive
           int     0x13                                ; invoke BIOS
-          jnc     .SUCCESS                            ; test for read error
+          jnc     SUCCESS                            ; test for read error
           xor     ax, ax                              ; BIOS reset disk
           int     0x13                                ; invoke BIOS
           dec     di                                  ; decrement error counter
           pop     cx
           pop     bx
           pop     ax
-          jnz     .SECTORLOOP                         ; attempt to read again
+          jnz     SECTORLOOP                         ; attempt to read again
           int     0x18
-     .SUCCESS
+     SUCCESS:
           pop     cx
           pop     bx
           pop     ax
           add     bx, WORD [bpbBytesPerSector]        ; queue next buffer
           inc     ax                                  ; queue next sector
-          loop    .MAIN                               ; read next sector
+          loop    READMAIN                               ; read next sector
           ret
 
 %endif		;__FLOPPY16_INC_67343546FDCC56AAB872_INCLUDED__

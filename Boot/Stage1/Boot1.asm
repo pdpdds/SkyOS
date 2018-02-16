@@ -1,25 +1,23 @@
-
 ;*********************************************
-;	Boot1.asm
-;		- A Simple Bootloader
-;
-;	Operating Systems Development Tutorial
+;	플로피 디스크로부터의 부팅
 ;*********************************************
 
-bits	16						; we are in 16 bit real mode
+%define KERNEL_LOADER_ADDRESS 0x050
 
-org		0					; we will set regisers later
+;리얼 모드에서 시작
+[BITS 16]
 
-start:	jmp	main					; jump to start of bootloader
+;부트코드는 0x07c0 번지에 로드되므로
+;주소 재조정이 필요하다
+[ORG 0x0000]	
 
+		nop
+		nop
+		nop
 ;*********************************************
 ;	BIOS Parameter Block
 ;*********************************************
-
-; BPB Begins 3 bytes from start. We do a far jump, which is 3 bytes in size.
-; If you use a short jump, add a "nop" after it to offset the 3rd byte.
-
-bpbOEM			db "My OS   "
+bpbOEM			db "Sky OS  "
 bpbBytesPerSector:  	DW 512
 bpbSectorsPerCluster: 	DB 1
 bpbReservedSectors: 	DW 1
@@ -39,7 +37,164 @@ bsSerialNumber:	        DD 0xa0a1a2a3
 bsVolumeLabel: 	        DB "MOS FLOPPY "
 bsFileSystem: 	        DB "FAT12   "
 
-;************************************************;
+BOOTMAIN:
+
+;세그먼트 레지스터 값들을 0x07C0로 초기화
+;현재 메모리상의 코드 위치는 0x07C0:IP이다.
+          mov     ax, 0x07C0				
+          mov     ds, ax
+          mov     es, ax
+          mov     fs, ax
+          mov     gs, ax
+
+ ;스택 설정 0x0000:0000~0x0000:FFFF 64KB 크기로 생성
+          mov     ax, 0x0000				; set the stack
+          mov     ss, ax
+          mov     sp, 0xFFFE
+
+;부팅 드라이브 번호 저장		  
+          mov  [BootDevice], dl
+    
+;루트 디렉토리 테이블을 읽는다
+LOAD_ROOT: 
+; 루트 디렉토리 테이블의 크기를 CX 레지스터에 저장한다
+     
+          xor     cx, cx
+          xor     dx, dx
+          mov     ax, 0x0020                           ; 32 byte directory entry
+          mul     WORD [bpbRootEntries]                ; total size of directory
+          div     WORD [bpbBytesPerSector]             ; sectors used by directory
+          xchg    ax, cx
+          
+; 루트 디렉토리 테이블의 위치를 AX 레지스터에 저장한다
+     
+          mov     al, BYTE [bpbNumberOfFATs]            ; number of FATs
+          mul     WORD [bpbSectorsPerFAT]               ; sectors used by FATs
+          add     ax, WORD [bpbReservedSectors]         ; adjust for bootsector
+          mov     WORD [datasector], ax                 ; base of root directory
+          add     WORD [datasector], cx
+          
+; 부트섹터 코드 바로 다음에(512바이트) 루트 디렉토리를 읽어들인다 (07C0:0200)
+     
+          mov     bx, 0x0200                            ; copy root dir above bootcode
+          call    ReadSectors
+
+;루트 디렉토리를 검색해서 커널 로더 파일 정보를 찾는다
+; 루트 디렉토리에는 최대 224개의 엔트리가 존재할 수 있다
+; 파일 이름은 FAT12에서 최대 12자. 우리의 커널로더와 같은 이름의 루트 디렉토리 엔트리를 찾는다
+          mov     cx, WORD [bpbRootEntries]             ; load loop counter
+          mov     di, 0x0200                            ; locate first root entry
+     .LOOP:
+          push    cx
+          mov     cx, 0x000B                            ; eleven character name
+          mov     si, ImageName                         ; image name to find
+          push    di
+     rep  cmpsb                                         ; test for entry match
+          pop     di
+          je      LOAD_FAT
+          pop     cx
+          add     di, 0x0020                            ; queue next directory entry
+          loop    .LOOP
+          jmp     FAILURE
+
+;----------------------------------------------------
+; FAT 정보 로드. 앞단계에서 di 레지스터에 이미지 파일의 루트 디렉토리 엔트리 옵셋을 구했다
+;----------------------------------------------------
+
+     LOAD_FAT:
+     
+     ; 커널 로더의 시작 클러스터 값을 dx 레지스터에 저장한다
+          mov     dx, WORD [di + 0x001A]
+          mov     WORD [cluster], dx                  ; 파일의 첫번째 클러스터 값 저장
+          
+     ; cx 레지스터에 FAT의 크기를 저장한다
+     
+          xor     ax, ax
+          mov     al, BYTE [bpbNumberOfFATs]          ; number of FATs
+          mul     WORD [bpbSectorsPerFAT]             ; sectors used by FATs
+          mov     cx, ax
+
+     ; AX 레지스터에 FAT의 위치를 지정한다. 부트섹터 다음 섹터가 FAT 시작위치. 즉 1
+
+          mov     ax, WORD [bpbReservedSectors]       ; adjust for bootsector
+          
+     ; FAT 정보를 메모리로 읽어들인다 (07C0:0200)
+
+          mov     bx, 0x0200                          ; copy FAT above bootcode
+          call    ReadSectors
+		  
+	; 커널 로더 파일을 메모리속으로 읽어들일 준비를 한다 (0A00:0000)
+     
+          mov     ax, KERNEL_LOADER_ADDRESS
+          mov     es, ax                              ; destination for image
+          mov     bx, 0x0000                          ; destination for image
+          push    bx
+
+     ;----------------------------------------------------
+     ; 파일을 읽어들인다
+     ;----------------------------------------------------
+
+     LOAD_IMAGE:
+     
+          mov     ax, WORD [cluster]                  ; cluster to read
+          pop     bx                                  ; buffer to read into
+          call    ClusterLBA                          ; convert cluster to LBA
+          xor     cx, cx
+          mov     cl, BYTE [bpbSectorsPerCluster]     ; sectors to read
+          call    ReadSectors
+          push    bx
+          
+     ; compute next cluster
+     
+          mov     ax, WORD [cluster]                  ; identify current cluster
+          mov     cx, ax                              ; copy current cluster
+          mov     dx, ax                              ; copy current cluster
+          shr     dx, 0x0001                          ; divide by two
+          add     cx, dx                              ; sum for (3/2)
+		  
+          mov     bx, 0x0200                          ; location of FAT in memory
+          add     bx, cx                              ; index into FAT
+          mov     dx, WORD [bx]                       ; read two bytes from FAT
+          test    ax, 0x0001
+          jnz     .ODD_CLUSTER
+          
+     .EVEN_CLUSTER:
+     
+          and     dx, 0000111111111111b               ; take low twelve bits
+         jmp     .DONE
+         
+     .ODD_CLUSTER:
+     
+          shr     dx, 0x0004                          ; take high twelve bits
+          
+     .DONE:
+     
+          mov     WORD [cluster], dx                  ; store new cluster
+          cmp     dx, 0x0FF0                          ; test for end of file
+          jb      LOAD_IMAGE
+          
+     DONE:
+     
+          mov     si, msgCRLF
+          call    Print
+		  
+		  mov     si, msgComplete
+          call    Print
+        
+	  mov	  dl, [BootDevice]
+          push    WORD KERNEL_LOADER_ADDRESS
+          push    WORD 0x0000
+          retf
+          
+     FAILURE:
+     
+          mov     si, msgFailure
+          call    Print
+          mov     ah, 0x00
+          int     0x16                                ; await keypress
+          int     0x19                                ; warm boot computer
+		  
+		 ;************************************************;
 ;	Prints a string
 ;	DS=>SI: 0 terminated string
 ;************************************************;
@@ -135,184 +290,19 @@ ReadSectors:
           loop    .MAIN                               ; read next sector
           ret
 
-
 ;*********************************************
 ;	Bootloader Entry Point
-;*********************************************
-
-main:
-
-     ;----------------------------------------------------
-     ; code located at 0000:7C00, adjust segment registers
-     ;----------------------------------------------------
-     
-          cli						; disable interrupts
-          mov     ax, 0x07C0				; setup registers to point to our segment
-          mov     ds, ax
-          mov     es, ax
-          mov     fs, ax
-          mov     gs, ax
-
-     ;----------------------------------------------------
-     ; create stack
-     ;----------------------------------------------------
-     
-          mov     ax, 0x0000				; set the stack
-          mov     ss, ax
-          mov     sp, 0xFFFF
-          sti						; restore interrupts
-
-          mov  [bootdevice], dl
-
-     ;----------------------------------------------------
-     ; Load root directory table
-     ;----------------------------------------------------
-
-     LOAD_ROOT:
-     
-     ; compute size of root directory and store in "cx"
-     
-          xor     cx, cx
-          xor     dx, dx
-          mov     ax, 0x0020                           ; 32 byte directory entry
-          mul     WORD [bpbRootEntries]                ; total size of directory
-          div     WORD [bpbBytesPerSector]             ; sectors used by directory
-          xchg    ax, cx
-          
-     ; compute location of root directory and store in "ax"
-     
-          mov     al, BYTE [bpbNumberOfFATs]            ; number of FATs
-          mul     WORD [bpbSectorsPerFAT]               ; sectors used by FATs
-          add     ax, WORD [bpbReservedSectors]         ; adjust for bootsector
-          mov     WORD [datasector], ax                 ; base of root directory
-          add     WORD [datasector], cx
-          
-     ; read root directory into memory (7C00:0200)
-     
-          mov     bx, 0x0200                            ; copy root dir above bootcode
-          call    ReadSectors
-
-     ;----------------------------------------------------
-     ; Find stage 2
-     ;----------------------------------------------------
-
-     ; browse root directory for binary image
-          mov     cx, WORD [bpbRootEntries]             ; load loop counter
-          mov     di, 0x0200                            ; locate first root entry
-     .LOOP:
-          push    cx
-          mov     cx, 0x000B                            ; eleven character name
-          mov     si, ImageName                         ; image name to find
-          push    di
-     rep  cmpsb                                         ; test for entry match
-          pop     di
-          je      LOAD_FAT
-          pop     cx
-          add     di, 0x0020                            ; queue next directory entry
-          loop    .LOOP
-          jmp     FAILURE
-
-     ;----------------------------------------------------
-     ; Load FAT
-     ;----------------------------------------------------
-
-     LOAD_FAT:
-     
-     ; save starting cluster of boot image
-     
-          mov     dx, WORD [di + 0x001A]
-          mov     WORD [cluster], dx                  ; file's first cluster
-          
-     ; compute size of FAT and store in "cx"
-     
-          xor     ax, ax
-          mov     al, BYTE [bpbNumberOfFATs]          ; number of FATs
-          mul     WORD [bpbSectorsPerFAT]             ; sectors used by FATs
-          mov     cx, ax
-
-     ; compute location of FAT and store in "ax"
-
-          mov     ax, WORD [bpbReservedSectors]       ; adjust for bootsector
-          
-     ; read FAT into memory (7C00:0200)
-
-          mov     bx, 0x0200                          ; copy FAT above bootcode
-          call    ReadSectors
-
-     ; read image file into memory (0050:0000)
-     
-          mov     ax, 0x0050
-          mov     es, ax                              ; destination for image
-          mov     bx, 0x0000                          ; destination for image
-          push    bx
-
-     ;----------------------------------------------------
-     ; Load Stage 2
-     ;----------------------------------------------------
-
-     LOAD_IMAGE:
-     
-          mov     ax, WORD [cluster]                  ; cluster to read
-          pop     bx                                  ; buffer to read into
-          call    ClusterLBA                          ; convert cluster to LBA
-          xor     cx, cx
-          mov     cl, BYTE [bpbSectorsPerCluster]     ; sectors to read
-          call    ReadSectors
-          push    bx
-          
-     ; compute next cluster
-     
-          mov     ax, WORD [cluster]                  ; identify current cluster
-          mov     cx, ax                              ; copy current cluster
-          mov     dx, ax                              ; copy current cluster
-          shr     dx, 0x0001                          ; divide by two
-          add     cx, dx                              ; sum for (3/2)
-          mov     bx, 0x0200                          ; location of FAT in memory
-          add     bx, cx                              ; index into FAT
-          mov     dx, WORD [bx]                       ; read two bytes from FAT
-          test    ax, 0x0001
-          jnz     .ODD_CLUSTER
-          
-     .EVEN_CLUSTER:
-     
-          and     dx, 0000111111111111b               ; take low twelve bits
-         jmp     .DONE
-         
-     .ODD_CLUSTER:
-     
-          shr     dx, 0x0004                          ; take high twelve bits
-          
-     .DONE:
-     
-          mov     WORD [cluster], dx                  ; store new cluster
-          cmp     dx, 0x0FF0                          ; test for end of file
-          jb      LOAD_IMAGE
-          
-     DONE:
-     
-          mov     si, msgCRLF
-          call    Print
-	  mov	  dl, [bootdevice]
-          push    WORD 0x0050
-          push    WORD 0x0000
-          retf
-          
-     FAILURE:
-     
-          mov     si, msgFailure
-          call    Print
-          mov     ah, 0x00
-          int     0x16                                ; await keypress
-          int     0x19                                ; warm boot computer
+;********************************************* 
 
 
-     bootdevice  db 0
+     BootDevice  db 0
      datasector  dw 0x0000
      cluster     dw 0x0000
      ImageName   db "KRNLDR  SYS"
      msgCRLF     db 0x0D, 0x0A, 0x00
      msgProgress db ".", 0x00
      msgFailure  db 0x0D, 0x0A, "MISSING OR CURRUPT KRNLDR. Press Any Key to Reboot", 0x0D, 0x0A, 0x00
+	 msgComplete  db 0x0D, 0x0A, "Loading Complete", 0x0D, 0x0A, 0x00
      
           TIMES 510-($-$$) DB 0
           DW 0xAA55
