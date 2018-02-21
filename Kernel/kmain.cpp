@@ -1,6 +1,7 @@
 ﻿#include "kmain.h"
 #include "stdio.h"
 #include "FAT32VFSAdaptor.h"
+#include "LowVGA.h"
 
 extern bool systemOn;
 void HardwareInitiize();
@@ -99,6 +100,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	else
 	{
 		//InitGraphics(pBootInfo);
+		StartLowModeVGA();
 	}
 }
 
