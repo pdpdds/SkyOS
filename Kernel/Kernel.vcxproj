@@ -120,6 +120,7 @@
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="KeyboardController.cpp" />
+    <ClCompile Include="LowVGA.cpp" />
     <ClCompile Include="RAMDisk.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="FloppyDiskIO.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="KeyboardController.h" />
+    <ClInclude Include="LowVGA.h" />
     <ClInclude Include="RAMDisk.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="ConsoleManager.h" />

@@ -181,6 +181,7 @@
       <Filter>Device</Filter>
     </ClCompile>
     <ClCompile Include="Beep.cpp" />
+    <ClCompile Include="LowVGA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h">
@@ -352,5 +353,6 @@
       <Filter>Device</Filter>
     </ClInclude>
     <ClInclude Include="Beep.h" />
+    <ClInclude Include="LowVGA.h" />
   </ItemGroup>
 </Project>

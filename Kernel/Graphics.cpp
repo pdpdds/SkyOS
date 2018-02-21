@@ -4,6 +4,7 @@
 #include "stdio.h"
 #include "exception.h"
 #include "VirtualMemoryManager.h"
+#include "LowVGA.h"
 #include "sprintf.h"
 
 uint16_t bochs_resolution_x = 0;
@@ -22,7 +23,33 @@ void rect32A(int x, int y, int w, int h, int col) {
 	int* lfb = (int*)bochs_vid_memory;
 	for (int k = 0; k < h; k++)
 		for (int j = 0; j < w; j++)
-			lfb[(j + x) + (k + y) * w] = col;
+			lfb[(j + x) + (k + y) * 1024] = col;
+}
+
+void rect32B(int x, int y, int w, int h, int col, int actualX, int actualY, int actualByte) {
+
+	//if (actualByte == 24)
+	{
+
+		char* lfb = (char*)bochs_vid_memory;
+
+		/*for (int i = 0; i < 0x090000; i++)
+		{
+			lfb[i] = col;
+		}*/
+
+
+		for (int k = 0; k < h; k++)
+			for (int j = 0; j < w; j++)
+			{
+				int index = ((j + x) + (k + y) * actualX) * 3;
+				lfb[index] = (char)(col >> 0);
+				index++;
+				lfb[index] = (char)(col >> 8);
+				index++;
+				lfb[index] = (char)(col >> 16);
+			}
+	}
 }
 
 void graphics_install_vesa(uint16_t resX, uint16_t resY)
@@ -89,7 +116,7 @@ void graphics_install_vesa(uint16_t resX, uint16_t resY)
 			best_y = modeinfo->Yres;
 			best_b = modeinfo->bpp;
 		}
-}
+	}
 	for (int i = 1; modes[i] != 0xFFFF; ++i) {
 		emu->AX.W = 0x4F01;
 		emu->CX.W = modes[i];
@@ -124,13 +151,13 @@ void graphics_install_vesa(uint16_t resX, uint16_t resY)
 	emu->DI.W = 0x0000;
 	RME_CallInt(emu, 0x10);
 
-	
+
 
 	emu->AX.W = 0x4F02;
 	emu->BX.W = modes[mode];
 
 	RME_CallInt(emu, 0x10);
-	
+
 	uint16_t actual_x = modeinfo->Xres;
 	uint16_t actual_y = modeinfo->Yres;
 	uint16_t actual_b = modeinfo->bpp;
@@ -140,45 +167,48 @@ void graphics_install_vesa(uint16_t resX, uint16_t resY)
 	if (!bochs_vid_memory) {
 		uint32_t * herp = (uint32_t *)0xA0000;
 		herp[0] = 0xA5ADFACE;
-		
-		//memset(bochs_vid_memory, 0xff, modeinfo->Xres * modeinfo->Yres);
 
-			
 		/* Enable the higher memory */
 		VirtualMemoryManager::CreateVideoDMAVirtualAddress(0xE0000000, 0xE0FF0000);
 		VirtualMemoryManager::CreateVideoDMAVirtualAddress(0xF0000000, 0xF0FF0000);
-			
+
 		/* Go find it */
 		for (uintptr_t x = 0xE0000000; x < 0xE0FF0000; x += 0x1000) {
 			if (((uintptr_t *)x)[0] == 0xA5ADFACE) {
 				bochs_vid_memory = (uint8_t *)x;
 
-				
+
 				goto mem_found;
 			}
 		}
 		for (uintptr_t x = 0xF0000000; x < 0xF0FF0000; x += 0x1000)
 		{
 			if (((uintptr_t *)x)[0] == 0xA5ADFACE) {
-				bochs_vid_memory = (uint8_t *)x;
+				bochs_vid_memory = (uint8_t *)0xF0000000;
 
 
-				SkyConsole::GetChar();
-				SkyConsole::GetChar();
+				rect32B(0, 0, actual_x, actual_y, 0x00FFFFFF, actual_x, actual_y, actual_b);
+				rect32B(100, 100, 100, 100, 0x00FF0000, actual_x, actual_y, actual_b);
+				rect32B(150, 150, 100, 100, 0x0000FF00, actual_x, actual_y, actual_b);
+				rect32B(200, 200, 100, 100, 0x000000FF, actual_x, actual_y, actual_b);
+											
 
-				rect32A(100, 100, 200, 200, 0xAAAAAAAA);
-		
+				//rect32A(0, 0, 200, 200, 0x80808080);
+				//SkyConsole::GetChar();
+				//SkyConsole::GetChar();
+				//StartLowModeVGA(bochs_vid_memory);
+
 				goto mem_found;
 			}
 		}
 
-		
+
 	}
-mem_found:	
+mem_found:
 	/*
 	* Finalize the graphics setup with the actual selected resolution.
 	*/
-	finalize_graphics(actual_x, actual_y, actual_b);	
+	finalize_graphics(actual_x, actual_y, actual_b);
 
 	//InitGraphics(modeinfo);
 }

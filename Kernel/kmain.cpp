@@ -1,7 +1,6 @@
 ﻿#include "kmain.h"
 #include "stdio.h"
 #include "FAT32VFSAdaptor.h"
-#include "LowVGA.h"
 
 extern bool systemOn;
 void HardwareInitiize();
@@ -69,8 +68,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
 	InitMemoryManager(pBootInfo, 0);
 
-	InitFloppyDrive();
-	SkyConsole::Print("Floppy Disk Init..\n");
+	//InitFloppyDrive();
+	//SkyConsole::Print("Floppy Disk Init..\n");
 
 	//StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
@@ -100,7 +99,6 @@ void kmain(unsigned long magic, unsigned long addr)
 	else
 	{
 		//InitGraphics(pBootInfo);
-		StartLowModeVGA();
 	}
 }
 
