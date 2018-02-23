@@ -6,20 +6,15 @@
 #include "string.h"
 
 static char* sickpc = " \
-                               _______      \n\
-                               |.-----.|    \n\
-                               ||x . x||    \n\
-                               ||_.-._||    \n\
-                               `--)-(--`    \n\
-                              __[=== o]___  \n\
-                             |:::::::::::|\\ \n\
-                             `-=========-`()\n\
-                                M. O. S.\n\n";
+                               (>_<)      \n\
+                                SkyOS\n\n";
+
+//୧༼ಠ益ಠ༽୨      \n\
 
 //! something is wrong--bail out
 void _cdecl kernel_panic(const char* fmt) {
 
-	char* disclamer = "We apologize, MOS has encountered a problem and has been shut down\n\
+	char* disclamer = "We apologize, SkyOS has encountered a problem and has been shut down\n\
 to prevent damage to your computer. Any unsaved work might be lost.\n\
 We are sorry for the inconvenience this might have caused.\n\n\
 Please report the following information and restart your computer.\n\
