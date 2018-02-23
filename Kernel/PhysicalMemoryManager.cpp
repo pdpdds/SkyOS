@@ -193,6 +193,11 @@ namespace PhysicalMemoryManager
 		return m_maxBlocks - m_usedBlocks;
 	}
 
+	uint32_t	GetFreeMemory()
+	{
+		return GetFreeBlockCount() * PMM_BLOCK_SIZE;
+	}
+
 	uint32_t GetTotalBlockCount() {
 
 		return m_maxBlocks;
@@ -310,4 +315,7 @@ namespace PhysicalMemoryManager
 		SkyConsole::Print("Used Block Count : 0x%x\n", m_usedBlocks);		
 		//#endif // _ORANGE_DEBUG
 	}
+
+
+	
 }

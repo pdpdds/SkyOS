@@ -181,7 +181,10 @@
       <Filter>Device</Filter>
     </ClCompile>
     <ClCompile Include="Beep.cpp" />
-    <ClCompile Include="LowVGA.cpp" />
+    <ClCompile Include="HariboteGUI.cpp" />
+    <ClCompile Include="sheet.cpp" />
+    <ClCompile Include="mouse.cpp" />
+    <ClCompile Include="fifo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h">
@@ -353,6 +356,10 @@
       <Filter>Device</Filter>
     </ClInclude>
     <ClInclude Include="Beep.h" />
-    <ClInclude Include="LowVGA.h" />
+    <ClInclude Include="HariboteGUI.h" />
+    <ClInclude Include="sheet.h" />
+    <ClInclude Include="mouse.h" />
+    <ClInclude Include="fifo.h" />
+    <ClInclude Include="FontData.h" />
   </ItemGroup>
 </Project>

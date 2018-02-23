@@ -118,10 +118,13 @@
   <ItemGroup>
     <ClCompile Include="Beep.cpp" />
     <ClCompile Include="commands.cpp" />
+    <ClCompile Include="fifo.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="HariboteGUI.cpp" />
     <ClCompile Include="KeyboardController.cpp" />
-    <ClCompile Include="LowVGA.cpp" />
+    <ClCompile Include="mouse.cpp" />
     <ClCompile Include="RAMDisk.cpp" />
+    <ClCompile Include="sheet.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
     <ClCompile Include="kentry.cpp" />
@@ -175,11 +178,15 @@
     <ClInclude Include="commandMacros.h" />
     <ClInclude Include="commands.h" />
     <ClInclude Include="commandTable.h" />
+    <ClInclude Include="fifo.h" />
     <ClInclude Include="FloppyDiskIO.h" />
+    <ClInclude Include="FontData.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="HariboteGUI.h" />
     <ClInclude Include="KeyboardController.h" />
-    <ClInclude Include="LowVGA.h" />
+    <ClInclude Include="mouse.h" />
     <ClInclude Include="RAMDisk.h" />
+    <ClInclude Include="sheet.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="ConsoleManager.h" />
     <ClInclude Include="DoubleLinkedList.h" />

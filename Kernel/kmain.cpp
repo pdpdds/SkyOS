@@ -62,14 +62,13 @@ void kmain(unsigned long magic, unsigned long addr)
 	SkyConsole::Print("Interrput Handler & System Call Init..\n");
 
 	InitKeyboard();
-
-	SkyConsole::Print("Keyboard Init..\n");
+	SkyConsole::Print("Keyboard Init..\n");	
 
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
 	InitMemoryManager(pBootInfo, 0);
 
-	//InitFloppyDrive();
-	//SkyConsole::Print("Floppy Disk Init..\n");
+	InitFloppyDrive();
+	SkyConsole::Print("Floppy Disk Init..\n");
 
 	//StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
@@ -90,6 +89,8 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	//DumpSystemInfo(pBootInfo);
 	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
+
+
 
 
 	if (consoleMode == true)
@@ -168,7 +169,7 @@ bool InitMemoryManager(multiboot_info* bootinfo, uint32_t kernelSize)
 
 	uint32_t freeSpaceMemorySize = GetFreeSpaceMemory(bootinfo);
 
-	freeSpaceMemorySize = 4096 * 1024 * 200;
+	//freeSpaceMemorySize = 4096 * 1024 * 200;
 
 	//SkyConsole::Print("KernelSize : %d Bytes\n", kernelSize);
 	SkyConsole::Print("FreeSpace MemorySize From 0x%x: 0x%x Bytes\n", FREE_MEMORY_SPACE_ADDRESS, freeSpaceMemorySize);
@@ -201,15 +202,15 @@ void StartConsoleSystem()
 {
 	//kEnterCriticalSection(&g_criticalSection);
 	
-	Process* pProcess = ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ConsoleSystem", SystemConsoleProc);
+	Process* pProcess = ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL);
 
 	if (pProcess == nullptr)
 		HaltSystem("Console Creation Fail!!");
 
-	ProcessManager::GetInstance()->CreateKernelProcessFromMemory("WatchDog", WatchDogProc);
-	ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ProcessRemover", ProcessRemoverProc);
-	ProcessManager::GetInstance()->CreateProcessFromMemory("SampleLoop", SampleLoop);
-	ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc);
+	//ProcessManager::GetInstance()->CreateKernelProcessFromMemory("WatchDog", WatchDogProc);
+	ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ProcessRemover", ProcessRemoverProc, NULL);
+	//ProcessManager::GetInstance()->CreateProcessFromMemory("SampleLoop", SampleLoop);
+	//ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc);
 	
 
 	SkyConsole::Print("Init Console....\n");

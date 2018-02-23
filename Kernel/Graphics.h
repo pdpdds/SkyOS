@@ -4,7 +4,7 @@
 #include "vesa.h"
 #include "Math.h"
 
-#define PROMPT_FOR_MODE 0
+#define PROMPT_FOR_MODE 1
 
 /* Friggin' frick, this should be a config option
 * because it's 4096 on some instances of Qemu,
@@ -23,4 +23,4 @@ typedef uintptr_t addr_t;
 #define FP_TO_LINEAR(seg, off) ((void*) ((((uint16_t) (seg)) << 4) + ((uint16_t) (off))))
 #define LINEAR_TO_FP(ptr)      (MK_FP(((addr_t) (ptr) - ((addr_t) (ptr) & 0xf)) / 16, ((addr_t)(ptr) & 0xf)))
 
-void graphics_install_vesa(uint16_t resX, uint16_t resY);
+bool graphics_install_vesa(uint16_t resX, uint16_t resY, int bpp);

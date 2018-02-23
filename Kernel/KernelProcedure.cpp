@@ -10,13 +10,13 @@
 #include "SkyAPI.h"
 
 bool systemOn = false;
-void NativeConsole();
+
 
 void NativeConsole()
 {
 	systemOn = true;
 	
-	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
+	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);	
 
 	__asm sti;
 
@@ -54,9 +54,11 @@ void NativeConsole()
 	}
 }
 
+
+
 DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 {	
-
+	
 	while (1) {
 		NativeConsole();
 	}
@@ -125,9 +127,7 @@ DWORD WINAPI WatchDogProc(LPVOID parameter)
 }
 
 DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
-{
-	Process* pProcess = (Process*)parameter;
-	
+{		
 	while (1)
 	{
 		kEnterCriticalSection(&g_criticalSection);

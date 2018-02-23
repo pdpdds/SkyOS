@@ -34,6 +34,8 @@ namespace PhysicalMemoryManager
 	uint32_t GetUsedBlockCount();
 	uint32_t GetFreeBlockCount();
 
+	uint32_t	GetFreeMemory();
+
 	uint32_t GetTotalBlockCount();
 	uint32_t GetBlockSize();
 

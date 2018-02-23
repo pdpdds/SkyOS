@@ -4,7 +4,6 @@
 #include "stdio.h"
 #include "exception.h"
 #include "VirtualMemoryManager.h"
-#include "LowVGA.h"
 #include "sprintf.h"
 
 uint16_t bochs_resolution_x = 0;
@@ -52,8 +51,9 @@ void rect32B(int x, int y, int w, int h, int col, int actualX, int actualY, int 
 	}
 }
 
-void graphics_install_vesa(uint16_t resX, uint16_t resY)
+bool graphics_install_vesa(uint16_t resX, uint16_t resY, int bpp)
 {
+	bool result = false;
 	/* VESA Structs */
 	struct VesaControllerInfo *info = (VesaControllerInfo*)0x10000;
 	struct VesaModeInfo *modeinfo = (VesaModeInfo*)0x9000;
@@ -81,9 +81,10 @@ void graphics_install_vesa(uint16_t resX, uint16_t resY)
 	{
 		SkyConsole::Print("\033[JYou have attempted to use the VESA/VBE2 driver\nwith a card that does not support VBE2.\n");
 		SkyConsole::Print("\nSystem responded to VBE request with version: 0x%x\n", info->Version);
+		
 		char errMsg[256];
 		sprintf(errMsg, "System responded to VBE request with version: 0x%x\n", info->Version);
-		HaltSystem("errMsg");
+		HaltSystem(errMsg);
 	}
 	modes = (uint16_t*)FP_TO_LINEAR(info->Videomodes.Segment, info->Videomodes.Offset);
 
@@ -110,7 +111,7 @@ void graphics_install_vesa(uint16_t resX, uint16_t resY)
 
 	mode = atoi(buf);
 #else
-		if ((abs(modeinfo->Xres - resX) < abs(best_x - resX)) && (abs(modeinfo->Yres - resY) < abs(best_y - resY))) {
+		if ((abs(modeinfo->Xres - resX) < abs(best_x - resX)) && (abs(modeinfo->Yres - resY) < abs(best_y - resY)) && bpp == modeinfo->bpp) {
 			best_mode = i;
 			best_x = modeinfo->Xres;
 			best_y = modeinfo->Yres;
@@ -131,10 +132,12 @@ void graphics_install_vesa(uint16_t resX, uint16_t resY)
 		}
 	}
 
-	if (best_b < 24) {
-		SkyConsole::Print("!!! Rendering at this bit depth (%d) is not currently supported.\n", best_b);
-		HaltSystem("");
-	}
+	/*if (best_b < 24) 
+	{
+		char errMsg[256];
+		sprintf(errMsg, "!!! Rendering at this bit depth (%d) is not currently supported.\n", best_b);		
+		HaltSystem(errMsg);
+	}*/
 
 	mode = best_mode;
 
@@ -177,7 +180,7 @@ void graphics_install_vesa(uint16_t resX, uint16_t resY)
 			if (((uintptr_t *)x)[0] == 0xA5ADFACE) {
 				bochs_vid_memory = (uint8_t *)x;
 
-
+				result = true;
 				goto mem_found;
 			}
 		}
@@ -187,17 +190,17 @@ void graphics_install_vesa(uint16_t resX, uint16_t resY)
 				bochs_vid_memory = (uint8_t *)0xF0000000;
 
 
-				rect32B(0, 0, actual_x, actual_y, 0x00FFFFFF, actual_x, actual_y, actual_b);
-				rect32B(100, 100, 100, 100, 0x00FF0000, actual_x, actual_y, actual_b);
-				rect32B(150, 150, 100, 100, 0x0000FF00, actual_x, actual_y, actual_b);
-				rect32B(200, 200, 100, 100, 0x000000FF, actual_x, actual_y, actual_b);
+				//rect32B(0, 0, actual_x, actual_y, 0x00FFFFFF, actual_x, actual_y, actual_b);
+				//rect32B(100, 100, 100, 100, 0x00FF0000, actual_x, actual_y, actual_b);
+				//rect32B(150, 150, 100, 100, 0x0000FF00, actual_x, actual_y, actual_b);
+				//rect32B(200, 200, 100, 100, 0x000000FF, actual_x, actual_y, actual_b);
 											
 
 				//rect32A(0, 0, 200, 200, 0x80808080);
 				//SkyConsole::GetChar();
-				//SkyConsole::GetChar();
-				//StartLowModeVGA(bochs_vid_memory);
+				//SkyConsole::GetChar();				
 
+				result = true;
 				goto mem_found;
 			}
 		}
@@ -210,6 +213,7 @@ mem_found:
 	*/
 	finalize_graphics(actual_x, actual_y, actual_b);
 
+	return true;
 	//InitGraphics(modeinfo);
 }
 
@@ -218,7 +222,7 @@ mem_found:
 
 void TestV8086()
 {
-	graphics_install_vesa(1024, 768);
+	graphics_install_vesa(1024, 768, 24);
 
 
 

@@ -208,7 +208,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	return pProcess;
 }*/
 
-Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress)
+Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param)
 {	
 	int flags = I86_PTE_PRESENT | I86_PTE_WRITABLE;
 
@@ -227,7 +227,7 @@ Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_S
 
 	VirtualMemoryManager::MapHeap(pPageDirectory);
 
-	Thread* pThread = CreateThread(pProcess, lpStartAddress, this);
+	Thread* pThread = CreateThread(pProcess, lpStartAddress, param);
 
 
 	pProcess->AddThread(pThread);
@@ -387,7 +387,7 @@ bool ProcessManager::AddProcess(Process* pProcess)
 //firstProcess가 true일 경우 커널의 최초 프로세스를 생성한다.
 //이 시점에서만 이전에 커널힙이 생성되었다고 가정한다.
 //이후 프로세스는 여기서 힙을 별도로 생성한다.
-Process* ProcessManager::CreateKernelProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress)
+Process* ProcessManager::CreateKernelProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param)
 {
 	Process* pProcess = new Process();
 	pProcess->m_processId = GetNextProcessId();
@@ -405,7 +405,7 @@ Process* ProcessManager::CreateKernelProcessFromMemory(const char* appName, LPTH
 	pProcess->m_dwProcessType = PROCESS_KERNEL;
 	pProcess->m_dwPriority = 1;
 
-	Thread* pThread = CreateThread(pProcess, lpStartAddress, pProcess);
+	Thread* pThread = CreateThread(pProcess, lpStartAddress, param);
 
 	pProcess->AddThread(pThread);
 

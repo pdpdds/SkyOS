@@ -9,8 +9,9 @@
 #include "KernelProcedure.h"
 #include "Graphics.h"
 #include "SkyAPI.h"
+#include "HariboteGUI.h"
 
-long cmdProcessList(char *theCommand) 
+long cmdProcessList(char *theCommand)
 {
 
 	kEnterCriticalSection(&g_criticalSection);
@@ -71,7 +72,7 @@ long cmdKillTask(char *theCommand)
 	}
 
 	int id = atoi(theCommand);
-	
+
 
 	kEnterCriticalSection(&g_criticalSection);
 
@@ -89,7 +90,7 @@ long cmdKillTask(char *theCommand)
 	return false;
 }
 
-long cmdRead(char *theCommand) 
+long cmdRead(char *theCommand)
 {
 	if (theCommand == NULL || strlen(theCommand) == 0)
 	{
@@ -124,7 +125,7 @@ long cmdRead(char *theCommand)
 		volReadFile(&file, buf, 512);
 
 		//! display file
-		for (int i = 0; i<512; i++)
+		for (int i = 0; i < 512; i++)
 			SkyConsole::WriteChar(buf[i]);
 
 		//! wait for input to continue if not EOF
@@ -163,18 +164,18 @@ long cmdTesttask(char* pName)
 {
 	kEnterCriticalSection(&g_criticalSection);
 
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc);
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc, NULL);
 
 	if (pProcess == 0)
 	{
 		SkyConsole::Print("Can't Execute Process. %d\n", pName);
-	}	
-		
+	}
+
 
 	kLeaveCriticalSection(&g_criticalSection);
 
 	return false;
-}	
+}
 
 
 extern void Beep();
@@ -188,10 +189,138 @@ long cmdBeep(char* pName)
 }
 
 extern void TestV8086();
+extern uint8_t * bochs_vid_memory;
+
+
+char hankaku[4096];
+
+bool LoadFont(char* fontName)
+{
+	FILE file = volOpenFile(fontName);
+	memset(hankaku, 0, 4096);
+
+	//! test for invalid file
+	if (file.flags == FS_INVALID) {
+
+		SkyConsole::Print("Unable to open (%s) file\n", fontName);
+		return false;
+	}
+
+	//! cant display directories
+	if ((file.flags & FS_DIRECTORY) == FS_DIRECTORY) {
+
+		SkyConsole::Print("Unable to display contents of directory.\n");
+		return false;
+	}
+
+	unsigned char* buffer = (unsigned char*)hankaku;
+	int bufferIndex = 0;
+	int charIndex = 0;
+
+	memset(buffer, 0, 4096);
+
+	while (file.eof != 1) {
+
+		char buf[512];
+		volReadFile(&file, (unsigned char*)buf, 512);
+
+		for (int i = 0; i < 512; i++)
+		{
+			if (buf[i] == '*')
+			{
+
+				if (charIndex < 8)
+				{
+					char a = (char)(1 << (8 - 1 - charIndex));
+					buffer[bufferIndex] |= a;
+				}
+				
+
+
+			}
+
+			if ((buf[i] == '*') || (buf[i] == '.'))
+			{
+				charIndex++;
+
+				if (charIndex >= 8)
+				{
+					bufferIndex++;
+					charIndex = 0;					
+				}
+			}
+		}
+
+		if (bufferIndex > 2000)
+			break;
+
+	}
+
+	return true;
+}
+
+#include "FontData.h"
+bool LoadFontFromMemory()
+{	
+	unsigned char* buffer = (unsigned char*)hankaku;
+	int bufferIndex = 0;
+	int charIndex = 0;
+
+	memset(buffer, 0, 4096);
+
+	int readIndex = 0;
+
+	while (readIndex < 32768) {
+
+		
+		for (int i = 0; i < 512; i++)
+		{
+			if (fontData[readIndex + i] == '*')
+			{
+
+				if (charIndex < 8)
+				{
+					char a = (char)(1 << (8 - 1 - charIndex));
+					buffer[bufferIndex] |= a;
+				}
+
+
+
+			}
+
+			if ((fontData[readIndex + i] == '*') || (fontData[readIndex + i] == '.'))
+			{
+				charIndex++;
+
+				if (charIndex >= 8)
+				{
+					bufferIndex++;
+					charIndex = 0;
+				}
+			}
+		}
+
+		readIndex += 512;
+
+	}
+
+	return true;
+}
 
 long cmdGUI(char *theCommand)
 {
-	graphics_install_vesa(1024,768);
-	
+	bool result = graphics_install_vesa(1024, 768, 8);
+
+	if (result == true)
+	{
+		//LoadFont("hankaku.txt");
+		LoadFontFromMemory();
+
+		HariboteGUI* pGUIManager = new HariboteGUI();
+		//pGUIManager->TestRun(bochs_vid_memory);
+		pGUIManager->Init((char*)bochs_vid_memory, 1024, 768);
+		pGUIManager->Run();
+	}
+
 	return false;
 }
