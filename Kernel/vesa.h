@@ -3,7 +3,7 @@
 #include "multiboot.h"
 
 
-
+#pragma pack(push,1)
 typedef struct {
 	uint16_t	Offset;
 	uint16_t	Segment;
@@ -17,6 +17,7 @@ struct VesaControllerInfo {
 	t_farptr	Videomodes;	// isa vbeParPtr
 	uint16_t	TotalMemory;// as # of 64KB blocks
 };
+
 
 struct VesaModeInfo {
 	uint16_t	attributes;
@@ -42,6 +43,7 @@ struct VesaModeInfo {
 	uint32_t	reserved1;
 	uint16_t	reserved2;
 };
+#pragma pack(pop)
 
 #ifdef __cplusplus
 extern "C" {

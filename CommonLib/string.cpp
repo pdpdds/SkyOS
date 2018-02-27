@@ -45,6 +45,25 @@ int strncasecmp(const char *s1, const char *s2, size_t n)
 	return ToLower(*(unsigned char *)s1) - ToLower(*(unsigned char *)s2);
 }
 
+char *strcat(char *dest, const char *src)
+
+{
+
+	size_t i, j;
+
+	for (i = 0; dest[i] != '\0'; i++)
+
+		;
+
+	for (j = 0; src[j] != '\0'; j++)
+
+		dest[i + j] = src[j];
+
+	dest[i + j] = '\0';
+
+	return dest;
+
+}
 
 
 char *strupr(char *str)
@@ -267,7 +286,7 @@ int strnicmp(const char * String1, const char * String2, unsigned int Len)
 	return 0;
 }
 
-const char *StrRChr(const char * String, char const Character)
+const char *strrchr(const char * String, char const Character)
 {
 	UINT32 Len = strlen(String), i;
 	for (i = Len; i>0; i--)

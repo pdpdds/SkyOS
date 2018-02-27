@@ -1,6 +1,9 @@
 #pragma once
 
-#include "./v8086/rme.h"
+//extern "C"
+//{
+	#include "./v8086/rme.h"
+//}
 #include "vesa.h"
 #include "Math.h"
 

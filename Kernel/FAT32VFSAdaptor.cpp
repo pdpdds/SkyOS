@@ -16,13 +16,13 @@ FILE fsysFat32Directory(const char* DirectoryName) {
 */
 void fsysFat32Read(PFILE file, unsigned char* Buffer, unsigned int Length) {
 
-	int readLen = 0;
+	/*int readLen = 0;
 	if (file) {
 		readLen = FATReadFile((UINT16)file->id, Length, Buffer);
 
 		if (readLen != (int)Length)
 			file->eof = 1;
-	}
+	}*/
 }
 
 /**
@@ -30,8 +30,8 @@ void fsysFat32Read(PFILE file, unsigned char* Buffer, unsigned int Length) {
 */
 void fsysFat32Close(PFILE file) {
 
-	if (file->flags == FS_FILE && file->id != 0)
-		FATIsEndOfFile((UINT16)file->id);
+	//if (file->flags == FS_FILE && file->id != 0)
+		//FATIsEndOfFile((UINT16)file->id);
 }
 
 
@@ -40,8 +40,8 @@ void fsysFat32Close(PFILE file) {
 */
 FILE fsysFat32Open(const char* FileName) {
 
-	FILE ret;
-	UINT16 handle = FATFileOpen((char*)FileName, 0);
+	FILE ret ;
+	/*UINT16 handle = FATFileOpen((char*)FileName, 0);
 
 	if (handle == 0)
 		ret.flags = FS_INVALID;
@@ -49,7 +49,7 @@ FILE fsysFat32Open(const char* FileName) {
 	{
 		ret.flags = FS_FILE;
 		ret.id = handle;
-	}
+	}*/
 
 	return ret;
 }

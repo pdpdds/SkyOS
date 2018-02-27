@@ -13,6 +13,16 @@ void OutPortWord(ushort port, ushort value)
 	_outpw(port, value);
 }
 
+void OutPortDWord(ushort port, unsigned int value)
+{
+	_outpd(port, value);
+}
+
+long InPortDWord(unsigned int port)
+{
+	return _inpd(port);
+}
+
 uchar InPortByte(ushort port)
 {
 #ifdef _MSC_VER

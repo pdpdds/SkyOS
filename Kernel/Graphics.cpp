@@ -51,6 +51,8 @@ void rect32B(int x, int y, int w, int h, int col, int actualX, int actualY, int 
 	}
 }
 
+uint8_t lowCache[RME_BLOCK_SIZE];
+extern char lowCacheBuffer[4096];
 bool graphics_install_vesa(uint16_t resX, uint16_t resY, int bpp)
 {
 	bool result = false;
@@ -60,23 +62,35 @@ bool graphics_install_vesa(uint16_t resX, uint16_t resY, int bpp)
 
 	/* 8086 Emulator Status */
 	tRME_State *emu;
-	void * lowCache;
-	lowCache = (void *)new BYTE[RME_BLOCK_SIZE];
-	memcpy(lowCache, NULL, RME_BLOCK_SIZE);
+	
+	uint16_t *zeroptr = (uint16_t*)0;
+	//uint16_t* lowCache = (uint16_t*)new BYTE[RME_BLOCK_SIZE];
+	//memcpy(lowCache, 0, RME_BLOCK_SIZE);
+	memcpy(lowCache, lowCacheBuffer, RME_BLOCK_SIZE);
 	emu = RME_CreateState();
 	emu->Memory[0] = (uint8_t*)lowCache;
-	for (int i = RME_BLOCK_SIZE; i < 0x100000; i += RME_BLOCK_SIZE) {
-		emu->Memory[i / RME_BLOCK_SIZE] = (uint8_t*)i;
-	}
+
+	for (int i = 1; i < 0x100000 / RME_BLOCK_SIZE; i++)
+		emu->Memory[i] = (uint8_t*)(i*RME_BLOCK_SIZE);
 	int ret, mode;
 
 	/* Find modes */
 	uint16_t * modes;
+	memset(info, 0, sizeof(VesaControllerInfo));
 	memcpy(info->Signature, "VBE2", 4);
 	emu->AX.W = 0x4F00;
 	emu->ES = 0x1000;
 	emu->DI.W = 0;
 	ret = RME_CallInt(emu, 0x10);
+
+	if (emu->AX.W != 0x004f)
+	{
+		char errMsg[256];
+		sprintf(errMsg, "asdasds 0x%x\n", ret);
+		HaltSystem(errMsg);
+	}
+
+
 	if (info->Version < 0x200 || info->Version > 0x300)
 	{
 		SkyConsole::Print("\033[JYou have attempted to use the VESA/VBE2 driver\nwith a card that does not support VBE2.\n");

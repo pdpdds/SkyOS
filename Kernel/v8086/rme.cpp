@@ -15,8 +15,10 @@
 
 #define outb OutPortByte
 #define outw OutPortWord
+#define outd OutPortDWord
 #define inb  InPortByte
 #define inw  InPortWord
+#define ind InPortDWord
 
 typedef uint8_t  Uint8;
 typedef uint16_t Uint16;
@@ -35,10 +37,10 @@ typedef int32_t  intptr_t;
 #define	printf	printf	// Formatted print function
 #define	outB(state,port,val)	(outb(port,val),0)	// Write 1 byte to an IO Port
 #define	outW(state,port,val)	(outw(port,val),0)	// Write 2 bytes to an IO Port
-//#define	outD(state,port,val)	(outl(port,val),0)	// Write 4 bytes to an IO Port
+#define	outD(state,port,val)	(outd(port,val),0)	// Write 4 bytes to an IO Port
 #define	inB(state,port,dst)	(*(dst)=inb((port)),0)	// Read 1 byte from an IO Port
 #define	inW(state,port,dst)	(*(dst)=inw((port)),0)	// Read 2 bytes from an IO Port
-//#define	inD(state,port,dst)	(*(dst)=inl((port)),0)	// Read 4 bytes from an IO Port
+#define	inD(state,port,dst)	(*(dst)=ind((port)),0)	// Read 4 bytes from an IO Port
 
 // -- Per Compiler macros
 #if defined(__GNUC__) && (__GNUC__ >= 4)
@@ -97,7 +99,7 @@ typedef int32_t  intptr_t;
 # define DEBUG_S(...)
 #endif
 #if ERR_OUTPUT
-# define ERROR_S(...)	SkyConsole::Print(__VA_ARGS__)
+# define ERROR_S(...)	SkyConsole::Print(__VA_ARGS__); for(;;);
 #else
 # define ERROR_S(...)
 #endif
@@ -240,6 +242,7 @@ static const char *casLogicOps[] = {"ROL", "ROR", "RCL", "RCR", "SHL", "SHR", "L
 /**
  * \brief Creates a blank RME State
  */
+
 tRME_State *RME_CreateState(void)
 {
 	tRME_State	*state = new tRME_State;
@@ -284,7 +287,7 @@ void RME_DumpRegs(tRME_State *State)
  */
 int RME_CallInt(tRME_State *State, int Num)
 {
-	 int	ret;
+	 int	ret = -1;
 	DEBUG_S("RM_Int: Calling Int 0x%x\n", Num);
 
 	if(Num < 0 || Num > 0xFF) {
@@ -296,6 +299,8 @@ int RME_CallInt(tRME_State *State, int Num)
 	if(ret)	return ret;
 	ret = RME_Int_Read16(State, 0, Num*4+2, &State->CS);
 	if(ret)	return ret;
+
+	
 
 	PUSH(State->Flags);
 	PUSH(RME_MAGIC_CS);

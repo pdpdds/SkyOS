@@ -1,22 +1,16 @@
 #pragma once
-
 #include "windef.h"
-#include "Partition.h"
-#include "GFS.H"
 
 #define FAT_DPF_SIZE 40
 
 //---------------------------STRUCTURES DEFINED HERE---------------------------
 
-#ifdef _MSC_VER
-#pragma pack (push, 1)
-#endif
 /* Starting of a Boot Sector Size=11*/
 struct BootSectorStart
 {
     BYTE bJumpInstruction[3];    /* 1-0xEB or 0xE9 2-anything 3-anything */
     BYTE bOEMName[8];             /* OEMName IBM3.0, MSWin4.1 or MSDos5.0 */
-};
+}__attribute__ ((packed));
 /* BIOS Parameter Block definition 
 Size of this structure is 25 */
 struct BPB
@@ -33,7 +27,7 @@ struct BPB
     UINT16  wNumberOfHeads;     /* Number of heads used by INT 13*/
     UINT32  dwHiddenSectors;    /* For partitioned media it is setted */
     UINT32  dwTotalSectors32;   /* Number of sectors if TotalSectors16 == 0 */
-};
+}__attribute__ ((packed));
 /*  FAT 12 or FAT 16 file system 
 Size of this struture is 26 */
 struct FAT12_16
@@ -44,7 +38,7 @@ struct FAT12_16
     UINT32  dwVolumeID;         /* Volume serial number */
     BYTE    bVolumeLabel[11];   /* Volume label */
     BYTE    bFileSystem[8];     /* File system type - FAT12 , FAT16  */
-};
+}__attribute__ ((packed));
 
 /* FAT 32 file system 
 Size of this struture is 52 */
@@ -63,7 +57,7 @@ struct FAT32
     UINT32 dwVolumeID;          /* Volume serial number */
     BYTE   bVolumeLabel[11];    /* Volume label */
     BYTE   bFileSystem[8];      /* File system FAT32 */
-};
+}__attribute__ ((packed));
 
 /* Total of this structure is 32 byte */
 struct DirEntry
@@ -81,14 +75,9 @@ struct DirEntry
     UINT16 wAccessDate;         /* Last Accessed Time - This field is used by Dos*/
     UINT16 wFirstClusterLow;    /* Low word of first cluster number */
     UINT32 dwFileSize;          /* Size of file must be zero for Directory */
-};
-
-typedef DirEntry DIRENTRY;
+}__attribute__ ((packed));
+typedef struct DirEntry DIRENTRY;
 typedef DIRENTRY * LPDIRENTRY;
-
-#ifdef _MSC_VER
-#pragma pack (pop)
-#endif
 
 struct __FATInfo
 {
@@ -103,13 +92,13 @@ struct __FATInfo
     UINT32 dwTotRootDirSectors;
     UINT32 dwDataSectors;
     UINT32 dwCountOfClusters;
-};
+}__attribute__ ((packed));
 
 struct _FAT
 {
     BYTE szDevicePath[FAT_DPF_SIZE];
-    struct _Partition Part;
-    struct __FATInfo FDI;
+    struct _Partition Part __attribute__ ((packed));
+    struct __FATInfo FDI __attribute__ ((packed));
 };
 typedef struct _FAT FAT;
 typedef FAT * LPFAT;
@@ -203,3 +192,4 @@ UINT32 WriteGSHDevice(const char * szDevicePath, DWORD dwLBASector, DWORD dwSect
 BYTE ValidateDEInfo(LPDIRENTRY DEInfo);
 int FAT_Init();
 void CheckAndInstallFAT(LPCTSTR szDevicePath, LPPARTITION lpPart);
+#endif

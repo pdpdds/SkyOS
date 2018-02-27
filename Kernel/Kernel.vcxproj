@@ -59,7 +59,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>../CommonLib;./;../Include;./.;./v8086;</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
       </StringPooling>
@@ -71,7 +71,7 @@
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat />
       <CallingConvention>Cdecl</CallingConvention>
-      <DisableSpecificWarnings>4457;4189;4100;4702;4102</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4457;4189;4100;4702;4102;4244</DisableSpecificWarnings>
       <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <ProjectReference>
@@ -85,7 +85,7 @@
       <AdditionalDependencies>CommonLib.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)kernel.sys</OutputFile>
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>../Debug/kernel.map</MapFileName>
       <SubSystem>Console</SubSystem>
@@ -116,13 +116,18 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ACEList.cpp" />
     <ClCompile Include="Beep.cpp" />
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="fifo.cpp" />
+    <ClCompile Include="GFS.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="GSH.cpp" />
+    <ClCompile Include="Harddisk.cpp" />
     <ClCompile Include="HariboteGUI.cpp" />
     <ClCompile Include="KeyboardController.cpp" />
     <ClCompile Include="mouse.cpp" />
+    <ClCompile Include="ObjMan.cpp" />
     <ClCompile Include="RAMDisk.cpp" />
     <ClCompile Include="sheet.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
@@ -134,13 +139,12 @@
     <ClCompile Include="FAT32VFSAdaptor.cpp" />
     <ClCompile Include="FloppyDisk.cpp" />
     <ClCompile Include="SkyTest.cpp" />
-    <ClCompile Include="v8086\rme.cpp">
-      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4457;4189;4100;4702;4102;4244</DisableSpecificWarnings>
-    </ClCompile>
+    <ClCompile Include="SysInfo.cpp" />
+    <ClCompile Include="Util.cpp" />
+    <ClCompile Include="v8086\rme.cpp" />
     <ClCompile Include="VFS.cpp" />
     <ClCompile Include="GDT.cpp" />
     <ClCompile Include="Hal.cpp" />
-    <ClCompile Include="HardDisk.cpp" />
     <ClCompile Include="IDT.cpp">
       <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</RuntimeTypeInfo>
     </ClCompile>
@@ -173,6 +177,7 @@
     <ClCompile Include="ZetPlane.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ACEList.h" />
     <ClInclude Include="Beep.h" />
     <ClInclude Include="Collect.h" />
     <ClInclude Include="commandMacros.h" />
@@ -181,10 +186,14 @@
     <ClInclude Include="fifo.h" />
     <ClInclude Include="FloppyDiskIO.h" />
     <ClInclude Include="FontData.h" />
+    <ClInclude Include="GFS.H" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GSH.H" />
+    <ClInclude Include="HardDisk.h" />
     <ClInclude Include="HariboteGUI.h" />
     <ClInclude Include="KeyboardController.h" />
     <ClInclude Include="mouse.h" />
+    <ClInclude Include="ObjMan.h" />
     <ClInclude Include="RAMDisk.h" />
     <ClInclude Include="sheet.h" />
     <ClInclude Include="SkyConsole.h" />
@@ -196,12 +205,14 @@
     <ClInclude Include="FAT32VFSAdaptor.h" />
     <ClInclude Include="FloppyDisk.h" />
     <ClInclude Include="SkyTest.h" />
+    <ClInclude Include="SysError.h" />
+    <ClInclude Include="SysInfo.h" />
     <ClInclude Include="TestInteger.h" />
+    <ClInclude Include="Util.h" />
     <ClInclude Include="v8086\rme.h" />
     <ClInclude Include="VFS.h" />
     <ClInclude Include="GDT.h" />
     <ClInclude Include="Hal.h" />
-    <ClInclude Include="HardDisk.h" />
     <ClInclude Include="IDT.h" />
     <ClInclude Include="PEImage.h" />
     <ClInclude Include="InitKernel.h" />

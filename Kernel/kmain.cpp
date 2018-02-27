@@ -1,6 +1,7 @@
 ﻿#include "kmain.h"
 #include "stdio.h"
 #include "FAT32VFSAdaptor.h"
+#include "HardDisk.h"
 
 extern bool systemOn;
 void HardwareInitiize();
@@ -39,6 +40,18 @@ _declspec(naked) void multiboot_entry(void)
 	}
 }
 
+void PrintDriveMappingInfo()
+{
+	int bTotalDrives = GetTotalDrives();
+	int i;
+	for (i = 0; i<bTotalDrives; i++)
+	{
+		SkyConsole::Print("%c: (%s) [%s]\n", 'A' + i, sysDevicePathLookupTable[i].szDevicePath, GetPartititionTypeString(PART_TYPE(&sysDevicePathLookupTable[i].Part)));
+	}
+}
+
+char lowCacheBuffer[4096];
+
 void kmain(unsigned long magic, unsigned long addr)
 {
 	bool consoleMode = true;
@@ -67,8 +80,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
 	InitMemoryManager(pBootInfo, 0);
 
-	InitFloppyDrive();
-	SkyConsole::Print("Floppy Disk Init..\n");
+	//InitFloppyDrive();
+	//SkyConsole::Print("Floppy Disk Init..\n");
 
 	//StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
@@ -86,6 +99,65 @@ void kmain(unsigned long magic, unsigned long addr)
 	{
 		SkyConsole::Print("Harddisk not detected..\n");
 	}*/
+
+	HardDisk_Initialize();
+	
+	FillDevicePathLookupTable();	
+	PrintDriveMappingInfo();
+
+	GFS_Init();
+	FAT_Init();
+
+	SkyConsole::Print(" %d device(s) found\n", HDD_GetNoOfDevices());
+	//GFS_DeleteFile("C:\\Test.bat");
+
+	/*if (HDD_GetNoOfDevices())
+	{
+		HANDLE hFile = NULL;
+		hFile = GFS_CreateFile("C:\MENU.LST", GENERIC_READ, 0, OPEN_EXISTING, 0);
+		
+		if (hFile == NULL)
+		{
+			SkyConsole::Print("Open file failed : %s\n", "menu.lst");
+		}
+		else
+		{
+			char buffer[1000];
+			int c = GFS_ReadFile(hFile, 1000, buffer);
+
+			while (c != 0)
+			{
+				if (c)
+				{
+					int i;
+					for (i = 0; i<c; i++)
+						SkyConsole::Print("%c", buffer[i]);
+				}
+				c = GFS_ReadFile(hFile, 1000, buffer);
+			}
+		}
+		//PrintHDDInfo();
+	}*/
+
+	if (HDD_GetNoOfDevices())
+	{
+		HANDLE hFile = NULL;
+		hFile = GFS_CreateFile("C:\BIOS.BIN", GENERIC_READ, 0, OPEN_EXISTING, 0);
+
+		if (hFile == NULL)
+		{
+			SkyConsole::Print("Open file failed : %s\n", "menu.lst");
+		}
+		else
+		{
+			char buffer[4096];
+			int c = GFS_ReadFile(hFile, 1000, lowCacheBuffer);
+
+			
+		}
+		//PrintHDDInfo();
+	}
+		
 
 	//DumpSystemInfo(pBootInfo);
 	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);

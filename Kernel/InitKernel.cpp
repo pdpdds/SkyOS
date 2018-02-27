@@ -22,7 +22,7 @@ bool InitKeyboard()
 
 	return true;
 }
-
+/*
 HardDiskHandler* __SysHDDHandler;
 
 void PrintHDDInfo()
@@ -53,11 +53,11 @@ void PrintHDDInfo()
 		}
 		Key[1]++;
 	}
-}
+}*/
 
 void TestHardDrive()
 {
-	
+	/*
 	UINT16 handle = FATFileOpen("C:\MENU.LST", 0);
 
 	if (handle != 0)
@@ -70,12 +70,12 @@ void TestHardDrive()
 		SkyConsole::Print("%s\n", buffer);
 
 		delete buffer;
-	}
+	}*/
 }
 
 bool InitHardDrive()
 {
-	__SysHDDHandler = new HardDiskHandler();
+	/*__SysHDDHandler = new HardDiskHandler();
 	__SysHDDHandler->Initialize();
 
 	
@@ -84,7 +84,7 @@ bool InitHardDrive()
 	PrintHDDInfo();
 	
 	if(__SysHDDHandler->GetTotalDevices() == 0)
-		return false;
+		return false;*/
 
 	return true;
 }

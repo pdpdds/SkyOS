@@ -1,184 +1,187 @@
 #pragma once
 
-struct ListNode {
-public:
-	inline ListNode();
-	virtual ~ListNode() {}
-	inline void RemoveFromList();
-
-	LPVOID _data;
-private:
-	ListNode *fNext;
-	ListNode *fPrev;
-	friend class DoubleLinkedList;
-	friend class SkyQueue;
-};
-
-class DoubleLinkedList 
+namespace SKY
 {
-public:
-	inline DoubleLinkedList();
-	inline ListNode* AddToTail(ListNode*);
-	inline ListNode* AddToHead(ListNode*);
-	inline ListNode* AddBefore(ListNode *next, ListNode *newEntry);
-	inline ListNode* AddAfter(ListNode *prev, ListNode *newEntry);
-	inline ListNode* Remove(ListNode*);
-	inline ListNode* Remove(void*);
-	inline void		 Clear();
-	inline ListNode* GetHead() const;
-	inline ListNode* GetTail() const;
-	inline ListNode* GetNext(const ListNode*) const;
-	inline ListNode* GetPrevious(const ListNode*) const;
-	inline bool IsEmpty() const;
-	inline int CountItems() const;
+	struct ListNode {
+	public:
+		inline ListNode();
+		virtual ~ListNode() {}
+		inline void RemoveFromList();
 
-protected:
+		LPVOID _data;
+	private:
+		ListNode * fNext;
+		ListNode *fPrev;
+		friend class DoubleLinkedList;
+		friend class SkyQueue;
+	};
 
-	// The nodes are stored in a doubly-linked circular list
-	// of entries, with this dummy node as the head.
-	ListNode fDummyHead;
-
-};
-
-inline ListNode::ListNode()
-	: fNext(0),
-	fPrev(0),
-	_data(0)
-{
-
-}
-
-inline void ListNode::RemoveFromList()
-{
-	fPrev->fNext = fNext;
-	fNext->fPrev = fPrev;
-	fNext = 0;
-	fPrev = 0;
-}
-
-inline DoubleLinkedList::DoubleLinkedList()
-{
-	fDummyHead.fNext = &fDummyHead;
-	fDummyHead.fPrev = &fDummyHead;
-	fDummyHead._data = 0;
-}
-
-inline ListNode* DoubleLinkedList::AddToTail(ListNode *node)
-{	
-	node->fNext = &fDummyHead;
-	node->fPrev = fDummyHead.fPrev;
-	node->fNext->fPrev = node;
-	node->fPrev->fNext = node;
-	return node;
-}
-
-inline ListNode* DoubleLinkedList::AddToHead(ListNode *node)
-{	
-	node->fPrev = &fDummyHead;
-	node->fNext = fDummyHead.fNext;
-	node->fNext->fPrev = node;
-	node->fPrev->fNext = node;
-	return node;
-}
-
-inline ListNode* DoubleLinkedList::Remove(ListNode *node)
-{
-	node->RemoveFromList();
-	return node;
-}
-
-inline ListNode* DoubleLinkedList::Remove(void* data)
-{
-	for (ListNode *node = fDummyHead.fNext; node != &fDummyHead; node = node->fNext)
+	class DoubleLinkedList
 	{
-		if (data == node->_data)
+	public:
+		inline DoubleLinkedList();
+		inline ListNode* AddToTail(ListNode*);
+		inline ListNode* AddToHead(ListNode*);
+		inline ListNode* AddBefore(ListNode *next, ListNode *newEntry);
+		inline ListNode* AddAfter(ListNode *prev, ListNode *newEntry);
+		inline ListNode* Remove(ListNode*);
+		inline ListNode* Remove(void*);
+		inline void		 Clear();
+		inline ListNode* GetHead() const;
+		inline ListNode* GetTail() const;
+		inline ListNode* GetNext(const ListNode*) const;
+		inline ListNode* GetPrevious(const ListNode*) const;
+		inline bool IsEmpty() const;
+		inline int CountItems() const;
+
+	protected:
+
+		// The nodes are stored in a doubly-linked circular list
+		// of entries, with this dummy node as the head.
+		ListNode fDummyHead;
+
+	};
+
+	inline ListNode::ListNode()
+		: fNext(0),
+		fPrev(0),
+		_data(0)
+	{
+
+	}
+
+	inline void ListNode::RemoveFromList()
+	{
+		fPrev->fNext = fNext;
+		fNext->fPrev = fPrev;
+		fNext = 0;
+		fPrev = 0;
+	}
+
+	inline DoubleLinkedList::DoubleLinkedList()
+	{
+		fDummyHead.fNext = &fDummyHead;
+		fDummyHead.fPrev = &fDummyHead;
+		fDummyHead._data = 0;
+	}
+
+	inline ListNode* DoubleLinkedList::AddToTail(ListNode *node)
+	{
+		node->fNext = &fDummyHead;
+		node->fPrev = fDummyHead.fPrev;
+		node->fNext->fPrev = node;
+		node->fPrev->fNext = node;
+		return node;
+	}
+
+	inline ListNode* DoubleLinkedList::AddToHead(ListNode *node)
+	{
+		node->fPrev = &fDummyHead;
+		node->fNext = fDummyHead.fNext;
+		node->fNext->fPrev = node;
+		node->fPrev->fNext = node;
+		return node;
+	}
+
+	inline ListNode* DoubleLinkedList::Remove(ListNode *node)
+	{
+		node->RemoveFromList();
+		return node;
+	}
+
+	inline ListNode* DoubleLinkedList::Remove(void* data)
+	{
+		for (ListNode *node = fDummyHead.fNext; node != &fDummyHead; node = node->fNext)
 		{
-			node->RemoveFromList();
-			return node;
+			if (data == node->_data)
+			{
+				node->RemoveFromList();
+				return node;
+			}
+		}
+
+		return NULL;
+	}
+
+	inline void DoubleLinkedList::Clear()
+	{
+		ListNode* node = fDummyHead.fNext;
+
+		if (node == &fDummyHead)
+			return;
+
+		ListNode* tempNode = node;
+		while (tempNode != nullptr)
+		{
+			node = tempNode;
+			tempNode = node->fNext;
+			delete node;
 		}
 	}
 
-	return NULL;
-}
-
-inline void DoubleLinkedList::Clear()
-{
-	ListNode* node = fDummyHead.fNext;
-
-	if (node == &fDummyHead)
-		return;
-
-	ListNode* tempNode = node;
-	while (tempNode != nullptr)
+	inline ListNode* DoubleLinkedList::GetHead() const
 	{
-		node = tempNode;
-		tempNode = node->fNext;
-		delete node;
+		if (fDummyHead.fNext == &fDummyHead)
+			return 0;
+
+		return fDummyHead.fNext;
 	}
-}
 
-inline ListNode* DoubleLinkedList::GetHead() const
-{
-	if (fDummyHead.fNext == &fDummyHead)
-		return 0;
+	inline ListNode* DoubleLinkedList::GetTail() const
+	{
+		if (fDummyHead.fPrev == &fDummyHead)
+			return 0;
 
-	return fDummyHead.fNext;
-}
+		return fDummyHead.fPrev;
+	}
 
-inline ListNode* DoubleLinkedList::GetTail() const
-{
-	if (fDummyHead.fPrev == &fDummyHead)
-		return 0;
+	inline ListNode* DoubleLinkedList::GetNext(const ListNode *node) const
+	{
+		if (node->fNext == &fDummyHead)
+			return 0;
 
-	return fDummyHead.fPrev;
-}
+		return node->fNext;
+	}
 
-inline ListNode* DoubleLinkedList::GetNext(const ListNode *node) const
-{
-	if (node->fNext == &fDummyHead)
-		return 0;
+	inline ListNode* DoubleLinkedList::GetPrevious(const ListNode *node) const
+	{
+		if (node->fPrev == &fDummyHead)
+			return 0;
 
-	return node->fNext;
-}
+		return node->fPrev;
+	}
 
-inline ListNode* DoubleLinkedList::GetPrevious(const ListNode *node) const
-{
-	if (node->fPrev == &fDummyHead)
-		return 0;
+	inline ListNode* DoubleLinkedList::AddBefore(ListNode *nextEntry, ListNode *newEntry)
+	{
+		newEntry->fNext = nextEntry;
+		newEntry->fPrev = nextEntry->fPrev;
+		newEntry->fPrev->fNext = newEntry;
+		newEntry->fNext->fPrev = newEntry;
 
-	return node->fPrev;
-}
+		return newEntry;
+	}
 
-inline ListNode* DoubleLinkedList::AddBefore(ListNode *nextEntry, ListNode *newEntry)
-{	
-	newEntry->fNext = nextEntry;
-	newEntry->fPrev = nextEntry->fPrev;
-	newEntry->fPrev->fNext = newEntry;
-	newEntry->fNext->fPrev = newEntry;
+	inline ListNode* DoubleLinkedList::AddAfter(ListNode *previousEntry, ListNode *newEntry)
+	{
+		newEntry->fNext = previousEntry->fNext;
+		newEntry->fPrev = previousEntry;
+		newEntry->fPrev->fNext = newEntry;
+		newEntry->fNext->fPrev = newEntry;
 
-	return newEntry;
-}
+		return newEntry;
+	}
 
-inline ListNode* DoubleLinkedList::AddAfter(ListNode *previousEntry, ListNode *newEntry)
-{
-	newEntry->fNext = previousEntry->fNext;
-	newEntry->fPrev = previousEntry;
-	newEntry->fPrev->fNext = newEntry;
-	newEntry->fNext->fPrev = newEntry;
+	inline bool DoubleLinkedList::IsEmpty() const
+	{
+		return fDummyHead.fNext == &fDummyHead;
+	}
 
-	return newEntry;
-}
+	inline int DoubleLinkedList::CountItems() const
+	{
+		int count = 0;
+		for (ListNode *node = fDummyHead.fNext; node != &fDummyHead; node = node->fNext)
+			count++;
 
-inline bool DoubleLinkedList::IsEmpty() const
-{
-	return fDummyHead.fNext == &fDummyHead;
-}
-
-inline int DoubleLinkedList::CountItems() const
-{
-	int count = 0;
-	for (ListNode *node = fDummyHead.fNext; node != &fDummyHead; node = node->fNext)
-		count++;
-
-	return count;
-}
+		return count;
+	}
+};

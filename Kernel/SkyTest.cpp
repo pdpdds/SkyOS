@@ -15,6 +15,8 @@
 #include "stl\stl_string.h"
 #include "stl\deque.h"
 
+using namespace SKY;
+
 #define kprintf SkyConsole::Print
 
 static const char *JSON_STRING =

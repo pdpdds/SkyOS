@@ -4,6 +4,8 @@
 #include "kheap.h"
 #include "DoubleLinkedList.h"
 
+using namespace SKY;
+
 class Thread;
 
 extern void HaltSystem(const char* errMsg);

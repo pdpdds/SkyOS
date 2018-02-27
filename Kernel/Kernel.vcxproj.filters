@@ -102,9 +102,6 @@
     <ClCompile Include="Partition.cpp">
       <Filter>Device</Filter>
     </ClCompile>
-    <ClCompile Include="HardDisk.cpp">
-      <Filter>Device</Filter>
-    </ClCompile>
     <ClCompile Include="FAT32.cpp">
       <Filter>Device</Filter>
     </ClCompile>
@@ -174,9 +171,6 @@
     <ClCompile Include="Graphics.cpp">
       <Filter>Video</Filter>
     </ClCompile>
-    <ClCompile Include="v8086\rme.cpp">
-      <Filter>v8086</Filter>
-    </ClCompile>
     <ClCompile Include="KeyboardController.cpp">
       <Filter>Device</Filter>
     </ClCompile>
@@ -185,6 +179,30 @@
     <ClCompile Include="sheet.cpp" />
     <ClCompile Include="mouse.cpp" />
     <ClCompile Include="fifo.cpp" />
+    <ClCompile Include="v8086\rme.cpp">
+      <Filter>v8086</Filter>
+    </ClCompile>
+    <ClCompile Include="Harddisk.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="GSH.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="ACEList.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="GFS.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjMan.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="SysInfo.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h">
@@ -251,9 +269,6 @@
       <Filter>Device</Filter>
     </ClInclude>
     <ClInclude Include="Partition.h">
-      <Filter>Device</Filter>
-    </ClInclude>
-    <ClInclude Include="HardDisk.h">
       <Filter>Device</Filter>
     </ClInclude>
     <ClInclude Include="FAT32.h">
@@ -349,9 +364,6 @@
     <ClInclude Include="Graphics.h">
       <Filter>Video</Filter>
     </ClInclude>
-    <ClInclude Include="v8086\rme.h">
-      <Filter>v8086</Filter>
-    </ClInclude>
     <ClInclude Include="KeyboardController.h">
       <Filter>Device</Filter>
     </ClInclude>
@@ -361,5 +373,32 @@
     <ClInclude Include="mouse.h" />
     <ClInclude Include="fifo.h" />
     <ClInclude Include="FontData.h" />
+    <ClInclude Include="v8086\rme.h">
+      <Filter>v8086</Filter>
+    </ClInclude>
+    <ClInclude Include="HardDisk.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="GSH.H">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="ACEList.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="GFS.H">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="SysInfo.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="SysError.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjMan.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>Device</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

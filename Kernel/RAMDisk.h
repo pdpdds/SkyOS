@@ -57,7 +57,7 @@ typedef struct kPartitionStruct
 	DWORD dwStartingLBAAddress;
 	// 파티션에 포함된 섹터 수
 	DWORD dwSizeInSector;
-} PARTITION;
+} _PARTITION;
 
 
 // MBR 자료구조
@@ -76,7 +76,7 @@ typedef struct kMBRStruct
 	DWORD dwTotalClusterCount;
 
 	// 파티션 테이블
-	PARTITION vstPartition[4];
+	_PARTITION vstPartition[4];
 
 	// 부트 로더 시그너처, 0x55, 0xAA
 	BYTE vbBootLoaderSignature[2];
