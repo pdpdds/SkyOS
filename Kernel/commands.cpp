@@ -307,11 +307,17 @@ bool LoadFontFromMemory()
 	return true;
 }
 
+#include "desq.h"
+#include "svgaguientry.h"
 long cmdGUI(char *theCommand)
 {
 	bool result = graphics_install_vesa(1024, 768, 8);
+	//bool result = graphics_install_vesa(1024, 768, 24);
+	//run_svgagui();
 
-	if (result == true)
+	StartSampleGui();
+
+	/*if (result == true)
 	{
 		//LoadFont("hankaku.txt");
 		LoadFontFromMemory();
@@ -320,7 +326,7 @@ long cmdGUI(char *theCommand)
 		//pGUIManager->TestRun(bochs_vid_memory);
 		pGUIManager->Init((char*)bochs_vid_memory, 1024, 768);
 		pGUIManager->Run();
-	}
+	}*/
 
 	return false;
 }

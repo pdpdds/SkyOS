@@ -135,7 +135,7 @@ bool InitGraphics(VesaModeInfo* pInfo)
 	//fillScreen32();
 
 	init_lfb(pInfo);
-	lfb_clear();
+	//lfb_clear();
 
 	return true;
 }

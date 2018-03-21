@@ -5,6 +5,7 @@
 #include "exception.h"
 #include "VirtualMemoryManager.h"
 #include "sprintf.h"
+#include "InitKernel.h"
 
 uint16_t bochs_resolution_x = 0;
 uint16_t bochs_resolution_y = 0;
@@ -64,9 +65,9 @@ bool graphics_install_vesa(uint16_t resX, uint16_t resY, int bpp)
 	tRME_State *emu;
 	
 	uint16_t *zeroptr = (uint16_t*)0;
-	//uint16_t* lowCache = (uint16_t*)new BYTE[RME_BLOCK_SIZE];
-	//memcpy(lowCache, 0, RME_BLOCK_SIZE);
-	memcpy(lowCache, lowCacheBuffer, RME_BLOCK_SIZE);
+	uint16_t* lowCache = (uint16_t*)new BYTE[RME_BLOCK_SIZE];
+	memcpy(lowCache, 0, RME_BLOCK_SIZE);
+	//memcpy(lowCache, lowCacheBuffer, RME_BLOCK_SIZE);
 	emu = RME_CreateState();
 	emu->Memory[0] = (uint8_t*)lowCache;
 
@@ -83,12 +84,12 @@ bool graphics_install_vesa(uint16_t resX, uint16_t resY, int bpp)
 	emu->DI.W = 0;
 	ret = RME_CallInt(emu, 0x10);
 
-	if (emu->AX.W != 0x004f)
+	/*if (emu->AX.W != 0x004f)
 	{
 		char errMsg[256];
 		sprintf(errMsg, "asdasds 0x%x\n", ret);
 		HaltSystem(errMsg);
-	}
+	}*/
 
 
 	if (info->Version < 0x200 || info->Version > 0x300)
@@ -118,12 +119,18 @@ bool graphics_install_vesa(uint16_t resX, uint16_t resY, int bpp)
 	}
 
 	SkyConsole::Print("Please select a mode: ");
-	char selected = SkyConsole::GetChar();
-	char buf[10];
-	buf[0] = selected;
-	buf[1] = '\n';
+	//char selected = SkyConsole::GetChar();
+	
+	char buffer[256];
+	memset(buffer, 0, MAXPATH);	
+	SkyConsole::GetCommand(buffer, MAXPATH - 2);
+	SkyConsole::Print("\n");
+	//char buf[10];
+	//buf[0] = selected;
+	//buf[1] = '\n';
 
-	mode = atoi(buf);
+	mode = atoi(buffer);
+	
 #else
 		if ((abs(modeinfo->Xres - resX) < abs(best_x - resX)) && (abs(modeinfo->Yres - resY) < abs(best_y - resY)) && bpp == modeinfo->bpp) {
 			best_mode = i;
@@ -202,17 +209,17 @@ bool graphics_install_vesa(uint16_t resX, uint16_t resY, int bpp)
 		{
 			if (((uintptr_t *)x)[0] == 0xA5ADFACE) {
 				bochs_vid_memory = (uint8_t *)0xF0000000;
+				modeinfo->physbase = (uintptr_t)bochs_vid_memory;
 
-
-				//rect32B(0, 0, actual_x, actual_y, 0x00FFFFFF, actual_x, actual_y, actual_b);
+				rect32B(0, 0, actual_x, actual_y, 0x00FFFFFF, actual_x, actual_y, actual_b);
 				//rect32B(100, 100, 100, 100, 0x00FF0000, actual_x, actual_y, actual_b);
 				//rect32B(150, 150, 100, 100, 0x0000FF00, actual_x, actual_y, actual_b);
 				//rect32B(200, 200, 100, 100, 0x000000FF, actual_x, actual_y, actual_b);
 											
-
-				//rect32A(0, 0, 200, 200, 0x80808080);
 				//SkyConsole::GetChar();
-				//SkyConsole::GetChar();				
+				/*rect32A(0, 0, 200, 200, 0x80808080);
+				SkyConsole::GetChar();
+				SkyConsole::GetChar();				*/
 
 				result = true;
 				goto mem_found;
@@ -226,9 +233,9 @@ mem_found:
 	* Finalize the graphics setup with the actual selected resolution.
 	*/
 	finalize_graphics(actual_x, actual_y, actual_b);
-
+	InitGraphics(modeinfo);
 	return true;
-	//InitGraphics(modeinfo);
+	
 }
 
 

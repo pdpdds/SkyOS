@@ -58,7 +58,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>../CommonLib;./;../Include;./.;./v8086;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../CommonLib;./;../Include;./.;./v8086;../kernel;../svgagui</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
@@ -85,7 +85,7 @@
       <AdditionalDependencies>CommonLib.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)kernel.sys</OutputFile>
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
-      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>../Debug/kernel.map</MapFileName>
       <SubSystem>Console</SubSystem>
@@ -116,8 +116,34 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\svgagui\src\browser.cpp" />
+    <ClCompile Include="..\svgagui\src\button.cpp" />
+    <ClCompile Include="..\svgagui\src\check.cpp" />
+    <ClCompile Include="..\svgagui\src\choice.cpp" />
+    <ClCompile Include="..\svgagui\src\dialog.cpp" />
+    <ClCompile Include="..\svgagui\src\filedialog.cpp" />
+    <ClCompile Include="..\svgagui\src\general.cpp" />
+    <ClCompile Include="..\svgagui\src\iconlist.cpp" />
+    <ClCompile Include="..\svgagui\src\image.cpp" />
+    <ClCompile Include="..\svgagui\src\info.cpp" />
+    <ClCompile Include="..\svgagui\src\input.cpp" />
+    <ClCompile Include="..\svgagui\src\listbox.cpp" />
+    <ClCompile Include="..\svgagui\src\_mouse.cpp" />
+    <ClCompile Include="..\svgagui\src\number.cpp" />
+    <ClCompile Include="..\svgagui\src\object.cpp" />
+    <ClCompile Include="..\svgagui\src\progress.cpp" />
+    <ClCompile Include="..\svgagui\src\pulldown.cpp" />
+    <ClCompile Include="..\svgagui\src\screen.cpp" />
+    <ClCompile Include="..\svgagui\src\slider.cpp" />
+    <ClCompile Include="..\svgagui\src\svgalib.cpp" />
+    <ClCompile Include="..\svgagui\src\text.cpp" />
+    <ClCompile Include="..\svgagui\src\window.cpp" />
+    <ClCompile Include="..\svgagui\src\window_draw.cPP" />
+    <ClCompile Include="..\svgagui\src\window_thread.cpp" />
+    <ClCompile Include="..\svgagui\src\xlib.cpp" />
     <ClCompile Include="ACEList.cpp" />
     <ClCompile Include="Beep.cpp" />
+    <ClCompile Include="color.cpp" />
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="fifo.cpp" />
     <ClCompile Include="GFS.cpp" />
@@ -139,6 +165,7 @@
     <ClCompile Include="FAT32VFSAdaptor.cpp" />
     <ClCompile Include="FloppyDisk.cpp" />
     <ClCompile Include="SkyTest.cpp" />
+    <ClCompile Include="svgaguientry.cpp" />
     <ClCompile Include="SysInfo.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="v8086\rme.cpp" />
@@ -177,6 +204,12 @@
     <ClCompile Include="ZetPlane.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\svgagui\src\bigfont.h" />
+    <ClInclude Include="..\svgagui\src\font.h" />
+    <ClInclude Include="..\svgagui\src\font2.h" />
+    <ClInclude Include="..\svgagui\src\local.h" />
+    <ClInclude Include="..\svgagui\src\_mouse.h" />
+    <ClInclude Include="..\svgagui\svgagui.h" />
     <ClInclude Include="ACEList.h" />
     <ClInclude Include="Beep.h" />
     <ClInclude Include="Collect.h" />
@@ -205,6 +238,7 @@
     <ClInclude Include="FAT32VFSAdaptor.h" />
     <ClInclude Include="FloppyDisk.h" />
     <ClInclude Include="SkyTest.h" />
+    <ClInclude Include="svgaguientry.h" />
     <ClInclude Include="SysError.h" />
     <ClInclude Include="SysInfo.h" />
     <ClInclude Include="TestInteger.h" />

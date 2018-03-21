@@ -222,3 +222,8 @@ void HaltSystem(const char* errMsg)
 		jmp halt;
 	}
 }
+
+void error(char *s)
+{
+
+}

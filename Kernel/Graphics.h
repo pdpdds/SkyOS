@@ -27,3 +27,5 @@ typedef uintptr_t addr_t;
 #define LINEAR_TO_FP(ptr)      (MK_FP(((addr_t) (ptr) - ((addr_t) (ptr) & 0xf)) / 16, ((addr_t)(ptr) & 0xf)))
 
 bool graphics_install_vesa(uint16_t resX, uint16_t resY, int bpp);
+void rect32B(int x, int y, int w, int h, int col, int actualX, int actualY, int actualByte);
+void rect32A(int x, int y, int w, int h, int col);

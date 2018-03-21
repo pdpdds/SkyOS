@@ -40,6 +40,9 @@
     <Filter Include="v8086">
       <UniqueIdentifier>{5d2e9c4f-3ba0-401b-a238-73c652354809}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{c0a94241-ac37-4c4c-9a66-ce2bba8355f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="exception.cpp">
@@ -202,6 +205,87 @@
     </ClCompile>
     <ClCompile Include="SysInfo.cpp">
       <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\browser.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\button.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\check.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\choice.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\dialog.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\filedialog.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\general.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\iconlist.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\image.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\info.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\input.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\listbox.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\number.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\object.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\progress.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\pulldown.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\screen.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\slider.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\svgalib.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\text.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\window.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\window_draw.cPP">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\window_thread.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\xlib.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\svgagui\src\_mouse.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="color.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="svgaguientry.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -399,6 +483,27 @@
     </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\svgagui\src\bigfont.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\svgagui\src\font.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\svgagui\src\font2.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\svgagui\src\local.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\svgagui\src\_mouse.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="svgaguientry.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\svgagui\svgagui.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

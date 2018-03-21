@@ -2,6 +2,7 @@
 #include "stdio.h"
 #include "FAT32VFSAdaptor.h"
 #include "HardDisk.h"
+#include "desq.h"
 
 extern bool systemOn;
 void HardwareInitiize();
@@ -170,7 +171,7 @@ void kmain(unsigned long magic, unsigned long addr)
 		StartConsoleSystem();
 	}
 	else
-	{
+	{		
 		//InitGraphics(pBootInfo);
 	}
 }

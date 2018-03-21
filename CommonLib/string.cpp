@@ -65,6 +65,11 @@ char *strcat(char *dest, const char *src)
 
 }
 
+char * strncat(char * destination, const char * source, size_t num) {
+	size_t s_size = strlen(source);
+	return strncpy((char *)destination + (strlen(destination) + 1), source, (num > s_size) ? s_size : num);
+}
+
 
 char *strupr(char *str)
 {

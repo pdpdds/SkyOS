@@ -10,6 +10,7 @@ int strncasecmp(const char *s1, const char *s2, size_t n);
 char* strstr(const char *in, const char *str);
 char *strupr(char *str);
 char *strcat(char *dest, const char *src);
+char * strncat(char * destination, const char * source, size_t num);
 
 void* memcpy(void *dest, const void *src, size_t count);
 void* memset(void *dest, char val, size_t count);
