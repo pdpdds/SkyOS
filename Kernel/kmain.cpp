@@ -79,6 +79,18 @@ void kmain(unsigned long magic, unsigned long addr)
 	SkyConsole::Print("Keyboard Init..\n");	
 
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
+
+	VbeInfoBlock* pblock = pBootInfo->vbe_control_info;
+
+	if (pblock != 0)
+	{
+		SkyConsole::Print("Vesa signature %s\n", pblock->Signature);
+
+		VbeModeInfo* info = pBootInfo->vbe_mode_info;
+
+		SkyConsole::Print("%d %d\n", info->XRes, info->YRes);
+	}
+
 	InitMemoryManager(pBootInfo, 0);
 
 	//InitFloppyDrive();
@@ -101,15 +113,15 @@ void kmain(unsigned long magic, unsigned long addr)
 		SkyConsole::Print("Harddisk not detected..\n");
 	}*/
 
-	HardDisk_Initialize();
+	//HardDisk_Initialize();
 	
-	FillDevicePathLookupTable();	
-	PrintDriveMappingInfo();
+	//FillDevicePathLookupTable();	
+	//PrintDriveMappingInfo();
 
-	GFS_Init();
-	FAT_Init();
+	//GFS_Init();
+	//FAT_Init();
 
-	SkyConsole::Print(" %d device(s) found\n", HDD_GetNoOfDevices());
+	//SkyConsole::Print(" %d device(s) found\n", HDD_GetNoOfDevices());
 	//GFS_DeleteFile("C:\\Test.bat");
 
 	/*if (HDD_GetNoOfDevices())
@@ -140,7 +152,7 @@ void kmain(unsigned long magic, unsigned long addr)
 		//PrintHDDInfo();
 	}*/
 
-	if (HDD_GetNoOfDevices())
+	/*if (HDD_GetNoOfDevices())
 	{
 		HANDLE hFile = NULL;
 		hFile = GFS_CreateFile("C:\BIOS.BIN", GENERIC_READ, 0, OPEN_EXISTING, 0);
@@ -157,7 +169,7 @@ void kmain(unsigned long magic, unsigned long addr)
 			
 		}
 		//PrintHDDInfo();
-	}
+	}*/
 		
 
 	//DumpSystemInfo(pBootInfo);
