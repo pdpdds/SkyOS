@@ -401,14 +401,18 @@ __declspec(naked) void kKeyboardHandler()
 
 bool HariboteGUI::Init(char* vram, int screenX, int screenY)
 {
+//해상도, 비디오 버퍼 설정
 	this->screenX = screenX;
 	this->screenY = screenY;
 	this->m_vram = vram;
 
-	__asm cli
+//키보드, 마우스 핸들러 변경
+	kEnterCriticalSection(&g_criticalSection);
+
 	setvect(0x21, kKeyboardHandler);
 	setvect(0x2c, kMouseHandler);
-	__asm sti
+
+	kLeaveCriticalSection(&g_criticalSection);
 
 	fifo32_init(&fifo, 128, fifobuf);
 	init_keyboard(&fifo, 256);
@@ -422,14 +426,14 @@ bool HariboteGUI::Init(char* vram, int screenX, int screenY)
 	InitPalette();
 	shtctl = shtctl_init((unsigned char*)vram, screenX, screenY);
 
-	/* sht_back */
+//백그라운드 쉬트를 생성
 	sht_back = sheet_alloc(shtctl);
 	buf_back = new unsigned char[screenX * screenY];
 	sheet_setbuf(sht_back, buf_back, screenX, screenY, -1); /* 투명색없음 */
 	init_screen8((unsigned char *)buf_back, screenX, screenY);
 	
 
-	/* sht_cons */
+//콘솔 태스크 쉬트를 구성
 	sht_cons = sheet_alloc(shtctl);
 	buf_cons = new unsigned char[256 * 165];
 	sheet_setbuf(sht_cons, buf_cons, 256, 165, -1);
@@ -438,7 +442,7 @@ bool HariboteGUI::Init(char* vram, int screenX, int screenY)
 	
 	ProcessManager::GetInstance()->CreateKernelProcessFromMemory("Console", console_task, this);
 
-	/* sht_win */
+//입력창 태스크(task_a) 생성
 	sht_win = sheet_alloc(shtctl);
 	buf_win = new unsigned char[160 * 52];
 	sheet_setbuf(sht_win, buf_win, 144, 52, -1); /* 투명색없음 */
@@ -447,7 +451,7 @@ bool HariboteGUI::Init(char* vram, int screenX, int screenY)
 	cursor_x = 8;
 	cursor_c = COL8_FFFFFF;
 
-	/* sht_mouse */
+//마우스 쉬트를 생성
 	sht_mouse = sheet_alloc(shtctl);
 	sheet_setbuf(sht_mouse, buf_mouse, 16, 16, 99);
 	init_mouse_cursor8((char *)buf_mouse, 99);
