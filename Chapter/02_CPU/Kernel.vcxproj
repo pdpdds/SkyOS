@@ -11,12 +11,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CPU\GDT.cpp" />
+    <ClCompile Include="CPU\Hal.cpp" />
+    <ClCompile Include="CPU\IDT.cpp" />
+    <ClCompile Include="CPU\Pic.cpp" />
+    <ClCompile Include="CPU\PIT.cpp" />
+    <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="InitKernel.cpp" />
     <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="SkyAPI.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CPU\GDT.h" />
+    <ClInclude Include="CPU\Hal.h" />
+    <ClInclude Include="CPU\IDT.h" />
+    <ClInclude Include="CPU\Pic.h" />
+    <ClInclude Include="CPU\PIT.h" />
+    <ClInclude Include="Exception.h" />
+    <ClInclude Include="InitKernel.h" />
     <ClInclude Include="kmain.h" />
     <ClInclude Include="MultiBoot.h" />
+    <ClInclude Include="SkyAPI.h" />
     <ClInclude Include="SkyConsole.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -79,7 +79,5 @@
 //! 4k grandularity. default: none
 #define I86_GDT_GRAND_4K			0x80			//10000000
 
-
-
 #define SYSTEM_TMR_INT_NUMBER	0x20
 #define SOFT_TASK_SW_INT_NUMBER	0x30

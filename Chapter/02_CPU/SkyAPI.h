@@ -3,8 +3,6 @@
 #include "SkyStruct.h"
 #include "Hal.h"
 #include "PIT.h"
-#include "ProcessUtil.h"
-
 
 void SKYASSERT(bool result, const char* pMsg);
 
@@ -35,17 +33,5 @@ BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime);
 void printf(const char* str, ...);
 int kprintf(const char* str);
 void ksleep(int millisecond);
-char GetKeyboardInput();
 HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreateionFlags, LPDWORD lpThreadId);
 void PauseSystem(const char* msg);
-
-extern "C"
-{
-	void TerminateProcess();
-	uint32_t MemoryAlloc(size_t size);
-	void MemoryFree(void* p);
-	void CreateDefaultHeap();
-	void TerminateMemoryProcess();
-}
-
-

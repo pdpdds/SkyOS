@@ -35,6 +35,8 @@ _declspec(naked) void multiboot_entry(void)
 	}
 }
 
+void HardwareInitiize();
+
 void kmain(unsigned long magic, unsigned long addr)
 {
 	SkyConsole::Initialize();
@@ -45,13 +47,19 @@ void kmain(unsigned long magic, unsigned long addr)
 	kEnterCriticalSection(&g_criticalSection);
 
 	HardwareInitiize();
-	SkyConsole::Print("Hardware Init Complete..\n");
+	SkyConsole::Print("Hardware Init Complete\n");
 
 	SetInterruptVector();
-
-	InitializeSysCall();	
-
-	SkyConsole::Print("Interrput Handler & System Call Init..\n");
+	
+	SkyConsole::Print("Interrput Handler Init Complete\n");
 
 	for (;;);
+}
+
+void HardwareInitiize()
+{
+	GDTInitialize();
+	IDTInitialize(0x8);
+	PICInitialize(0x20, 0x28);
+	InitializePIT();
 }

@@ -1,6 +1,5 @@
 #ifndef PIT_H
 #define PIT_H
-
 #include "stdint.h"
 
 //! Use when setting counter mode
@@ -57,39 +56,17 @@
 
 #define TimerFrequency 1193180
 
-extern void i86_pit_send_command(uint8_t cmd);
-
-//! write data byte to a counter
-extern void i86_pit_send_data(uint16_t data, uint8_t counter);
-
-//! reads data from a counter
-extern uint8_t i86_pit_read_data(uint16_t counter);
-
+extern void SendPITCommand(uint8_t cmd);
+extern void SendPITData(uint16_t data, uint8_t counter);
 //! Sets new pit tick count and returns prev. value
-extern uint32_t i86_pit_set_tick_count(uint32_t i);
+extern uint32_t SetPITTickCount(uint32_t i);
+extern uint32_t GetPITTickCount();
 
-//! returns current tick count
-extern uint32_t i86_pit_get_tick_count();
-
-
-extern void _cdecl InitializePIT();
+void InitializePIT();
 
 
 unsigned int GetTickCount();
 void _cdecl msleep(int ms);
 
 extern void StartPITCounter(uint32_t freq, uint8_t counter, uint8_t mode);
-class PIT
-{
-private:
-	unsigned char channel;
-	unsigned int m_frequency;
-	static unsigned int ticks;
-public:
-	static void pitHandler();
-	PIT(unsigned char chan);
-	~PIT();
-	void Enable(unsigned int hz);
-	void Disable();
-};
 #endif
