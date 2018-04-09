@@ -38,8 +38,20 @@ _declspec(naked) void multiboot_entry(void)
 void kmain(unsigned long magic, unsigned long addr)
 {
 	SkyConsole::Initialize();
-	
-	SkyConsole::Print("Hello World!!\n");
+		
+	//헥사를 표시할 때 %X는 integer, %x는 unsigned integer의 헥사값을 표시한다.	
+	SkyConsole::Print("*** Sky OS Console System Init ***\n");
+
+	kEnterCriticalSection(&g_criticalSection);
+
+	HardwareInitiize();
+	SkyConsole::Print("Hardware Init Complete..\n");
+
+	SetInterruptVector();
+
+	InitializeSysCall();	
+
+	SkyConsole::Print("Interrput Handler & System Call Init..\n");
 
 	for (;;);
 }
