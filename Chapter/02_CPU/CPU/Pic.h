@@ -42,13 +42,13 @@
 #define		I86_PIC_OCW3_MASK_D7		0x80	//10000000
 
 //PIC로부터 1바이트를 읽는다
-extern uint8_t ReadDataFromPIC(uint8_t picNum);
+uint8_t ReadDataFromPIC(uint8_t picNum);
 
 //PIC로 데이터를 보낸다.
-extern void SendDataToPIC(uint8_t data, uint8_t picNum);
+void SendDataToPIC(uint8_t data, uint8_t picNum);
 
 //PIC로 명령어를 전송한다.
-extern void SendCommandToPIC(uint8_t cmd, uint8_t picNum);
+void SendCommandToPIC(uint8_t cmd, uint8_t picNum);
 
 //PIC 초기화
-extern void PICInitialize(uint8_t base0, uint8_t base1);
+void PICInitialize(uint8_t base0, uint8_t base1);

@@ -92,14 +92,14 @@ void StartPITCounter(uint32_t freq, uint8_t counter, uint8_t mode) {
 
 	uint16_t divisor = uint16_t(1193181 / (uint16_t)freq);
 
-	//! send operational command
+	//커맨드 전송
 	uint8_t ocw = 0;
 	ocw = (ocw & ~I86_PIT_OCW_MASK_MODE) | mode;
 	ocw = (ocw & ~I86_PIT_OCW_MASK_RL) | I86_PIT_OCW_RL_DATA;
 	ocw = (ocw & ~I86_PIT_OCW_MASK_COUNTER) | counter;
 	SendPITCommand(ocw);
 
-	//! set frequency rate
+	//프리퀀시 비율 설정
 	SendPITData(divisor & 0xff, 0);
 	SendPITData((divisor >> 8) & 0xff, 0);
 
