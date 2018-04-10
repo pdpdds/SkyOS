@@ -20,19 +20,20 @@ static void IDTInstall() {
 }
 
 //다룰수 있는 핸들러가 존재하지 않을때 호출되는 기본 핸들러
-static void InterrputDefaultHandler () {
+__declspec(naked) void InterrputDefaultHandler () {
 	
-	kEnterCriticalSection (&g_criticalSection);
+	_asm {
+		cli
+		pushad
+	}
 
-	//디버그 모드일시 메세지를 출력하고 시스템을 중지시킨다.
-#ifdef _DEBUG
-	DebugClrScr (0x18);
-	DebugGotoXY (0,0);
-	DebugSetColor (0x1e);
-	DebugSkyConsole::Print ("*** [i86 Hal] InterrputDefaultHandler : Unhandled Exception");
-#endif
-
-	for(;;);
+	_asm {
+		mov al, 0x20
+		out 0x20, al
+		popad
+		sti
+		iretd
+	}
 }
 
 

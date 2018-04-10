@@ -15,9 +15,7 @@
     <ClCompile Include="CPU\PIT.cpp">
       <Filter>CPU</Filter>
     </ClCompile>
-    <ClCompile Include="InitKernel.cpp" />
     <ClCompile Include="SkyAPI.cpp" />
-    <ClCompile Include="Exception.cpp" />
     <ClCompile Include="CPU\GDT.cpp">
       <Filter>CPU</Filter>
     </ClCompile>
@@ -38,9 +36,7 @@
     <ClInclude Include="CPU\PIT.h">
       <Filter>CPU</Filter>
     </ClInclude>
-    <ClInclude Include="InitKernel.h" />
     <ClInclude Include="SkyAPI.h" />
-    <ClInclude Include="Exception.h" />
     <ClInclude Include="CPU\GDT.h">
       <Filter>CPU</Filter>
     </ClInclude>

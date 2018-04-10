@@ -8,79 +8,30 @@
 #define		I86_PIT_REG_COMMAND			0x43
 
 volatile uint32_t _pitTicks = 0;
-int g_esp = 0;
-uint32_t g_pageDirectory = 0;
+DWORD _lastTickCount = 0;
 
-void ProcessTimerHandler(registers_t regs)
-{	
-	
-}
-
-//!	pit timer interrupt handler
+//타이머 인터럽트 핸들러
 __declspec(naked) void InterruptPITHandler() 
 {	
-	_asm
-	{
+	_asm {
 		cli
-		pushad;
-
-		push ds
-		push es
-		push fs
-		push gs
-
-		mov ax, 0x10; load the kernel data segment descriptor
-		mov ds, ax
-		mov es, ax
-		mov fs, ax
-		mov gs, ax
-
-		mov eax, esp
-		mov g_esp, eax
+		pushad
 	}
-	_pitTicks++;
 
-	
-
-	_asm
-	{		
-		call ProcessTimerHandler
-	}
-		
-	__asm
+	if (_pitTicks - _lastTickCount >= 100)
 	{
-		cmp g_pageDirectory, 0
-		jz pass
+		_lastTickCount = _pitTicks;
+		SkyConsole::Print("Timer Count : %d\n", _pitTicks);
+	}
 
-		mov eax, g_esp
-		mov esp, eax		
-		
-		mov	eax, [g_pageDirectory]
-		mov	cr3, eax		// PDBR is cr3 register in i86
-					
-		pop gs
-		pop fs
-		pop es
-		pop ds
-
-		popad;	
-
+	_pitTicks++;
+	
+	_asm {
 		mov al, 0x20
 		out 0x20, al
+		popad
 		sti
-		iretd;
-						
-pass :
-		pop gs
-		pop fs
-		pop es
-		pop ds
-
-		popad;
-		mov al, 0x20
-		out 0x20, al		
-		sti
-		iretd;
+		iretd
 	}
 }
 
