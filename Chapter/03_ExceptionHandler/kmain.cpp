@@ -38,6 +38,7 @@ _declspec(naked) void multiboot_entry(void)
 
 void HardwareInitiize();
 
+
 void kmain(unsigned long magic, unsigned long addr)
 {
 	SkyConsole::Initialize();
@@ -59,7 +60,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 	
 	TestInterrupt();	
-
+	
 	for (;;);
 }
 
@@ -70,3 +71,5 @@ void HardwareInitiize()
 	PICInitialize(0x20, 0x28);
 	InitializePIT();
 }
+
+

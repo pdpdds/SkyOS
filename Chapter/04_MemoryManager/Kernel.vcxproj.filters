@@ -28,6 +28,12 @@
     <ClCompile Include="Memory\VirtualMemoryManager.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
+    <ClCompile Include="Memory\PageDirectoryEntry.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\PageTableEntry.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -56,6 +62,12 @@
       <Filter>Memory</Filter>
     </ClInclude>
     <ClInclude Include="Memory\VirtualMemoryManager.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\PageDirectoryEntry.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\PageTableEntry.h">
       <Filter>Memory</Filter>
     </ClInclude>
   </ItemGroup>

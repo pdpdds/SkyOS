@@ -19,6 +19,8 @@
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="InitKernel.cpp" />
     <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="Memory\PageDirectoryEntry.cpp" />
+    <ClCompile Include="Memory\PageTableEntry.cpp" />
     <ClCompile Include="Memory\PhysicalMemoryManager.cpp" />
     <ClCompile Include="Memory\VirtualMemoryManager.cpp" />
     <ClCompile Include="SkyAPI.cpp" />
@@ -34,6 +36,8 @@
     <ClInclude Include="Exception.h" />
     <ClInclude Include="InitKernel.h" />
     <ClInclude Include="kmain.h" />
+    <ClInclude Include="Memory\PageDirectoryEntry.h" />
+    <ClInclude Include="Memory\PageTableEntry.h" />
     <ClInclude Include="Memory\PhysicalMemoryManager.h" />
     <ClInclude Include="Memory\VirtualMemoryManager.h" />
     <ClInclude Include="MultiBoot.h" />

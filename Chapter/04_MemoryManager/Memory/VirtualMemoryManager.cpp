@@ -2,11 +2,7 @@
 #include "PhysicalMemoryManager.h"
 #include "string.h"
 #include "SkyConsole.h"
-#include "kheap.h"
 #include"MultiBoot.h"	
-
-#ifdef _ORANGE_DEBUG
-#endif // ORANGE_DEBUG
 
 namespace VirtualMemoryManager
 {
@@ -227,7 +223,6 @@ namespace VirtualMemoryManager
 		if (false == SetCurPageDirectory(dir))
 			return false;
 
-
 		_asm
 		{
 			mov	eax, [dir]
@@ -236,9 +231,7 @@ namespace VirtualMemoryManager
 
 		//페이징 기능을 다시 활성화시킨다
 		PhysicalMemoryManager::EnablePaging(true);
-
 		
-
 		return true;
 	}
 
@@ -267,72 +260,5 @@ namespace VirtualMemoryManager
 			sti
 		}
 #endif
-	}
-
-	//256 * 50 * 4096 = 40MB의 힙을 할당한다
-
-	bool CreateKernelHeap()
-	{
-		PageDirectory* dir = GetCurPageDirectory();
-
-		//Virtual Heap Address
-		void* pVirtualHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
-
-		heapFrameCount = 256 * 10 * 5;
-
-		m_pKernelHeapPhysicalMemory = PhysicalMemoryManager::AllocBlocks(heapFrameCount);
-
-		if (m_pKernelHeapPhysicalMemory == NULL)
-		{
-			SkyConsole::Print("kernel heap allocation fail. frame count : %d\n", heapFrameCount);
-			return false;
-		}
-
-		SkyConsole::Print("kernel heap allocation success. frame count : %d\n", heapFrameCount);
-
-		int endAddress = (uint32_t)pVirtualHeap + heapFrameCount * PMM_BLOCK_SIZE;
-
-		SkyConsole::Print("MapHeap\n");
-		
-		MapHeap(dir);
-
-		SkyConsole::Print("MapHeap End\n");
-
-		create_kernel_heap((u32int)pVirtualHeap, (uint32_t)endAddress, (uint32_t)endAddress, 0, 0);
-
-#ifdef _DEBUG
-		SkyConsole::Print("KernelHeap Physical Address 0x%x\n", m_pKernelHeapPhysicalMemory);
-		SkyConsole::Print("KernelHeap Virtual Address 0x%x\n", pVirtualHeap);
-#endif
-
-		return true;
-	}
-
-	bool MapHeap(PageDirectory* dir)
-	{		
-		int endAddress = (uint32_t)KERNEL_VIRTUAL_HEAP_ADDRESS + heapFrameCount * PMM_BLOCK_SIZE;
-		int frameCount = (endAddress - KERNEL_VIRTUAL_HEAP_ADDRESS) / PAGE_SIZE;		
-
-		for (int i = 0; i < frameCount; i++)
-		{
-			MapPhysicalAddressToVirtualAddresss(dir, (uint32_t)KERNEL_VIRTUAL_HEAP_ADDRESS + i * PAGE_SIZE, (uint32_t)m_pKernelHeapPhysicalMemory + i * PAGE_SIZE, I86_PTE_PRESENT | I86_PTE_WRITABLE);
-		}		
-
-#ifdef _DEBUG
-		SkyConsole::Print("Map Heap\n");
-#endif
-
-		return true;
-	}
-
-	bool CreateVideoDMAVirtualAddress(uintptr_t start, uintptr_t end)
-	{
-		//void* memory = PhysicalMemoryManager::AllocBlocks((end - start)/ PAGE_SIZE);
-		for (int i = 0; start <= end; start += 0x1000, i++)
-		{
-			MapPhysicalAddressToVirtualAddresss(GetCurPageDirectory(), (uint32_t)start, (uint32_t)start, I86_PTE_PRESENT | I86_PTE_WRITABLE);
-		}
-
-		return true;
-	}
+	}		
 }
