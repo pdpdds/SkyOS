@@ -24,31 +24,6 @@ The system has been halted.\n\n";
 	SkyConsole::Print(disclamer);
 }
 
-
-
-/*void HandleDivideByZero(registers_t regs)
-{
-	_divider = 100;
-	SkyConsole::Print("*** STOP: %d\n", regs.cs);
-	SkyConsole::Print("*** STOP: %d\n", regs.eip);
-	SkyConsole::Print("*** STOP: %d\n", regs.eflags);
-	SkyConsole::Print("*** STOP: %d\n", regs.useresp);	
-	SkyConsole::Print("*** STOP: %d\n", regs.ss);
-
-	SkyConsole::Print("*** STOP: %d\n", regs.ds);
-	SkyConsole::Print("*** STOP: %d\n", regs.es);
-	SkyConsole::Print("*** STOP: %d\n", regs.fs);
-	SkyConsole::Print("*** STOP: %d\n", regs.edi);
-	SkyConsole::Print("*** STOP: %d\n", regs.esi);
-	SkyConsole::Print("*** STOP: %d\n", regs.ebp);
-	SkyConsole::Print("*** STOP: %d\n", regs.esp);
-
-	SkyConsole::Print("*** STOP: %d\n", regs.ebx);
-	SkyConsole::Print("*** STOP: %d\n", regs.edx);
-	SkyConsole::Print("*** STOP: %d\n", regs.ecx);
-	SkyConsole::Print("*** STOP: %d\n", regs.eax);	
-}*/
-
 extern int _divider;
 extern int _dividend;
 
@@ -68,7 +43,7 @@ void HandleDivideByZero(registers_t regs)
 	for (;;);
 }
 
-interrupt void __cdecl kHandleDivideByZero() 
+interrupt void kHandleDivideByZero() 
 {
 
 	_asm {
