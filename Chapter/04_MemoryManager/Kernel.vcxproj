@@ -19,6 +19,8 @@
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="InitKernel.cpp" />
     <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="Memory\PhysicalMemoryManager.cpp" />
+    <ClCompile Include="Memory\VirtualMemoryManager.cpp" />
     <ClCompile Include="SkyAPI.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
     <ClCompile Include="SkyTest.cpp" />
@@ -32,6 +34,8 @@
     <ClInclude Include="Exception.h" />
     <ClInclude Include="InitKernel.h" />
     <ClInclude Include="kmain.h" />
+    <ClInclude Include="Memory\PhysicalMemoryManager.h" />
+    <ClInclude Include="Memory\VirtualMemoryManager.h" />
     <ClInclude Include="MultiBoot.h" />
     <ClInclude Include="SkyAPI.h" />
     <ClInclude Include="SkyConsole.h" />
@@ -85,7 +89,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
