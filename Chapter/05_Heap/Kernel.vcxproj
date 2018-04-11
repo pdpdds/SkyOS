@@ -17,6 +17,7 @@
     <ClCompile Include="CPU\Pic.cpp" />
     <ClCompile Include="CPU\PIT.cpp" />
     <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="Heap\HeapManager.cpp" />
     <ClCompile Include="Heap\kheap.cpp" />
     <ClCompile Include="Heap\ordered_array.cpp" />
     <ClCompile Include="InitKernel.cpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="CPU\Pic.h" />
     <ClInclude Include="CPU\PIT.h" />
     <ClInclude Include="Exception.h" />
+    <ClInclude Include="Heap\HeapManager.h" />
     <ClInclude Include="Heap\kheap.h" />
     <ClInclude Include="Heap\ordered_array.h" />
     <ClInclude Include="InitKernel.h" />

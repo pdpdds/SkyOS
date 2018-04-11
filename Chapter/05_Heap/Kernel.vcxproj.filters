@@ -40,6 +40,9 @@
     <ClCompile Include="Heap\ordered_array.cpp">
       <Filter>Heap</Filter>
     </ClCompile>
+    <ClCompile Include="Heap\HeapManager.cpp">
+      <Filter>Heap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -80,6 +83,9 @@
       <Filter>Heap</Filter>
     </ClInclude>
     <ClInclude Include="Heap\ordered_array.h">
+      <Filter>Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap\HeapManager.h">
       <Filter>Heap</Filter>
     </ClInclude>
   </ItemGroup>
