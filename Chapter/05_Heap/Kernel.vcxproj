@@ -17,6 +17,8 @@
     <ClCompile Include="CPU\Pic.cpp" />
     <ClCompile Include="CPU\PIT.cpp" />
     <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="Heap\kheap.cpp" />
+    <ClCompile Include="Heap\ordered_array.cpp" />
     <ClCompile Include="InitKernel.cpp" />
     <ClCompile Include="kmain.cpp" />
     <ClCompile Include="Memory\PageDirectoryEntry.cpp" />
@@ -34,6 +36,8 @@
     <ClInclude Include="CPU\Pic.h" />
     <ClInclude Include="CPU\PIT.h" />
     <ClInclude Include="Exception.h" />
+    <ClInclude Include="Heap\kheap.h" />
+    <ClInclude Include="Heap\ordered_array.h" />
     <ClInclude Include="InitKernel.h" />
     <ClInclude Include="kmain.h" />
     <ClInclude Include="Memory\PageDirectoryEntry.h" />
@@ -93,7 +97,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>

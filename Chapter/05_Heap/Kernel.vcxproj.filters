@@ -34,6 +34,12 @@
     <ClCompile Include="Memory\PageTableEntry.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
+    <ClCompile Include="Heap\kheap.cpp">
+      <Filter>Heap</Filter>
+    </ClCompile>
+    <ClCompile Include="Heap\ordered_array.cpp">
+      <Filter>Heap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -70,6 +76,12 @@
     <ClInclude Include="Memory\PageTableEntry.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Heap\kheap.h">
+      <Filter>Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap\ordered_array.h">
+      <Filter>Heap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
@@ -77,6 +89,9 @@
     </Filter>
     <Filter Include="Memory">
       <UniqueIdentifier>{3ecdb3ef-d093-4961-af61-868ec3a1e9f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Heap">
+      <UniqueIdentifier>{640d957b-b9ef-4497-94a2-ffc23c8c1734}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
