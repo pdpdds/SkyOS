@@ -10,7 +10,7 @@
 namespace PhysicalMemoryManager
 {
 
-	void	Initialize(size_t memorySize, uint32_t bitmapAddr);
+	void	Initialize(uint32_t memorySize, uint32_t bitmapAddr);
 
 	void SetBit(int bit);
 	void UnsetBit(int bit);

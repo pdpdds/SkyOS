@@ -52,6 +52,9 @@ void kmain(unsigned long magic, unsigned long addr)
 	//헥사를 표시할 때 %X는 integer, %x는 unsigned integer의 헥사값을 표시한다.	
 	SkyConsole::Print("*** Sky OS Console System Init ***\n");
 
+	SkyConsole::Print("GRUB Information\n");
+	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
+
 	kEnterCriticalSection(&g_criticalSection);
 
 	HardwareInitiize();
@@ -81,16 +84,18 @@ void HardwareInitiize()
 	InitializePIT();
 }
 
+uint32_t g_freeMemoryStartAddress = 0x00400000; //자유공간 시작주소 : 4MB
+
 uint32_t GetFreeSpaceMemory(multiboot_info* bootinfo)
 {
 	uint32_t memorySize = 0;
 	uint32_t mmapEntryNum = bootinfo->mmap_length / sizeof(multiboot_memory_map_t);
 
-	//SkyConsole::Print("GRUB Information\n");
-	//SkyConsole::Print("Boot Loader Name : %s\n", (char*)bootinfo->boot_loader_name);
-	//SkyConsole::Print("Memory Map Entry Num : %d\n", mmapEntryNum);
-
 	uint32_t mmapAddr = bootinfo->mmap_addr;
+
+#ifdef _SKY_DEBUG
+	SkyConsole::Print("Memory Map Entry Num : %d\n", mmapEntryNum);
+#endif
 
 	for (uint32_t i = 0; i < mmapEntryNum; i++)
 	{
@@ -98,19 +103,25 @@ uint32_t GetFreeSpaceMemory(multiboot_info* bootinfo)
 
 #ifdef _SKY_DEBUG
 		SkyConsole::Print("Memory Address : %x\n", entry->addr);
-		SkyConsole::Print("\nMemory Length : %x", entry->len);
-		SkyConsole::Print("\nMemory Type : %x", entry->type);
-		SkyConsole::Print("\nEntry Size : %d", entry->size);
+		SkyConsole::Print("Memory Length : %x\n", entry->len);
+		SkyConsole::Print("Memory Type : %x\n", entry->type);
+		SkyConsole::Print("Entry Size : %d\n", entry->size);
 #endif
 
 		mmapAddr += sizeof(multiboot_memory_map_t);
 
-		if (entry->addr + entry->len < FREE_MEMORY_SPACE_ADDRESS)
+		if (entry->addr + entry->len < g_freeMemoryStartAddress)
 			continue;
 
-		memorySize += entry->len;
-		if (entry->addr < FREE_MEMORY_SPACE_ADDRESS)
-			memorySize -= (FREE_MEMORY_SPACE_ADDRESS - entry->addr);
+		if (memorySize > entry->len)
+			continue;
+
+		memorySize = entry->len;
+
+		if (entry->addr < g_freeMemoryStartAddress)
+			memorySize -= (g_freeMemoryStartAddress - entry->addr);
+		else
+			g_freeMemoryStartAddress = entry->addr;
 	}
 
 	memorySize -= (memorySize % 4096);
@@ -122,31 +133,21 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 {
 	PhysicalMemoryManager::EnablePaging(false);
 
-	uint32_t freeSpaceMemorySize = GetFreeSpaceMemory(bootinfo);
-
-	//freeSpaceMemorySize = 4096 * 1024 * 200;
-
-	//SkyConsole::Print("KernelSize : %d Bytes\n", kernelSize);
-	SkyConsole::Print("FreeSpace MemorySize From 0x%x: 0x%x Bytes\n", FREE_MEMORY_SPACE_ADDRESS, freeSpaceMemorySize);
-
+	uint32_t freeMemorySize = GetFreeSpaceMemory(bootinfo);
 
 	//물리 메모리 매니저 초기화
-	PhysicalMemoryManager::Initialize(freeSpaceMemorySize, FREE_MEMORY_SPACE_ADDRESS);
+	PhysicalMemoryManager::Initialize(freeMemorySize, g_freeMemoryStartAddress);
 	//PhysicalMemoryManager::Dump();
 
-	uint32_t memoryMapSize = PhysicalMemoryManager::GetMemoryMapSize();
-	uint32_t alignedMemoryMapSize = (memoryMapSize / 4096) * 4096;
-
-	if (memoryMapSize % 4096 > 0)
-		alignedMemoryMapSize += 4096;
-
-	PhysicalMemoryManager::SetAvailableMemory(FREE_MEMORY_SPACE_ADDRESS + alignedMemoryMapSize, freeSpaceMemorySize - (FREE_MEMORY_SPACE_ADDRESS + alignedMemoryMapSize));
+	PhysicalMemoryManager::SetAvailableMemory(g_freeMemoryStartAddress, freeMemorySize);
 	PhysicalMemoryManager::Dump();
 
 	//가상 메모리 매니저 초기화	
 	VirtualMemoryManager::Initialize();
+	VirtualMemoryManager::Dump();
 
-	SkyConsole::Print("Init Complete\n");
+	//SkyConsole::Print("KernelSize : %d Bytes\n", kernelSize);
+	SkyConsole::Print("FreeSpace MemorySize From 0x%x: 0x%x Bytes\n", g_freeMemoryStartAddress, freeMemorySize);
 	
 	return true;
 }

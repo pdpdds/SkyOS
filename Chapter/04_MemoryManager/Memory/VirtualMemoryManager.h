@@ -12,10 +12,8 @@
 #define USER_VIRTUAL_STACK_ADDRESS				0x00F00000
 
 #define KERNEL_VIRTUAL_STACK_ADDRESS			0x00800000
-#define KERNEL_PHYSICAL_STACK_ADDRESS			0x00800000
 
 #define KERNEL_VIRTUAL_HEAP_ADDRESS				0x80000000
-#define KERNEL_VIRTUAL_SYSAPI_ADDRESS			0x00800000
 
 
 using namespace PageTableEntry;
@@ -107,11 +105,7 @@ namespace VirtualMemoryManager
 	//페이지 디렉토리를 생성한다. 즉 가상주소공간을 생성한다는 의미다
 	PageDirectory* CreatePageDirectory();
 
-	//커널 힙을 생성한다
-	bool CreateKernelHeap();
-	//특정 커널 프로세스의 페이지 디렉토리에 커널 힙을 매핑시킨다
-	//즉 커널 힙은 커널에서 돌아가는 모든 프로세스에서 공유한다
-	bool MapHeap(PageDirectory* dir);
-	bool CreateVideoDMAVirtualAddress(uintptr_t start, uintptr_t end);
+	//Debug
+	void Dump();
 }
 

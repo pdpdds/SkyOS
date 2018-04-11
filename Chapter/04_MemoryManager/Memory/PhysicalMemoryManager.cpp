@@ -2,10 +2,6 @@
 #include "string.h"
 #include "SkyConsole.h"
 
-#ifdef _ORANGE_DEBUG
-
-#endif // ORANGE_DEBUG
-
 namespace PhysicalMemoryManager
 {
 	uint32_t	m_memorySize = 0;
@@ -17,11 +13,12 @@ namespace PhysicalMemoryManager
 	//비트맵 배열, 각 비트는 메모리 블럭을 표현, 비트맵처리
 	uint32_t*	m_pMemoryMap = 0;
 	uint32_t	m_memoryMapSize = 0;	
+	uint32_t	m_alignedMemoryMapSize = 0;
 
 	// memorySize : 전체 메모리의 크기(바이트 사이즈)
 	//bitmapAddr : 커널다음에 배치되는 비트맵 배열
 	//이 배열을 참조해서 해당 물리 메모리가 할당되었는지 사용중인지를 판단한다.
-	void Initialize(size_t memorySize, uint32_t bitmapAddr)
+	void Initialize(uint32_t memorySize, uint32_t bitmapAddr)
 	{
 		SkyConsole::Print("Physical Memory Manager Init..\n");
 
@@ -40,9 +37,16 @@ namespace PhysicalMemoryManager
 		//모든 메모리 블럭들이 사용중에 있다고 설정한다.	
 		unsigned char flag = 0xff;
 		memset((char*)m_pMemoryMap, flag, m_memoryMapSize);
+
+		m_alignedMemoryMapSize = (GetMemoryMapSize() / 4096) * 4096;
+
+		if (GetMemoryMapSize() % 4096 > 0)
+			m_alignedMemoryMapSize += 4096;
 	}
 
 	uint32_t GetMemoryMapSize() { return m_memoryMapSize; }
+
+	uint32_t GetAlignedMemoryMapSize() { return m_alignedMemoryMapSize; }
 
 	//8번째 메모리 블럭이 사용중임을 표시하기 위해 1로 세팅하려면 배열 첫번째 요소(4바이트) 바이트의 8번째 비트에 접근해야 한다
 	void SetBit(int bit)
@@ -282,15 +286,15 @@ namespace PhysicalMemoryManager
 
 	void SetAvailableMemory(uint32_t base, size_t size)
 	{
+
+		size = size - m_alignedMemoryMapSize;
 		int align = base / PMM_BLOCK_SIZE;
 		int blocks = size / PMM_BLOCK_SIZE;
 
 		for (; blocks > 0; blocks--) {
 			UnsetBit(align++);
 			m_usedBlocks--;
-		}
-
-		//SetBit(0);	//first block is always set. This insures allocs cant be 0
+		}		
 	}
 	void SetDeAvailableMemory(uint32_t base, size_t size)
 	{
@@ -301,22 +305,15 @@ namespace PhysicalMemoryManager
 			SetBit(align++);
 			m_usedBlocks++;
 		}
-
-		//SetBit(0);	//first block is always set. This insures allocs cant be 0
 	}
 
 	void Dump()
 	{
-		//#ifdef _ORANGE_DEBUG
 		SkyConsole::Print("Memory Size : 0x%x\n", m_memorySize);
 		SkyConsole::Print("Memory Map Address : 0x%x\n", m_pMemoryMap);
-		SkyConsole::Print("Memory Map Size : 0x%x\n", m_memoryMapSize);
-		SkyConsole::Print("Max Block Count : 0x%x\n", m_maxBlocks);
+		SkyConsole::Print("Memory Map Size : %d bytes\n", m_memoryMapSize);
+		SkyConsole::Print("Max Block Count : %d\n", m_maxBlocks);
 
-		SkyConsole::Print("Used Block Count : 0x%x\n", m_usedBlocks);		
-		//#endif // _ORANGE_DEBUG
+		SkyConsole::Print("Used Block Count : %d\n", m_usedBlocks);
 	}
-
-
-	
 }

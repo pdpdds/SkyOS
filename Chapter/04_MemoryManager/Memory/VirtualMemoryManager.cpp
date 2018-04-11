@@ -260,5 +260,10 @@ namespace VirtualMemoryManager
 			sti
 		}
 #endif
-	}		
+	}	
+
+	void Dump()
+	{
+		
+	}
 }
