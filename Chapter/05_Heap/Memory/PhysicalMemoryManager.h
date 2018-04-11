@@ -28,8 +28,8 @@ namespace PhysicalMemoryManager
 
 	size_t GetMemorySize();
 
-	int GetFreeFrame();
-	int GetFreeFrames(size_t size);
+	unsigned int GetFreeFrame();
+	unsigned int GetFreeFrames(size_t size);
 
 	uint32_t GetUsedBlockCount();
 	uint32_t GetFreeBlockCount();

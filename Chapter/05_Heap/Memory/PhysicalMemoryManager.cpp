@@ -2,6 +2,8 @@
 #include "string.h"
 #include "SkyConsole.h"
 
+extern uint32_t g_freeMemoryStartAddress;
+
 namespace PhysicalMemoryManager
 {
 	uint32_t	m_memorySize = 0;
@@ -13,7 +15,6 @@ namespace PhysicalMemoryManager
 	//비트맵 배열, 각 비트는 메모리 블럭을 표현, 비트맵처리
 	uint32_t*	m_pMemoryMap = 0;
 	uint32_t	m_memoryMapSize = 0;	
-	uint32_t	m_alignedMemoryMapSize = 0;
 
 	// memorySize : 전체 메모리의 크기(바이트 사이즈)
 	//bitmapAddr : 커널다음에 배치되는 비트맵 배열
@@ -34,19 +35,21 @@ namespace PhysicalMemoryManager
 		m_memoryMapSize = m_maxBlocks / PMM_BLOCKS_PER_BYTE;
 		m_usedBlocks = GetTotalBlockCount();
 
+		int tempMemoryMapSize = (GetMemoryMapSize() / 4096) * 4096;
+
+		if (GetMemoryMapSize() % 4096 > 0)
+			tempMemoryMapSize += 4096;
+
+		m_memoryMapSize = tempMemoryMapSize;
+
 		//모든 메모리 블럭들이 사용중에 있다고 설정한다.	
 		unsigned char flag = 0xff;
 		memset((char*)m_pMemoryMap, flag, m_memoryMapSize);
 
-		m_alignedMemoryMapSize = (GetMemoryMapSize() / 4096) * 4096;
-
-		if (GetMemoryMapSize() % 4096 > 0)
-			m_alignedMemoryMapSize += 4096;
+		SetAvailableMemory(g_freeMemoryStartAddress, memorySize);
 	}
 
 	uint32_t GetMemoryMapSize() { return m_memoryMapSize; }
-
-	uint32_t GetAlignedMemoryMapSize() { return m_alignedMemoryMapSize; }
 
 	//8번째 메모리 블럭이 사용중임을 표시하기 위해 1로 세팅하려면 배열 첫번째 요소(4바이트) 바이트의 8번째 비트에 접근해야 한다
 	void SetBit(int bit)
@@ -126,14 +129,15 @@ namespace PhysicalMemoryManager
 		if (GetFreeBlockCount() <= 0)
 			return NULL;
 
-		int frame = GetFreeFrame();
+		unsigned int frame = GetFreeFrame();
 
 		if (frame == -1)
 			return NULL;
 
 		SetBit(frame);
+		//SkyConsole::Print("free frame : 0x%x\n", frame);
 
-		uint32_t addr = frame * PMM_BLOCK_SIZE;
+		uint32_t addr = frame * PMM_BLOCK_SIZE + g_freeMemoryStartAddress;
 		m_usedBlocks++;
 
 		return (void*)addr;
@@ -149,6 +153,7 @@ namespace PhysicalMemoryManager
 		m_usedBlocks--;
 	}
 
+	
 	void* AllocBlocks(size_t size)
 	{
 		if (GetFreeBlockCount() <= size)
@@ -156,6 +161,7 @@ namespace PhysicalMemoryManager
 			return NULL;
 		}
 
+		
 		int frame = GetFreeFrames(size);
 
 		if (frame == -1)
@@ -166,7 +172,7 @@ namespace PhysicalMemoryManager
 		for (uint32_t i = 0; i < size; i++)
 			SetBit(frame + i);
 
-		uint32_t addr = frame * PMM_BLOCK_SIZE;
+		uint32_t addr = frame * PMM_BLOCK_SIZE + g_freeMemoryStartAddress;
 		m_usedBlocks += size;
 
 		return (void*)addr;
@@ -174,7 +180,7 @@ namespace PhysicalMemoryManager
 
 	void FreeBlocks(void* p, size_t size) {
 
-		uint32_t addr = (uint32_t)p;
+		uint32_t addr = (uint32_t)p - g_freeMemoryStartAddress;
 		int frame = addr / PMM_BLOCK_SIZE;
 
 		for (uint32_t i = 0; i < size; i++)
@@ -221,42 +227,44 @@ namespace PhysicalMemoryManager
 	}
 
 	//비트가 0인 프레임 인덱스를 얻어낸다(사용할 수 있는 빈 블럭 비트 인덱스)
-	int GetFreeFrame()
+	unsigned int GetFreeFrame()
 	{
 		for (uint32_t i = 0; i < GetTotalBlockCount() / 32; i++)
 		{
 			if (m_pMemoryMap[i] != 0xffffffff)
-				for (int j = 0; j < PMM_BITS_PER_INDEX; j++)
+				for (unsigned int j = 0; j < PMM_BITS_PER_INDEX; j++)
 				{
-					int bit = 1 << j;
+					unsigned int bit = 1 << j;
 					if ((m_pMemoryMap[i] & bit) == 0)
 						return i * PMM_BITS_PER_INDEX + j;
 				}
 		}
 
-		return -1;
+		return 0xffffffff;
 	}
 
 	//연속된 빈 프레임(블럭)들을 얻어낸다
-	int GetFreeFrames(size_t size)
+	unsigned int GetFreeFrames(size_t size)
 	{
 		if (size == 0)
-			return -1;
+			return 0xffffffff;
 
 		if (size == 1)
 			return GetFreeFrame();
 
+		
+
 		for (uint32_t i = 0; i < GetTotalBlockCount() / 32; i++)
-		{
+		{		
 			if (m_pMemoryMap[i] != 0xffffffff)
-			{
-				for (int j = 0; j < 32; j++)
+			{				
+				for (unsigned int j = 0; j < 32; j++)
 				{
-					int bit = 1 << j;
+					unsigned int bit = 1 << j;
 					if ((m_pMemoryMap[i] & bit) == 0)
 					{
-
-						int startingBit = i * PMM_BITS_PER_INDEX + j;
+						
+						unsigned int startingBit = i * PMM_BITS_PER_INDEX + j;
 
 						// 연속된 빈 프레임의 갯수를 증가시킨다.
 
@@ -265,7 +273,7 @@ namespace PhysicalMemoryManager
 						{
 							//메모리맵을 벗어나는 상황
 							if (startingBit + count >= m_maxBlocks)
-								return -1;
+								return 0xffffffff;
 
 							if (TestMemoryMap(startingBit + count) == false)
 								free++;
@@ -281,18 +289,17 @@ namespace PhysicalMemoryManager
 			}
 		}
 
-		return -1;
+		return 0xffffffff;
 	}
 
 	void SetAvailableMemory(uint32_t base, size_t size)
 	{
+				
+		int usedBlock = GetMemoryMapSize() / PMM_BLOCK_SIZE;
+		int blocks = GetTotalBlockCount();
 
-		size = size - m_alignedMemoryMapSize;
-		int align = base / PMM_BLOCK_SIZE;
-		int blocks = size / PMM_BLOCK_SIZE;
-
-		for (; blocks > 0; blocks--) {
-			UnsetBit(align++);
+		for (int i = usedBlock; i < blocks; i++) {
+			UnsetBit(i);
 			m_usedBlocks--;
 		}		
 	}

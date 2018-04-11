@@ -14,6 +14,7 @@
 #define KERNEL_VIRTUAL_STACK_ADDRESS			0x00800000
 
 #define KERNEL_VIRTUAL_HEAP_ADDRESS				0x80000000
+#define KERNEL_VIRTUAL_PAGE_BASE_ADDRESS		0x70000000
 
 
 using namespace PageTableEntry;
@@ -24,19 +25,18 @@ using namespace PageDirectoryEntry;
 // 크기(4 * 1024 = 4K)
 // 따라서 한 프로세스는 가상주소 4기가를 전부 표현하기 위해 약 4메가바이트의
 // 메모리 공간을 필요로 한다(4K(PDE) + 1024 * 4K(PTE))
-// 하나의 페이지 테이블은 4MB를 표현할 수 있고 페이지 디렉토리에 1024개의 페이지 테이블이
-// 존재하므로 4MB * 1024 = 4GB, 즉 4GB 바이트 전체를 표현할 수 있다.
+// 하나의 페이지 테이블은 4MB를 표현할 수 있고 페이지 디렉토리는 1024개의 페이지 테이블을
+// 표현할 수 있으므로 4MB * 1024 = 4GB, 즉 4GB 바이트 전체를 표현할 수 있다.
 
 #define PAGES_PER_TABLE		1024
 #define PAGES_PER_DIRECTORY	1024
 #define PAGE_TABLE_SIZE		4096
 
-//! page table represents 4mb address space
+//페이지 테이블 하나당 주소 공간 : 4MB
 #define PTABLE_ADDR_SPACE_SIZE 0x400000
-//! directory table represents 4gb address space
+//페이지 디렉토리 하나가 표현할 수 있는 있는 주소 공간 4GB
 #define DTABLE_ADDR_SPACE_SIZE 0x100000000
 
-// chapter 21
 #define PAGE_DIRECTORY_INDEX(x) (((x) >> 22) & 0x3ff)
 #define PAGE_TABLE_INDEX(x) (((x) >> 12) & 0x3ff)
 #define PAGE_GET_PHYSICAL_ADDRESS(x) (*x & ~0xfff)
@@ -96,6 +96,7 @@ namespace VirtualMemoryManager
 	bool CreatePageTable(PageDirectory* dir, uint32_t virt, uint32_t flags);
 	//가상주소를 물리주소에 매핑한다. 이 과정에서 페이지 테이블 엔트리에 정보가 기록된다.
 	void MapPhysicalAddressToVirtualAddresss(PageDirectory* dir, uint32_t virt, uint32_t phys, uint32_t flags);
+	
 	//가상주소로부터 실제 물리주소를 얻어낸다
 	void* GetPhysicalAddressFromVirtualAddress(PageDirectory* directory, uint32_t virtualAddress);
 	//페이지 디렉토리에 매핑된 페이지 디렉토리를 해제한다

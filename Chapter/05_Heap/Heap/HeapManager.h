@@ -1,8 +1,9 @@
 #pragma once
-class HeapManager
-{
-public:
-	HeapManager();
-	~HeapManager();
-};
+#include "PhysicalMemoryManager.h"
+#include "VirtualMemoryManager.h"
 
+namespace HeapManager
+{
+	bool InitKernelHeap(int heapFrameCount);
+	bool MapHeapToAddressSpace(PageDirectory* curPageDirectory);
+}

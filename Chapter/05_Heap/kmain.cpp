@@ -2,6 +2,7 @@
 #include "SkyTest.h"
 #include "PhysicalMemoryManager.h"
 #include "VirtualMemoryManager.h"
+#include "HeapManager.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -38,6 +39,9 @@ _declspec(naked) void multiboot_entry(void)
 	}
 }
 
+uint32_t g_freeMemoryStartAddress = 0x00400000; //자유공간 시작주소 : 4MB
+uint32_t g_freeMemorySize = 0;
+
 void HardwareInitiize();
 bool InitMemoryManager(multiboot_info* bootinfo);
 
@@ -64,10 +68,25 @@ void kmain(unsigned long magic, unsigned long addr)
 	
 	SkyConsole::Print("Interrput Handler Init Complete\n");
 
-//물리/가상 메모리 매니저를 초기화한다.
+//물/가상 메모리 매니저를 초기화한다.
+//설정 시스템 메모리는 128MB
 	InitMemoryManager(pBootInfo);
 
 	SkyConsole::Print("Memory Manager Init Complete\n");
+
+	int heapFrameCount = 256 * 10 * 5; //프레임수 12800개, 52MB
+	unsigned int requiredHeapSize = heapFrameCount * PAGE_SIZE;
+
+//요구되는 힙의 크기가 자유공간보다 크다면 그 크기를 자유공간 크기로 맞춘다음 반으로 줄인다.
+	if (requiredHeapSize > g_freeMemorySize)
+	{
+		requiredHeapSize = g_freeMemorySize;
+		heapFrameCount = requiredHeapSize / PAGE_SIZE / 2;
+	}
+
+	HeapManager::InitKernelHeap(heapFrameCount);
+
+	SkyConsole::Print("Heap %dMB Allocated\n", requiredHeapSize / 1048576);
 
 	kLeaveCriticalSection(&g_criticalSection);
 
@@ -83,8 +102,6 @@ void HardwareInitiize()
 	PICInitialize(0x20, 0x28);
 	InitializePIT();
 }
-
-uint32_t g_freeMemoryStartAddress = 0x00400000; //자유공간 시작주소 : 4MB
 
 uint32_t GetFreeSpaceMemory(multiboot_info* bootinfo)
 {
@@ -133,21 +150,18 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 {
 	PhysicalMemoryManager::EnablePaging(false);
 
-	uint32_t freeMemorySize = GetFreeSpaceMemory(bootinfo);
+	g_freeMemorySize = GetFreeSpaceMemory(bootinfo);
 
 	//물리 메모리 매니저 초기화
-	PhysicalMemoryManager::Initialize(freeMemorySize, g_freeMemoryStartAddress);
-	//PhysicalMemoryManager::Dump();
-
-	PhysicalMemoryManager::SetAvailableMemory(g_freeMemoryStartAddress, freeMemorySize);
+	PhysicalMemoryManager::Initialize(g_freeMemorySize, g_freeMemoryStartAddress);
 	PhysicalMemoryManager::Dump();
 
 	//가상 메모리 매니저 초기화	
 	VirtualMemoryManager::Initialize();
-	VirtualMemoryManager::Dump();
+	PhysicalMemoryManager::Dump();
 
-	//SkyConsole::Print("KernelSize : %d Bytes\n", kernelSize);
-	SkyConsole::Print("FreeSpace MemorySize From 0x%x: 0x%x Bytes\n", g_freeMemoryStartAddress, freeMemorySize);
+	SkyConsole::Print("Free Memory Start Address(0x%x)\n", g_freeMemoryStartAddress);
+	SkyConsole::Print("Free Memory Size(%dMB)\n", g_freeMemorySize / 1048576);
 	
 	return true;
 }
