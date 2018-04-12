@@ -1,7 +1,6 @@
 #pragma once
 
-
-namespace std
+namespace sky
 {
 	template <typename ContentsType>
 	ListIterator<ContentsType>::ListIterator(ListNode<ContentsType>* nodePointer)

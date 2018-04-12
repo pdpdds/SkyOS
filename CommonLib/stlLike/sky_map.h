@@ -1,6 +1,6 @@
 #include "stl_pair.h"
 
-namespace std
+namespace sky
 {
 	template <class T, class V>
 	struct node

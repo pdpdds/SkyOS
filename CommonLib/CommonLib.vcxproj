@@ -18,21 +18,12 @@
     <ClInclude Include="memory.h" />
     <ClInclude Include="SkyStruct.h" />
     <ClInclude Include="sprintf.h" />
-    <ClInclude Include="stdint.h" />
     <ClInclude Include="stdio.h" />
-    <ClInclude Include="stlLike\c++config.h" />
-    <ClInclude Include="stlLike\concept_check.h" />
-    <ClInclude Include="stlLike\HashMap.h" />
-    <ClInclude Include="stlLike\list1.h" />
-    <ClInclude Include="stlLike\list_implement.h" />
-    <ClInclude Include="stlLike\list_iterator_implement.h" />
-    <ClInclude Include="stlLike\list_node_implement.h" />
-    <ClInclude Include="stlLike\map.hpp" />
-    <ClInclude Include="stlLike\map1.hpp" />
-    <ClInclude Include="stlLike\move.h" />
-    <ClInclude Include="stlLike\Stack.h" />
-    <ClInclude Include="stlLike\stl_pair.h" />
-    <ClInclude Include="stlLike\Vector.h" />
+    <ClInclude Include="stlLike\sky_hashmap.h" />
+    <ClInclude Include="stlLike\sky_list.h" />
+    <ClInclude Include="stlLike\sky_map.h" />
+    <ClInclude Include="stlLike\sky_stack.h" />
+    <ClInclude Include="stlLike\sky_vector.h" />
     <ClInclude Include="stl\darray.h" />
     <ClInclude Include="stl\darray.hpp" />
     <ClInclude Include="stl\deque.h" />
@@ -133,7 +124,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./;../include;./lua;./util;./stl</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../include;./lua;./util;./stl;./stllike</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ARCH_X86;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>false</StringPooling>

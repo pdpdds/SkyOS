@@ -2,7 +2,7 @@
 #include "list_node_implement.h"
 #include "list_iterator_implement.h"
 
-namespace std
+namespace sky
 {
 
 	template <typename ContentsType>

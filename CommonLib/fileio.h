@@ -20,24 +20,12 @@ int fseek(FILE *stream, long int offset, int whence);
 long int ftell(FILE *stream);
 size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
 int getc(FILE * stream); 
-
 char *	strerror(int errnum);
-
 int fprintf(FILE * stream, const char * format, ...);
 
-FILE* __cdecl __acrt_iob_func(unsigned _Ix);
-
-#define stdin  (__acrt_iob_func(0))
-#define stdout  (__acrt_iob_func(0))
-
-
-//extern struct FILE *stderr;                /* Standard error output stream.  */
-
-#define stderr stderr
 
 #define NULL 0
 
-										   /* flags for mmioSeek() */
 #ifndef SEEK_SET
 #define SEEK_SET        0               /* seek to an absolute position */
 #define SEEK_CUR        1               /* seek relative to current position */

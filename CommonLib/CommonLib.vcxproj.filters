@@ -18,45 +18,6 @@
     <ClInclude Include="jsmn\jsmn.h">
       <Filter>jsmn</Filter>
     </ClInclude>
-    <ClInclude Include="stlLike\c++config.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\concept_check.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\HashMap.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\list_implement.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\list_iterator_implement.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\list_node_implement.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\list1.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\map.hpp">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\map1.hpp">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\move.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\Stack.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\stl_pair.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\Vector.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
     <ClInclude Include="stl\darray.h">
       <Filter>stl</Filter>
     </ClInclude>
@@ -173,10 +134,24 @@
     <ClInclude Include="math.h" />
     <ClInclude Include="SkyStruct.h" />
     <ClInclude Include="sprintf.h" />
-    <ClInclude Include="stdint.h" />
     <ClInclude Include="stdio.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="memory.h" />
+    <ClInclude Include="stlLike\sky_vector.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\sky_stack.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\sky_list.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\sky_hashmap.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\sky_map.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jsmn\jsmn.cpp">

@@ -1,174 +1,178 @@
 #pragma once
-template <class T>
-class  Vector {
-public:
 
-	typedef T* Iterator;
+namespace sky
+{
+	template <class T>
+	class  vector {
+	public:
 
-	Vector();
-	Vector(unsigned int size);
-	Vector(unsigned int size, const T & initial);
-	Vector(const Vector<T>& v);
-	~Vector();
+		typedef T* Iterator;
 
-	unsigned int capacity() const;
-	unsigned int size() const;
-	bool empty() const;
-	Iterator begin();
-	Iterator end();
-	T& front();
-	T& back();
-	void push_back(const T& value);
-	void pop_back();
+		vector();
+		vector(unsigned int size);
+		vector(unsigned int size, const T & initial);
+		vector(const vector<T>& v);
+		~vector();
 
-	void reserve(unsigned int capacity);
-	void resize(unsigned int size);
+		unsigned int capacity() const;
+		unsigned int size() const;
+		bool empty() const;
+		Iterator begin();
+		Iterator end();
+		T& front();
+		T& back();
+		void push_back(const T& value);
+		void pop_back();
 
-	T & operator[](unsigned int index);
-	Vector<T> & operator = (const Vector<T> &);
-	void clear();
-private:
-	unsigned int _size;
-	unsigned int _capacity;
-	unsigned int Log;
-	T* buffer;
-};
+		void reserve(unsigned int capacity);
+		void resize(unsigned int size);
 
-template<class T>
-Vector<T>::Vector() {
-	_capacity = 0;
-	_size = 0;
-	buffer = 0;
-	Log = 0;
-}
+		T & operator[](unsigned int index);
+		vector<T> & operator = (const vector<T> &);
+		void clear();
+	private:
+		unsigned int _size;
+		unsigned int _capacity;
+		unsigned int Log;
+		T* buffer;
+	};
 
-template<class T>
-Vector<T>::Vector(const Vector<T> & v) {
-	_size = v._size;
-	Log = v.Log;
-	_capacity = v._capacity;
-	buffer = new T[_size];
-	for (unsigned int i = 0; i < _size; i++)
-		buffer[i] = v.buffer[i];
-}
-
-template<class T>
-Vector<T>::Vector(unsigned int size) {
-	_size = size;
-	Log = ceil(log((double)size) / log(2.0));
-	_capacity = 1 << Log;
-	buffer = new T[_capacity];
-}
-
-template <class T>
-bool Vector<T>::empty() const {
-	return _size == 0;
-}
-
-template<class T>
-Vector<T>::Vector(unsigned int size, const T& initial) {
-	_size = size;
-	Log = ceil(log((double)size) / log(2.0));
-	_capacity = 1 << Log;
-	buffer = new T[_capacity];
-	for (unsigned int i = 0; i < size; i++)
-		buffer[i] = initial;
-}
-
-template<class T>
-Vector<T>& Vector<T>::operator = (const Vector<T> & v) {
-	delete[] buffer;
-	_size = v._size;
-	Log = v.Log;
-	_capacity = v._capacity;
-	buffer = new T[_capacity];
-	for (unsigned int i = 0; i < _size; i++)
-		buffer[i] = v.buffer[i];
-	return *this;
-}
-
-template<class T>
-typename Vector<T>::Iterator Vector<T>::begin() {
-	return buffer;
-}
-
-template<class T>
-typename Vector<T>::Iterator Vector<T>::end() {
-	return buffer + size();
-}
-
-template<class T>
-T& Vector<T>::front() {
-	return buffer[0];
-}
-
-template<class T>
-T& Vector<T>::back() {
-	return buffer[_size - 1];
-}
-
-template<class T>
-void Vector<T>::push_back(const T & v) {
-	/*
-	Incidentally, one common way of regrowing an array is to double the size as needed.
-	This is so that if you are inserting n items at most only O(log n) regrowths are performed
-	and at most O(n) space is wasted.
-	*/
-	if (_size >= _capacity) {
-		reserve(1 << Log);
-		Log++;
+	template<class T>
+	vector<T>::vector() {
+		_capacity = 0;
+		_size = 0;
+		buffer = 0;
+		Log = 0;
 	}
-	buffer[_size++] = v;
-}
 
-template<class T>
-void Vector<T>::pop_back() {
-	_size--;
-}
+	template<class T>
+	vector<T>::vector(const vector<T> & v) {
+		_size = v._size;
+		Log = v.Log;
+		_capacity = v._capacity;
+		buffer = new T[_size];
+		for (unsigned int i = 0; i < _size; i++)
+			buffer[i] = v.buffer[i];
+	}
 
-template<class T>
-void Vector<T>::reserve(unsigned int capacity) {
-	T * newBuffer = new T[capacity];
+	template<class T>
+	vector<T>::vector(unsigned int size) {
+		_size = size;
+		Log = ceil(log((double)size) / log(2.0));
+		_capacity = 1 << Log;
+		buffer = new T[_capacity];
+	}
 
-	for (unsigned int i = 0; i < _size; i++)
-		newBuffer[i] = buffer[i];
+	template <class T>
+	bool vector<T>::empty() const {
+		return _size == 0;
+	}
 
-	_capacity = capacity;
-	delete[] buffer;
-	buffer = newBuffer;
-}
+	template<class T>
+	vector<T>::vector(unsigned int size, const T& initial) {
+		_size = size;
+		Log = ceil(log((double)size) / log(2.0));
+		_capacity = 1 << Log;
+		buffer = new T[_capacity];
+		for (unsigned int i = 0; i < size; i++)
+			buffer[i] = initial;
+	}
 
-template<class T>
-unsigned int Vector<T>::size() const {
-	return _size;
-}
+	template<class T>
+	vector<T>& vector<T>::operator = (const vector<T> & v) {
+		delete[] buffer;
+		_size = v._size;
+		Log = v.Log;
+		_capacity = v._capacity;
+		buffer = new T[_capacity];
+		for (unsigned int i = 0; i < _size; i++)
+			buffer[i] = v.buffer[i];
+		return *this;
+	}
 
-template<class T>
-void Vector<T>::resize(unsigned int size) {
-	Log = ceil(log((double)size) / log(2.0));
-	reserve(1 << Log);
-	_size = size;
-}
+	template<class T>
+	typename vector<T>::Iterator vector<T>::begin() {
+		return buffer;
+	}
 
-template<class T>
-T& Vector<T>::operator[](unsigned int index) {
-	return buffer[index];
-}
+	template<class T>
+	typename vector<T>::Iterator vector<T>::end() {
+		return buffer + size();
+	}
 
-template<class T>
-unsigned int Vector<T>::capacity()const {
-	return _capacity;
-}
+	template<class T>
+	T& vector<T>::front() {
+		return buffer[0];
+	}
 
-template<class T>
-Vector<T>::~Vector() {
-	delete[] buffer;
-}
+	template<class T>
+	T& vector<T>::back() {
+		return buffer[_size - 1];
+	}
 
-template <class T>
-void Vector<T>::clear() {
-	_capacity = 0;
-	_size = 0;
-	buffer = 0;
-	Log = 0;
+	template<class T>
+	void vector<T>::push_back(const T & v) {
+		/*
+		Incidentally, one common way of regrowing an array is to double the size as needed.
+		This is so that if you are inserting n items at most only O(log n) regrowths are performed
+		and at most O(n) space is wasted.
+		*/
+		if (_size >= _capacity) {
+			reserve(1 << Log);
+			Log++;
+		}
+		buffer[_size++] = v;
+	}
+
+	template<class T>
+	void vector<T>::pop_back() {
+		_size--;
+	}
+
+	template<class T>
+	void vector<T>::reserve(unsigned int capacity) {
+		T * newBuffer = new T[capacity];
+
+		for (unsigned int i = 0; i < _size; i++)
+			newBuffer[i] = buffer[i];
+
+		_capacity = capacity;
+		delete[] buffer;
+		buffer = newBuffer;
+	}
+
+	template<class T>
+	unsigned int vector<T>::size() const {
+		return _size;
+	}
+
+	template<class T>
+	void vector<T>::resize(unsigned int size) {
+		Log = ceil(log((double)size) / log(2.0));
+		reserve(1 << Log);
+		_size = size;
+	}
+
+	template<class T>
+	T& vector<T>::operator[](unsigned int index) {
+		return buffer[index];
+	}
+
+	template<class T>
+	unsigned int vector<T>::capacity()const {
+		return _capacity;
+	}
+
+	template<class T>
+	vector<T>::~vector() {
+		delete[] buffer;
+	}
+
+	template <class T>
+	void vector<T>::clear() {
+		_capacity = 0;
+		_size = 0;
+		buffer = 0;
+		Log = 0;
+	}
 }
