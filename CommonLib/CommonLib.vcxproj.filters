@@ -4,11 +4,8 @@
     <Filter Include="jsmn">
       <UniqueIdentifier>{6427ffee-d7b5-43ae-bd4d-715013b5ba74}</UniqueIdentifier>
     </Filter>
-    <Filter Include="stllike">
-      <UniqueIdentifier>{74dae68f-7cff-4577-9f13-8847c6b8d565}</UniqueIdentifier>
-    </Filter>
     <Filter Include="stl">
-      <UniqueIdentifier>{74806527-b4f0-4003-960f-f62906112a10}</UniqueIdentifier>
+      <UniqueIdentifier>{9bef8106-3953-438b-9a42-cb5a2791737a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -23,52 +20,22 @@
     <ClInclude Include="stdio.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="memory.h" />
-    <ClInclude Include="stlLike\sky_vector.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\sky_stack.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\sky_list.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\sky_hashmap.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
-    <ClInclude Include="stlLike\sky_map.h">
-      <Filter>stllike</Filter>
-    </ClInclude>
     <ClInclude Include="stl\algo.h">
       <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\algobase.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\alloc.h">
+    <ClInclude Include="stl\c++config.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\bvector.h">
+    <ClInclude Include="stl\concept_check.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\defalloc.h">
+    <ClInclude Include="stl\darray.hpp">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\deque.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\function.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\hash_map.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\hash_set.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\hashtable.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\heap.h">
+    <ClInclude Include="stl\deque.hpp">
       <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\IOStream.h">
@@ -77,46 +44,22 @@
     <ClInclude Include="stl\IStream.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\iterator.h">
+    <ClInclude Include="stl\list_implement.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\list.h">
+    <ClInclude Include="stl\list_iterator_implement.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\map.h">
+    <ClInclude Include="stl\list_node_implement.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\multimap.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\multiset.h">
+    <ClInclude Include="stl\move.h">
       <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\OStream.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\pair.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\pthread_alloc.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\rope.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\ropeimpl.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\set.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\slist.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\stack.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\stl_config.h">
+    <ClInclude Include="stl\stl_pair.h">
       <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\stl_string.h">
@@ -125,29 +68,38 @@
     <ClInclude Include="stl\tempbuf.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\tree.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\type_traits.h">
-      <Filter>stl</Filter>
-    </ClInclude>
     <ClInclude Include="stl\vector.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stlLike\darray.hpp">
-      <Filter>stllike</Filter>
+    <ClInclude Include="stl\stack.h">
+      <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stlLike\deque.hpp">
-      <Filter>stllike</Filter>
+    <ClInclude Include="stl\map.h">
+      <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stlLike\sky_functional.h">
-      <Filter>stllike</Filter>
+    <ClInclude Include="stl\hashmap.h">
+      <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stlLike\sky_deque.h">
-      <Filter>stllike</Filter>
+    <ClInclude Include="stl\functional.h">
+      <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stlLike\sky_darray.h">
-      <Filter>stllike</Filter>
+    <ClInclude Include="stl\deque.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\darray.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\DoubleLinkedList.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\queue.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\list.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\LinkedList.h">
+      <Filter>stl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +121,9 @@
       <Filter>stl</Filter>
     </ClCompile>
     <ClCompile Include="stl\stl_string.cpp">
+      <Filter>stl</Filter>
+    </ClCompile>
+    <ClCompile Include="stl\LinkedList.cpp">
       <Filter>stl</Filter>
     </ClCompile>
   </ItemGroup>

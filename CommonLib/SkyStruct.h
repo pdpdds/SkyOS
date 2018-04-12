@@ -1,10 +1,13 @@
 #pragma once
 #include "windef.h"
-#include "sky_list.h"
-#include "sky_hashmap.h"
-#include "sky_map.h"
-#include "sky_stack.h"
-#include "sky_vector.h"
+#include "list.h"
+#include "hashmap.h"
+#include "map.h"
+#include "stack.h"
+#include "vector.h"
+#include "deque.h"
+#include "queue.h"
+#include "stl_string.h"
 
 //RTC Command registers
 #define RTC_INDEX_REG 0x70
