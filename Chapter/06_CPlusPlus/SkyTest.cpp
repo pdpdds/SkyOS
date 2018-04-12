@@ -5,6 +5,7 @@
 #include "PureCallExtend.h"
 #include "ZetPlane.h"
 #include "string.h"
+#include "memory.h"
 #include "kheap.h"
 
 //인터럽트 핸들러 테스트

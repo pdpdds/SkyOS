@@ -1,10 +1,8 @@
 #include "idt.h"
-#include <string.h>
+#include "string.h"
+#include "memory.h"
 #include <hal.h>
 #include "SkyAPI.h"
-#ifdef _DEBUG
-#include "..\Kernel\DebugDisplay.h"
-#endif
 
 //인터럽트 디스크립터 테이블
 static struct idt_descriptor	_idt [I86_MAX_INTERRUPTS];

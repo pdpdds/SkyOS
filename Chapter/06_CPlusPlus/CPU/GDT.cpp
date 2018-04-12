@@ -1,6 +1,8 @@
 #include "gdt.h"
-#include <string.h>
+#include "string.h"
+#include "memory.h"
 #include "windef.h"
+
 #include "defines.h"
 
 #ifdef _MSC_VER
@@ -21,13 +23,6 @@ struct gdtr {
 #ifdef _MSC_VER
 #pragma pack (pop, 1)
 #endif
-
-//============================================================================
-//    IMPLEMENTATION REQUIRED EXTERNAL REFERENCES (AVOID)
-//============================================================================
-//============================================================================
-//    IMPLEMENTATION PRIVATE DATA
-//============================================================================
 
 //! global descriptor table is an array of descriptors
 static struct gdt_descriptor	_gdt [MAX_DESCRIPTORS];

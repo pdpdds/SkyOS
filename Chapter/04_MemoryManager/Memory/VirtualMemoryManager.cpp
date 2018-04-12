@@ -1,6 +1,7 @@
 ﻿#include "VirtualMemoryManager.h"
 #include "PhysicalMemoryManager.h"
 #include "string.h"
+#include "memory.h"
 #include "SkyConsole.h"
 #include"MultiBoot.h"	
 

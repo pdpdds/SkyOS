@@ -1,5 +1,6 @@
 ﻿#include "PhysicalMemoryManager.h"
 #include "string.h"
+#include "memory.h"
 #include "SkyConsole.h"
 
 namespace PhysicalMemoryManager

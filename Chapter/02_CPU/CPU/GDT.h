@@ -1,31 +1,5 @@
-#ifndef _GDT_H_INCLUDED
-# define _GDT_H_INCLUDED
-//****************************************************************************
-//**
-//**    gdt.h
-//**
-//**	global descriptor table (gdt) for i86 processors. This handles
-//**	the basic memory map for the system and permission levels
-//**
-//**	The system software should have a gdt set up prior to this being
-//**	used. This sets up a basic gdt interface that can be managed through
-//**	the HAL
-//**
-//****************************************************************************
-
-#ifndef ARCH_X86
-#error "[gdt.h] platform not implimented. Define ARCH_X86 for HAL"
-#endif
-
-//============================================================================
-//    INTERFACE REQUIRED HEADERS
-//============================================================================
-
+#pragma once
 #include <stdint.h>
-
-//============================================================================
-//    INTERFACE DEFINITIONS / ENUMERATIONS / SIMPLE TYPEDEFS
-//============================================================================
 
 //! maximum amount of descriptors allowed
 #define MAX_DESCRIPTORS					10
@@ -109,4 +83,3 @@ extern void gdt_set_descriptor(uint32_t i, uint64_t base, uint64_t limit, uint8_
 //! returns descritor
 extern gdt_descriptor* i86_gdt_get_descriptor (int i);
 extern	int GDTInitialize();
-#endif
