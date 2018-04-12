@@ -1,4 +1,4 @@
-namespace std
+namespace sky
 {
 	template <typename T>
 	deque<T>::deque(int c, bool d) : _display(d), _deque_front(c, d), _deque_rear(c, d), _front(0), _rear(0), _front_last(0), _rear_first(0)
