@@ -10,124 +10,10 @@
     <Filter Include="stl">
       <UniqueIdentifier>{74806527-b4f0-4003-960f-f62906112a10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="stl\tinystl">
-      <UniqueIdentifier>{7d085712-e5ed-403e-94c3-0e159ad60cb9}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jsmn\jsmn.h">
       <Filter>jsmn</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\darray.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\darray.hpp">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\deque.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\deque.hpp">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\functional.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\IOStream.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\IStream.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\OStream.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\stl_string.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\algo.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\algobase.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\alloc.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\bvector.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\defalloc.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\deque.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\function.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\hash_map.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\hash_set.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\hashtable.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\heap.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\iterator.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\list.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\map.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\multimap.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\multiset.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\pair.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\pthread_alloc.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\rope.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\ropeimpl.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\set.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\slist.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\stack.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\stl_config.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\tempbuf.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\tree.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\type_traits.h">
-      <Filter>stl\tinystl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\tinystl\vector.h">
-      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="ctype.h" />
     <ClInclude Include="fileio.h" />
@@ -152,19 +38,121 @@
     <ClInclude Include="stlLike\sky_map.h">
       <Filter>stllike</Filter>
     </ClInclude>
+    <ClInclude Include="stl\algo.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\algobase.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\alloc.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\bvector.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\defalloc.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\deque.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\function.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\hash_map.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\hash_set.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\hashtable.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\heap.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\IOStream.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\IStream.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\iterator.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\list.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\map.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\multimap.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\multiset.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\OStream.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\pair.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\pthread_alloc.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\rope.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\ropeimpl.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\set.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\slist.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\stack.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\stl_config.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\stl_string.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tempbuf.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\tree.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\type_traits.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\vector.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\darray.hpp">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\deque.hpp">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\sky_functional.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\sky_deque.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\sky_darray.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jsmn\jsmn.cpp">
       <Filter>jsmn</Filter>
-    </ClCompile>
-    <ClCompile Include="stl\IStream.cpp">
-      <Filter>stl</Filter>
-    </ClCompile>
-    <ClCompile Include="stl\OStream.cpp">
-      <Filter>stl</Filter>
-    </ClCompile>
-    <ClCompile Include="stl\stl_string.cpp">
-      <Filter>stl</Filter>
     </ClCompile>
     <ClCompile Include="cstd.cpp" />
     <ClCompile Include="ctype.cpp" />
@@ -174,5 +162,14 @@
     <ClCompile Include="stdio.cpp" />
     <ClCompile Include="string.cpp" />
     <ClCompile Include="memory.cpp" />
+    <ClCompile Include="stl\IStream.cpp">
+      <Filter>stl</Filter>
+    </ClCompile>
+    <ClCompile Include="stl\OStream.cpp">
+      <Filter>stl</Filter>
+    </ClCompile>
+    <ClCompile Include="stl\stl_string.cpp">
+      <Filter>stl</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

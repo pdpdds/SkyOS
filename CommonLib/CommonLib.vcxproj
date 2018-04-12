@@ -19,48 +19,48 @@
     <ClInclude Include="SkyStruct.h" />
     <ClInclude Include="sprintf.h" />
     <ClInclude Include="stdio.h" />
+    <ClInclude Include="stlLike\sky_darray.h" />
+    <ClInclude Include="stlLike\darray.hpp" />
+    <ClInclude Include="stlLike\sky_deque.h" />
+    <ClInclude Include="stlLike\deque.hpp" />
+    <ClInclude Include="stlLike\sky_functional.h" />
     <ClInclude Include="stlLike\sky_hashmap.h" />
     <ClInclude Include="stlLike\sky_list.h" />
     <ClInclude Include="stlLike\sky_map.h" />
     <ClInclude Include="stlLike\sky_stack.h" />
     <ClInclude Include="stlLike\sky_vector.h" />
-    <ClInclude Include="stl\darray.h" />
-    <ClInclude Include="stl\darray.hpp" />
+    <ClInclude Include="stl\algo.h" />
+    <ClInclude Include="stl\algobase.h" />
+    <ClInclude Include="stl\alloc.h" />
+    <ClInclude Include="stl\bvector.h" />
+    <ClInclude Include="stl\defalloc.h" />
     <ClInclude Include="stl\deque.h" />
-    <ClInclude Include="stl\deque.hpp" />
-    <ClInclude Include="stl\functional.h" />
+    <ClInclude Include="stl\function.h" />
+    <ClInclude Include="stl\hashtable.h" />
+    <ClInclude Include="stl\hash_map.h" />
+    <ClInclude Include="stl\hash_set.h" />
+    <ClInclude Include="stl\heap.h" />
     <ClInclude Include="stl\IOStream.h" />
     <ClInclude Include="stl\IStream.h" />
+    <ClInclude Include="stl\iterator.h" />
+    <ClInclude Include="stl\list.h" />
+    <ClInclude Include="stl\map.h" />
+    <ClInclude Include="stl\multimap.h" />
+    <ClInclude Include="stl\multiset.h" />
     <ClInclude Include="stl\OStream.h" />
+    <ClInclude Include="stl\pair.h" />
+    <ClInclude Include="stl\pthread_alloc.h" />
+    <ClInclude Include="stl\rope.h" />
+    <ClInclude Include="stl\ropeimpl.h" />
+    <ClInclude Include="stl\set.h" />
+    <ClInclude Include="stl\slist.h" />
+    <ClInclude Include="stl\stack.h" />
+    <ClInclude Include="stl\stl_config.h" />
     <ClInclude Include="stl\stl_string.h" />
-    <ClInclude Include="stl\tinystl\algo.h" />
-    <ClInclude Include="stl\tinystl\algobase.h" />
-    <ClInclude Include="stl\tinystl\alloc.h" />
-    <ClInclude Include="stl\tinystl\bvector.h" />
-    <ClInclude Include="stl\tinystl\defalloc.h" />
-    <ClInclude Include="stl\tinystl\deque.h" />
-    <ClInclude Include="stl\tinystl\function.h" />
-    <ClInclude Include="stl\tinystl\hashtable.h" />
-    <ClInclude Include="stl\tinystl\hash_map.h" />
-    <ClInclude Include="stl\tinystl\hash_set.h" />
-    <ClInclude Include="stl\tinystl\heap.h" />
-    <ClInclude Include="stl\tinystl\iterator.h" />
-    <ClInclude Include="stl\tinystl\list.h" />
-    <ClInclude Include="stl\tinystl\map.h" />
-    <ClInclude Include="stl\tinystl\multimap.h" />
-    <ClInclude Include="stl\tinystl\multiset.h" />
-    <ClInclude Include="stl\tinystl\pair.h" />
-    <ClInclude Include="stl\tinystl\pthread_alloc.h" />
-    <ClInclude Include="stl\tinystl\rope.h" />
-    <ClInclude Include="stl\tinystl\ropeimpl.h" />
-    <ClInclude Include="stl\tinystl\set.h" />
-    <ClInclude Include="stl\tinystl\slist.h" />
-    <ClInclude Include="stl\tinystl\stack.h" />
-    <ClInclude Include="stl\tinystl\stl_config.h" />
-    <ClInclude Include="stl\tinystl\tempbuf.h" />
-    <ClInclude Include="stl\tinystl\tree.h" />
-    <ClInclude Include="stl\tinystl\type_traits.h" />
-    <ClInclude Include="stl\tinystl\vector.h" />
+    <ClInclude Include="stl\tempbuf.h" />
+    <ClInclude Include="stl\tree.h" />
+    <ClInclude Include="stl\type_traits.h" />
+    <ClInclude Include="stl\vector.h" />
     <ClInclude Include="string.h" />
   </ItemGroup>
   <ItemGroup>
@@ -124,7 +124,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./;../include;./lua;./util;./stl;./stllike</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../include;./stl;./stllike</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ARCH_X86;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>false</StringPooling>
