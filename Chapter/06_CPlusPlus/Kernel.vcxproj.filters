@@ -49,6 +49,7 @@
     <ClCompile Include="Test\ZetPlane.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="SysAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -101,6 +102,10 @@
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="Test\ZetPlane.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="SysAPI.h" />
+    <ClInclude Include="Test\PureCallExtend.h">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>

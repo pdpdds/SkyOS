@@ -90,7 +90,9 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	kLeaveCriticalSection(&g_criticalSection);
 
-	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);		
+	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);	
+
+	TestCPlusPlus();
 
 	for (;;);
 }
@@ -154,11 +156,11 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 
 	//물리 메모리 매니저 초기화
 	PhysicalMemoryManager::Initialize(g_freeMemorySize, g_freeMemoryStartAddress);
-	PhysicalMemoryManager::Dump();
+	//PhysicalMemoryManager::Dump();
 
 	//가상 메모리 매니저 초기화	
 	VirtualMemoryManager::Initialize();
-	PhysicalMemoryManager::Dump();
+	//PhysicalMemoryManager::Dump();
 
 	SkyConsole::Print("Free Memory Start Address(0x%x)\n", g_freeMemoryStartAddress);
 	SkyConsole::Print("Free Memory Size(%dMB)\n", g_freeMemorySize / 1048576);

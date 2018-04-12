@@ -12,7 +12,7 @@ public:
 	int GetX(){ return m_x; }
 	int GetY(){ return m_y; }
 
-	virtual bool IsRotate() = 0;
+	virtual bool IsRotate() { return false; }
 
 private:
 	int m_x;
