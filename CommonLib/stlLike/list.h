@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 namespace std
 {
 	template <typename ContentsType> class ListNode;
