@@ -176,6 +176,7 @@
     <ClInclude Include="stdint.h" />
     <ClInclude Include="stdio.h" />
     <ClInclude Include="string.h" />
+    <ClInclude Include="memory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jsmn\jsmn.cpp">
@@ -197,5 +198,6 @@
     <ClCompile Include="sprintf.cpp" />
     <ClCompile Include="stdio.cpp" />
     <ClCompile Include="string.cpp" />
+    <ClCompile Include="memory.cpp" />
   </ItemGroup>
 </Project>

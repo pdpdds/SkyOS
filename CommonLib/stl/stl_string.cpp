@@ -1,6 +1,7 @@
 #include "stl_string.h"
 #include "windef.h"
 #include "string.h"
+#include "memory.h"
 #include "ctype.h"
 
 namespace std

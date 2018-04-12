@@ -15,6 +15,7 @@
     <ClInclude Include="fileio.h" />
     <ClInclude Include="jsmn\jsmn.h" />
     <ClInclude Include="math.h" />
+    <ClInclude Include="memory.h" />
     <ClInclude Include="SkyStruct.h" />
     <ClInclude Include="sprintf.h" />
     <ClInclude Include="stdint.h" />
@@ -77,6 +78,7 @@
     <ClCompile Include="fileio.cpp" />
     <ClCompile Include="jsmn\jsmn.cpp" />
     <ClCompile Include="math.cpp" />
+    <ClCompile Include="memory.cpp" />
     <ClCompile Include="sprintf.cpp" />
     <ClCompile Include="stdio.cpp" />
     <ClCompile Include="stl\IStream.cpp" />
