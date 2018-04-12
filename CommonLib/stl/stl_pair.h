@@ -55,13 +55,13 @@
 
 #ifndef _STL_PAIR_H
 #define _STL_PAIR_H 1
-#include "move.h" // for sky::move / sky::forward, and sky::swap
+#include "move.h" // for std::move / std::forward, and std::swap
 
 #if __cplusplus >= 201103L
-#include <type_traits> // for sky::__decay_and_strip too
+#include <type_traits> // for std::__decay_and_strip too
 #endif
 
-namespace sky _GLIBCXX_VISIBILITY(default)
+namespace std _GLIBCXX_VISIBILITY(default)
 {
 //_GLIBCXX_BEGIN_NAMESPACE_VERSION
 
@@ -82,7 +82,7 @@ namespace sky _GLIBCXX_VISIBILITY(default)
   template<typename...>
     class tuple;
 
-  template<sky::size_t...>
+  template<std::size_t...>
     struct _Index_tuple;
 
   // Concept utility functions, reused in conditionally-explicit
@@ -178,10 +178,10 @@ namespace sky _GLIBCXX_VISIBILITY(default)
       }
   };
 
-  // PR libskyc++/79141, a utility type for preventing
+  // PR libstdc++/79141, a utility type for preventing
   // initialization of an argument of a disabled assignment
   // operator from a pair of empty braces.
-  struct __nonesuch_no_braces : sky::__nonesuch {
+  struct __nonesuch_no_braces : std::__nonesuch {
     explicit __nonesuch_no_braces(const __nonesuch&) = delete;
   };
 
@@ -203,7 +203,7 @@ namespace sky _GLIBCXX_VISIBILITY(default)
       _T2 second;                /// @c second is a copy of the second object
 
       // _GLIBCXX_RESOLVE_LIB_DEFECTS
-      // 265.  sky::pair::pair() effects overly restrictive
+      // 265.  std::pair::pair() effects overly restrictive
       /** The default constructor creates @c first and @c second using their
        *  respective default constructors.  */
 #if __cplusplus >= 201103L
@@ -297,28 +297,28 @@ namespace sky _GLIBCXX_VISIBILITY(default)
 			   _MoveCopyPair<true, _U1, _T2>(),
                          bool>::type=true>
        constexpr pair(_U1&& __x, const _T2& __y)
-       : first(sky::forward<_U1>(__x)), second(__y) { }
+       : first(std::forward<_U1>(__x)), second(__y) { }
 
       template<typename _U1, typename
 	       enable_if<_PCCP::template
 			   _MoveCopyPair<false, _U1, _T2>(),
                          bool>::type=false>
        explicit constexpr pair(_U1&& __x, const _T2& __y)
-       : first(sky::forward<_U1>(__x)), second(__y) { }
+       : first(std::forward<_U1>(__x)), second(__y) { }
 
       template<typename _U2, typename
 	       enable_if<_PCCP::template
 			   _CopyMovePair<true, _T1, _U2>(),
                          bool>::type=true>
        constexpr pair(const _T1& __x, _U2&& __y)
-       : first(__x), second(sky::forward<_U2>(__y)) { }
+       : first(__x), second(std::forward<_U2>(__y)) { }
 
       template<typename _U2, typename
 	       enable_if<_PCCP::template
 			   _CopyMovePair<false, _T1, _U2>(),
                          bool>::type=false>
        explicit pair(const _T1& __x, _U2&& __y)
-       : first(__x), second(sky::forward<_U2>(__y)) { }
+       : first(__x), second(std::forward<_U2>(__y)) { }
 
       template<typename _U1, typename _U2, typename
 	       enable_if<_PCCP::template
@@ -327,7 +327,7 @@ namespace sky _GLIBCXX_VISIBILITY(default)
 			   _ImplicitlyMoveConvertiblePair<_U1, _U2>(),
                          bool>::type=true>
 	constexpr pair(_U1&& __x, _U2&& __y)
-	: first(sky::forward<_U1>(__x)), second(sky::forward<_U2>(__y)) { }
+	: first(std::forward<_U1>(__x)), second(std::forward<_U2>(__y)) { }
 
       template<typename _U1, typename _U2, typename
 	       enable_if<_PCCP::template
@@ -336,7 +336,7 @@ namespace sky _GLIBCXX_VISIBILITY(default)
 			   _ImplicitlyMoveConvertiblePair<_U1, _U2>(),
                          bool>::type=false>
 	explicit constexpr pair(_U1&& __x, _U2&& __y)
-	: first(sky::forward<_U1>(__x)), second(sky::forward<_U2>(__y)) { }
+	: first(std::forward<_U1>(__x)), second(std::forward<_U2>(__y)) { }
 
 
       template<typename _U1, typename _U2, typename
@@ -346,8 +346,8 @@ namespace sky _GLIBCXX_VISIBILITY(default)
 			   _ImplicitlyMoveConvertiblePair<_U1, _U2>(),
                          bool>::type=true>
 	constexpr pair(pair<_U1, _U2>&& __p)
-	: first(sky::forward<_U1>(__p.first)),
-	  second(sky::forward<_U2>(__p.second)) { }
+	: first(std::forward<_U1>(__p.first)),
+	  second(std::forward<_U2>(__p.second)) { }
 
       template<typename _U1, typename _U2, typename
 	       enable_if<_PCCFP<_U1, _U2>::template
@@ -356,8 +356,8 @@ namespace sky _GLIBCXX_VISIBILITY(default)
 			   _ImplicitlyMoveConvertiblePair<_U1, _U2>(),
                          bool>::type=false>
 	explicit constexpr pair(pair<_U1, _U2>&& __p)
-	: first(sky::forward<_U1>(__p.first)),
-	  second(sky::forward<_U2>(__p.second)) { }
+	: first(std::forward<_U1>(__p.first)),
+	  second(std::forward<_U2>(__p.second)) { }
 
       template<typename... _Args1, typename... _Args2>
         pair(piecewise_construct_t, tuple<_Args1...>, tuple<_Args2...>);
@@ -387,8 +387,8 @@ namespace sky _GLIBCXX_VISIBILITY(default)
       noexcept(__and_<is_nothrow_move_assignable<_T1>,
 	              is_nothrow_move_assignable<_T2>>::value)
       {
-	first = sky::forward<first_type>(__p.first);
-	second = sky::forward<second_type>(__p.second);
+	first = std::forward<first_type>(__p.first);
+	second = std::forward<second_type>(__p.second);
 	return *this;
       }
 
@@ -409,8 +409,8 @@ namespace sky _GLIBCXX_VISIBILITY(default)
 			 pair&>::type
 	operator=(pair<_U1, _U2>&& __p)
 	{
-	  first = sky::forward<_U1>(__p.first);
-	  second = sky::forward<_U2>(__p.second);
+	  first = std::forward<_U1>(__p.first);
+	  second = std::forward<_U2>(__p.second);
 	  return *this;
 	}
 
@@ -419,14 +419,14 @@ namespace sky _GLIBCXX_VISIBILITY(default)
       noexcept(__and_<__is_nothrow_swappable<_T1>,
                       __is_nothrow_swappable<_T2>>::value)
       {
-	using sky::swap;
+	using std::swap;
 	swap(first, __p.first);
 	swap(second, __p.second);
       }
 
     private:
-      template<typename... _Args1, sky::size_t... _Indexes1,
-               typename... _Args2, sky::size_t... _Indexes2>
+      template<typename... _Args1, std::size_t... _Indexes1,
+               typename... _Args2, std::size_t... _Indexes2>
         pair(tuple<_Args1...>&, tuple<_Args2...>&,
              _Index_tuple<_Indexes1...>, _Index_tuple<_Indexes2...>);
 #endif
@@ -442,7 +442,7 @@ namespace sky _GLIBCXX_VISIBILITY(default)
     operator==(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
     { return __x.first == __y.first && __x.second == __y.second; }
 
-  /// <http://gcc.gnu.org/onlinedocs/libskyc++/manual/utilities.html>
+  /// <http://gcc.gnu.org/onlinedocs/libstdc++/manual/utilities.html>
   template<typename _T1, typename _T2>
     inline _GLIBCXX_CONSTEXPR bool
     operator<(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
@@ -474,9 +474,9 @@ namespace sky _GLIBCXX_VISIBILITY(default)
     { return !(__x < __y); }
 
 #if __cplusplus >= 201103L
-  /// See sky::pair::swap().
-  // Note:  no sky::swap overloads in C++03 mode, this has performance
-  //        implications, see, eg, libskyc++/38466.
+  /// See std::pair::swap().
+  // Note:  no std::swap overloads in C++03 mode, this has performance
+  //        implications, see, eg, libstdc++/38466.
   template<typename _T1, typename _T2>
     inline
 #if __cplusplus > 201402L || !defined(__STRICT_ANSI__) // c++1z or gnu++11
@@ -520,7 +520,7 @@ namespace sky _GLIBCXX_VISIBILITY(default)
       typedef typename __decay_and_strip<_T1>::__type __ds_type1;
       typedef typename __decay_and_strip<_T2>::__type __ds_type2;
       typedef pair<__ds_type1, __ds_type2> 	      __pair_type;
-      return __pair_type(sky::forward<_T1>(__x), sky::forward<_T2>(__y));
+      return __pair_type(std::forward<_T1>(__x), std::forward<_T2>(__y));
     }
 #else
   template<typename _T1, typename _T2>
@@ -532,6 +532,6 @@ namespace sky _GLIBCXX_VISIBILITY(default)
   /// @}
 
 //_GLIBCXX_END_NAMESPACE_VERSION
-} // namespace sky
+} // namespace std
 
 #endif /* _STL_PAIR_H */

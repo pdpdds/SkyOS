@@ -1,6 +1,6 @@
 #pragma once
 
-namespace sky
+namespace std
 {
 	template <typename ContentsType>
 	ListNode<ContentsType>::ListNode()

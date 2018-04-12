@@ -33,13 +33,13 @@
 #include "c++config.h"
 #include "concept_check.h"
 
-namespace sky _GLIBCXX_VISIBILITY(default)
+namespace std _GLIBCXX_VISIBILITY(default)
 {
 _GLIBCXX_BEGIN_NAMESPACE_VERSION
 
   // Used, in C++03 mode too, by allocators, etc.
   /**
-   *  @brief Same as C++11 sky::addressof
+   *  @brief Same as C++11 std::addressof
    *  @ingroup utilities
    */
   template<typename _Tp>
@@ -52,9 +52,9 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace
 
-#include <type_traits> // Brings in sky::declval too.
+#include <type_traits> // Brings in std::declval too.
 
-namespace sky _GLIBCXX_VISIBILITY(default)
+namespace std _GLIBCXX_VISIBILITY(default)
 {
 _GLIBCXX_BEGIN_NAMESPACE_VERSION
 
@@ -71,7 +71,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
    */
   template<typename _Tp>
     constexpr _Tp&&
-    forward(typename sky::remove_reference<_Tp>::type& __t) noexcept
+    forward(typename std::remove_reference<_Tp>::type& __t) noexcept
     { return static_cast<_Tp&&>(__t); }
 
   /**
@@ -82,9 +82,9 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
    */
   template<typename _Tp>
     constexpr _Tp&&
-    forward(typename sky::remove_reference<_Tp>::type&& __t) noexcept
+    forward(typename std::remove_reference<_Tp>::type&& __t) noexcept
     {
-      static_assert(!sky::is_lvalue_reference<_Tp>::value, "template argument"
+      static_assert(!std::is_lvalue_reference<_Tp>::value, "template argument"
 		    " substituting _Tp is an lvalue reference type");
       return static_cast<_Tp&&>(__t);
     }
@@ -95,9 +95,9 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
    *  @return The parameter cast to an rvalue-reference to allow moving it.
   */
   template<typename _Tp>
-    constexpr typename sky::remove_reference<_Tp>::type&&
+    constexpr typename std::remove_reference<_Tp>::type&&
     move(_Tp&& __t) noexcept
-    { return static_cast<typename sky::remove_reference<_Tp>::type&&>(__t); }
+    { return static_cast<typename std::remove_reference<_Tp>::type&&>(__t); }
 
 
   template<typename _Tp>
@@ -110,20 +110,20 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
    *  @param  __x  A thing of arbitrary type.
    *  @return The parameter, possibly cast to an rvalue-reference.
    *
-   *  Same as sky::move unless the type's move constructor could throw and the
+   *  Same as std::move unless the type's move constructor could throw and the
    *  type is copyable, in which case an lvalue-reference is returned instead.
    */
   template<typename _Tp>
     constexpr typename
     conditional<__move_if_noexcept_cond<_Tp>::value, const _Tp&, _Tp&&>::type
     move_if_noexcept(_Tp& __x) noexcept
-    { return sky::move(__x); }
+    { return std::move(__x); }
 
   // declval, from type_traits.
 
 #if __cplusplus > 201402L
   // _GLIBCXX_RESOLVE_LIB_DEFECTS
-  // 2296. sky::addressof should be constexpr
+  // 2296. std::addressof should be constexpr
 # define __cpp_lib_addressof_constexpr 201603
 #endif
   /**
@@ -136,27 +136,27 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
   template<typename _Tp>
     inline _GLIBCXX17_CONSTEXPR _Tp*
     addressof(_Tp& __r) noexcept
-    { return sky::__addressof(__r); }
+    { return std::__addressof(__r); }
 
   // _GLIBCXX_RESOLVE_LIB_DEFECTS
   // 2598. addressof works on temporaries
   template<typename _Tp>
     const _Tp* addressof(const _Tp&&) = delete;
 
-  // C++11 version of sky::exchange for internal use.
+  // C++11 version of std::exchange for internal use.
   template <typename _Tp, typename _Up = _Tp>
     inline _Tp
     __exchange(_Tp& __obj, _Up&& __new_val)
     {
-      _Tp __old_val = sky::move(__obj);
-      __obj = sky::forward<_Up>(__new_val);
+      _Tp __old_val = std::move(__obj);
+      __obj = std::forward<_Up>(__new_val);
       return __old_val;
     }
 
   /// @} group utilities
 
-#define _GLIBCXX_MOVE(__val) sky::move(__val)
-#define _GLIBCXX_FORWARD(_Tp, __val) sky::forward<_Tp>(__val)
+#define _GLIBCXX_MOVE(__val) std::move(__val)
+#define _GLIBCXX_FORWARD(_Tp, __val) std::forward<_Tp>(__val)
 #else
 #define _GLIBCXX_MOVE(__val) (__val)
 #define _GLIBCXX_FORWARD(_Tp, __val) (__val)
@@ -196,7 +196,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     }
 
   // _GLIBCXX_RESOLVE_LIB_DEFECTS
-  // DR 809. sky::swap should be overloaded for array types.
+  // DR 809. std::swap should be overloaded for array types.
   /// Swap the contents of two arrays.
   template<typename _Tp, size_t _Nm>
     inline

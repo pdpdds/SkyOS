@@ -1,9 +1,9 @@
 #pragma once
 
-namespace sky
+namespace std
 {
 	template <typename ContentsType>
-	ListIterator<ContentsType>::ListIterator(ListNode<ContentsType>* nodePointer)
+	listIterator<ContentsType>::listIterator(ListNode<ContentsType>* nodePointer)
 		: myNodePointer(nodePointer) {
 
 		if (nodePointer == NULL) {
@@ -12,18 +12,18 @@ namespace sky
 	}
 
 	template <typename ContentsType>
-	bool ListIterator<ContentsType>::operator==(ListIterator<ContentsType>& comparedIter) {
+	bool listIterator<ContentsType>::operator==(listIterator<ContentsType>& comparedIter) {
 		return (*(this->myNodePointer) == *(comparedIter.myNodePointer));
 	}
 
 	template <typename ContentsType>
-	bool ListIterator<ContentsType>::operator!=(ListIterator<ContentsType>& comparedIter) {
+	bool listIterator<ContentsType>::operator!=(listIterator<ContentsType>& comparedIter) {
 		return !(*(this) == comparedIter);
 	}
 
 
 	template <typename ContentsType> // postfix operator
-	const ListIterator<ContentsType>& ListIterator<ContentsType>::operator++(int i) {
+	const listIterator<ContentsType>& listIterator<ContentsType>::operator++(int i) {
 		ListNode<ContentsType>* temp = myNodePointer->nextNodePointer;
 
 		/*if (temp == NULL) {
@@ -35,7 +35,7 @@ namespace sky
 	}
 
 	template <typename ContentsType> // postfix operator
-	const ListIterator<ContentsType>& ListIterator<ContentsType>::operator--(int i) {
+	const listIterator<ContentsType>& listIterator<ContentsType>::operator--(int i) {
 		ListNode<ContentsType>* temp = myNodePointer->previousNodePointer;
 
 		if (temp == NULL) {
@@ -47,7 +47,7 @@ namespace sky
 	}
 
 	template <typename ContentsType> // prefix operator
-	const ListIterator<ContentsType>& ListIterator<ContentsType>::operator++() {
+	const listIterator<ContentsType>& listIterator<ContentsType>::operator++() {
 		ListNode<ContentsType>* temp = myNodePointer->nextNodePointer;
 
 	
@@ -57,7 +57,7 @@ namespace sky
 	}
 
 	template <typename ContentsType> // prefix operator
-	const ListIterator<ContentsType>& ListIterator<ContentsType>::operator--() {
+	const listIterator<ContentsType>& listIterator<ContentsType>::operator--() {
 		ListNode<ContentsType>* temp = myNodePointer->previousNodePointer;
 
 		if (temp == NULL) {
@@ -69,12 +69,12 @@ namespace sky
 	}
 
 	template <typename ContentsType>
-	const ContentsType& ListIterator<ContentsType>::operator*() {
+	const ContentsType& listIterator<ContentsType>::operator*() {
 		return myNodePointer->value;
 	}
 
 	template <typename ContentsType>
-	void ListIterator<ContentsType>::rewriteNodePointer(ListNode<ContentsType>* pointer) {
+	void listIterator<ContentsType>::rewriteNodePointer(ListNode<ContentsType>* pointer) {
 		if (pointer == NULL) {
 			throw Exception("Attempted to get iterator pointing to NULL", __FILE__, __LINE__);
 		}

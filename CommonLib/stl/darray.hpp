@@ -15,7 +15,7 @@ Definition of routines of darray class
 /*----------------------------------------------------------------
 Constructor
 -----------------------------------------------------------------*/
-namespace sky
+namespace std
 {
 
 	template <typename T>
