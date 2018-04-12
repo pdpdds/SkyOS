@@ -24,6 +24,7 @@
 #include "stdio.h"
 #include "SkyAPI.h"
 #include "string.h"
+#include "memory.h"
 #include "sprintf.h"
 #include "local.h"
 #include "windef.h"

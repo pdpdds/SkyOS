@@ -29,6 +29,7 @@
 #include "local.h"
 #include "windef.h"
 #include "PIT.h"
+#include "memory.h"
 
 GuiObject *add_number(GuiWindow * win, int type, int x, int y, int seg_length, char *mask)
 {

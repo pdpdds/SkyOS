@@ -1,8 +1,8 @@
 #include "UserAPI.h"
 #include "string.h"
-#include "stl\iostream.h"
-#include "stl\functional.h"
-#include "stl\tinystl\algo.h"
+#include "iostream.h"
+#include "functional.h"
+#include "algo.h"
 
 int main() 
 {

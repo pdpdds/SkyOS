@@ -1,7 +1,7 @@
 #pragma once
 
 #include "windef.h"
-#include "ACEList.h"
+//#include "ACEList.h"
 #include "GSH.H"
 
 #define PART_ISBOOTABLE(Part)  ( ((struct _Partition * )Part)->Bootable==0x80?TRUE:FALSE)

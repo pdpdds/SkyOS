@@ -25,6 +25,7 @@
 //#include <stdlib.h>
 #include "SkyAPI.h"
 #include "string.h"
+#include "memory.h"
 #include "sprintf.h"
 #include "windef.h"
 #include "PIT.h"

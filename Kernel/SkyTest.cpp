@@ -9,15 +9,14 @@
 #include "Stack.h"
 #include "jsmn.h"
 #include "map.h"
-#include "stl_list.h"
 #include "list.h"
+#include "linkedlist.h"
 #include "TestInteger.h"
 #include "SkyConsole.h"
-#include "SkyQueue.h"
+#include "queue.h"
 #include "stl_string.h"
 #include "deque.h"
 
-using namespace sky;
 using namespace std;
 
 #define kprintf SkyConsole::Print
@@ -245,7 +244,7 @@ void TestMap()
 
 void TestQueue()
 {
-	SkyQueue queue;
+	queue queue;
 	QueueNode* pNode = new QueueNode();
 	pNode->_data = (void*)5;
 	queue.Enqueue(pNode);

@@ -98,9 +98,6 @@
     <ClInclude Include="stl\list.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\LinkedList.h">
-      <Filter>stl</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jsmn\jsmn.cpp">
@@ -121,9 +118,6 @@
       <Filter>stl</Filter>
     </ClCompile>
     <ClCompile Include="stl\stl_string.cpp">
-      <Filter>stl</Filter>
-    </ClCompile>
-    <ClCompile Include="stl\LinkedList.cpp">
       <Filter>stl</Filter>
     </ClCompile>
   </ItemGroup>

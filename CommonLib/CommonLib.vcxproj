@@ -28,7 +28,6 @@
     <ClInclude Include="stl\DoubleLinkedList.h" />
     <ClInclude Include="stl\IOStream.h" />
     <ClInclude Include="stl\IStream.h" />
-    <ClInclude Include="stl\LinkedList.h" />
     <ClInclude Include="stl\list_implement.h" />
     <ClInclude Include="stl\list_iterator_implement.h" />
     <ClInclude Include="stl\list_node_implement.h" />
@@ -58,7 +57,6 @@
     <ClCompile Include="sprintf.cpp" />
     <ClCompile Include="stdio.cpp" />
     <ClCompile Include="stl\IStream.cpp" />
-    <ClCompile Include="stl\LinkedList.cpp" />
     <ClCompile Include="stl\OStream.cpp" />
     <ClCompile Include="stl\stl_string.cpp" />
     <ClCompile Include="string.cpp" />

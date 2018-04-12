@@ -27,6 +27,7 @@
 #include "string.h"
 #include "sprintf.h"
 #include "local.h"
+#include "memory.h"
 #include "images/circle.xpm"
 #include "images/check1.xpm"
 #include "images/check2.xpm"

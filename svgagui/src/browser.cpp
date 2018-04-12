@@ -24,6 +24,7 @@
 #include "windef.h"
 #include <stdio.h>
 //#include <stdlib.h>
+#include "memory.h"
 #include "sprintf.h"
 #include "string.h"
 #include "local.h"

@@ -25,6 +25,7 @@
 //#include <stdlib.h>
 #include "sprintf.h"
 #include "string.h"
+#include "memory.h"
 #include "local.h"
 #include "font.h"
 #include "windef.h"

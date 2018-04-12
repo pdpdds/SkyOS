@@ -26,6 +26,7 @@
 //#include <unistd.h>
 #include "sprintf.h"
 #include "string.h"
+#include "memory.h"
 #include "windef.h"
 #include "PIT.h"
 #include "local.h"

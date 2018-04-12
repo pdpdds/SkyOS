@@ -26,6 +26,7 @@
 //#include <stdlib.h>
 #include "windef.h"
 //#include "bootinfo.h"
+#include "memory.h"
 #include "vesa.h"
 #include <string.h>
 #include <mouse.h>
