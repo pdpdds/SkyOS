@@ -29,6 +29,8 @@
     <ClCompile Include="SkyAPI.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
     <ClCompile Include="SkyTest.cpp" />
+    <ClCompile Include="Test\Plane.cpp" />
+    <ClCompile Include="Test\ZetPlane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\GDT.h" />
@@ -50,6 +52,9 @@
     <ClInclude Include="SkyAPI.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="SkyTest.h" />
+    <ClInclude Include="Test\Plane.h" />
+    <ClInclude Include="Test\TestInteger.h" />
+    <ClInclude Include="Test\ZetPlane.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}</ProjectGuid>
@@ -99,7 +104,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_HEAP_DEBUG;DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>

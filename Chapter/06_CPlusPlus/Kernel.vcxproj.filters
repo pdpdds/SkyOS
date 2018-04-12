@@ -43,6 +43,12 @@
     <ClCompile Include="Heap\HeapManager.cpp">
       <Filter>Heap</Filter>
     </ClCompile>
+    <ClCompile Include="Test\Plane.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\ZetPlane.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -88,6 +94,15 @@
     <ClInclude Include="Heap\HeapManager.h">
       <Filter>Heap</Filter>
     </ClInclude>
+    <ClInclude Include="Test\Plane.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\TestInteger.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\ZetPlane.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
@@ -98,6 +113,9 @@
     </Filter>
     <Filter Include="Heap">
       <UniqueIdentifier>{640d957b-b9ef-4497-94a2-ffc23c8c1734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{506eb715-610c-4dae-8c11-f57a9696e441}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
