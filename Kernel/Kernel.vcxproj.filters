@@ -25,9 +25,6 @@
     <Filter Include="Video">
       <UniqueIdentifier>{317548d2-9076-414d-9403-486247cee5ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="DataStructure">
-      <UniqueIdentifier>{a652997e-b5b7-4178-836e-cd99edfe17fa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{3251226d-ebfa-45ad-baf4-339098dfdc96}</UniqueIdentifier>
     </Filter>
@@ -153,9 +150,6 @@
     <ClCompile Include="InitKernel.cpp">
       <Filter>Entry</Filter>
     </ClCompile>
-    <ClCompile Include="List.cpp">
-      <Filter>DataStructure</Filter>
-    </ClCompile>
     <ClCompile Include="KernelProcedure.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -189,9 +183,6 @@
       <Filter>Device</Filter>
     </ClCompile>
     <ClCompile Include="GSH.cpp">
-      <Filter>Device</Filter>
-    </ClCompile>
-    <ClCompile Include="ACEList.cpp">
       <Filter>Device</Filter>
     </ClCompile>
     <ClCompile Include="GFS.cpp">
@@ -406,18 +397,6 @@
     <ClInclude Include="InitKernel.h">
       <Filter>Entry</Filter>
     </ClInclude>
-    <ClInclude Include="Collect.h">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
-    <ClInclude Include="DoubleLinkedList.h">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
-    <ClInclude Include="List.h">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyQueue.h">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
     <ClInclude Include="MultiBoot.h">
       <Filter>Entry</Filter>
     </ClInclude>
@@ -464,9 +443,6 @@
       <Filter>Device</Filter>
     </ClInclude>
     <ClInclude Include="GSH.H">
-      <Filter>Device</Filter>
-    </ClInclude>
-    <ClInclude Include="ACEList.h">
       <Filter>Device</Filter>
     </ClInclude>
     <ClInclude Include="GFS.H">

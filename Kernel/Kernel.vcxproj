@@ -141,7 +141,6 @@
     <ClCompile Include="..\svgagui\src\window_draw.cPP" />
     <ClCompile Include="..\svgagui\src\window_thread.cpp" />
     <ClCompile Include="..\svgagui\src\xlib.cpp" />
-    <ClCompile Include="ACEList.cpp" />
     <ClCompile Include="Beep.cpp" />
     <ClCompile Include="color.cpp" />
     <ClCompile Include="commands.cpp" />
@@ -179,7 +178,6 @@
     <ClCompile Include="KernelProcedure.cpp" />
     <ClCompile Include="kheap.cpp" />
     <ClCompile Include="KeyBoard.cpp" />
-    <ClCompile Include="List.cpp" />
     <ClCompile Include="kmain.cpp" />
     <ClCompile Include="ordered_array.cpp" />
     <ClCompile Include="PageDirectoryEntry.cpp" />
@@ -210,9 +208,7 @@
     <ClInclude Include="..\svgagui\src\local.h" />
     <ClInclude Include="..\svgagui\src\_mouse.h" />
     <ClInclude Include="..\svgagui\svgagui.h" />
-    <ClInclude Include="ACEList.h" />
     <ClInclude Include="Beep.h" />
-    <ClInclude Include="Collect.h" />
     <ClInclude Include="commandMacros.h" />
     <ClInclude Include="commands.h" />
     <ClInclude Include="commandTable.h" />
@@ -231,7 +227,6 @@
     <ClInclude Include="sheet.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="ConsoleManager.h" />
-    <ClInclude Include="DoubleLinkedList.h" />
     <ClInclude Include="exception.h" />
     <ClInclude Include="FAT32.h" />
     <ClInclude Include="FAT12.h" />
@@ -254,10 +249,8 @@
     <ClInclude Include="KeyBoardIO.h" />
     <ClInclude Include="kheap.h" />
     <ClInclude Include="KeyBoard.h" />
-    <ClInclude Include="List.h" />
     <ClInclude Include="kmain.h" />
     <ClInclude Include="MultiBoot.h" />
-    <ClInclude Include="SkyQueue.h" />
     <ClInclude Include="ordered_array.h" />
     <ClInclude Include="PageDirectoryEntry.h" />
     <ClInclude Include="PageTableEntry.h" />
