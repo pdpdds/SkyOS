@@ -2,6 +2,7 @@
 #include "Partition.h"
 #include "GSH.h"
 #include "string.h"
+#include "memory.h"
 #include "ctype.h"
 #include "SysInfo.h"
 

@@ -2,6 +2,7 @@
 #include "SkyConsole.h"
 #include "ProcessManager.h"
 #include "string.h"
+#include "memory.h"
 #include "va_list.h"
 #include "stdarg.h"
 #include "sprintf.h"

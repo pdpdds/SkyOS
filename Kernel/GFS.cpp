@@ -1,6 +1,7 @@
 #include "GFS.h"
 #include "string.h"
 #include "ctype.h"
+#include "memory.h"
 #include "Partition.h"
 #include "SysInfo.h"
 #include "SkyConsole.h"

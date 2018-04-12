@@ -1,6 +1,7 @@
 #include "Graphics.h"
 #include "SkyConsole.h"
 #include "string.h"
+#include "memory.h"
 #include "stdio.h"
 #include "exception.h"
 #include "VirtualMemoryManager.h"

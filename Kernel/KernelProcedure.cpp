@@ -2,6 +2,7 @@
 #include "ConsoleManager.h"
 #include "SkyConsole.h"
 #include "string.h"
+#include "memory.h"
 #include "Hal.h"
 #include "PIT.h"
 #include "Process.h"

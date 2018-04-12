@@ -5,6 +5,7 @@
 #include "sprintf.h"
 #include "SkyAPI.H"
 #include "SkyConsole.h"
+#include "memory.h"
 #include "FloppyDisk.h"
 #include "fat12.h"
 #include "exception.h"

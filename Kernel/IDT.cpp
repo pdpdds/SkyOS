@@ -1,5 +1,6 @@
 #include "idt.h"
 #include <string.h>
+#include "memory.h"
 #include <hal.h>
 #include "SkyAPI.h"
 #ifdef _DEBUG

@@ -21,7 +21,7 @@ public:
 	Process* GetCurrentProcess();	
 
 
-	Sky::LinkedList* GetProcessList() { return &m_processList;}
+	SKY::LinkedList* GetProcessList() { return &m_processList;}
 	int GetNextProcessId() { return m_nextProcessId++; }
 
 	static ProcessManager* GetInstance()
@@ -48,7 +48,7 @@ public:
 	bool DestroyKernelProcess(Process* pProcess);
 	bool ReleaseThreadContext(Process* pProcess);
 
-	DoubleLinkedList* GetTaskList() { return &m_taskList; }
+	sky::DoubleLinkedList* GetTaskList() { return &m_taskList; }
 
 //Page Directory Mapping
 	PageDirectory* MapKernelSpace();
@@ -62,7 +62,7 @@ private:
 	int m_nextProcessId;
 	int m_nextThreadId;
 
-	Sky::LinkedList m_processList;
-	DoubleLinkedList m_taskList;
-	DoubleLinkedList m_terminatedTaskList;
+	SKY::LinkedList m_processList;
+	sky::DoubleLinkedList m_taskList;
+	sky::DoubleLinkedList m_terminatedTaskList;
 };

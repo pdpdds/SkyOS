@@ -1,6 +1,8 @@
 #include "Process.h"
 #include "Thread.h"
 
+using namespace sky;
+
 Process::Process()
 {
 	m_processId = -1;	

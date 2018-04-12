@@ -1,5 +1,6 @@
 ﻿#include "kmain.h"
 #include "stdio.h"
+#include "memory.h"
 #include "FAT32VFSAdaptor.h"
 #include "HardDisk.h"
 #include "desq.h"

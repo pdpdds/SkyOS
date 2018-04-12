@@ -12,6 +12,7 @@
 //============================================================================
 
 #include <string.h>
+#include "memory.h"
 #include "gdt.h"
 #include "tss.h"
 

@@ -4,18 +4,21 @@
 #include "windef.h"
 #include "exception.h"
 #include "string.h"
+#include "memory.h"
 #include "Vector.h"
 #include "Stack.h"
 #include "jsmn.h"
-#include "map.hpp"
-#include "list1.h"
+#include "map.h"
+#include "stl_list.h"
+#include "list.h"
 #include "TestInteger.h"
 #include "SkyConsole.h"
 #include "SkyQueue.h"
-#include "stl\stl_string.h"
-#include "stl\deque.h"
+#include "stl_string.h"
+#include "deque.h"
 
-using namespace SKY;
+using namespace sky;
+using namespace std;
 
 #define kprintf SkyConsole::Print
 
@@ -51,8 +54,8 @@ void SkyTest()
 }
 
 void TestStack()
-{	
-	Stack<int> s;
+{
+	stack<int> s;
 	s.push(10);
 	s.push(20);
 	s.push(30);
@@ -189,7 +192,7 @@ void TestDeque()
 
 void TestVector()
 {
-	Vector<int> vec;
+	vector<int> vec;
 	vec.push_back(5);
 	vec.push_back(1);
 	vec.push_back(3);
@@ -336,14 +339,14 @@ void TestCPP14()
 
 void TestList()
 {
-	std::List<int> fstList = std::List<int>();
-	std::List<int> scndList = std::List<int>();
+	list<int> fstList = list<int>();
+	list<int> scndList = list<int>();
 	int counter = 0;
 
 	for (int i = 0; i <= 10; ++i) {
 		fstList.push_back(i);
 	}
-	std::List<int>::Iterator iter = fstList.begin();
+	list<int>::Iterator iter = fstList.begin();
 	while (iter != fstList.end())
 	{
 		kprintf("item %d  done\n", *iter);

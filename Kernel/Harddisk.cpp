@@ -8,6 +8,7 @@
 
 #include "HardDisk.h"
 #include "string.h"
+#include "memory.h"
 #include "Hal.h"
 #include "PIT.h"
 #include "SysInfo.h"

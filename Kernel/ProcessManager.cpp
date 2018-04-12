@@ -4,11 +4,14 @@
 #include "ProcessUtil.h"
 #include "Thread.h"
 #include "string.h"
+#include "memory.h"
 #include "SkyConsole.h"
 #include "Process.h"
 #include "PhysicalMemoryManager.h"
 #include "KernelProcedure.h"
 #include "sysapi.h"
+
+using namespace sky;
 
 ProcessManager* ProcessManager::m_processManager = nullptr;
 static int kernelStackIndex = 0;

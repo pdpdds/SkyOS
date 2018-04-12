@@ -9,6 +9,7 @@
 #include "sysapi.h"
 #include "string.h"
 
+using namespace sky;
 Scheduler* Scheduler::m_pScheduler = 0;
 extern bool systemOn;
 registers_t g_registers;

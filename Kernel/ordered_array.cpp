@@ -4,6 +4,7 @@
 
 #include "ordered_array.h"
 #include "string.h"
+#include "memory.h"
 #include "ordered_array.h"
 #include "kheap.h"
 

@@ -8,6 +8,7 @@
 
 #include "RAMDisk.h"
 #include "string.h"
+#include "memory.h"
 #include "Math.h"
 
 

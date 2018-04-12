@@ -4,7 +4,7 @@
 #include "kheap.h"
 #include "DoubleLinkedList.h"
 
-using namespace SKY;
+using namespace std;
 
 class Thread;
 
@@ -30,7 +30,7 @@ public:
 	UINT32		m_dwProcessType; //프로세스 타입		
 		
 	int			m_stackIndex; //스레드가 생성될때 마다 새 스택을 할당해 주어야 하는데 그때 사용되는 인덱스
-	DoubleLinkedList m_threadList; //프로세스내에 속한 스레드 리스트
+	sky::DoubleLinkedList m_threadList; //프로세스내에 속한 스레드 리스트
 
 	uint32_t	m_imageBase; //파일로 부터 코드를 로드할 경우 사용됨. 파일에 메모리에 로드된 주소
 	uint32_t	m_imageSize; //파일의 크기

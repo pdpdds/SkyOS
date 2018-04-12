@@ -1,5 +1,6 @@
 #include "SkyConsole.h"
 #include "string.h"
+#include "memory.h"
 #include "stdio.h"
 #include "Hal.h"
 #include "ProcessManager.h"
@@ -17,7 +18,7 @@ long cmdProcessList(char *theCommand)
 	kEnterCriticalSection(&g_criticalSection);
 	SkyConsole::Print(" ID : Process Name\n");
 
-	Sky::LinkedList* processlist = ProcessManager::GetInstance()->GetProcessList();
+	SKY::LinkedList* processlist = ProcessManager::GetInstance()->GetProcessList();
 
 	for (int i = 0; i < processlist->Count(); i++)
 	{

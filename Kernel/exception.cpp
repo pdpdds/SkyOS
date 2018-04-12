@@ -1,5 +1,6 @@
 ﻿#include "exception.h"
 #include <hal.h>
+#include "memory.h"
 #include <stdint.h>
 #include "SkyConsole.h"
 #include "sprintf.h"

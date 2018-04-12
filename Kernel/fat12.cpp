@@ -7,6 +7,7 @@
 
 #include <fat12.h>
 #include <string.h>
+#include "memory.h"
 #include "FloppyDisk.h"
 #include <bpb.h>
 #include <ctype.h>

@@ -3,6 +3,7 @@
 #include "FAT32.h"
 #include "ctype.h"
 #include "string.h"
+#include "memory.h"
 #include "SysInfo.h"
 #include "Util.h"
 #include "SkyConsole.h"
