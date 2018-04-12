@@ -1,387 +1,414 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source">
-      <UniqueIdentifier>{133342e2-89aa-43a0-bcb7-a8de80cb8046}</UniqueIdentifier>
+    <Filter Include="lua">
+      <UniqueIdentifier>{68dcb09d-9092-4ffe-a6fc-ddb32c17678f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\lua">
-      <UniqueIdentifier>{a327c23b-fcfe-42d0-8bf6-b1e84d3df9e2}</UniqueIdentifier>
+    <Filter Include="jsmn">
+      <UniqueIdentifier>{6427ffee-d7b5-43ae-bd4d-715013b5ba74}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\stl">
-      <UniqueIdentifier>{797df97c-1078-4895-8f27-c2edd9a0521d}</UniqueIdentifier>
+    <Filter Include="crt">
+      <UniqueIdentifier>{d829cafe-7049-4c5c-bccf-55b0cc64e41f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\stl\tinystl">
-      <UniqueIdentifier>{a27a6c11-f9fb-4569-a8c5-089dfad4cca1}</UniqueIdentifier>
+    <Filter Include="stllike">
+      <UniqueIdentifier>{74dae68f-7cff-4577-9f13-8847c6b8d565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="stl">
+      <UniqueIdentifier>{74806527-b4f0-4003-960f-f62906112a10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="stl\tinystl">
+      <UniqueIdentifier>{7d085712-e5ed-403e-94c3-0e159ad60cb9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="string.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="cstd.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="stdio.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="sprintf.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyIO.c" />
-    <ClCompile Include="Math.cpp" />
-    <ClCompile Include="jsmn.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lstate.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lzio.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lparser.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lstring.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lstrlib.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ctype.c">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lundump.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lutf8lib.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lvm.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lobject.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lopcodes.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ltable.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ltablib.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ltm.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lapi.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lbitlib.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lcode.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lcorolib.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lctype.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ldebug.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ldo.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ldump.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lfunc.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lgc.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\linit.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\llex.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lmathlib.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lmem.c">
-      <Filter>Source\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="stl\IStream.cpp">
-      <Filter>Source\stl</Filter>
-    </ClCompile>
-    <ClCompile Include="stl\OStream.cpp">
-      <Filter>Source\stl</Filter>
-    </ClCompile>
-    <ClCompile Include="stl\stl_string.cpp">
-      <Filter>Source\stl</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="string.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="size_t.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="stdarg.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="stdint.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="stdio.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="va_list.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="ctype.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="sprintf.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="ChType.H">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="stddef.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Math.h" />
-    <ClInclude Include="SkyIO.h" />
-    <ClInclude Include="errno.h" />
-    <ClInclude Include="setjmp.h" />
-    <ClInclude Include="Vector.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Stack.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="HashMap.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="jsmn.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="map.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="stl_pair.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="list_implement.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="list_iterator_implement.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="list_node_implement.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="list1.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lstate.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="time.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="lua\_mingw.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\lapi.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
-    <ClInclude Include="lua\ldebug.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\ldo.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lfunc.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lgc.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lprefix.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lua.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\signal.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\llex.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lmem.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lstring.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\ltable.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\ltm.h">
-      <Filter>Source\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\luaconf.h">
-      <Filter>Source\lua</Filter>
+    <ClInclude Include="lua\lauxlib.h">
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\lcode.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\lctype.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\ldebug.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\ldo.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\lfunc.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\lgc.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\llex.h">
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\llimits.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\lmem.h">
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\lobject.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\lopcodes.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\lparser.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\lprefix.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\lstate.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\lstring.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\ltable.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\ltm.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\lua.h">
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\lua.hpp">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\luaconf.h">
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\lualib.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\lundump.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\lvm.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="lua\lzio.h">
-      <Filter>Source\lua</Filter>
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\setjmp.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\signal.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="jsmn\jsmn.h">
+      <Filter>jsmn</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\ctype.h">
+      <Filter>crt</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\math.h">
+      <Filter>crt</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\sprintf.h">
+      <Filter>crt</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\stdint.h">
+      <Filter>crt</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\stdio.h">
+      <Filter>crt</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\string.h">
+      <Filter>crt</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\c++config.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\concept_check.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\HashMap.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\list_implement.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\list_iterator_implement.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\list_node_implement.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\list1.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\map.hpp">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\map1.hpp">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\move.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\Stack.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\stl_pair.h">
+      <Filter>stllike</Filter>
+    </ClInclude>
+    <ClInclude Include="stlLike\Vector.h">
+      <Filter>stllike</Filter>
     </ClInclude>
     <ClInclude Include="stl\darray.h">
-      <Filter>Source\stl</Filter>
+      <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\darray.hpp">
-      <Filter>Source\stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\deque.hpp">
-      <Filter>Source\stl</Filter>
+      <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\deque.h">
-      <Filter>Source\stl</Filter>
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\deque.hpp">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\functional.h">
+      <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\IOStream.h">
-      <Filter>Source\stl</Filter>
+      <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\IStream.h">
-      <Filter>Source\stl</Filter>
+      <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\OStream.h">
-      <Filter>Source\stl</Filter>
+      <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\stl_string.h">
-      <Filter>Source\stl</Filter>
+      <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\algo.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\algobase.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\alloc.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\bvector.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\defalloc.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\deque.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\function.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\hash_map.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\hash_set.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\hashtable.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\heap.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\iterator.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\list.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\map.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\multimap.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\multiset.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\pair.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\pthread_alloc.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\rope.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\ropeimpl.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\set.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\slist.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\stack.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\stl_config.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\tempbuf.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\tree.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\type_traits.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
     <ClInclude Include="stl\tinystl\vector.h">
-      <Filter>Source\stl\tinystl</Filter>
+      <Filter>stl\tinystl</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="lua\lapi.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lauxlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lbaselib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lbitlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lcode.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lcorolib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lctype.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\ldblib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\ldebug.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\ldo.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\ldump.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lfunc.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lgc.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\linit.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\liolib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\llex.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lmathlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lmem.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\loadlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lobject.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lopcodes.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\loslib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lparser.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lstate.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lstring.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lstrlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\ltable.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\ltablib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\ltm.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lundump.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lutf8lib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lvm.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lzio.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="jsmn\jsmn.cpp">
+      <Filter>jsmn</Filter>
+    </ClCompile>
+    <ClCompile Include="CRT\cstd.cpp">
+      <Filter>crt</Filter>
+    </ClCompile>
+    <ClCompile Include="CRT\ctype.cpp">
+      <Filter>crt</Filter>
+    </ClCompile>
+    <ClCompile Include="CRT\math.cpp">
+      <Filter>crt</Filter>
+    </ClCompile>
+    <ClCompile Include="CRT\sprintf.cpp">
+      <Filter>crt</Filter>
+    </ClCompile>
+    <ClCompile Include="CRT\stdio.cpp">
+      <Filter>crt</Filter>
+    </ClCompile>
+    <ClCompile Include="CRT\string.cpp">
+      <Filter>crt</Filter>
+    </ClCompile>
+    <ClCompile Include="stl\IStream.cpp">
+      <Filter>stl</Filter>
+    </ClCompile>
+    <ClCompile Include="stl\OStream.cpp">
+      <Filter>stl</Filter>
+    </ClCompile>
+    <ClCompile Include="stl\stl_string.cpp">
+      <Filter>stl</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
