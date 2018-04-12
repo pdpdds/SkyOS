@@ -1,5 +1,5 @@
-#include <string.h>
-#include "ChType.H"
+#include "string.h"
+#include "CharType.h"
 
 //! warning C4706: assignment within conditional expression
 #pragma warning (disable:4706)

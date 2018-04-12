@@ -1,4 +1,4 @@
-#include "SkyIO.h"
+#include "fileio.h"
 #include "errno.h"
 
 /*char *	strerror(int errnum)

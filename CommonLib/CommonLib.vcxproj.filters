@@ -1,14 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="lua">
-      <UniqueIdentifier>{68dcb09d-9092-4ffe-a6fc-ddb32c17678f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="jsmn">
       <UniqueIdentifier>{6427ffee-d7b5-43ae-bd4d-715013b5ba74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="crt">
-      <UniqueIdentifier>{d829cafe-7049-4c5c-bccf-55b0cc64e41f}</UniqueIdentifier>
     </Filter>
     <Filter Include="stllike">
       <UniqueIdentifier>{74dae68f-7cff-4577-9f13-8847c6b8d565}</UniqueIdentifier>
@@ -21,113 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lua\_mingw.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lapi.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lauxlib.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lcode.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lctype.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\ldebug.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\ldo.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lfunc.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lgc.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\llex.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\llimits.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lmem.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lobject.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lopcodes.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lparser.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lprefix.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lstate.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lstring.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\ltable.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\ltm.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lua.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lua.hpp">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\luaconf.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lualib.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lundump.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lvm.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lzio.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\setjmp.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\signal.h">
-      <Filter>lua</Filter>
-    </ClInclude>
     <ClInclude Include="jsmn\jsmn.h">
       <Filter>jsmn</Filter>
-    </ClInclude>
-    <ClInclude Include="CRT\ctype.h">
-      <Filter>crt</Filter>
-    </ClInclude>
-    <ClInclude Include="CRT\math.h">
-      <Filter>crt</Filter>
-    </ClInclude>
-    <ClInclude Include="CRT\sprintf.h">
-      <Filter>crt</Filter>
-    </ClInclude>
-    <ClInclude Include="CRT\stdint.h">
-      <Filter>crt</Filter>
-    </ClInclude>
-    <ClInclude Include="CRT\stdio.h">
-      <Filter>crt</Filter>
-    </ClInclude>
-    <ClInclude Include="CRT\string.h">
-      <Filter>crt</Filter>
     </ClInclude>
     <ClInclude Include="stlLike\c++config.h">
       <Filter>stllike</Filter>
@@ -279,127 +168,18 @@
     <ClInclude Include="stl\tinystl\vector.h">
       <Filter>stl\tinystl</Filter>
     </ClInclude>
+    <ClInclude Include="ctype.h" />
+    <ClInclude Include="fileio.h" />
+    <ClInclude Include="math.h" />
+    <ClInclude Include="SkyStruct.h" />
+    <ClInclude Include="sprintf.h" />
+    <ClInclude Include="stdint.h" />
+    <ClInclude Include="stdio.h" />
+    <ClInclude Include="string.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="lua\lapi.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lauxlib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lbaselib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lbitlib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lcode.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lcorolib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lctype.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ldblib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ldebug.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ldo.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ldump.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lfunc.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lgc.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\linit.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\liolib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\llex.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lmathlib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lmem.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\loadlib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lobject.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lopcodes.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\loslib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lparser.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lstate.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lstring.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lstrlib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ltable.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ltablib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\ltm.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lundump.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lutf8lib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lvm.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua\lzio.c">
-      <Filter>lua</Filter>
-    </ClCompile>
     <ClCompile Include="jsmn\jsmn.cpp">
       <Filter>jsmn</Filter>
-    </ClCompile>
-    <ClCompile Include="CRT\cstd.cpp">
-      <Filter>crt</Filter>
-    </ClCompile>
-    <ClCompile Include="CRT\ctype.cpp">
-      <Filter>crt</Filter>
-    </ClCompile>
-    <ClCompile Include="CRT\math.cpp">
-      <Filter>crt</Filter>
-    </ClCompile>
-    <ClCompile Include="CRT\sprintf.cpp">
-      <Filter>crt</Filter>
-    </ClCompile>
-    <ClCompile Include="CRT\stdio.cpp">
-      <Filter>crt</Filter>
-    </ClCompile>
-    <ClCompile Include="CRT\string.cpp">
-      <Filter>crt</Filter>
     </ClCompile>
     <ClCompile Include="stl\IStream.cpp">
       <Filter>stl</Filter>
@@ -410,5 +190,12 @@
     <ClCompile Include="stl\stl_string.cpp">
       <Filter>stl</Filter>
     </ClCompile>
+    <ClCompile Include="cstd.cpp" />
+    <ClCompile Include="ctype.cpp" />
+    <ClCompile Include="fileio.cpp" />
+    <ClCompile Include="math.cpp" />
+    <ClCompile Include="sprintf.cpp" />
+    <ClCompile Include="stdio.cpp" />
+    <ClCompile Include="string.cpp" />
   </ItemGroup>
 </Project>

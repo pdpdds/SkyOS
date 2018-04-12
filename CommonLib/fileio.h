@@ -31,7 +31,7 @@ FILE* __cdecl __acrt_iob_func(unsigned _Ix);
 #define stdout  (__acrt_iob_func(0))
 
 
-extern struct FILE *stderr;                /* Standard error output stream.  */
+//extern struct FILE *stderr;                /* Standard error output stream.  */
 
 #define stderr stderr
 

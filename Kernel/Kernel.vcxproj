@@ -58,7 +58,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>../CommonLib;./;../Include;./.;./v8086;../kernel;../svgagui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../CommonLib;./;../Include;./.;./v8086;../kernel;../svgagui;../CommonLib/stllike;../CommonLib/jsmn</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
