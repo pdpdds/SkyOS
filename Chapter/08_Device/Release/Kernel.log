@@ -1,0 +1,27 @@
+﻿  GDT.cpp
+d:\dev\skyos\trunk\chapter\08_device\cpu\gdt.h(17): fatal error C1189: #error:  "[gdt.h] platform not implimented. Define ARCH_X86 for HAL"
+  Hal.cpp
+  IDT.cpp
+  Pic.cpp
+CPU\Pic.cpp(3): fatal error C1189: #error:  "[pic.cpp for i86] requires i86 architecture. Define ARCH_X86"
+  PIT.cpp
+  Exception.cpp
+  HeapManager.cpp
+  kheap.cpp
+  ordered_array.cpp
+  InitKernel.cpp
+  kmain.cpp
+D:\Dev\SkyOS\trunk\Chapter\08_Device\CPU\GDT.h(17): fatal error C1189: #error:  "[gdt.h] platform not implimented. Define ARCH_X86 for HAL"
+  PageDirectoryEntry.cpp
+  PageTableEntry.cpp
+  PhysicalMemoryManager.cpp
+  VirtualMemoryManager.cpp
+  SkyAPI.cpp
+  SkyConsole.cpp
+  SkyTest.cpp
+  SysAPI.cpp
+  Plane.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  ZetPlane.cpp
+  코드를 생성하고 있습니다...
