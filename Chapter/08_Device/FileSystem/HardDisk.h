@@ -1,116 +1,111 @@
-#pragma once
+#ifndef __HARDDISK_H
+#define __HARDDISK_H
+
 #include "windef.h"
-#include "stdint.h"
+#include "Collect.H"
 
-#define MAX_DEVICE_PATH 100
-
-#define DEVICE_KEY_SIZE 20
-
-
-#ifndef _GSH_IO_PARAMETER_DEFINED
-#define _GSH_IO_PARAMETER_DEFINED
-#endif   //this structure is used by kernel32.h so modify it also if you do any changes here
-
-#ifdef _MSC_VER
-#pragma pack (push, 1)
-#endif
-
-typedef struct tag_GSH_IO_Parameter
+struct _GSH_IO_Parameter
 {
-	UINT32 dwCylinder;
-	UINT32 dwHead;
-	UINT32 dwSector;
+	UINT32 Cylinder;
+	UINT16 Head;
+	UINT16 Sector;
 
-	UINT32 dwLBASector;
+	UINT32 LBASector;
 
-	UINT32 dwSectorCount;
+	UINT16 SectorCount;
 
-	BYTE   bMode;		//if bit 0 is set LBA mode
+	BYTE   Mode;		//if bit 0 is set LBA mode
 
-	UINT32 Reserved[20];
-}_GSH_IO_Parameter;
+	UINT16 Others[20];
+};
 
-#ifdef _MSC_VER
-#pragma pack (pop)
-#endif
-
-typedef _GSH_IO_Parameter GSHIOPARA;
-typedef GSHIOPARA *LPGSHIOPARA;
+/*--------------- Error Constants -----------*/
 
 enum HDD_Errors
-{
-    HDD_NO_ERROR,
-    HDD_NOT_FOUND,
-    HDD_CONTROLLER_BUSY,
-    HDD_DATA_NOT_READY,
-    HDD_DATA_COMMAND_NOT_READY,
+	{
+	HDD_NO_ERROR,
+	HDD_NOT_FOUND,
+	HDD_CONTROLLER_BUSY,
+	HDD_DATA_NOT_READY,
+	HDD_DATA_COMMAND_NOT_READY,
 
-    HDD_ERR_UNC, 	//Uncorrectable ECC
-    HDD_ERR_MC,     //Media Changed
-    HDD_ERR_IDNF,   //ID Not Found
-    HDD_ERR_MCR,    //Media Change Request
-    HDD_ERR_ABRT,   //Command Aborted
-    HDD_ERR_TK0NF   //Track 0 Not Found
-};
+	HDD_ERR_UNC, 	//Uncorrectable ECC
+	HDD_ERR_MC,     //Media Changed
+	HDD_ERR_IDNF,   //ID Not Found
+	HDD_ERR_MCR,    //Media Change Request
+	HDD_ERR_ABRT,   //Command Aborted
+	HDD_ERR_TK0NF   //Track 0 Not Found
+	};
 
-//#warning The following definition should be only 20 but if you set anything below 25 it causes page fault. I suspect Heap module.
-#define IDE_STRING_NUMBER_SIZE 25
-struct _HDD
-{
-    BYTE bIORegisterIdx;        /* Index Number of IO Resources and IRQ */
-    BYTE bIRQ;
 
-    BYTE bDeviceNumber;		/* 0 - Master, 1 - Slave */
-    
-    BYTE bDeviceID[512];	/* Device ID bytes Returned on IDENTIFY DEVICE Command*/
+struct __HDDInfo
+	{
+	BYTE IORegisterIdx ;  /* Index Number of IO Resources and IRQ */
+	BYTE IRQ;
 
-    BYTE bMode;			/* 0 - CHS Mode, 1-LBA Mode */
+	BYTE DeviceNumber;		/* 0 - Master, 1 - Slave */
+	char SerialNumber[21];
+	char FirmwareRevision[21];
+	char ModelNumber[21];
+	BYTE DMASupported;
+	BYTE LBASupported;
 
-    UINT32 dwFeatures;          /* bit  0 LBA 
-                                        1 DMA
-                                */
-    UINT16 wCHSHeadCount;
-    UINT16 wCHSCylinderCount;
-    UINT16 wCHSSectorCount;
-    UINT32 dwLBACount;   	/* Used only in LBA mode */
+	BYTE DeviceID[512];		/* Device ID bytes Returned on IDENTIFY DEVICE Command*/
 
-    UINT16 wBytesPerSector;
-    
-    char szSerialNumber[IDE_STRING_NUMBER_SIZE];
-    char szModelNumber[IDE_STRING_NUMBER_SIZE];
-    char szFirmwareRevision[IDE_STRING_NUMBER_SIZE];
-};
-typedef struct _HDD HDD;
-typedef HDD * LPHDD;
+	BYTE Mode;			/* 0 - CHS Mode, 1-LBA Mode */
 
-#ifdef __cplusplus
-	extern "C" {
-#endif
-    extern LPHDD sysHDDArray[];
-    BYTE ReadErrorRegister(BYTE bDeviceController);
-    BOOLEAN IsDeviceDataReady(BYTE bDeviceController, DWORD dwWaitUpToms,BOOLEAN bCheckDataRequest);
-    BOOLEAN IsDeviceControllerBusy(BYTE bDeviceController, DWORD dwWaitUpToms);
-    BYTE HardDisk_DoSoftwareReset(BYTE bDeviceController);
-    BOOLEAN HardDisk_IsRemovableDevice(BYTE bDeviceNo);
-    BOOLEAN HardDisk_IsRemovableMedia(BYTE bDeviceNo);
-    
-    UINT32 HardDisk_CHSToLBA(BYTE bDeviceNo, UINT32 dwCylinder, UINT32 dwHead, UINT32 dwSector);
-    UINT32 HardDisk_LBAToCHS(BYTE bDeviceNo,UINT32 dwLBA, UINT32 * lpCylinder, UINT32 * lpHead, UINT32 * lpSector);
-    void HardDisk_Initialize();
-    UINT32 HardDisk_Reset(BYTE bDeviceNo);
-    UINT32 HardDisk_ReadSectors(BYTE bDeviceNo, UINT32 dwStartLBASector, BYTE bNoOfSectors, BYTE * lpBuffer);
-    UINT32 HardDisk_WriteSectors(BYTE bDeviceNo, UINT32 dwStartLBASector, BYTE bNoOfSectors, BYTE * lpBuffer);
+	UINT16 CHSHeadCount;
+	UINT16 CHSCylinderCount;
+	UINT16 CHSSectorCount;
+	UINT32 LBACount;   		/* Used only in LBA mode */
 
-    //--------Implementation of GSH functions
-    BYTE   HDD_GetNoOfDevices();
-    UINT32 HDD_GetDeviceParameters(BYTE bDeviceNo, BYTE * lpBuffer);
+	UINT16 BytesPerSector;
 
-    UINT32 HDD_Reset(BYTE bDeviceNo);
-    UINT32 HDD_Status(BYTE bDeviceNo);
+	BYTE LastError;
+	};
 
-    UINT32 HDD_Verify(BYTE bDeviceNo,  LPGSHIOPARA lpIOPara);
-    UINT32 HDD_Read(BYTE bDeviceNo,  LPGSHIOPARA lpIOPara, BYTE * lpBuffer);
-    UINT32 HDD_Write(BYTE bDeviceNo,  LPGSHIOPARA lpIOPara, BYTE * lpBuffer);
-#ifdef __cplusplus
-    }
+class HardDiskHandler
+	{
+	private:
+		Collection <__HDDInfo *> HDDs;
+		void (*InterruptHandler)();
+		static BYTE DoSoftwareReset(UINT16 DeviceController);
+		BYTE LastError;
+	public:
+		HardDiskHandler();
+		~HardDiskHandler();
+		
+		void Initialize();
+
+		BYTE GetTotalDevices();
+
+		BOOLEAN IsRemovableDevice(BYTE * DPF);
+		BOOLEAN IsRemovableMedia (BYTE * DPF);
+
+		__HDDInfo * GetHDDInfo(BYTE * DPF);
+
+		UINT32 CHSToLBA(BYTE *DPF, UINT32 Cylinder, UINT32 Head, UINT32 Sector);
+		void LBAToCHS(BYTE *DPF, UINT32 LBA, UINT32 * Cylinder, UINT32 * Head, UINT32 * Sector);
+
+		BYTE ReadSectors(BYTE * DPF, UINT16 StartCylinder, BYTE StartHead, BYTE StartSector, BYTE NoOfSectors, BYTE * Buffer, BOOLEAN WithRetry = TRUE);
+		BYTE ReadSectors(BYTE * DPF, UINT32 StartLBASector, BYTE NoOfSectors, BYTE * Buffer, BOOLEAN WithRetry = TRUE);
+		BYTE WriteSectors(BYTE * DPF, UINT16 StartCylinder, BYTE StartHead, BYTE StartSector, BYTE NoOfSectors, BYTE * Buffer, BOOLEAN WithRetry = TRUE);
+	
+
+		//--------Implementation of GSH functions
+		BYTE GetNoOfDevices();
+		UINT16 GetDeviceParameters(BYTE * DPF, BYTE * Buffer);
+		BYTE Reset(BYTE * DPF);		
+
+		BYTE GetLastErrorCode()
+		{
+			return LastError;
+		}
+		char * GetLastError(BYTE ErrorCode);
+		char * GetLastError()
+		{
+			return GetLastError(LastError);
+		}
+	};
+extern HardDiskHandler* g_pHDDHandler;
 #endif
