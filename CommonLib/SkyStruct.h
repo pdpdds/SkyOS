@@ -1,5 +1,9 @@
 #pragma once
 #include "windef.h"
+#include "stdint.h"
+#include "string.h"
+#include "memory.h"
+#include "ctype.h"
 #include "list.h"
 #include "hashmap.h"
 #include "map.h"

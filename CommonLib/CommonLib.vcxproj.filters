@@ -98,6 +98,7 @@
     <ClInclude Include="stl\list.h">
       <Filter>stl</Filter>
     </ClInclude>
+    <ClInclude Include="str_util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jsmn\jsmn.cpp">
@@ -105,7 +106,6 @@
     </ClCompile>
     <ClCompile Include="cstd.cpp" />
     <ClCompile Include="ctype.cpp" />
-    <ClCompile Include="fileio.cpp" />
     <ClCompile Include="math.cpp" />
     <ClCompile Include="sprintf.cpp" />
     <ClCompile Include="stdio.cpp" />
@@ -120,5 +120,6 @@
     <ClCompile Include="stl\stl_string.cpp">
       <Filter>stl</Filter>
     </ClCompile>
+    <ClCompile Include="str_util.cpp" />
   </ItemGroup>
 </Project>

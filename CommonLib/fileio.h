@@ -1,39 +1,38 @@
 #pragma once
+#include "windef.h"
 #include "stddef.h"
-
-#ifndef _FILE_DEFINED
-#define _FILE_DEFINED
-typedef struct _iobuf
-{
-	void* _Placeholder;
-} FILE;
-#endif
-
-size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
-FILE *fopen(const char *filename, const char *mode);
-int fclose(FILE *stream);
-int feof(FILE *stream);
-int ferror(FILE *stream);
-int fflush(FILE *stream);
-FILE *freopen(const char *filename, const char *mode, FILE *stream);
-int fseek(FILE *stream, long int offset, int whence);
-long int ftell(FILE *stream);
-size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
-int getc(FILE * stream); 
-char *	strerror(int errnum);
-int fprintf(FILE * stream, const char * format, ...);
-
-
-#define NULL 0
-
-#ifndef SEEK_SET
 #define SEEK_SET        0               /* seek to an absolute position */
 #define SEEK_CUR        1               /* seek relative to current position */
 #define SEEK_END        2               /* seek relative to end of file */
-#endif  /* ifndef SEEK_SET */
 
-#define _IOFBF 0x0000
-#define _IOLBF 0x0040
-#define _IONBF 0x0004
+//파일 플래그
+#define FS_FILE       0
+#define FS_DIRECTORY  1
+#define FS_INVALID    2
 
-#define HUGE_VAL 10000000
+typedef struct _FILE {
+
+	char     _name[32];
+	DWORD	 _flags;
+	DWORD    _fileLength;
+	DWORD    _id;
+	DWORD    _eof;
+	DWORD    _position;
+	DWORD    _currentCluster;
+	DWORD    _deviceID;
+
+}FILE, *PFILE;
+
+extern size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
+extern FILE *fopen(const char *filename, const char *mode);
+extern int fclose(FILE *stream);
+extern int feof(FILE *stream);
+extern int ferror(FILE *stream);
+extern int fflush(FILE *stream);
+extern FILE *freopen(const char *filename, const char *mode, FILE *stream);
+extern int fseek(FILE *stream, long int offset, int whence);
+extern long int ftell(FILE *stream);
+extern size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
+extern int getc(FILE * stream);
+extern char*	strerror(int errnum);
+extern int fprintf(FILE * stream, const char * format, ...);
