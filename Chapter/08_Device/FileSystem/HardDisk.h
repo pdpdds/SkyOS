@@ -1,7 +1,41 @@
 #pragma once
 #include "windef.h"
 #include "stdint.h"
-#include "GSH.H"
+
+#define MAX_DEVICE_PATH 100
+
+#define DEVICE_KEY_SIZE 20
+
+
+#ifndef _GSH_IO_PARAMETER_DEFINED
+#define _GSH_IO_PARAMETER_DEFINED
+#endif   //this structure is used by kernel32.h so modify it also if you do any changes here
+
+#ifdef _MSC_VER
+#pragma pack (push, 1)
+#endif
+
+typedef struct tag_GSH_IO_Parameter
+{
+	UINT32 dwCylinder;
+	UINT32 dwHead;
+	UINT32 dwSector;
+
+	UINT32 dwLBASector;
+
+	UINT32 dwSectorCount;
+
+	BYTE   bMode;		//if bit 0 is set LBA mode
+
+	UINT32 Reserved[20];
+}_GSH_IO_Parameter;
+
+#ifdef _MSC_VER
+#pragma pack (pop)
+#endif
+
+typedef _GSH_IO_Parameter GSHIOPARA;
+typedef GSHIOPARA *LPGSHIOPARA;
 
 enum HDD_Errors
 {

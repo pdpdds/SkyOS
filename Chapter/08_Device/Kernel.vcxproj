@@ -19,11 +19,10 @@
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="FileSystem\ACEList.cpp" />
-    <ClCompile Include="FileSystem\fat32.cpp" />
     <ClCompile Include="FileSystem\GFS.cpp" />
-    <ClCompile Include="FileSystem\GSH.cpp" />
     <ClCompile Include="FileSystem\Harddisk.cpp" />
     <ClCompile Include="FileSystem\kfileio.cpp" />
+    <ClCompile Include="FileSystem\Partition.cpp" />
     <ClCompile Include="Heap\HeapManager.cpp" />
     <ClCompile Include="Heap\kheap.cpp" />
     <ClCompile Include="Heap\ordered_array.cpp" />
@@ -33,11 +32,13 @@
     <ClCompile Include="Memory\PageTableEntry.cpp" />
     <ClCompile Include="Memory\PhysicalMemoryManager.cpp" />
     <ClCompile Include="Memory\VirtualMemoryManager.cpp" />
+    <ClCompile Include="ObjMan.cpp" />
     <ClCompile Include="SkyAPI.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
     <ClCompile Include="SkyTest.cpp" />
     <ClCompile Include="StorageManager.cpp" />
     <ClCompile Include="SysAPI.cpp" />
+    <ClCompile Include="SysInfo.cpp" />
     <ClCompile Include="Test\Plane.cpp" />
     <ClCompile Include="Test\ZetPlane.cpp" />
   </ItemGroup>
@@ -51,10 +52,9 @@
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="FileSystem\ACEList.h" />
     <ClInclude Include="FileSystem\FAT.h" />
-    <ClInclude Include="FileSystem\fat32.h" />
     <ClInclude Include="FileSystem\GFS.H" />
-    <ClInclude Include="FileSystem\GSH.H" />
     <ClInclude Include="FileSystem\HardDisk.h" />
+    <ClInclude Include="FileSystem\Partition.h" />
     <ClInclude Include="Heap\HeapManager.h" />
     <ClInclude Include="Heap\kheap.h" />
     <ClInclude Include="Heap\ordered_array.h" />
@@ -65,11 +65,14 @@
     <ClInclude Include="Memory\PhysicalMemoryManager.h" />
     <ClInclude Include="Memory\VirtualMemoryManager.h" />
     <ClInclude Include="MultiBoot.h" />
+    <ClInclude Include="ObjMan.h" />
     <ClInclude Include="SkyAPI.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="SkyTest.h" />
     <ClInclude Include="StorageManager.h" />
     <ClInclude Include="SysAPI.h" />
+    <ClInclude Include="SysError.h" />
+    <ClInclude Include="SysInfo.h" />
     <ClInclude Include="Test\Plane.h" />
     <ClInclude Include="Test\PureCallExtend.h" />
     <ClInclude Include="Test\TestInteger.h" />

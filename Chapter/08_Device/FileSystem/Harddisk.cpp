@@ -438,8 +438,9 @@ void HardDisk_Initialize()
 
     if ( bTotalDevices > 0 ) //one or more HDD is found and we must register into the GSH
     {
+		//20180413
 		//remember this structure should not be freed
-        LPGSH lpNewGSH = new GSH;
+        /*LPGSH lpNewGSH = new GSH;
                
         lpNewGSH->GetNoOfDevices=HDD_GetNoOfDevices;
         lpNewGSH->Read=HDD_Read;
@@ -454,7 +455,7 @@ void HardDisk_Initialize()
 		{
 			
 		//	DEBUG_PRINT_INFO("GSH Registration failed.");
-		}
+		}*/
     }
 }
 /* This function reset the given controller and returns the Diagnostic Code

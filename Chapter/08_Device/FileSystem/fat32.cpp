@@ -1,15 +1,13 @@
 #include "GFS.h"
-#include "GSH.h"
 #include "FAT32.h"
 #include "ctype.h"
 #include "string.h"
 #include "memory.h"
 #include "SysInfo.h"
-#include "Util.h"
 #include "SkyConsole.h"
+#include "str_util.h"
 
 LPLISTNODE sysFATOpenFileInfo=NULL;
-
 
 #define FILL_FS_STRUCTURE( lpNewFS )\
     lpNewFS->GetVolumeCapacity=FAT_GetVolumeCapacity;\

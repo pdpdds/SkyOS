@@ -4,6 +4,9 @@
 #include "VirtualMemoryManager.h"
 #include "HeapManager.h"
 #include "HardDisk.h"
+#include "Partition.h"
+#include "GFS.H"
+#include "FAT32.H"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -170,6 +173,16 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 	return true;
 }
 
+void PrintDriveMappingInfo()
+{
+	int bTotalDrives = GetTotalDrives();
+	int i;
+	for (i = 0; i<bTotalDrives; i++)
+	{
+		SkyConsole::Print("%c: (%s) [%s]\n", 'A' + i, sysDevicePathLookupTable[i].szDevicePath, GetPartititionTypeString(PART_TYPE(&sysDevicePathLookupTable[i].Part)));
+	}
+}
+
 void InitHardDisk()
 {
 	/*if (true == InitHardDrive())
@@ -188,11 +201,11 @@ void InitHardDisk()
 
 	HardDisk_Initialize();
 
-	FillDevicePathLookupTable();
+	//FillDevicePathLookupTable();
 	PrintDriveMappingInfo();
 
 	GFS_Init();
-	FAT_Init();
+	//FAT_Init();
 
 	SkyConsole::Print(" %d device(s) found\n", HDD_GetNoOfDevices());
 	GFS_DeleteFile("C:\\Test.bat");
@@ -222,25 +235,6 @@ void InitHardDisk()
 				c = GFS_ReadFile(hFile, 1000, buffer);
 			}
 		}
-		PrintHDDInfo();
+		//PrintHDDInfo();
 	}
-
-	/*if (HDD_GetNoOfDevices())
-	{
-	HANDLE hFile = NULL;
-	hFile = GFS_CreateFile("C:\BIOS.BIN", GENERIC_READ, 0, OPEN_EXISTING, 0);
-
-	if (hFile == NULL)
-	{
-	SkyConsole::Print("Open file failed : %s\n", "menu.lst");
-	}
-	else
-	{
-	char buffer[4096];
-	int c = GFS_ReadFile(hFile, 1000, lowCacheBuffer);
-
-
-	}
-	//PrintHDDInfo();
-	}*/
 }
