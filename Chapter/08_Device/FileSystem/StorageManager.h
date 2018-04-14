@@ -1,5 +1,5 @@
 #pragma once
-#include "FileSystem.h"
+#include "FileSysAdaptor.h"
 
 //저장장치는 최대 26개
 #define STORAGE_DEVICE_MAX 26
@@ -18,12 +18,12 @@ public:
 	}
 
 //인터페이스
-	bool RegisterFileSystem(FileSystem* fsys, DWORD deviceID);
-	bool UnregisterFileSystem(FileSystem* fsys);
+	bool RegisterFileSystem(FileSysAdaptor* fsys, DWORD deviceID);
+	bool UnregisterFileSystem(FileSysAdaptor* fsys);
 	bool UnregisterFileSystemByID(DWORD deviceID);
 
 	bool SetCurrentFileSystemByID(DWORD deviceID);
-	bool SetCurrentFileSystem(FileSystem* fsys);
+	bool SetCurrentFileSystem(FileSysAdaptor* fsys);
 
 //파일 메소드
 	PFILE OpenFile(const char* fname, const char *mode);
@@ -35,7 +35,7 @@ private:
 	StorageManager();
 	static StorageManager* m_pStorageManager;
 
-	FileSystem* m_fileSystems[STORAGE_DEVICE_MAX];
+	FileSysAdaptor* m_fileSystems[STORAGE_DEVICE_MAX];
 	int m_stroageCount;
-	FileSystem* m_pCurrentFileSystem;
+	FileSysAdaptor* m_pCurrentFileSystem;
 };

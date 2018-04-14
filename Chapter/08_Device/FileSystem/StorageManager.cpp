@@ -5,7 +5,7 @@ StorageManager* StorageManager::m_pStorageManager = nullptr;
 
 StorageManager::StorageManager()
 {
-	memset(m_fileSystems, 0, sizeof(FileSystem*) * STORAGE_DEVICE_MAX);
+	memset(m_fileSystems, 0, sizeof(FileSysAdaptor*) * STORAGE_DEVICE_MAX);
 	m_stroageCount = 0;
 	m_pCurrentFileSystem = nullptr;
 }
@@ -14,7 +14,7 @@ StorageManager::~StorageManager()
 {
 }
 
-bool StorageManager::RegisterFileSystem(FileSystem* fsys, DWORD deviceID)
+bool StorageManager::RegisterFileSystem(FileSysAdaptor* fsys, DWORD deviceID)
 {
 	char deviceLetter = toupper(deviceID);
 	deviceLetter -= 'A';
@@ -34,7 +34,7 @@ bool StorageManager::RegisterFileSystem(FileSystem* fsys, DWORD deviceID)
 	return false;
 }
 
-bool StorageManager::UnregisterFileSystem(FileSystem* fsys)
+bool StorageManager::UnregisterFileSystem(FileSysAdaptor* fsys)
 {
 	for (int i = 0; i < STORAGE_DEVICE_MAX; i++)
 	{
@@ -65,7 +65,7 @@ bool StorageManager::SetCurrentFileSystemByID(DWORD deviceID)
 	return false;
 }
 
-bool StorageManager::SetCurrentFileSystem(FileSystem* fsys)
+bool StorageManager::SetCurrentFileSystem(FileSysAdaptor* fsys)
 {
 	for (int i = 0; i < STORAGE_DEVICE_MAX; i++)
 	{

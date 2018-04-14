@@ -1,5 +1,5 @@
 #pragma once
-#include "FileSystem.h"
+#include "FileSysAdaptor.h"
 #include "MintFileSystem.h"
 
 #pragma pack( push, 1 )
@@ -44,7 +44,7 @@ typedef struct PackageHeaderStruct
 	PACKAGEITEM vstItem;
 } PACKAGEHEADER;
 
-class RamDiskAdaptor : public FileSystem
+class RamDiskAdaptor : public FileSysAdaptor
 {
 public:
 	RamDiskAdaptor(char* deviceName, DWORD deviceID);

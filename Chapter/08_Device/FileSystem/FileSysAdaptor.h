@@ -3,11 +3,11 @@
 #include "fileio.h"
 
 //파일 시스템
-class FileSystem
+class FileSysAdaptor
 {
 public:
-	FileSystem(char* deviceName, DWORD deviceID);
-	~FileSystem();
+	FileSysAdaptor(char* deviceName, DWORD deviceID);
+	~FileSysAdaptor();
 
 	virtual FILE* Open(const char* FileName, const char *mode) = 0;
 	virtual int Read(PFILE file, unsigned char* buffer, unsigned int size, int count) = 0;	

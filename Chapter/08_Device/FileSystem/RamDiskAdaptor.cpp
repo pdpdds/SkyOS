@@ -3,7 +3,7 @@
 #include "MultiBoot.h"
 
 RamDiskAdaptor::RamDiskAdaptor(char* deviceName, DWORD deviceID)
-	: FileSystem(deviceName, deviceID)
+	: FileSysAdaptor(deviceName, deviceID)
 {
 	m_pInformation = new HDDINFORMATION;
 }

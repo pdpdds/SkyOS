@@ -5,6 +5,7 @@
 #include "HeapManager.h"
 #include "HDDAdaptor.h"
 #include "RamDiskAdaptor.h"
+#include "FloppyDiskAdaptor.h"
 #include "StorageManager.h"
 #include "fileio.h"
 
@@ -174,10 +175,9 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 }
 
 void ConstructFileSystem()
-{
-	
+{	
 //IDE 하드 디스크
-	FileSystem* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
+	FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
 	
 	pHDDAdaptor->Initialize();
 
@@ -188,20 +188,32 @@ void ConstructFileSystem()
 		
 		//TestHardDisk();			
 	}
+	else
+	{
+		delete pHDDAdaptor;		
+	}
 			
-//램디스크 생성	
-	FileSystem* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');	
+//램 디스크
+	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');
 	if (pRamDiskAdaptor->Initialize() == true)
 	{
 		StorageManager::GetInstance()->RegisterFileSystem(pRamDiskAdaptor, 'K');
 		StorageManager::GetInstance()->SetCurrentFileSystemByID('K');		
 	}
-		
-	delete pRamDiskAdaptor;
-	delete pHDDAdaptor;
+	else
+	{
+		delete pRamDiskAdaptor;
+	}
+
+//플로피 디스크
+	FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
+	if (pFloppyDiskAdaptor->Initialize() == true)
+	{
+		StorageManager::GetInstance()->RegisterFileSystem(pFloppyDiskAdaptor, 'A');
+		StorageManager::GetInstance()->SetCurrentFileSystemByID('A');
+	}
+	else
+	{
+		delete pFloppyDiskAdaptor;
+	}				
 }
-
-
-
-
-

@@ -18,8 +18,11 @@
     <ClCompile Include="CPU\PIT.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="FileSystem\ACEList.cpp" />
+    <ClCompile Include="FileSystem\FAT12.cpp" />
     <ClCompile Include="FileSystem\fat32.cpp" />
-    <ClCompile Include="FileSystem\FileSystem.cpp" />
+    <ClCompile Include="FileSystem\FileSysAdaptor.cpp" />
+    <ClCompile Include="FileSystem\FloppyDisk.cpp" />
+    <ClCompile Include="FileSystem\FloppyDiskAdaptor.cpp" />
     <ClCompile Include="FileSystem\Harddisk.cpp" />
     <ClCompile Include="FileSystem\HDDAdaptor.cpp" />
     <ClCompile Include="FileSystem\kfileio.cpp" />
@@ -55,8 +58,12 @@
     <ClInclude Include="Exception.h" />
     <ClInclude Include="FileSystem\ACEList.h" />
     <ClInclude Include="FileSystem\Collect.h" />
+    <ClInclude Include="FileSystem\FAT12.h" />
     <ClInclude Include="FileSystem\fat32.h" />
-    <ClInclude Include="FileSystem\FileSystem.h" />
+    <ClInclude Include="FileSystem\FileSysAdaptor.h" />
+    <ClInclude Include="FileSystem\FloppyDisk.h" />
+    <ClInclude Include="FileSystem\FloppyDiskAdaptor.h" />
+    <ClInclude Include="FileSystem\FloppyDiskIO.h" />
     <ClInclude Include="FileSystem\HardDisk.h" />
     <ClInclude Include="FileSystem\HDDAdaptor.h" />
     <ClInclude Include="FileSystem\MintFileSystem.h" />

@@ -1,9 +1,9 @@
 #pragma once
-#include "FileSystem.h"
+#include "FileSysAdaptor.h"
 #include "HardDisk.h"
 #include "fat32.h"
 
-class HDDAdaptor : public FileSystem
+class HDDAdaptor : public FileSysAdaptor
 {
 public:
 	HDDAdaptor(char* deviceName, DWORD deviceID);

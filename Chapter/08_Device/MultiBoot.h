@@ -235,8 +235,8 @@ struct VbeModeInfo
 	char BlueFieldPosition;
 	char RsvedMaskSize;
 	char RsvedFieldPosition;
-	char DirectColorModeInfo; //MISSED IN THIS TUTORIAL!! SEE ABOVE
-							  //VBE 2.0
+	char DirectColorModeInfo; 
+
 	UINT32 PhysBasePtr;
 	UINT32 OffScreenMemOffset;
 	short OffScreenMemSize;

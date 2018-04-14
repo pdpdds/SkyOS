@@ -4,7 +4,7 @@
 HardDiskHandler* g_pHDDHandler = nullptr;
 
 HDDAdaptor::HDDAdaptor(char* deviceName, DWORD deviceID)
-	: FileSystem(deviceName, deviceID)
+	: FileSysAdaptor(deviceName, deviceID)
 {
 }
 
@@ -35,23 +35,6 @@ bool HDDAdaptor::Initialize()
 	
 	PrintHDDInfo();	
 
-	/*void TestHardDrive()
-	{
-		UINT16 handle = FATFileOpen("C:\MENU.LST", 0);
-
-		if (handle != 0)
-		{
-			SkyConsole::Print("FileHandle : %x\n", handle);
-			BYTE* buffer = new BYTE[512];
-
-			FATReadFile(handle, 512, buffer);
-
-			SkyConsole::Print("%s\n", buffer);
-
-			delete buffer;
-		}
-	}*/
-	
 	return true;
 }
 
