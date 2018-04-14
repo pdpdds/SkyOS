@@ -157,7 +157,7 @@ using namespace std;
 
 void TestCommonLibrary()
 {
-
+	TestString();
 }
 
 void TestQueue()
