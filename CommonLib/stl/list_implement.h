@@ -49,7 +49,7 @@ namespace std
 	template <typename ContentsType>
 	ContentsType& list<ContentsType>::front() {
 		if (empty()) {
-			throw Exception("Attempted to access non-exsistent node", __FILE__, __LINE__);
+			//throw Exception("Attempted to access non-exsistent node", __FILE__, __LINE__);
 		}
 
 		return firstNodePointer->value;
@@ -178,7 +178,7 @@ namespace std
 	template <typename ContentsType>
 	void list<ContentsType>::pop_front() {
 		if (empty()) {
-			throw Exception("Attempted to access non-exsistent node", __FILE__, __LINE__);
+			//throw Exception("Attempted to access non-exsistent node", __FILE__, __LINE__);
 		}
 
 		deleteNode(firstNodePointer);
@@ -276,7 +276,7 @@ namespace std
 	}
 
 	template <typename ContentsType>
-	listIterator<ContentsType> list<ContentsType>::erase(const listIterator<ContentsType>& iter) {
+	listIterator<ContentsType> list<ContentsType>::erase(listIterator<ContentsType>& iter) {
 		ListNode<ContentsType>* nodeToPointForReturnedIter = iter.myNodePointer->nextNodePointer;
 
 		if (iter == end()) {

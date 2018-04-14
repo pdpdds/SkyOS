@@ -151,7 +151,7 @@ namespace std
 		 * @param iter Iterator of the element to delete
 		 * @return The iterator for the next node or for the end of the list if the last element was deleted
 		 */
-		Iterator erase(const Iterator& iter);
+		Iterator erase(Iterator& iter);
 
 		/**
 		 * Deletes all the elements of the list
