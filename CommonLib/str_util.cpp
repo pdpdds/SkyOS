@@ -1,6 +1,7 @@
 #include "str_util.h"
 #include "string.h"
 #include "ctype.h"
+#include "memory.h"
 
 
 char* MaxPtr(char * p1, char * p2)
@@ -180,6 +181,71 @@ void MergePath(char *path, const char *drive, const char *dir, const char *name,
             strcat(path, ".");
         strcat(path, ext);
     }
+}
+
+char * ConvertFileNameToProperFormat(char * szFile, char * szFileName, char * szExt)
+{
+	int i;
+	szFile[0] = 0;
+	if (szFileName[0])
+	{
+		strcpy(szFile, szFileName);
+		for (i = strlen(szFile); i<8; i++)
+			szFile[i] = ' ';
+		szFile[8] = 0;
+	}
+	if (szExt[0])
+	{
+		strcat(szFile, &szExt[1]);
+		for (i = strlen(szFile); i<11; i++)
+			szFile[i] = ' ';
+		szFile[11] = 0;
+	}
+	return szFile;
+}
+
+/**
+*	Helper function. Converts filename to DOS 8.3 file format
+*/
+void ToDosFileName(const char* filename, char* fname, unsigned int FNameLength) 
+{
+
+	unsigned int  i = 0;
+
+	if (FNameLength > 11)
+		return;
+
+	if (!fname || !filename)
+		return;
+
+	//! set all characters in output name to spaces
+	memset(fname, ' ', FNameLength);
+
+	//! 8.3 filename
+	for (i = 0; i < strlen(filename) - 1 && i < FNameLength; i++) {
+
+		if (filename[i] == '.' || i == 8)
+			break;
+
+		//! capitalize character and copy it over (we dont handle LFN format)
+		fname[i] = toupper(filename[i]);
+	}
+
+	//! add extension if needed
+	if (filename[i] == '.') {
+
+		//! note: cant just copy over-extension might not be 3 chars
+		for (int k = 0; k<3; k++) {
+
+			++i;
+			if (filename[i])
+				fname[8 + k] = filename[i];
+		}
+	}
+
+	//! extension must be uppercase (we dont handle LFNs)
+	for (i = 0; i < 3; i++)
+		fname[8 + i] = toupper(fname[8 + i]);
 }
 
 

@@ -87,6 +87,16 @@ namespace std
 				}
 			}
 
+			bool operator == (typename map<T, V>::iterator nit)
+			{
+				if (nit.it == it) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+
 			iterator operator ++(int x) {
 				map<T, V>::iterator r = (*this);
 				++(*this);
