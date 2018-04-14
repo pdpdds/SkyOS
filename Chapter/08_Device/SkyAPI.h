@@ -4,7 +4,8 @@
 #include "Hal.h"
 #include "PIT.h"
 
-void SKYASSERT(bool result, const char* pMsg);
+#define ASSERT(a, b) if(a == false) SkyConsole::Print("Kernel Panic : %s\n", b); _asm hlt
+#define kprintf SkyConsole::Print
 
 /////////////////////////////////////////////////////////////////////////////
 //µø±‚»≠
@@ -31,7 +32,6 @@ void GetLocalTime(LPSYSTEMTIME lpSystemTime);
 BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime);
 
 void printf(const char* str, ...);
-int kprintf(const char* str);
 void ksleep(int millisecond);
 HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreateionFlags, LPDWORD lpThreadId);
 void PauseSystem(const char* msg);

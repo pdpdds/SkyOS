@@ -16,8 +16,6 @@
 //u32int placement_address = (u32int)&end;
 heap_t kheap;
 
-#define ASSERT(a, b) if(a == false) SkyConsole::Print("Heap Error!! %s\n", b);
-
 u32int kmalloc_int(u32int sz, int align, u32int *phys)
 {
     

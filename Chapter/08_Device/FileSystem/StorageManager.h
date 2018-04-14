@@ -27,7 +27,8 @@ public:
 
 //파일 메소드
 	PFILE OpenFile(const char* fname, const char *mode);
-	int ReadFile(PFILE file, unsigned char* Buffer, unsigned int length);
+	int ReadFile(PFILE file, unsigned char* Buffer, unsigned int size, int count);
+	int WriteFile(PFILE file, unsigned char* Buffer, unsigned int size, int count);
 	bool CloseFile(PFILE file);
 
 private:

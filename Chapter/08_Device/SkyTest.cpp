@@ -9,6 +9,9 @@
 #include "kheap.h"
 #include "skystruct.h"
 #include "jsmn.h"
+#include "HDDAdaptor.h"
+#include "StorageManager.h"
+#include "fileio.h"
 
 //인터럽트 핸들러 테스트
 void TestDivideByZero();
@@ -483,3 +486,25 @@ void TestDeque()
 }
 
 //공통 라이브러리 테스트 끝
+
+
+//하드디스크 테스트
+void TestHardDisk()
+{
+	FILE* pFile = fopen("MENU.LST", "rw");
+
+	if (pFile != NULL)
+	{
+		SkyConsole::Print("Handle ID %d\n", pFile->_id);
+
+		BYTE* buffer = new BYTE[512];
+		int ret = StorageManager::GetInstance()->ReadFile(pFile, buffer, 512, 1);
+
+		if (ret > 0)
+			SkyConsole::Print("%s\n", buffer);
+
+		StorageManager::GetInstance()->CloseFile(pFile);		
+
+		delete buffer;
+	}
+}

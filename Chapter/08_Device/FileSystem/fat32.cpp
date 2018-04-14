@@ -419,7 +419,7 @@ BYTE EnumerateFilesInFolder(BYTE DriveLetter, DirEntry * FolderDE, BYTE(*CallBac
 	FATInfo *FInfo = __SysFATInternal->Item((char *)Drive);
 	if (FInfo == NULL)
 	{
-		SkyConsole::Print("FAT FS Internal Error :: No FAInfo for drive %c:\n", Drive[0]);
+		SkyConsole::Print("FAT FS Internal Error :: No FAT Info for drive %c:\n", Drive[0]);
 		return 0;
 	}
 
@@ -489,7 +489,7 @@ BYTE EnumerateFilesInRoot(BYTE DriveLetter, BYTE(*CallBackFn)(struct DirEntry  *
 
 	if (FInfo == NULL)
 	{
-		SkyConsole::Print("FAT FS Internal Error :: No FAInfo for drive %c:\n", Drive[0]);
+		SkyConsole::Print("FAT FS Internal Error :: No FAT Info for drive %c:\n", Drive[0]);
 		return 0;
 	}
 
@@ -541,6 +541,7 @@ UINT16 FATFileOpen(BYTE driveLetter, const char * filepath, BYTE Mode)
 {
 	static int hanldeId = 0;
 	DirEntry DEInfo;	
+
 	if (GetDirectoryEntry(filepath, &DEInfo) != 0)
 	{		
 		struct FATOpenFileInfo * FATFileInfo = (struct FATOpenFileInfo *)kmalloc(sizeof(struct FATOpenFileInfo));
@@ -619,7 +620,7 @@ BYTE FATIsEndOfFile(UINT16 handleID)
 	FATInfo *FInfo = __SysFATInternal->Item((char *)Drive);
 	if (FInfo == NULL)
 	{
-		SkyConsole::Print("FAT FS Internal Error :: No FAInfo for drive %c:\n", Drive[0]);
+		SkyConsole::Print("FAT FS Internal Error :: No FAT Info for drive %c:\n", Drive[0]);
 		return 0;
 	}
 	if (FInfo->IsEndOfClusterChain(FATFileInfo->CurrentCluster) || FATFileInfo->CurrentCluster == 0)

@@ -55,9 +55,6 @@
     <ClCompile Include="FileSystem\kfileio.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
-    <ClCompile Include="FileSystem\GFS.cpp">
-      <Filter>FileSystem</Filter>
-    </ClCompile>
     <ClCompile Include="FileSystem\Harddisk.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
@@ -66,7 +63,18 @@
     </ClCompile>
     <ClCompile Include="ObjMan.cpp" />
     <ClCompile Include="SysInfo.cpp" />
+    <ClCompile Include="FileSystem\fat32.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
     <ClCompile Include="FileSystem\Partition.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="HDDAdaptor.cpp" />
+    <ClCompile Include="RamDiskAdaptor.cpp" />
+    <ClCompile Include="FileSystem\MintFileSystem.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\RAMDisk.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
   </ItemGroup>
@@ -129,12 +137,6 @@
     </ClInclude>
     <ClInclude Include="StorageManager.h" />
     <ClInclude Include="FileSystem.h" />
-    <ClInclude Include="FileSystem\FAT.h">
-      <Filter>FileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="FileSystem\GFS.H">
-      <Filter>FileSystem</Filter>
-    </ClInclude>
     <ClInclude Include="FileSystem\HardDisk.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
@@ -144,7 +146,18 @@
     <ClInclude Include="ObjMan.h" />
     <ClInclude Include="SysError.h" />
     <ClInclude Include="SysInfo.h" />
+    <ClInclude Include="FileSystem\fat32.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
     <ClInclude Include="FileSystem\Partition.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="HDDAdaptor.h" />
+    <ClInclude Include="RamDiskAdaptor.h" />
+    <ClInclude Include="FileSystem\MintFileSystem.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\RAMDisk.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
   </ItemGroup>
@@ -164,5 +177,10 @@
     <Filter Include="FileSystem">
       <UniqueIdentifier>{ce6fd751-bc89-48aa-bc30-d19a7ef1b762}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Debug\kernel.sys">
+      <Filter>Heap</Filter>
+    </None>
   </ItemGroup>
 </Project>

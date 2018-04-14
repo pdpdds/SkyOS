@@ -2,14 +2,19 @@
 #include "FileSystem.h"
 #include "StorageManager.h"
 
-size_t fread(void *ptr, size_t size, size_t count, FILE *stream)
-{
-	return StorageManager::GetInstance()->ReadFile(stream, (unsigned char*)ptr, size * count);
-}
-
 FILE *fopen(const char *filename, const char *mode)
 {
 	return StorageManager::GetInstance()->OpenFile(filename, mode);
+}
+
+size_t fread(void *ptr, size_t size, size_t count, FILE *stream)
+{
+	return StorageManager::GetInstance()->ReadFile(stream, (unsigned char*)ptr, size, count);
+}
+
+size_t fwrite(const void *ptr, size_t size, size_t count, FILE *stream)
+{
+	return StorageManager::GetInstance()->WriteFile(stream, (unsigned char*)ptr, size, count);
 }
 
 int fclose(FILE *stream)
@@ -33,11 +38,6 @@ long int ftell(FILE *stream)
 }
 
 int getc(FILE * stream)
-{
-	return 0;
-}
-
-size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
 	return 0;
 }

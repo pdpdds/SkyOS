@@ -1,4 +1,5 @@
 #include "StorageManager.h"
+#include "SkyConsole.h"
 
 StorageManager* StorageManager::m_pStorageManager = nullptr;
 
@@ -15,11 +16,15 @@ StorageManager::~StorageManager()
 
 bool StorageManager::RegisterFileSystem(FileSystem* fsys, DWORD deviceID)
 {
+	char deviceLetter = toupper(deviceID);
+	deviceLetter -= 'A';
+
 	if (m_stroageCount < STORAGE_DEVICE_MAX)
 	{
 		if (fsys) {
 
-			m_fileSystems[deviceID] = fsys;
+			m_fileSystems[deviceLetter] = fsys;
+			fsys->m_deviceID = deviceLetter;
 			m_stroageCount++;
 
 			return true;
@@ -46,11 +51,13 @@ bool StorageManager::UnregisterFileSystem(FileSystem* fsys)
 
 bool StorageManager::SetCurrentFileSystemByID(DWORD deviceID)
 {
-	if (deviceID < STORAGE_DEVICE_MAX)
+	char deviceLetter = toupper(deviceID);
+	deviceLetter -= 'A';
+	if (deviceLetter < STORAGE_DEVICE_MAX)
 	{
-		if (m_fileSystems[deviceID] != nullptr)
+		if (m_fileSystems[deviceLetter] != nullptr)
 		{
-			m_pCurrentFileSystem = m_fileSystems[deviceID];
+			m_pCurrentFileSystem = m_fileSystems[deviceLetter];
 			return true;
 		}
 	}
@@ -73,11 +80,13 @@ bool StorageManager::SetCurrentFileSystem(FileSystem* fsys)
 
 bool StorageManager::UnregisterFileSystemByID(DWORD deviceID)
 {
-	if (deviceID < STORAGE_DEVICE_MAX)
+	char deviceLetter = toupper(deviceID);
+	deviceLetter -= 'A';
+	if (deviceLetter < STORAGE_DEVICE_MAX)
 	{
-		if (m_fileSystems[deviceID] != nullptr)
+		if (m_fileSystems[deviceLetter] != nullptr)
 		{
-			m_fileSystems[deviceID] = nullptr;
+			m_fileSystems[deviceLetter] = nullptr;
 			return true;
 		}
 	}
@@ -86,35 +95,48 @@ bool StorageManager::UnregisterFileSystemByID(DWORD deviceID)
 }
 
 PFILE StorageManager::OpenFile(const char* fileName, const char *mode)
-{
-	
+{		
 	if (m_pCurrentFileSystem == nullptr || fileName == nullptr)
 		return nullptr;
-
+	
 	//파일을 사용할 수 있으면 디바이스 아이디를 세팅하고 리턴한다.		
-	PFILE pFile = m_pCurrentFileSystem->Open(fileName, mode);
-
+	PFILE pFile = m_pCurrentFileSystem->Open(fileName, mode);	
+	
 	if (pFile == nullptr)
 		return nullptr;
-
+	
 	strcpy(pFile->_name, fileName);
-	pFile->_deviceID = m_pCurrentFileSystem->_deviceID;
-				
+	pFile->_deviceID = m_pCurrentFileSystem->m_deviceID;
+	
 	return pFile;
 }
 
-int StorageManager::ReadFile(PFILE file, unsigned char* Buffer, unsigned int length)
+int StorageManager::ReadFile(PFILE file, unsigned char* Buffer, unsigned int size, int count)
+{
+	if (count == 0)
+		return 0;
+
+	if (m_pCurrentFileSystem == nullptr)
+		return 0;
+
+	if (file->_deviceID != m_pCurrentFileSystem->m_deviceID)
+		return 0;
+
+	return m_pCurrentFileSystem->Read(file, Buffer, size, count);	
+}
+
+int StorageManager::WriteFile(PFILE file, unsigned char* buffer, unsigned int size, int count)
 {
 	if (m_pCurrentFileSystem == nullptr)
 		return false;
 
-	if (file->_deviceID != m_pCurrentFileSystem->_deviceID)
+	if (file->_deviceID != m_pCurrentFileSystem->m_deviceID)
 		return false;
 
-	int len = m_pCurrentFileSystem->Read(file, Buffer, length);
+	int len = m_pCurrentFileSystem->Write(file, buffer, size, count);
 
 	if (len == 0)
-		return false;
+		return 0;
 
 	return len;
 }
@@ -124,7 +146,7 @@ bool StorageManager::CloseFile(PFILE file)
 	if (m_pCurrentFileSystem == nullptr)
 		return false;
 
-	if (file->_deviceID != m_pCurrentFileSystem->_deviceID)
+	if (file->_deviceID != m_pCurrentFileSystem->m_deviceID)
 		return false;
 
 	return m_pCurrentFileSystem->Close(file);

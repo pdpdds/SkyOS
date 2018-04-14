@@ -6,17 +6,7 @@
 #include "stdarg.h"
 #include "sprintf.h"
 
-
 CRITICAL_SECTION g_criticalSection;
-
-void SKYASSERT(bool result, const char* pMsg)
-{
-	if (result == false)
-	{
-		SkyConsole::Print("%s", pMsg);
-		_asm hlt
-	}
-}
 
 void SKYAPI kInitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
 {
@@ -54,7 +44,7 @@ void SKYAPI kLeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
 	lpCriticalSection->LockRecursionCount--;
 	//if (lpCriticalSection->LockRecursionCount == 0)
 	{
-	//	lpCriticalSection->OwningThread = 0;
+		lpCriticalSection->OwningThread = 0;
 		_asm sti
 	}
 }
@@ -145,12 +135,6 @@ BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime)
 	OutPortByte(RTC_VALUE_REG, (uchar)lpSystemTime->wHour);
 
 	return 1;
-}
-
-int kprintf(const char* str)
-{
-	SkyConsole::Write(str);
-	return 0;
 }
 
 void ksleep(int millisecond)
