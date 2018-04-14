@@ -39,10 +39,10 @@ typedef struct PackageHeaderStruct
 
 	// 패키지 헤더의 전체 크기
 	DWORD dwHeaderSize;
-
-	// 패키지 아이템의 시작 위치
-	PACKAGEITEM vstItem;
+	
 } PACKAGEHEADER;
+
+#pragma pack( pop )
 
 class RamDiskAdaptor : public FileSysAdaptor
 {
@@ -57,9 +57,11 @@ public:
 	virtual PFILE Open(const char* FileName, const char *mode)  override;
 	virtual size_t Write(PFILE file, unsigned char* buffer, unsigned int size, int count) override;
 
-private:
-	void PrintRamDiskInfo();
 	bool InstallPackage();
+
+private:
+	void PrintRamDiskInfo();	
+	PACKAGEHEADER* FindPackageSignature(UINT32 startAddress, UINT32 endAddress);
 
 private:
 	HDDINFORMATION* m_pInformation;

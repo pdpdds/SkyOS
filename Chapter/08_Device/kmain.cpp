@@ -199,6 +199,8 @@ void ConstructFileSystem()
 	{
 		StorageManager::GetInstance()->RegisterFileSystem(pRamDiskAdaptor, 'K');
 		StorageManager::GetInstance()->SetCurrentFileSystemByID('K');		
+
+		((RamDiskAdaptor*)pRamDiskAdaptor)->InstallPackage();
 	}
 	else
 	{

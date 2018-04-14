@@ -23,6 +23,7 @@ so ALIGN value must be greater */
 Base adress from advanced linker option
 */
 #define KERNEL_LOAD_ADDRESS            0x100000
+#define KERNEL_END_ADDRESS             0x400000
 
 
 #define   HEADER_ADRESS         KERNEL_LOAD_ADDRESS+ALIGN

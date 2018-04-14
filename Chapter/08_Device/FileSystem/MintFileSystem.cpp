@@ -274,7 +274,7 @@ static bool kInternalWriteClusterLinkTableWithoutCache( DWORD dwOffset,
 *      내부적으로 사용하는 함수, 캐시 사용 안 함
 */
 static bool kInternalReadCluster(DWORD dwOffset, BYTE* pbBuffer)
-{
+{	
 	// 데이터 영역의 시작 어드레스를 더함
 	return gs_pfReadHDDSector(TRUE, TRUE, (dwOffset * FILESYSTEM_SECTORSPERCLUSTER) +
 		gs_stFileSystemManager.dwDataAreaStartAddress,
@@ -949,7 +949,7 @@ DWORD kWriteFile( const void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstF
 
     // 총 바이트 수
     dwTotalCount = dwSize * dwCount;
-    
+
     // 동기화
 	kEnterCriticalSection(&g_criticalSection);
 
@@ -961,7 +961,7 @@ DWORD kWriteFile( const void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstF
         // 현재 클러스터가 파일의 끝이면 클러스터를 할당하여 연결
         //======================================================================
         if( pstFileHandle->dwCurrentClusterIndex == FILESYSTEM_LASTCLUSTER )
-        {
+        {					
             // 빈 클러스터 검색
             dwAllocatedClusterIndex = kFindFreeCluster();
             if( dwAllocatedClusterIndex == FILESYSTEM_LASTCLUSTER )
@@ -975,6 +975,7 @@ DWORD kWriteFile( const void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstF
             {
                 break;
             }
+
             
             // 파일의 마지막 클러스터에 할당된 클러스터를 연결
             if( kSetClusterLinkData( pstFileHandle->dwPreviousClusterIndex, 
@@ -989,14 +990,15 @@ DWORD kWriteFile( const void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstF
             pstFileHandle->dwCurrentClusterIndex = dwAllocatedClusterIndex;
             
             // 새로 할당받았으니 임시 클러스터 버퍼를 0으로 채움
-			memset( gs_vbTempBuffer, 0, FILESYSTEM_LASTCLUSTER );
+			memset( gs_vbTempBuffer, 0, 4096 );
+
         }        
         //======================================================================
         // 한 클러스터를 채우지 못하면 클러스터를 읽어서 임시 클러스터 버퍼로 복사
         //======================================================================
         else if( ( ( pstFileHandle->dwCurrentOffset % FILESYSTEM_CLUSTERSIZE ) != 0 ) ||
                  ( ( dwTotalCount - dwWriteCount ) < FILESYSTEM_CLUSTERSIZE ) )
-        {
+        {					
             // 전체 클러스터를 덮어쓰는 경우가 아니면 부분만 덮어써야 하므로 
             // 현재 클러스터를 읽음
             if( kReadCluster( pstFileHandle->dwCurrentClusterIndex, 
@@ -1004,7 +1006,7 @@ DWORD kWriteFile( const void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstF
             {
                 break;
             }
-        }
+        }		
 
         // 클러스터 내에서 파일 포인터가 존재하는 오프셋을 계산
         dwOffsetInCluster = pstFileHandle->dwCurrentOffset % FILESYSTEM_CLUSTERSIZE;
@@ -1043,7 +1045,7 @@ DWORD kWriteFile( const void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstF
             pstFileHandle->dwPreviousClusterIndex = 
                 pstFileHandle->dwCurrentClusterIndex;
             pstFileHandle->dwCurrentClusterIndex = dwNextClusterIndex;
-        }
+        }			
     }
 
     //==========================================================================
