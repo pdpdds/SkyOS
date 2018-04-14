@@ -8,6 +8,8 @@
 #include "FloppyDiskAdaptor.h"
 #include "StorageManager.h"
 #include "fileio.h"
+#include "ProcessManager.h"
+#include "KernelProcedure.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -44,12 +46,15 @@ _declspec(naked) void multiboot_entry(void)
 	}
 }
 
+bool systemOn = false;
 uint32_t g_freeMemoryStartAddress = 0x00400000; //자유공간 시작주소 : 4MB
 uint32_t g_freeMemorySize = 0;
 
 void HardwareInitiize();
 bool InitMemoryManager(multiboot_info* bootinfo);
 void ConstructFileSystem();
+void StartConsoleSystem();
+void JumpToNewKernelEntry(int entryPoint, unsigned int procStack);
 
 void kmain(unsigned long magic, unsigned long addr)
 {
@@ -98,9 +103,10 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	kLeaveCriticalSection(&g_criticalSection);
 
-	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);		
+	StartConsoleSystem();
 
 	for (;;);
+	
 }
 
 void HardwareInitiize()
@@ -218,4 +224,58 @@ void ConstructFileSystem()
 	{
 		delete pFloppyDiskAdaptor;
 	}				
+}
+
+void StartConsoleSystem()
+{	
+	//kEnterCriticalSection(&g_criticalSection);
+
+	Process* pProcess = ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL);
+
+	if (pProcess == nullptr)
+		HaltSystem("Console Creation Fail!!");
+
+	ProcessManager::GetInstance()->CreateKernelProcessFromMemory("WatchDog", WatchDogProc, NULL);
+	//ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ProcessRemover", ProcessRemoverProc, NULL);
+	//ProcessManager::GetInstance()->CreateProcessFromMemory("SampleLoop", SampleLoop);
+	//ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc);
+
+
+	SkyConsole::Print("Init Console....\n");
+
+	Thread* pThread = pProcess->GetThread(0);
+
+	if (pThread == nullptr)
+		HaltSystem("Console Creation Fail!!");
+
+	pThread->m_taskState = TASK_STATE_RUNNING;
+
+	int entryPoint = (int)pThread->frame.eip;
+	unsigned int procStack = pThread->frame.esp;
+
+//	kLeaveCriticalSection(&g_criticalSection);
+
+	JumpToNewKernelEntry(entryPoint, procStack);
+}
+
+void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
+{	
+	__asm
+	{
+		mov     ax, 0x10;
+		mov     ds, ax
+			mov     es, ax
+			mov     fs, ax
+			mov     gs, ax
+
+			//; create stack frame
+			//; push   0x10;
+			//; push procStack; stack
+			mov     esp, procStack
+			push	0x10;
+		push    0x200; EFLAGS
+			push    0x08; CS
+			push    entryPoint; EIP
+			iretd
+	}
 }

@@ -53,6 +53,11 @@
 #define		I86_PIT_OCW_COUNTER_1			0x40	//01000000
 #define		I86_PIT_OCW_COUNTER_2			0x80	//10000000
 
+#define		I86_PIT_REG_COUNTER0		0x40
+#define		I86_PIT_REG_COUNTER1		0x41
+#define		I86_PIT_REG_COUNTER2		0x42
+#define		I86_PIT_REG_COMMAND			0x43
+
 
 #define TimerFrequency 1193180
 

@@ -96,6 +96,12 @@
     <ClCompile Include="FileSystem\FloppyDiskAdaptor.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Scheduler.cpp" />
+    <ClCompile Include="Process.cpp" />
+    <ClCompile Include="ProcessManager.cpp" />
+    <ClCompile Include="Thread.cpp" />
+    <ClCompile Include="ProcessUtil.cpp" />
+    <ClCompile Include="KernelProcedure.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -204,6 +210,13 @@
     <ClInclude Include="FileSystem\FloppyDiskAdaptor.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="Scheduler.h" />
+    <ClInclude Include="Process.h" />
+    <ClInclude Include="ProcessManager.h" />
+    <ClInclude Include="Thread.h" />
+    <ClInclude Include="PEImage.h" />
+    <ClInclude Include="ProcessUtil.h" />
+    <ClInclude Include="KernelProcedure.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

@@ -36,11 +36,16 @@
     <ClCompile Include="Heap\kheap.cpp" />
     <ClCompile Include="Heap\ordered_array.cpp" />
     <ClCompile Include="InitKernel.cpp" />
+    <ClCompile Include="KernelProcedure.cpp" />
     <ClCompile Include="kmain.cpp" />
     <ClCompile Include="Memory\PageDirectoryEntry.cpp" />
     <ClCompile Include="Memory\PageTableEntry.cpp" />
     <ClCompile Include="Memory\PhysicalMemoryManager.cpp" />
     <ClCompile Include="Memory\VirtualMemoryManager.cpp" />
+    <ClCompile Include="Process.cpp" />
+    <ClCompile Include="ProcessManager.cpp" />
+    <ClCompile Include="ProcessUtil.cpp" />
+    <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="SkyAPI.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
     <ClCompile Include="SkyTest.cpp" />
@@ -48,6 +53,7 @@
     <ClCompile Include="SysInfo.cpp" />
     <ClCompile Include="Test\Plane.cpp" />
     <ClCompile Include="Test\ZetPlane.cpp" />
+    <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\GDT.h" />
@@ -76,12 +82,18 @@
     <ClInclude Include="Heap\kheap.h" />
     <ClInclude Include="Heap\ordered_array.h" />
     <ClInclude Include="InitKernel.h" />
+    <ClInclude Include="KernelProcedure.h" />
     <ClInclude Include="kmain.h" />
     <ClInclude Include="Memory\PageDirectoryEntry.h" />
     <ClInclude Include="Memory\PageTableEntry.h" />
     <ClInclude Include="Memory\PhysicalMemoryManager.h" />
     <ClInclude Include="Memory\VirtualMemoryManager.h" />
     <ClInclude Include="MultiBoot.h" />
+    <ClInclude Include="PEImage.h" />
+    <ClInclude Include="Process.h" />
+    <ClInclude Include="ProcessManager.h" />
+    <ClInclude Include="ProcessUtil.h" />
+    <ClInclude Include="Scheduler.h" />
     <ClInclude Include="SkyAPI.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="SkyTest.h" />
@@ -92,6 +104,7 @@
     <ClInclude Include="Test\PureCallExtend.h" />
     <ClInclude Include="Test\TestInteger.h" />
     <ClInclude Include="Test\ZetPlane.h" />
+    <ClInclude Include="Thread.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Debug\kernel.sys" />

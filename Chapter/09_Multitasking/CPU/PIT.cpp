@@ -2,30 +2,82 @@
 #include "Hal.h"
 #include "SkyConsole.h"
 
-#define		I86_PIT_REG_COUNTER0		0x40
-#define		I86_PIT_REG_COUNTER1		0x41
-#define		I86_PIT_REG_COUNTER2		0x42
-#define		I86_PIT_REG_COMMAND			0x43
+extern void SwitchTask(int tick, registers_t& regs);
 
 volatile uint32_t _pitTicks = 0;
+int g_esp = 0;
+uint32_t g_pageDirectory = 0;
 DWORD _lastTickCount = 0;
+
+
+void ISRHandler(registers_t regs)
+{
+	SwitchTask(_pitTicks, regs);
+}
 
 //타이머 인터럽트 핸들러
 __declspec(naked) void InterruptPITHandler() 
 {	
-	_asm {
+	_asm
+	{
 		cli
-		pushad
+		pushad;
+
+		push ds
+			push es
+			push fs
+			push gs
+
+			mov ax, 0x10; load the kernel data segment descriptor
+			mov ds, ax
+			mov es, ax
+			mov fs, ax
+			mov gs, ax
+
+			mov eax, esp
+			mov g_esp, eax
+	}
+	_pitTicks++;
+
+	_asm
+	{
+		call ISRHandler
 	}
 
-	_pitTicks++;
-	
-	_asm {
+	__asm
+	{
+		cmp g_pageDirectory, 0
+		jz pass
+
+		mov eax, g_esp
+		mov esp, eax
+
+		mov	eax, [g_pageDirectory]
+		mov	cr3, eax		// PDBR is cr3 register in i86
+
+		pop gs
+		pop fs
+		pop es
+		pop ds
+
+		popad;
+
 		mov al, 0x20
-		out 0x20, al
-		popad
-		sti
-		iretd
+			out 0x20, al
+			sti
+			iretd;
+
+	pass:
+		pop gs
+			pop fs
+			pop es
+			pop ds
+
+			popad;
+		mov al, 0x20
+			out 0x20, al
+			sti
+			iretd;
 	}
 }
 
