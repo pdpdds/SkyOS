@@ -50,8 +50,6 @@
       <Filter>Test</Filter>
     </ClCompile>
     <ClCompile Include="SysAPI.cpp" />
-    <ClCompile Include="StorageManager.cpp" />
-    <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="FileSystem\kfileio.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
@@ -61,7 +59,6 @@
     <ClCompile Include="FileSystem\ACEList.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
-    <ClCompile Include="ObjMan.cpp" />
     <ClCompile Include="SysInfo.cpp" />
     <ClCompile Include="FileSystem\fat32.cpp">
       <Filter>FileSystem</Filter>
@@ -69,12 +66,25 @@
     <ClCompile Include="FileSystem\Partition.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
-    <ClCompile Include="HDDAdaptor.cpp" />
-    <ClCompile Include="RamDiskAdaptor.cpp" />
     <ClCompile Include="FileSystem\MintFileSystem.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
     <ClCompile Include="FileSystem\RAMDisk.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FileSystem.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\HDDAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\ObjMan.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\RamDiskAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\StorageManager.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
   </ItemGroup>
@@ -135,15 +145,12 @@
     <ClInclude Include="Test\PureCallExtend.h">
       <Filter>Test</Filter>
     </ClInclude>
-    <ClInclude Include="StorageManager.h" />
-    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="FileSystem\HardDisk.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
     <ClInclude Include="FileSystem\ACEList.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ObjMan.h" />
     <ClInclude Include="SysError.h" />
     <ClInclude Include="SysInfo.h" />
     <ClInclude Include="FileSystem\fat32.h">
@@ -152,12 +159,28 @@
     <ClInclude Include="FileSystem\Partition.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
-    <ClInclude Include="HDDAdaptor.h" />
-    <ClInclude Include="RamDiskAdaptor.h" />
     <ClInclude Include="FileSystem\MintFileSystem.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
     <ClInclude Include="FileSystem\RAMDisk.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\Collect.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FileSystem.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\HDDAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\ObjMan.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\RamDiskAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\StorageManager.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
   </ItemGroup>
