@@ -45,7 +45,6 @@ public:
 
 		m_pPageDirectory = pPageDirectory;
 	}
-	void*		m_lpHeap; //프로세스가 사용하는 힙
 
 private:
 	PageDirectory * m_pPageDirectory; //이 프로세스가 사용하는 페이지 디렉토리		

@@ -2,6 +2,7 @@
 #include "Hal.h"
 #include "Exception.h"
 #include "IDT.h"
+#include "KeyBoardController.h"
 
 void SetInterruptVector()
 {
@@ -26,4 +27,13 @@ void SetInterruptVector()
 
 	setvect(33, (void(__cdecl &)(void))InterrputDefaultHandler);
 	setvect(38, (void(__cdecl &)(void))InterrputDefaultHandler);
+}
+
+bool InitKeyboard()
+{
+	//KeyBoard::Install(33);
+
+	KeyboardController::SetupInterrupts();
+
+	return true;
 }

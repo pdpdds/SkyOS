@@ -152,7 +152,8 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	pThread->m_startParam = param;
 
 	//스택을 생성하고 주소공간에 매핑한다.
-	void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS);	
+	void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * kernelStackIndex++);
+	//void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_kernelStackIndex++);
 	void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
 
 #ifdef _DEBUG
@@ -164,8 +165,6 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 
 	/* map user process stack space */
 	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
-
-	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
 
 	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE);
 	pThread->frame.esp = (uint32_t)pThread->m_initialStack;
@@ -315,14 +314,15 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType
 
 	HeapManager::MapHeapToAddressSpace(pProcess->GetPageDirectory());
 
-
-	pProcess->m_lpHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
-
 	pProcess->m_dwProcessType = PROCESS_KERNEL;
 	pProcess->m_dwPriority = 1;
 
 	Thread* pThread = CreateThread(pProcess, file, NULL);
 
+	if (pThread == nullptr)
+	{
+		HaltSystem("ProcessManager::CreateProcessFromFile, Create Thread Fail");
+	}
 
 	pProcess->AddThread(pThread);
 	
@@ -345,7 +345,7 @@ Process* ProcessManager::FindProcess(int processId)
 
 bool ProcessManager::AddProcess(Process* pProcess)
 {
-	if (pProcess == 0)
+	if (pProcess == nullptr)
 		return false;
 
 	int entryPoint = 0;
@@ -374,7 +374,7 @@ bool ProcessManager::AddProcess(Process* pProcess)
 	kEnterCriticalSection(&g_criticalSection);
 	m_processList.insert(std::make_pair(pProcess->m_processId, pProcess));
 
-	m_taskList.push_front(pThread);
+	m_taskList.push_back(pThread);
 
 	kLeaveCriticalSection(&g_criticalSection);
 
@@ -387,6 +387,10 @@ bool ProcessManager::AddProcess(Process* pProcess)
 Process* ProcessManager::CreateKernelProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param)
 {
 	Process* pProcess = new Process();
+
+	if (pProcess == nullptr)
+		HaltSystem("ProcessManager::CreateKernelProcessFromMemory\n");
+
 	pProcess->m_processId = GetNextProcessId();
 
 	PageDirectory* pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
@@ -395,14 +399,16 @@ Process* ProcessManager::CreateKernelProcessFromMemory(const char* appName, LPTH
 	pProcess->m_dwRunState = TASK_STATE_RUNNING;
 	strcpy(pProcess->m_processName, appName);
 
-	//VirtualMemoryManager::MapHeap(pProcess->m_pPageDirectory);
-
-	pProcess->m_lpHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
-
 	pProcess->m_dwProcessType = PROCESS_KERNEL;
 	pProcess->m_dwPriority = 1;
 
+	if (param == nullptr)
+		param = pProcess;
+
 	Thread* pThread = CreateThread(pProcess, lpStartAddress, param);
+
+	if (pThread == nullptr)
+		HaltSystem("ProcessManager::CreateKernelProcessFromMemory\n");
 
 	pProcess->AddThread(pThread);
 
@@ -521,12 +527,7 @@ bool ProcessManager::RemoveFromTaskList(Process* pProcess)
 		tempThreadList.push_back(iter->second);
 	}
 
-	TaskList::Iterator iter2 = tempThreadList.begin();
-
-	for (; iter2 != tempThreadList.end(); iter2++)
-	{
-		m_taskList.erase(iter2);
-	}
+	tempThreadList.clear();
 		
 	return true;
 }

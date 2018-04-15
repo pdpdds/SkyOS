@@ -5,3 +5,5 @@
 extern void __cdecl InitializeConstructors();
 
 void SetInterruptVector();
+
+bool InitKeyboard();

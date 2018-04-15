@@ -4,7 +4,14 @@
 #include "Hal.h"
 #include "PIT.h"
 
+
 #define ASSERT(a, b) if(a == false) SkyConsole::Print("Kernel Panic : %s\n", b); _asm hlt
+
+#define M_Assert(Expr, Msg) \
+    __M_Assert(#Expr, Expr, __FILE__, __LINE__, Msg)
+
+void __M_Assert(const char* expr_str, bool expr, const char* file, int line, const char* msg);
+
 #define kprintf SkyConsole::Print
 
 /////////////////////////////////////////////////////////////////////////////

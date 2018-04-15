@@ -83,7 +83,7 @@ u32int kmalloc(u32int sz)
 static void expand(u32int new_size, heap_t *heap)
 {
     // Sanity check.
-    ASSERT(new_size > heap->end_address - heap->start_address, "new_size > heap->end_address - heap->start_address");
+	M_Assert(new_size > heap->end_address - heap->start_address, "new_size > heap->end_address - heap->start_address");
 
     // Get the nearest following page boundary.
     if ((new_size&0xFFFFF000) != 0)
@@ -93,7 +93,7 @@ static void expand(u32int new_size, heap_t *heap)
     }
 
     // Make sure we are not overreaching ourselves.
-    ASSERT(heap->start_address+new_size <= heap->max_address, "heap->start_address+new_size <= heap->max_address");
+	M_Assert(heap->start_address+new_size <= heap->max_address, "heap->start_address+new_size <= heap->max_address");
 
     // This should always be on a page boundary.
     u32int old_size = heap->end_address-heap->start_address;
@@ -111,7 +111,7 @@ static void expand(u32int new_size, heap_t *heap)
 static u32int contract(u32int new_size, heap_t *heap)
 {
     // Sanity check.
-    ASSERT(new_size < heap->end_address-heap->start_address, "new_size < heap->end_address-heap->start_address");
+	M_Assert(new_size < heap->end_address-heap->start_address, "new_size < heap->end_address-heap->start_address");
 
     // Get the nearest following page boundary.
     if (new_size&0x1000)
@@ -177,8 +177,8 @@ heap_t *create_kernel_heap(u32int start, u32int end_addr, u32int max, u8int supe
 	heap_t *heap = &kheap;
 
 	// All our assumptions are made on startAddress and endAddress being page-aligned.
-	ASSERT(start % 0x1000 == 0, "start % 0x1000 == 0");
-	ASSERT(end_addr % 0x1000 == 0, "end_addr % 0x1000 == 0");
+	M_Assert(start % 0x1000 == 0, "start % 0x1000 == 0");
+	M_Assert(end_addr % 0x1000 == 0, "end_addr % 0x1000 == 0");
 
 	// Initialise the index.
 	heap->index = place_ordered_array((void*)start, HEAP_INDEX_SIZE, &header_t_less_than);
@@ -214,8 +214,8 @@ heap_t *create_heap(u32int start, u32int end_addr, u32int max, u8int supervisor,
     heap_t *heap = (heap_t*)kmalloc(sizeof(heap_t));
 
     // All our assumptions are made on startAddress and endAddress being page-aligned.
-    ASSERT(start%0x1000 == 0, "start%0x1000 == 0");
-    ASSERT(end_addr%0x1000 == 0, "end_addr%0x1000");
+	M_Assert(start%0x1000 == 0, "start%0x1000 == 0");
+	M_Assert(end_addr%0x1000 == 0, "end_addr%0x1000");
 	
     // Initialise the index.
     heap->index = place_ordered_array( (void*)start, HEAP_INDEX_SIZE, &header_t_less_than);
@@ -382,8 +382,11 @@ void free(void *p, heap_t *heap)
     footer_t *footer = (footer_t*) ( (u32int)header + header->size - sizeof(footer_t) );
 
     // Sanity checks.
-    ASSERT(header->magic == HEAP_MAGIC, "header->magic == HEAP_MAGIC");
-    ASSERT(footer->magic == HEAP_MAGIC, "footer->magic == HEAP_MAGIC");
+    //ASSERT(header->magic == HEAP_MAGIC, "header->magic == HEAP_MAGIC");
+    //ASSERT(footer->magic == HEAP_MAGIC, "footer->magic == HEAP_MAGIC");
+
+	M_Assert(header->magic == HEAP_MAGIC, "header->magic == HEAP_MAGIC");
+	M_Assert(footer->magic == HEAP_MAGIC, "footer->magic == HEAP_MAGIC");
 
     // Make us a hole.
     header->is_hole = 1;
@@ -421,7 +424,7 @@ void free(void *p, heap_t *heap)
             iterator++;
 
         // Make sure we actually found the item.
-        ASSERT(iterator < heap->index.size, "iterator < heap->index.size");
+		M_Assert(iterator < heap->index.size, "iterator < heap->index.size");
         // Remove it.
         remove_ordered_array(iterator, &heap->index);
     }
@@ -431,6 +434,7 @@ void free(void *p, heap_t *heap)
     {
         u32int old_length = heap->end_address-heap->start_address;
         u32int new_length = contract( (u32int)header - heap->start_address, heap);
+		
         // Check how big we will be after resizing.
         if (header->size - (old_length-new_length) > 0)
         {
@@ -441,7 +445,7 @@ void free(void *p, heap_t *heap)
             footer->header = header;
         }
         else
-        {
+        {			
             // We will no longer exist :(. Remove us from the index.
             u32int iterator = 0;
             while ( (iterator < heap->index.size) &&
@@ -456,5 +460,6 @@ void free(void *p, heap_t *heap)
     // If required, add us to the index.
     if (do_add == 1)
         insert_ordered_array((void*)header, &heap->index);
+
 
 }

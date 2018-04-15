@@ -68,7 +68,14 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 		lastTickCount = currentTickCount;
 	}*/
 #endif	
+	static int count = 0;
+	count++;
+	if (count % 20 == 0)
+	{
 
+		//SkyConsole::Print("TestProc %d\n", count);
+	}
+	
 	ProcessManager::TaskList* pTaskList = ProcessManager::GetInstance()->GetTaskList();
 
 	int taskCount = pTaskList->size();
@@ -79,11 +86,18 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 	if (taskCount == 1)
 		return true;
 
-	Thread* pThread = pTaskList->front();;
-	
+	ProcessManager::TaskList::Iterator iter = pTaskList->begin();
+
+	if (iter == pTaskList->end())
+	{
+		HaltSystem("Timer");
+	}
+
+	Thread* pThread = *iter;
+
 	pThread->m_waitingTime--;
 
-
+	
 	if (pThread->m_waitingTime > 0)
 	{
 		if (strcmp(pThread->m_pParent->m_processName, "TestProc") == 0)
@@ -99,7 +113,14 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 	pThread->m_taskState = TASK_STATE_WAIT;
 	pThread->m_contextSnapshot = registers;
 	pThread->m_esp = g_esp;
-	pTaskList->pop_front();
+
+	if (count % 500 == 0)
+	{
+		SkyConsole::Print("\n%s, %s %d, %d\n", __FILE__, __func__, __LINE__, pTaskList->size());
+	}
+	
+	pTaskList->erase(iter);
+
 	pTaskList->push_back(pThread);
 
 	Thread* pNextThread = pTaskList->front();	
@@ -108,11 +129,7 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 
 	if (pNextThread->m_taskState == TASK_STATE_INIT)
 	{		
-		if (strcmp(pProcess->m_processName, "TestProc") == 0)
-		{
-			SkyConsole::Print("TestProc\n");			
-		}
-
+		
 		pNextThread->m_waitingTime = TASK_RUNNING_TIME;
 		pNextThread->m_taskState = TASK_STATE_RUNNING;
 
@@ -122,7 +139,6 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 
 		PageDirectory* pageDirectory = pNextThread->m_pParent->GetPageDirectory();
 		VirtualMemoryManager::SetCurPageDirectory(pageDirectory);
-
 		{
 
 			_asm

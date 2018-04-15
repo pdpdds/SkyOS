@@ -1,6 +1,9 @@
 #ifndef SKYCONSOLE_H
 #define SKYCONSOLE_H
 #include "windef.h"
+#include "KeyBoard.h"
+
+using namespace KeyBoard;
 
 enum ConsoleColor
 {

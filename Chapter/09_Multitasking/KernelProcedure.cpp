@@ -8,6 +8,7 @@
 #include "ProcessManager.h"
 #include "Scheduler.h"
 #include "SkyAPI.h"
+#include "ConsoleManager.h"
 
 extern bool systemOn;
 
@@ -17,7 +18,26 @@ void NativeConsole()
 		
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);		
 
-	for (;;);
+	__asm sti;
+
+	g_criticalSection.LockRecursionCount = 0;
+
+	ConsoleManager manager;
+
+	char	commandBuffer[MAXPATH];
+
+	while (1)
+	{
+		SkyConsole::Print("Command> ");
+		memset(commandBuffer, 0, MAXPATH);
+		//SkyConsole::Print("commandBuffer Address : 0x%x\n", &commandBuffer);	
+
+		SkyConsole::GetCommand(commandBuffer, MAXPATH - 2);
+		SkyConsole::Print("\n");
+
+		if (manager.RunCommand(commandBuffer) == true)
+			break;
+	}
 }
 
 
@@ -26,8 +46,6 @@ DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 {	
 	SkyConsole::Print("Console Mode Start!!\n");
 	
-	for (;;);
-
 	while (1) {
 		NativeConsole();
 	}

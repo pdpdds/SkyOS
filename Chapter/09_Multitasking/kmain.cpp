@@ -10,6 +10,8 @@
 #include "fileio.h"
 #include "ProcessManager.h"
 #include "KernelProcedure.h"
+#include "SysAPI.h"
+#include "tss.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -99,6 +101,13 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	SkyConsole::Print("Heap %dMB Allocated\n", requiredHeapSize / 1048576);
 
+	InitKeyboard();
+	SkyConsole::Print("Keyboard Init..\n");
+
+	InitializeSysCall();
+	install_tss(5, 0x10, 0);
+
+
 	ConstructFileSystem();
 
 	kLeaveCriticalSection(&g_criticalSection);
@@ -183,7 +192,7 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 void ConstructFileSystem()
 {	
 //IDE 하드 디스크
-	FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
+	/*FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
 	
 	pHDDAdaptor->Initialize();
 
@@ -197,7 +206,7 @@ void ConstructFileSystem()
 	else
 	{
 		delete pHDDAdaptor;		
-	}
+	}*/
 			
 //램 디스크
 	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');

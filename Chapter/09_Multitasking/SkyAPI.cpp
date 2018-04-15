@@ -5,8 +5,23 @@
 #include "va_list.h"
 #include "stdarg.h"
 #include "sprintf.h"
+#include "Exception.h"
 
 CRITICAL_SECTION g_criticalSection;
+
+void __M_Assert(const char* expr_str, bool expr, const char* file, int line, const char* msg)
+{
+	if (!expr)
+	{		
+		//SkyConsole::Print("%s %s, %s %d\n", msg, expr_str, file, line);
+		//for (;;);
+		char buf[256];
+		sprintf(buf, "Assert failed: %s Expected: %s %s %d\n", msg, expr_str, file, line);	
+
+		
+		HaltSystem(buf);
+	}
+}
 
 void SKYAPI kInitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
 {

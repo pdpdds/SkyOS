@@ -3,6 +3,12 @@
 #include <stdint.h>
 #include <string.h>
 #include "sprintf.h"
+#include "Hal.h"
+#include "sysapi.h"
+#include "KeyBoard.h"
+#include "KeyboardController.h"
+
+using namespace KeyBoard;
 
 namespace SkyConsole
 {
@@ -232,7 +238,23 @@ namespace SkyConsole
 
 	void MoveCursor(unsigned int  X, unsigned int  Y)
 	{
-		
+		if (X > m_ScreenWidth)
+			X = 0;
+		unsigned short Offset = (unsigned short)((Y*m_ScreenWidth) + (X - 1));
+
+		kEnterCriticalSection(&g_criticalSection);
+		OutPortByte(m_VideoCardType, VGA_CRT_CURSOR_H_LOCATION);
+		OutPortByte(m_VideoCardType + 1, Offset >> 8);
+		OutPortByte(m_VideoCardType, VGA_CRT_CURSOR_L_LOCATION);
+		OutPortByte(m_VideoCardType + 1, (Offset << 8) >> 8);
+		kLeaveCriticalSection(&g_criticalSection);
+
+		if (X > 0)
+			m_xPos = X - 1;
+		else
+			m_xPos = 0;
+
+		m_yPos = Y;
 	}
 	/* Sets the Cursor Type
 		0 to 15 is possible value to pass
@@ -243,7 +265,10 @@ namespace SkyConsole
 	*/
 	void SetCursorType(unsigned char  Bottom, unsigned char  Top)
 	{
-		
+		OutPortByte(m_VideoCardType, VGA_CRT_CURSOR_START);
+		OutPortByte(m_VideoCardType + 1, Top);
+		OutPortByte(m_VideoCardType, VGA_CRT_CURSOR_END);
+		OutPortByte(m_VideoCardType + 1, Bottom);
 	}
 
 	void scrollup()		// scroll the screen up one line
@@ -296,15 +321,183 @@ namespace SkyConsole
 		}
 	}
 
+	//Get Command from prompt
+	/*void GetCommand(char* commandBuffer, int bufSize)
+	{
+		KEYCODE key = KEY_UNKNOWN;
+		bool	BufChar;
+
+		//! get command string
+		int i = 0;
+		while (i < bufSize) {
+
+			//! buffer the next char
+			BufChar = true;
+
+			//! grab next char
+			key = GetChar();
+
+			//! end of command if enter is pressed
+			if (key == KEY_RETURN)
+				break;
+
+			//! backspace
+			if (key == KEY_BACKSPACE) {
+
+				//! dont buffer this char
+				BufChar = false;
+
+				if (i > 0) {
+
+					//! go back one char
+					uint y, x;
+					GetCursorPos(x, y);
+
+					if (x > 0)
+						MoveCursor(x, y);
+					else {
+						//! x is already 0, so go back one line
+						y--;
+						x = 80;
+					}
+
+					//! erase the character from display
+					WriteChar(' ');
+					MoveCursor(x, y);
+
+					//! go back one char in cmd buf
+					i--;
+				}
+			}
+
+			//! only add the char if it is to be buffered
+			if (BufChar) {
+
+				//! convert key to an ascii char and put it in buffer
+				char c = KeyBoard::ConvertKeyToAscii(key);
+				//if (c != 0 && KEY_SPACE != c) { //insure its an ascii char
+				if (c != 0) { //insure its an ascii char
+
+					WriteChar(c);
+					commandBuffer[i++] = c;
+				}
+			}
+
+			//! wait for next key. You may need to adjust this to suite your needs
+			//msleep(10);
+		}
+
+		//! null terminate the string
+		commandBuffer[i] = 0;
+	}*/
+
+	//리팩토링
+	//! wait for key stroke
+	/*KEYCODE	GetChar()
+	{
+		KEYCODE key = KEY_UNKNOWN;
+		int first = GetTickCount();
+
+		//! wait for a keypress
+		while (key == KEY_UNKNOWN)
+		{
+			__asm cli
+			key = KeyBoard::GetLastKeyCode();
+			__asm sti
+
+
+			int second = GetTickCount();
+			//if (second - first > 100)
+			//{
+				//SkyConsole::Print("%d\n", second);
+
+				//first = GetTickCount();
+			//}
+
+			if (key == KEY_UNKNOWN)
+				msleep(1);
+
+		}
+
+		//! discard last keypress (we handled it) and return
+		KeyBoard::DiscardLastKeyCode();
+		return key;
+	}*/
+
+
 	char	GetChar()
 	{
-		
-		return 0;
+		char c = KeyboardController::GetInput();
+		return c;
 	}
 
 
 	void GetCommand(char* commandBuffer, int bufSize)
 	{
-		
+		char c = 0;
+		bool	BufChar;
+
+		//! get command string
+		int i = 0;
+		while (i < bufSize) {
+
+			//! buffer the next char
+			BufChar = true;
+
+			//! grab next char
+			c = KeyboardController::GetInput();
+
+			//return
+			if (c == 0x0d)
+				break;
+
+			//backspace
+			if (c == 0x08) {
+
+				//! dont buffer this char
+				BufChar = false;
+
+				if (i > 0) {
+
+					//! go back one char
+					uint y, x;
+					GetCursorPos(x, y);
+
+					if (x > 0)
+						MoveCursor(x, y);
+					else {
+						//! x is already 0, so go back one line
+						y--;
+						x = 80;
+					}
+
+					//! erase the character from display
+					WriteChar(' ');
+					MoveCursor(x, y);
+
+					//! go back one char in cmd buf
+					i--;
+				}
+			}
+
+			//! only add the char if it is to be buffered
+			if (BufChar) {
+
+				//! convert key to an ascii char and put it in buffer
+				//char c = KeyBoard::ConvertKeyToAscii(key);
+				//if (c != 0 && KEY_SPACE != c) { //insure its an ascii char
+				if (c != 0) { //insure its an ascii char
+
+					WriteChar(c);
+					commandBuffer[i++] = c;
+				}
+			}
+
+			//! wait for next key. You may need to adjust this to suite your needs
+			//msleep(10);
+		}
+
+		//! null terminate the string
+		commandBuffer[i] = 0;
 	}
 }
