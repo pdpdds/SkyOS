@@ -63,7 +63,8 @@ namespace std
 	template <typename ContentsType>
 	ContentsType& list<ContentsType>::back() {
 		if (empty()) {
-			throw Exception("Attempted to access non-exsistent node", __FILE__, __LINE__);
+			//throw Exception("Attempted to access non-exsistent node", __FILE__, __LINE__);
+			//return;
 		}
 
 		return lastNodePointer->value;
@@ -178,6 +179,7 @@ namespace std
 	template <typename ContentsType>
 	void list<ContentsType>::pop_front() {
 		if (empty()) {
+			return;
 			//throw Exception("Attempted to access non-exsistent node", __FILE__, __LINE__);
 		}
 
