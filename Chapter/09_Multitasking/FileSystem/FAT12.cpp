@@ -231,6 +231,7 @@ FILE fsysFatOpenSubDir (FILE kFile,
 FILE fsysFatOpen (const char* FileName) 
 {
 	FILE curDirectory;
+	memset(&curDirectory, 0, sizeof(FILE));
 	char* p = 0;
 	bool rootDir=true;
 	char* path = (char*) FileName;

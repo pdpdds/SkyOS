@@ -12,12 +12,6 @@
 #include "KernelProcedure.h"
 #include "SysAPI.h"
 #include "tss.h"
-#include "ctrycatch.h"
-
-void throwArgumentException() {
-	//puts("Function reached.");
-	throw(ArgumentException, (char*)"Ooh! Some ArgumentException was thrown. ");
-}
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -78,7 +72,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	SkyConsole::Print("GRUB Information\n");
 	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
 
-	kEnterCriticalSection(&g_criticalSection);
+	//kEnterCriticalSection(&g_criticalSection);
 
 	HardwareInitiize();
 	SkyConsole::Print("Hardware Init Complete\n");
@@ -115,23 +109,13 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	ConstructFileSystem();
 
-	kLeaveCriticalSection(&g_criticalSection);
-	
-	try {
-		throwArgumentException();
-	}
-	catch (ArgumentException) {
-	//	puts("ArgumentException block reached");
-		if (__ctrycatch_exception_message_exists) 
-			printf("message: %s\n", __ctrycatch_exception_message);
-	}
-	finally {
-		//puts("finally block reached");
-		printf("No Error!!\n");
-	}
+	//kLeaveCriticalSection(&g_criticalSection);
 
-	for (;;);
-	
+	TestTryCatch();
+
+
+	float num = 0.0f;
+		
 	StartConsoleSystem();
 
 	for (;;);
@@ -257,7 +241,7 @@ void ConstructFileSystem()
 
 void StartConsoleSystem()
 {	
-	//kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 
 
 	Process* pProcess = ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL);
@@ -283,7 +267,7 @@ void StartConsoleSystem()
 	int entryPoint = (int)pThread->frame.eip;
 	unsigned int procStack = pThread->frame.esp;
 
-//	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 
 	JumpToNewKernelEntry(entryPoint, procStack);
 }

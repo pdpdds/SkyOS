@@ -1,5 +1,6 @@
 #include "Process.h"
 #include "Thread.h"
+#include "SkyAPI.h"
 
 Process::Process()
 {
@@ -31,4 +32,11 @@ Thread* Process::GetThread(int threadId)
 		return nullptr;
 
 	return iter->second;
+}
+
+void Process::SetPageDirectory(PageDirectory* pPageDirectory)
+{			
+	M_Assert(pPageDirectory != nullptr, "PageDirectory Is Null.");
+
+	m_pPageDirectory = pPageDirectory;
 }

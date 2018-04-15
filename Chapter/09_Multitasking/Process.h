@@ -38,13 +38,8 @@ public:
 
 	PageDirectory* GetPageDirectory() { return m_pPageDirectory; }
 	
-	void SetPageDirectory(PageDirectory* pPageDirectory) 
-	{
-		if(pPageDirectory == 0)
-			HaltSystem("PageDirectory is Null");;
-
-		m_pPageDirectory = pPageDirectory;
-	}
+	void SetPageDirectory(PageDirectory* pPageDirectory);
+	
 
 private:
 	PageDirectory * m_pPageDirectory; //이 프로세스가 사용하는 페이지 디렉토리		

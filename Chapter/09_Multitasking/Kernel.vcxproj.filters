@@ -107,8 +107,12 @@
     <ClCompile Include="KeyBoard\KeyBoard.cpp" />
     <ClCompile Include="KeyBoard\KeyboardController.cpp" />
     <ClCompile Include="tss.cpp" />
-    <ClCompile Include="setjmp.c" />
-    <ClCompile Include="ctrycatch.cpp" />
+    <ClCompile Include="CPlusPlus\ctrycatch.cpp">
+      <Filter>CPlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlusPlus\setjmp.c">
+      <Filter>CPlusPlus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -232,7 +236,18 @@
     <ClInclude Include="KeyBoard\KeyboardController.h" />
     <ClInclude Include="KeyBoard\KeyBoardIO.h" />
     <ClInclude Include="tss.h" />
-    <ClInclude Include="ctrycatch.h" />
+    <ClInclude Include="CPlusPlus\_mingw.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\ctrycatch.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\setjmp.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\signal.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
@@ -250,10 +265,16 @@
     <Filter Include="FileSystem">
       <UniqueIdentifier>{ce6fd751-bc89-48aa-bc30-d19a7ef1b762}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CPlusPlus">
+      <UniqueIdentifier>{240e76cd-70d2-4123-ba5e-eec5ce2c056b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Debug\kernel.sys">
       <Filter>Heap</Filter>
+    </None>
+    <None Include="CPlusPlus\ctrycatch_exception_types.conf">
+      <Filter>CPlusPlus</Filter>
     </None>
   </ItemGroup>
 </Project>

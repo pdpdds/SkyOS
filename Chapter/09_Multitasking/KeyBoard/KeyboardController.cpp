@@ -42,7 +42,7 @@ int kb_special(unsigned char key);	//Detects non-ascii key presses
 
 	const unsigned int KEYBUFFSIZE = 129;	//Size of our key buffer
 
-	char normal[] = {					//Keyboard character maps (Look up table)
+	unsigned char normal[] = {					//Keyboard character maps (Look up table)
 	  0x00,0x1B,'1','2','3','4','5','6','7','8','9','0','-','=','\b','\t',
 	'q','w','e','r','t','y','u','i','o','p','[',']',0x0D,0x80,
 	'a','s','d','f','g','h','j','k','l',';',047,0140,0x80,
@@ -52,7 +52,7 @@ int kb_special(unsigned char key);	//Detects non-ascii key presses
 	0x80,0x80,0x80,'0',0177
 	};
 
-	char shifted[] = {
+	unsigned char shifted[] = {
 	  0,033,'!','@','#','$','%','^','&','*','(',')','_','+','\b','\t',
 	'Q','W','E','R','T','Y','U','I','O','P','{','}',015,0x80,
 	'A','S','D','F','G','H','J','K','L',':',042,'~',0x80,
@@ -62,7 +62,7 @@ int kb_special(unsigned char key);	//Detects non-ascii key presses
 	'1','2','3','0',177
 	};
 
-	char capsNormal[] = {
+	unsigned char capsNormal[] = {
 	  0x00,0x1B,'1','2','3','4','5','6','7','8','9','0','-','=','\b','\t',
 	'Q','W','E','R','T','Y','U','I','O','P','[',']',0x0D,0x80,
 	'A','S','D','F','G','H','J','K','L',';',047,0140,0x80,
@@ -72,7 +72,7 @@ int kb_special(unsigned char key);	//Detects non-ascii key presses
 	0x80,0x80,0x80,'0',0177
 	};
 
-	char capsShifted[] = {
+	unsigned char capsShifted[] = {
 	  0,033,'!','@','#','$','%','^','&','*','(',')','_','+','\b','\t',
 	'q','w','e','r','t','y','u','i','o','p','{','}',015,0x80,
 	'a','s','d','f','g','h','j','k','l',':',042,'~',0x80,
@@ -300,14 +300,14 @@ void KeyboardController::SetupInterrupts()
 	//IDT::setEntry()
 }
 
-void KeyboardController::SetLEDs(bool scroll, bool num, bool caps)
+void KeyboardController::SetLEDs(bool scroll, bool number, bool capslk)
 {
 	//Bit 1 set: scroll lock on
 	unsigned char status = scroll ? 1 : 0;
 
-	if(num)	//Bit 2: num lock
+	if(number)	//Bit 2: num lock
 		status |= 2;
-	if(caps)//Bit 3: caps lock
+	if(capslk)//Bit 3: caps lock
 		status |= 4;
 	//Make sure the command buffer is clean
 	while((InPortByte(0x64) & 2) == 2)
@@ -326,12 +326,12 @@ char KeyboardController::GetInput()		// Waits for a key to enter the buffer and 
 	int i = 0;
 	while (buffend == 0)
 	{		
-		//kEnterCriticalSection(&g_criticalSection);		//Disable interrupts while we modify the buffer
-//		kLeaveCriticalSection(&g_criticalSection);		//Disable interrupts while we modify the buffer
+		//kEnterCriticalSection();		//Disable interrupts while we modify the buffer
+//		kLeaveCriticalSection();		//Disable interrupts while we modify the buffer
 		//msleep(10);
 	}
 
-	kEnterCriticalSection(&g_criticalSection);		//Disable interrupts while we modify the buffer
+	kEnterCriticalSection();		//Disable interrupts while we modify the buffer
 
 	for(; i < buffend; i++)
 	{
@@ -339,7 +339,7 @@ char KeyboardController::GetInput()		// Waits for a key to enter the buffer and 
 	}
 	buffend--;
 
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 
 	return buffer[0];
 }
@@ -347,7 +347,7 @@ char KeyboardController::GetInput()		// Waits for a key to enter the buffer and 
 void KeyboardController::HandleKeyboardInterrupt()
 {	
 	unsigned char asciiCode;
-	kEnterCriticalSection(&g_criticalSection);			//Don't let interrupts bother us while handling one.
+	kEnterCriticalSection();			//Don't let interrupts bother us while handling one.
 	
 	scanCode = InPortByte(0x60);	//retrieve scan code
 
@@ -383,6 +383,6 @@ void KeyboardController::HandleKeyboardInterrupt()
 			buffer[buffend] = asciiCode;
 		}
 
-	kLeaveCriticalSection(&g_criticalSection);			//Enable interrupts
+	kLeaveCriticalSection();			//Enable interrupts
 }
 

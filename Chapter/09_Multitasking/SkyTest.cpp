@@ -12,6 +12,7 @@
 #include "HDDAdaptor.h"
 #include "StorageManager.h"
 #include "fileio.h"
+#include "ctrycatch.h"
 
 //인터럽트 핸들러 테스트
 void TestDivideByZero();
@@ -506,5 +507,28 @@ void TestHardDisk()
 		StorageManager::GetInstance()->CloseFile(pFile);		
 
 		delete buffer;
+	}
+}
+
+//인터럽트 핸들러 테스트
+
+void throwArgumentException() {
+	//puts("Function reached.");
+	throw(ArgumentException, (char*)"Ooh! Some ArgumentException was thrown. ");
+}
+
+void TestTryCatch()
+{
+	try {
+		throwArgumentException();
+	}
+	catch (ArgumentException) {
+		//	puts("ArgumentException block reached");
+		if (__ctrycatch_exception_message_exists)
+			SkyConsole::Print("message: %s\n", __ctrycatch_exception_message);
+	}
+	finally {
+		//puts("finally block reached");
+		SkyConsole::Print("Finally!!\n");
 	}
 }

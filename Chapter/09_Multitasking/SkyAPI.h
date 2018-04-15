@@ -13,6 +13,8 @@
 void __M_Assert(const char* expr_str, bool expr, const char* file, int line, const char* msg);
 
 #define kprintf SkyConsole::Print
+#define kEnterCriticalSection()	__asm	PUSHFD	__asm CLI
+#define kLeaveCriticalSection()		__asm	POPFD
 
 /////////////////////////////////////////////////////////////////////////////
 //동기화
@@ -24,11 +26,6 @@ typedef struct _CRITICAL_SECTION {
 	      
 } CRITICAL_SECTION, *LPCRITICAL_SECTION;;
 
-extern CRITICAL_SECTION g_criticalSection;
-
-void SKYAPI kEnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
-void SKYAPI kInitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
-void SKYAPI kLeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 
 /////////////////////////////////////////////////////////////////////////////
 //스레드

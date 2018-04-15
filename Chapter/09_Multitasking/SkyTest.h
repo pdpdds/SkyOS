@@ -5,3 +5,4 @@ void TestCPlusPlus();
 void TestCommonLibrary();
 void TestString();
 void TestHardDisk();
+void TestTryCatch();

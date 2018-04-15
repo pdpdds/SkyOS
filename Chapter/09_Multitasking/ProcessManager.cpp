@@ -55,8 +55,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	pProcess->m_imageBase = ntHeaders->OptionalHeader.ImageBase;
 	pProcess->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;
 	pThread->m_imageBase = ntHeaders->OptionalHeader.ImageBase;
-	pThread->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;
-	pThread->kernelStack = 0;
+	pThread->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;	
 	pThread->m_dwPriority = 1;
 	pThread->m_taskState = TASK_STATE_INIT;
 	pThread->m_initialStack = 0;
@@ -371,12 +370,12 @@ bool ProcessManager::AddProcess(Process* pProcess)
 	SkyConsole::Print("procStack : %x\n", procStack);
 #endif	
 
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 	m_processList.insert(std::make_pair(pProcess->m_processId, pProcess));
 
 	m_taskList.push_back(pThread);
 
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 
 	return true;
 }
@@ -394,7 +393,7 @@ Process* ProcessManager::CreateKernelProcessFromMemory(const char* appName, LPTH
 	pProcess->m_processId = GetNextProcessId();
 
 	PageDirectory* pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
-	pProcess->SetPageDirectory(pPageDirectory);
+	pProcess->SetPageDirectory(0);
 	
 	pProcess->m_dwRunState = TASK_STATE_RUNNING;
 	strcpy(pProcess->m_processName, appName);

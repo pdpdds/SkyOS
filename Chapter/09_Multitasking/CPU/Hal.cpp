@@ -117,11 +117,11 @@ bool kSetInterruptFlag(bool bEnableInterrupt)
 	dwRFLAGS = kReadFLAGS();
 	if (bEnableInterrupt == TRUE)
 	{
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
 	}
 	else
 	{
-		kEnterCriticalSection(&g_criticalSection);
+		kEnterCriticalSection();
 	}
 
 	// 이전 RFLAGS 레지스터의 IF 비트(비트 9)를 확인하여 이전의 인터럽트 상태를 반환

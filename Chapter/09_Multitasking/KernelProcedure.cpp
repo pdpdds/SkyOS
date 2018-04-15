@@ -18,10 +18,6 @@ void NativeConsole()
 		
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);		
 
-	__asm sti;
-
-	g_criticalSection.LockRecursionCount = 0;
-
 	ConsoleManager manager;
 
 	char	commandBuffer[MAXPATH];
@@ -117,12 +113,12 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
 {		
 	while (1)
 	{
-		kEnterCriticalSection(&g_criticalSection);
+		kEnterCriticalSection();
 
 		ProcessManager::GetInstance()->RemoveTerminatedProcess();
 		Scheduler::GetInstance()->Yield(kGetCurrentThreadId());
 
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
 	}
 
 	return 0;

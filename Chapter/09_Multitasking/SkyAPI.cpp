@@ -7,8 +7,6 @@
 #include "sprintf.h"
 #include "Exception.h"
 
-CRITICAL_SECTION g_criticalSection;
-
 void __M_Assert(const char* expr_str, bool expr, const char* file, int line, const char* msg)
 {
 	if (!expr)
@@ -23,47 +21,6 @@ void __M_Assert(const char* expr_str, bool expr, const char* file, int line, con
 	}
 }
 
-void SKYAPI kInitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
-{
-	lpCriticalSection->LockRecursionCount = 0;
-	lpCriticalSection->OwningThread = 0;
-}
-
-void SKYAPI kEnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
-{
-	if (lpCriticalSection->LockRecursionCount == 0)
-	{
-		_asm cli
-	}
-
-	lpCriticalSection->LockRecursionCount++;
-
-	//DWORD threadId = kGetCurrentThreadId();
-	//SKYASSERT((HANDLE)threadId == lpCriticalSection->OwningThread || lpCriticalSection->OwningThread == 0, "kEnterCriticalSection");
-
-	//if (lpCriticalSection->OwningThread == (HANDLE)threadId)
-	//{
-		//lpCriticalSection->LockRecursionCount++;
-	/*
-	else
-	{
-		lpCriticalSection->OwningThread = (HANDLE)threadId;
-		lpCriticalSection->LockRecursionCount = 1;
-	}*/
-}
-
-void SKYAPI kLeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
-{
-	//DWORD threadId = kGetCurrentThreadId();
-	//SKYASSERT((HANDLE)threadId == lpCriticalSection->OwningThread, "kLeaveCriticalSection");
-	lpCriticalSection->LockRecursionCount--;
-	//if (lpCriticalSection->LockRecursionCount == 0)
-	{
-		lpCriticalSection->OwningThread = 0;
-		_asm sti
-	}
-}
-
 /////////////////////////////////////////////////////////////////////////////
 //½º·¹µå
 /////////////////////////////////////////////////////////////////////////////
@@ -72,12 +29,6 @@ DWORD SKYAPI kGetCurrentThreadId()
 	return 0;
 }
 
-/* This function will return the current system date & time in the passed pointer parameters.
-
-Note : The year is only 2 digits and the RTC is Real Time Clock  and donot confuse it with the Y2K problem.
-
-The Day of week problem is still unsolved
-*/
 void GetLocalTime(LPSYSTEMTIME lpSystemTime)
 {
 	/* Checking whether we can read the time now or not according to some documentation the MSB in Status A will remain 1 (invalid time) only a millisecond*/
@@ -156,8 +107,6 @@ void ksleep(int millisecond)
 {
 	msleep(millisecond);
 }
-
-
 
 void printf(const char* str, ...)
 {
@@ -245,4 +194,10 @@ void printf(const char* str, ...)
 void PauseSystem(const char* msg)
 {
 	for (;;);
+}
+
+HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreateionFlags, LPDWORD lpThreadId)
+{
+	//Not Implemented
+	return 0;
 }

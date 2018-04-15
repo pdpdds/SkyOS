@@ -69,13 +69,13 @@ bool kMount( void )
     MBR* pstMBR;
     
     // 동기화 처리
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 
     // MBR을 읽음
     if( gs_pfReadHDDSector( TRUE, TRUE, 0, 1, (char*)gs_vbTempBuffer ) == FALSE )
     {
         // 동기화 처리
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -84,7 +84,7 @@ bool kMount( void )
     if( pstMBR->dwSignature != FILESYSTEM_SIGNATURE )
     {
         // 동기화 처리
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -101,7 +101,7 @@ bool kMount( void )
     gs_stFileSystemManager.dwTotalClusterCount = pstMBR->dwTotalClusterCount;
 
     // 동기화 처리
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
     return TRUE;
 }
 
@@ -118,7 +118,7 @@ bool kFormat( void )
     DWORD i;
     
     // 동기화 처리
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 
     //==========================================================================
     //  하드 디스크 정보를 읽어서 메타 영역의 크기와 클러스터의 개수를 계산
@@ -128,7 +128,7 @@ bool kFormat( void )
     if( gs_pfReadHDDInformation( TRUE, TRUE, pstHDD ) == FALSE )
     {
         // 동기화 처리
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return FALSE;
     }    
     dwTotalSectorCount = pstHDD->dwTotalSectors;
@@ -158,7 +158,7 @@ bool kFormat( void )
     if( gs_pfReadHDDSector( TRUE, TRUE, 0, 1, (char*)gs_vbTempBuffer ) == FALSE )
     {
         // 동기화 처리
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return FALSE;
     }        
     
@@ -174,7 +174,7 @@ bool kFormat( void )
     if( gs_pfWriteHDDSector( TRUE, TRUE, 0, 1, (char*)gs_vbTempBuffer ) == FALSE )
     {
         // 동기화 처리
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -198,14 +198,14 @@ bool kFormat( void )
         if( gs_pfWriteHDDSector( TRUE, TRUE, i + 1, 1, (char*)gs_vbTempBuffer ) == FALSE )
         {
             // 동기화 처리
-			kLeaveCriticalSection(&g_criticalSection);
+			kLeaveCriticalSection();
             return FALSE;
         }
     }    
 
     
     // 동기화 처리
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
     return TRUE;
 }
 
@@ -217,12 +217,12 @@ bool kGetHDDInformation( HDDINFORMATION* pstInformation)
 	bool bResult;
     
     // 동기화 처리
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
     
     bResult = gs_pfReadHDDInformation( TRUE, TRUE, pstInformation );
     
     // 동기화 처리
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
     
     return bResult;
 }
@@ -712,7 +712,7 @@ MFILE* kOpenFile( const char* pcFileName, const char* pcMode )
     }
     
     // 동기화
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
     
     //==========================================================================
     // 파일이 먼저 존재하는가 확인하고, 없다면 옵션을 보고 파일을 생성
@@ -724,7 +724,7 @@ MFILE* kOpenFile( const char* pcFileName, const char* pcMode )
         if( pcMode[ 0 ] == 'r' )
         {
             // 동기화
-			kLeaveCriticalSection(&g_criticalSection);
+			kLeaveCriticalSection();
             return NULL;
         }
         
@@ -732,7 +732,7 @@ MFILE* kOpenFile( const char* pcFileName, const char* pcMode )
         if( kCreateFile( pcFileName, &stEntry, &iDirectoryEntryOffset ) == FALSE )
         {
             // 동기화
-			kLeaveCriticalSection(&g_criticalSection);
+			kLeaveCriticalSection();
             return NULL;
         }
     }    
@@ -747,7 +747,7 @@ MFILE* kOpenFile( const char* pcFileName, const char* pcMode )
                 == FALSE )
         {
             // 동기화
-			kLeaveCriticalSection(&g_criticalSection);
+			kLeaveCriticalSection();
             return NULL;
         }
         
@@ -756,7 +756,7 @@ MFILE* kOpenFile( const char* pcFileName, const char* pcMode )
                FILESYSTEM_LASTCLUSTER ) == FALSE )
         {
             // 동기화
-			kLeaveCriticalSection(&g_criticalSection);
+			kLeaveCriticalSection();
             return NULL;
         }
         
@@ -764,7 +764,7 @@ MFILE* kOpenFile( const char* pcFileName, const char* pcMode )
         if( kFreeClusterUntilEnd( dwSecondCluster ) == FALSE )
         {
             // 동기화
-			kLeaveCriticalSection(&g_criticalSection);
+			kLeaveCriticalSection();
             return NULL;
         }
        
@@ -773,7 +773,7 @@ MFILE* kOpenFile( const char* pcFileName, const char* pcMode )
         if( kSetDirectoryEntryData( iDirectoryEntryOffset, &stEntry ) == FALSE )
         {
             // 동기화
-			kLeaveCriticalSection(&g_criticalSection);
+			kLeaveCriticalSection();
             return NULL;
         }
     }
@@ -786,7 +786,7 @@ MFILE* kOpenFile( const char* pcFileName, const char* pcMode )
     if( pstFile == NULL )
     {
         // 동기화
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return NULL;
     }
     
@@ -806,7 +806,7 @@ MFILE* kOpenFile( const char* pcFileName, const char* pcMode )
     }
 
     // 동기화
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
     return pstFile;
 }
 
@@ -842,7 +842,7 @@ DWORD kReadFile( void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstFile )
                         pstFileHandle->dwCurrentOffset );
     
     // 동기화
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
     
     // 계산된 값만큼 다 읽을 때까지 반복
     dwReadCount = 0;
@@ -892,7 +892,7 @@ DWORD kReadFile( void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstFile )
     }
     
     // 동기화
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
     
     // 읽은 레코드 수를 반환
     return ( dwReadCount / dwSize );
@@ -951,7 +951,7 @@ DWORD kWriteFile( const void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstF
     dwTotalCount = dwSize * dwCount;
 
     // 동기화
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 
     // 다 쓸 때까지 반복
     dwWriteCount = 0;
@@ -1058,7 +1058,7 @@ DWORD kWriteFile( const void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstF
     }
     
     // 동기화
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
     
     // 쓴 레코드 수를 반환
     return ( dwWriteCount / dwSize );
@@ -1217,7 +1217,7 @@ int kSeekFile(MFILE* pstFile, int iOffset, int iOrigin )
     }
 
     // 동기화
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 
     // 클러스터를 이동
     dwCurrentClusterIndex = dwStartClusterIndex;
@@ -1231,7 +1231,7 @@ int kSeekFile(MFILE* pstFile, int iOffset, int iOrigin )
             FALSE )
         {
             // 동기화
-			kLeaveCriticalSection(&g_criticalSection);
+			kLeaveCriticalSection();
             return -1;
         }
     }
@@ -1259,7 +1259,7 @@ int kSeekFile(MFILE* pstFile, int iOffset, int iOrigin )
     {
         pstFileHandle->dwCurrentOffset = pstFileHandle->dwFileSize;
         // 동기화
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
 
         // 남은 크기만큼 0으로 채움
         if( kWriteZero( pstFile, dwRealOffset - pstFileHandle->dwFileSize )
@@ -1272,7 +1272,7 @@ int kSeekFile(MFILE* pstFile, int iOffset, int iOrigin )
     pstFileHandle->dwCurrentOffset = dwRealOffset;
 
     // 동기화
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 
     return 0;    
 }
@@ -1335,14 +1335,14 @@ int kRemoveFile( const char* pcFileName )
     }
     
     // 동기화
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
     
     // 파일이 존재하는가 확인
     iDirectoryEntryOffset = kFindDirectoryEntry( pcFileName, &stEntry );
     if( iDirectoryEntryOffset == -1 ) 
     { 
         // 동기화
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return -1;
     }
     
@@ -1351,7 +1351,7 @@ int kRemoveFile( const char* pcFileName )
     if( kIsFileOpened( &stEntry ) == TRUE )
     {
         // 동기화
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return -1;
     }
     
@@ -1359,7 +1359,7 @@ int kRemoveFile( const char* pcFileName )
     if( kFreeClusterUntilEnd( stEntry.dwStartClusterIndex ) == FALSE )
     { 
         // 동기화
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return -1;
     }
 
@@ -1368,12 +1368,12 @@ int kRemoveFile( const char* pcFileName )
     if( kSetDirectoryEntryData( iDirectoryEntryOffset, &stEntry ) == FALSE )
     {
         // 동기화
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return -1;
     }
     
     // 동기화
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
     return 0;
 }
 
@@ -1386,14 +1386,14 @@ DIR* kOpenDirectory( const char* pcDirectoryName )
     DIRECTORYENTRY* pstDirectoryBuffer;
     
     // 동기화
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
     
     // 루트 디렉터리 밖에 없으므로 디렉터리 이름은 무시하고 핸들만 할당받아서 반환
     pstDirectory = (DIR*)kAllocateFileDirectoryHandle();
     if( pstDirectory == NULL )
     {
         // 동기화
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return NULL;
     }
     
@@ -1404,7 +1404,7 @@ DIR* kOpenDirectory( const char* pcDirectoryName )
         // 실패하면 핸들을 반환해야 함
         kFreeFileDirectoryHandle( pstDirectory );
         // 동기화
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return NULL;
     }
     
@@ -1416,7 +1416,7 @@ DIR* kOpenDirectory( const char* pcDirectoryName )
 		delete pstDirectoryBuffer;
         
         // 동기화
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
         return NULL;
         
     }
@@ -1427,7 +1427,7 @@ DIR* kOpenDirectory( const char* pcDirectoryName )
     pstDirectory->stDirectoryHandle.pstDirectoryBuffer = pstDirectoryBuffer;
 
     // 동기화
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
     return pstDirectory;
 }
 
@@ -1455,7 +1455,7 @@ struct kDirectoryEntryStruct* kReadDirectory( DIR* pstDirectory )
     }
 
     // 동기화
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
     
     // 루트 디렉터리에 있는 최대 디렉터리 엔트리의 개수만큼 검색
     pstEntry = pstDirectoryHandle->pstDirectoryBuffer;
@@ -1466,7 +1466,7 @@ struct kDirectoryEntryStruct* kReadDirectory( DIR* pstDirectory )
                 != 0 )
         {
             // 동기화
-			kLeaveCriticalSection(&g_criticalSection);
+			kLeaveCriticalSection();
             return &( pstEntry[ pstDirectoryHandle->iCurrentOffset++ ] );
         }
         
@@ -1474,7 +1474,7 @@ struct kDirectoryEntryStruct* kReadDirectory( DIR* pstDirectory )
     }
 
     // 동기화
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
     return NULL;
 }
 
@@ -1494,13 +1494,13 @@ void kRewindDirectory( DIR* pstDirectory )
     pstDirectoryHandle = &( pstDirectory->stDirectoryHandle );
     
     // 동기화
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
     
     // 디렉터리 엔트리의 포인터만 0으로 바꿔줌
     pstDirectoryHandle->iCurrentOffset = 0;
     
     // 동기화
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 }
 
 
@@ -1520,14 +1520,14 @@ int kCloseDirectory( DIR* pstDirectory )
     pstDirectoryHandle = &( pstDirectory->stDirectoryHandle );
 
     // 동기화
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
     
     // 루트 디렉터리의 버퍼를 해제하고 핸들을 반환
     delete pstDirectoryHandle->pstDirectoryBuffer;
     kFreeFileDirectoryHandle( pstDirectory );    
     
     // 동기화
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 
     return 0;
 }

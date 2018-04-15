@@ -3,7 +3,8 @@
 Thread::Thread()
 {
 	m_waitingTime = TASK_RUNNING_TIME;
-	m_pParent = NULL;
+	m_pParent = nullptr;
+	m_lpTLS = nullptr;
 }
 
 

@@ -14,7 +14,7 @@
 
 long cmdProcessList(char *theCommand)
 {
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 	SkyConsole::Print(" ID : Process Name\n");
 
 	ProcessManager::ProcessList* processlist = ProcessManager::GetInstance()->GetProcessList();
@@ -26,7 +26,7 @@ long cmdProcessList(char *theCommand)
 		SkyConsole::Print("  %d : %s\n", pProcess->m_processId, pProcess->m_processName);
 	}
 
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 
 	return true;
 }
@@ -74,7 +74,7 @@ long cmdKillTask(char *theCommand)
 	int id = atoi(theCommand);
 
 
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 
 	Process* pProcess = ProcessManager::GetInstance()->FindProcess(id);
 
@@ -86,7 +86,7 @@ long cmdKillTask(char *theCommand)
 	else
 		SkyConsole::Print("process don't exist(%d)\n", id);
 
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 	return false;
 }
 
@@ -162,7 +162,7 @@ long cmdProc(char* pName) {
 
 long cmdTesttask(char* pName)
 {
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 
 	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc, NULL);
 
@@ -172,7 +172,7 @@ long cmdTesttask(char* pName)
 	}
 
 
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 
 	return false;
 }

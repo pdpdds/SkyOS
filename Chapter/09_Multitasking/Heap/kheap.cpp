@@ -52,9 +52,9 @@ u32int kmalloc_int(u32int sz, int align, u32int *phys)
 
 void kfree(void *p)
 {
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 	free(p, &kheap);
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 }
 
 u32int kmalloc_a(u32int sz)
@@ -74,9 +74,9 @@ u32int kmalloc_ap(u32int sz, u32int *phys)
 
 u32int kmalloc(u32int sz)
 {
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 	u32int buffer = kmalloc_int(sz, 0, 0);
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 	return buffer;
 }
 

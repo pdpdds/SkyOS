@@ -41,7 +41,7 @@ namespace VirtualMemoryManager
 	//가상주소를 물리 주소에 매핑
 	void MapPhysicalAddressToVirtualAddresss(PageDirectory* dir, uint32_t virt, uint32_t phys, uint32_t flags)
 	{
-		kEnterCriticalSection(&g_criticalSection);
+		kEnterCriticalSection();
 		PhysicalMemoryManager::EnablePaging(false);
 		PDE* pageDir = dir->m_entries;				
 
@@ -56,7 +56,7 @@ namespace VirtualMemoryManager
 		pageTable[virt << 10 >> 10 >> 12] = phys | flags;
 
 		PhysicalMemoryManager::EnablePaging(true);
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
 	}
 
 	void UnmapPageTable(PageDirectory* dir, uint32_t virt)

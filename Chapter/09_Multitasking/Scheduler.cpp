@@ -268,7 +268,7 @@ bool Scheduler::Yield(int currentThreadId)
 	if (pThread->m_threadId != currentThreadId)
 		return false;
 
-	if (pThread->m_taskState = TASK_STATE_RUNNING)
+	if (pThread->m_taskState == TASK_STATE_RUNNING)
 		return false;
 
 	pThread->m_waitingTime = 0;

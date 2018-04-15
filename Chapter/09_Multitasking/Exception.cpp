@@ -109,10 +109,47 @@ interrupt void kHandleBoundsCheckFault() {
 	for (;;);
 }
 
-interrupt void kHandleInvalidOpcodeFault() {
+void HandleInvalidOpcode(registers_t regs)
+{
 	kExceptionMessageHeader();
-	SkyConsole::Print("Invalid opcode");
+	SkyConsole::Print("Invalid Opcode at Address[0x%x:0x%x]\n", regs.cs, regs.eip);
+	SkyConsole::Print("EFLAGS[0x%x]\n", regs.eflags);
+	SkyConsole::Print("ss : 0x%x\n", regs.ss);
 	for (;;);
+}
+
+interrupt void kHandleInvalidOpcodeFault()
+{
+
+	_asm {
+		cli
+		pushad
+
+		push ds
+		push es
+		push fs
+		push gs
+	}
+
+	_asm
+	{
+		call HandleInvalidOpcode
+	}
+
+	_asm {
+
+		pop gs
+		pop fs
+		pop es
+		pop ds
+
+		popad
+
+		mov al, 0x20
+		out 0x20, al
+		sti
+		iretd
+	}
 }
 
 interrupt void kHandleNoDeviceFault() 
