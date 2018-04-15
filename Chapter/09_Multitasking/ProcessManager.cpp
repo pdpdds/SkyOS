@@ -367,7 +367,7 @@ bool ProcessManager::AddProcess(Process* pProcess)
 
 #ifdef _DEBUG
 	SkyConsole::Print("eip : %x\n", pThread->frame.eip);
-	SkyConsole::Print("page directory : %x\n", pProcess->m_pPageDirectory);
+	SkyConsole::Print("page directory : %x\n", pProcess->GetPageDirectory());
 	SkyConsole::Print("procStack : %x\n", procStack);
 #endif	
 

@@ -12,7 +12,12 @@
 #include "KernelProcedure.h"
 #include "SysAPI.h"
 #include "tss.h"
+#include "ctrycatch.h"
 
+void throwArgumentException() {
+	//puts("Function reached.");
+	throw(ArgumentException, (char*)"Ooh! Some ArgumentException was thrown. ");
+}
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -108,34 +113,25 @@ void kmain(unsigned long magic, unsigned long addr)
 	InitializeSysCall();
 	install_tss(5, 0x10, 0);
 
-
 	ConstructFileSystem();
 
 	kLeaveCriticalSection(&g_criticalSection);
-
-	int foo = 0;
-	try {
-		
-		foo += 1;
-		printf("foo try: %d\n", foo);
-		try {
-			//throw(44);
-			printf("After inner throw\n");
-		}
-		catch (int err_inner) {
-			printf("Catching inner error %d\n", err_inner);
-		}
-				
-		//throw(43);
-	}
-	catch (int err) {
-		printf("foo catch: %d, err: %d\n", foo, err);
-	}
 	
-
+	try {
+		throwArgumentException();
+	}
+	catch (ArgumentException) {
+	//	puts("ArgumentException block reached");
+		if (__ctrycatch_exception_message_exists) 
+			printf("message: %s\n", __ctrycatch_exception_message);
+	}
+	finally {
+		//puts("finally block reached");
+		printf("No Error!!\n");
+	}
 
 	for (;;);
-
+	
 	StartConsoleSystem();
 
 	for (;;);

@@ -102,8 +102,13 @@
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="ProcessUtil.cpp" />
     <ClCompile Include="KernelProcedure.cpp" />
-    <ClCompile Include="exceptional.cpp" />
-    <ClCompile Include="Excpt.cpp" />
+    <ClCompile Include="commands.cpp" />
+    <ClCompile Include="ConsoleManager.cpp" />
+    <ClCompile Include="KeyBoard\KeyBoard.cpp" />
+    <ClCompile Include="KeyBoard\KeyboardController.cpp" />
+    <ClCompile Include="tss.cpp" />
+    <ClCompile Include="setjmp.c" />
+    <ClCompile Include="ctrycatch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -219,7 +224,15 @@
     <ClInclude Include="PEImage.h" />
     <ClInclude Include="ProcessUtil.h" />
     <ClInclude Include="KernelProcedure.h" />
-    <ClInclude Include="exceptional.h" />
+    <ClInclude Include="commandMacros.h" />
+    <ClInclude Include="commands.h" />
+    <ClInclude Include="commandTable.h" />
+    <ClInclude Include="ConsoleManager.h" />
+    <ClInclude Include="KeyBoard\KeyBoard.h" />
+    <ClInclude Include="KeyBoard\KeyboardController.h" />
+    <ClInclude Include="KeyBoard\KeyBoardIO.h" />
+    <ClInclude Include="tss.h" />
+    <ClInclude Include="ctrycatch.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
