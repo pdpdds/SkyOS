@@ -34,5 +34,6 @@ extern FILE *freopen(const char *filename, const char *mode, FILE *stream);
 extern int fseek(FILE *stream, long int offset, int whence);
 extern long int ftell(FILE *stream);
 extern int getc(FILE * stream);
-extern char*	strerror(int errnum);
+extern char*	strerr(int errnum);
+//extern FILE*	stderr;
 extern int fprintf(FILE * stream, const char * format, ...);

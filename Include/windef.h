@@ -99,6 +99,17 @@ typedef          char  s8int;
   typedef LPSTR PTSTR, LPTSTR;
   typedef LPCSTR LPCTSTR;
 
+#if defined(_WIN64)
+  typedef unsigned __int64 ULONG_PTR;
+#else
+  typedef unsigned long ULONG_PTR;
+#endif
+
+  typedef ULONG_PTR DWORD_PTR;
+  typedef ULONG_PTR *PULONG_PTR;
+
+
+
 //20180124
 	
   #define offsetof(st, m) ((size_t)&(((st *)0)->m))

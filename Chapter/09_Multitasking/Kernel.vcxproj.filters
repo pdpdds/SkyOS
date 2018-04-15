@@ -102,15 +102,8 @@
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="ProcessUtil.cpp" />
     <ClCompile Include="KernelProcedure.cpp" />
-    <ClCompile Include="KeyBoard\KeyBoard.cpp">
-      <Filter>Keyboard</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyBoard\KeyboardController.cpp">
-      <Filter>Keyboard</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsoleManager.cpp" />
-    <ClCompile Include="commands.cpp" />
-    <ClCompile Include="tss.cpp" />
+    <ClCompile Include="exceptional.cpp" />
+    <ClCompile Include="Excpt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -226,20 +219,7 @@
     <ClInclude Include="PEImage.h" />
     <ClInclude Include="ProcessUtil.h" />
     <ClInclude Include="KernelProcedure.h" />
-    <ClInclude Include="KeyBoard\KeyBoard.h">
-      <Filter>Keyboard</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyBoard\KeyboardController.h">
-      <Filter>Keyboard</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyBoard\KeyBoardIO.h">
-      <Filter>Keyboard</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsoleManager.h" />
-    <ClInclude Include="commandMacros.h" />
-    <ClInclude Include="commands.h" />
-    <ClInclude Include="commandTable.h" />
-    <ClInclude Include="tss.h" />
+    <ClInclude Include="exceptional.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
@@ -256,9 +236,6 @@
     </Filter>
     <Filter Include="FileSystem">
       <UniqueIdentifier>{ce6fd751-bc89-48aa-bc30-d19a7ef1b762}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Keyboard">
-      <UniqueIdentifier>{14c406e1-def8-46b5-bf53-203dedba1c38}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

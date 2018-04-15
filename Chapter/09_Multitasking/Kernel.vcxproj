@@ -19,6 +19,8 @@
     <ClCompile Include="CPU\Pic.cpp" />
     <ClCompile Include="CPU\PIT.cpp" />
     <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="exceptional.cpp" />
+    <ClCompile Include="Excpt.cpp" />
     <ClCompile Include="FileSystem\ACEList.cpp" />
     <ClCompile Include="FileSystem\FAT12.cpp" />
     <ClCompile Include="FileSystem\fat32.cpp" />
@@ -71,6 +73,7 @@
     <ClInclude Include="CPU\Pic.h" />
     <ClInclude Include="CPU\PIT.h" />
     <ClInclude Include="Exception.h" />
+    <ClInclude Include="exceptional.h" />
     <ClInclude Include="FileSystem\ACEList.h" />
     <ClInclude Include="FileSystem\Collect.h" />
     <ClInclude Include="FileSystem\FAT12.h" />
@@ -175,7 +178,7 @@
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
       </StringPooling>
-      <ExceptionHandling />
+      <ExceptionHandling>false</ExceptionHandling>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
