@@ -5,9 +5,6 @@
  
  typedef void(_cdecl *I86_IRQ_HANDLER)(void);
 
-#define ENTER_CRITICAL_SECTION()	__asm	PUSHFD	__asm CLI
-#define EXIT_CRITICAL_SECTION()		__asm	POPFD
-
 /*
 0x00000000-0x00400000 ?Kernel reserved
 0x00400000-0x80000000 ?User land
