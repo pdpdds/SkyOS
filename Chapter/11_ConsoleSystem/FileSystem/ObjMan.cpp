@@ -6,6 +6,7 @@
 
 struct _ListNode * sysObjects = NULL;
 struct _ListNode * sysWaitForObjects = NULL;
+
 LPOBJECT CreateObject(char * szName, PVOID lpData)
 {
     LPOBJECT lpObj;    

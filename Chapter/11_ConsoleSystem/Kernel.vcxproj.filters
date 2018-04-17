@@ -108,6 +108,16 @@
       <Filter>CPU</Filter>
     </ClCompile>
     <ClCompile Include="TSS.cpp" />
+    <ClCompile Include="commands.cpp" />
+    <ClCompile Include="ConsoleManager.cpp" />
+    <ClCompile Include="KernelProcedure.cpp" />
+    <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="ProcessManager.cpp" />
+    <ClCompile Include="ProcessUtil.cpp" />
+    <ClCompile Include="Thread.cpp" />
+    <ClCompile Include="UserProcessLoader.cpp" />
+    <ClCompile Include="KernelProcessLoader.cpp" />
+    <ClCompile Include="Process.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -235,6 +245,19 @@
       <Filter>CPU</Filter>
     </ClInclude>
     <ClInclude Include="TSS.h" />
+    <ClInclude Include="commandMacros.h" />
+    <ClInclude Include="commands.h" />
+    <ClInclude Include="commandTable.h" />
+    <ClInclude Include="ConsoleManager.h" />
+    <ClInclude Include="KernelProcedure.h" />
+    <ClInclude Include="Loader.h" />
+    <ClInclude Include="PEImage.h" />
+    <ClInclude Include="ProcessManager.h" />
+    <ClInclude Include="ProcessUtil.h" />
+    <ClInclude Include="Thread.h" />
+    <ClInclude Include="UserProcessLoader.h" />
+    <ClInclude Include="KernelProcessLoader.h" />
+    <ClInclude Include="Process.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

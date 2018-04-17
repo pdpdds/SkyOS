@@ -11,6 +11,8 @@
 #include "SysAPI.h"
 #include "FPU.h"
 #include "TSS.h"
+#include "ProcessManager.h"
+#include "KernelProcedure.h"
 
 
 _declspec(naked) void multiboot_entry(void)
@@ -55,6 +57,8 @@ uint32_t g_freeMemorySize = 0;
 void HardwareInitiize();
 bool InitMemoryManager(multiboot_info* bootinfo);
 void ConstructFileSystem();
+void StartConsoleSystem();
+void JumpToNewKernelEntry(int entryPoint, unsigned int procStack);
 
 void kmain(unsigned long magic, unsigned long addr)
 {
@@ -70,7 +74,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	SkyConsole::Print("GRUB Information\n");
 	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
 
-	//kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 
 	HardwareInitiize();
 	SkyConsole::Print("Hardware Init Complete\n");
@@ -116,9 +120,10 @@ void kmain(unsigned long magic, unsigned long addr)
 	
 	ConstructFileSystem();	
 
-	TestTryCatch();
-	TestNullPointer();
-
+	kLeaveCriticalSection();
+	
+	StartConsoleSystem();
+	
 	for (;;);	
 }
 
@@ -237,4 +242,56 @@ void ConstructFileSystem()
 	{
 		delete pFloppyDiskAdaptor;
 	}				
+}
+
+void StartConsoleSystem()
+{
+	kEnterCriticalSection();
+
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL, PROCESS_KERNEL);
+
+	if (pProcess == nullptr)
+		HaltSystem("Console Creation Fail!!");
+
+
+	SkyConsole::Print("Init Console....\n");
+
+	Thread* pThread = pProcess->GetMainThread();
+
+	if (pThread == nullptr)
+		HaltSystem("Console Creation Fail!!");
+
+	pThread->m_taskState = TASK_STATE_RUNNING;
+
+	int entryPoint = (int)pThread->frame.eip;
+	unsigned int procStack = pThread->frame.esp;
+
+	kLeaveCriticalSection();
+
+	SkyConsole::Print(" entryPoint : (0x%x)\n", entryPoint);
+	SkyConsole::Print(" procStack : (0x%x)\n", procStack);
+
+	JumpToNewKernelEntry(entryPoint, procStack);
+}
+
+void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
+{
+	__asm
+	{
+		mov     ax, 0x10;
+		mov     ds, ax
+			mov     es, ax
+			mov     fs, ax
+			mov     gs, ax
+
+			//; create stack frame
+			//; push   0x10;
+			//; push procStack; stack
+			mov     esp, procStack
+			push	0x10;
+		push    0x200; EFLAGS
+			push    0x08; CS
+			push    entryPoint; EIP
+			iretd
+	}
 }
