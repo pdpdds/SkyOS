@@ -11,8 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CPlusPlus\ctrycatch.cpp" />
-    <ClCompile Include="CPlusPlus\setjmp.c" />
     <ClCompile Include="CPU\FPU.cpp" />
     <ClCompile Include="CPU\GDT.cpp" />
     <ClCompile Include="CPU\Hal.cpp" />
@@ -55,10 +53,6 @@
     <ClCompile Include="Test\ZetPlane.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CPlusPlus\ctrycatch.h" />
-    <ClInclude Include="CPlusPlus\setjmp.h" />
-    <ClInclude Include="CPlusPlus\signal.h" />
-    <ClInclude Include="CPlusPlus\_mingw.h" />
     <ClInclude Include="CPU\FPU.h" />
     <ClInclude Include="CPU\GDT.h" />
     <ClInclude Include="CPU\Hal.h" />
@@ -108,7 +102,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Debug\kernel.sys" />
-    <None Include="CPlusPlus\ctrycatch_exception_types.conf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}</ProjectGuid>

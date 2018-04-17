@@ -12,7 +12,6 @@
 #include "HDDAdaptor.h"
 #include "StorageManager.h"
 #include "fileio.h"
-#include "ctrycatch.h"
 
 //인터럽트 핸들러 테스트
 void TestDivideByZero();
