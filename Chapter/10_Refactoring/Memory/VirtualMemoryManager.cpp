@@ -165,6 +165,7 @@ namespace VirtualMemoryManager
 
 	PageDirectory* CreateCommonPageDirectory()
 	{
+		
 		//페이지 디렉토리 생성. 가상주소 공간 
 		//4GB를 표현하기 위해서 페이지 디렉토리는 하나면 충분하다.
 		//페이지 디렉토리는 1024개의 페이지테이블을 가진다

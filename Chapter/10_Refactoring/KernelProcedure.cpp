@@ -16,7 +16,7 @@ void NativeConsole()
 {
 	systemOn = true;
 		
-	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);		
+	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);	
 
 	ConsoleManager manager;
 

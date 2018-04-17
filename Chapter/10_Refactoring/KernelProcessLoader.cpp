@@ -4,6 +4,7 @@
 #include "HeapManager.h"
 #include "fileio.h"
 #include "StorageManager.h"
+#include "SkyConsole.h"
 
 KernelProcessLoader::KernelProcessLoader()
 {
@@ -19,16 +20,26 @@ Process* KernelProcessLoader::CreateProcessFromMemory(const char* appName, LPTHR
 {
 	Process* pProcess = new Process();
 	pProcess->m_processId = GetNextProcessId();
+	PageDirectory* pPageDirectory = nullptr;
 
-	PageDirectory* pPageDirectory = VirtualMemoryManager::GetKernelPageDirectory();
+	if (strcmp(appName, "ConsoleSystem") != 0)
+	{
+		PhysicalMemoryManager::EnablePaging(false);
+		pPageDirectory = VirtualMemoryManager::CreateCommonPageDirectory();
+		PhysicalMemoryManager::EnablePaging(true);
+		HeapManager::MapHeapToAddressSpace(pPageDirectory);
+	}
+	else
+		pPageDirectory = VirtualMemoryManager::GetKernelPageDirectory();	
+	
 	pProcess->SetPageDirectory(pPageDirectory);
 
 	pProcess->m_dwRunState = TASK_STATE_INIT;
 	strcpy(pProcess->m_processName, appName);
 
 	pProcess->m_dwProcessType = PROCESS_KERNEL;
-	pProcess->m_dwPriority = 1;
-
+	pProcess->m_dwPriority = 1;		
+	
 	return pProcess;
 }
 
