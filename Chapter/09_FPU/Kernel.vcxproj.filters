@@ -104,7 +104,9 @@
     <ClCompile Include="CPlusPlus\setjmp.c">
       <Filter>CPlusPlus</Filter>
     </ClCompile>
-    <ClCompile Include="FPU.cpp" />
+    <ClCompile Include="CPU\FPU.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -228,7 +230,9 @@
     <ClInclude Include="CPlusPlus\signal.h">
       <Filter>CPlusPlus</Filter>
     </ClInclude>
-    <ClInclude Include="FPU.h" />
+    <ClInclude Include="CPU\FPU.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
