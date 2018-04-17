@@ -25,6 +25,7 @@
   #define ULONG_MAX           0xFFFFFFFFUL*/
 
 #define MAXPATH	256
+#define MAX_PROCESS_NAME	256
 
 
   /* 8 Bit data types*/

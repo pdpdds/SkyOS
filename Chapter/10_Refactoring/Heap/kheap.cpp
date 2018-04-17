@@ -26,7 +26,7 @@ u32int kmalloc_int(u32int sz, int align, u32int *phys)
 		
         if (phys != 0)
         {
-			phys = (u32int*)VirtualMemoryManager::GetPhysicalAddressFromVirtualAddress(VirtualMemoryManager::GetCurPageDirectory(), (uint32_t)addr);			
+			phys = (u32int*)VirtualMemoryManager::GetPhysicalAddressFromVirtualAddress(VirtualMemoryManager::GetKernelPageDirectory(), (uint32_t)addr);
         }
 
         return (u32int)addr;

@@ -73,8 +73,12 @@ namespace VirtualMemoryManager
 	//페이지 디렉토리를 PDTR 레지스터에 세트한다
 	bool SetCurPageDirectory(PageDirectory* dir);
 
+	bool SetKernelPageDirectory(PageDirectory* dir);
+
 	//현재 페이지 디렉토리를 가져온다
 	PageDirectory* GetCurPageDirectory();
+
+	PageDirectory* GetKernelPageDirectory();
 
 	//캐쉬된 TLS 락 버퍼를 비운다.
 	void FlushTranslationLockBufferEntry(uint32_t addr);

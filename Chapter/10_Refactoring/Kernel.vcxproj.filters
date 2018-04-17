@@ -113,6 +113,9 @@
     <ClCompile Include="CPlusPlus\setjmp.c">
       <Filter>CPlusPlus</Filter>
     </ClCompile>
+    <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="KernelProcessLoader.cpp" />
+    <ClCompile Include="UserProcessLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -248,6 +251,9 @@
     <ClInclude Include="CPlusPlus\signal.h">
       <Filter>CPlusPlus</Filter>
     </ClInclude>
+    <ClInclude Include="Loader.h" />
+    <ClInclude Include="KernelProcessLoader.h" />
+    <ClInclude Include="UserProcessLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

@@ -9,6 +9,8 @@
 namespace VirtualMemoryManager
 {
 	//! current directory table
+
+	PageDirectory*		_kernel_directory = 0;
 	PageDirectory*		_cur_directory = 0;	
 
 	//가상 주소와 매핑된 실제 물리 주소를 얻어낸다.
@@ -223,8 +225,8 @@ namespace VirtualMemoryManager
 			return false;
 
 		//페이지 디렉토리를 PDBR 레지스터에 로드한다
-		if (false == SetCurPageDirectory(dir))
-			return false;
+		SetCurPageDirectory(dir);
+		SetKernelPageDirectory(dir);
 
 		_asm
 		{
@@ -237,6 +239,22 @@ namespace VirtualMemoryManager
 		
 		return true;
 	}
+
+	bool SetKernelPageDirectory(PageDirectory* dir)
+	{
+		if (dir == NULL)
+			return false;
+
+		_kernel_directory = dir;
+
+		return true;
+	}
+
+	PageDirectory* GetKernelPageDirectory()
+	{
+		return _kernel_directory;
+	}
+
 
 
 	bool SetCurPageDirectory(PageDirectory* dir)
