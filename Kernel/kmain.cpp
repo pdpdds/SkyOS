@@ -6,7 +6,7 @@
 #include "desq.h"
 
 extern bool systemOn;
-void HardwareInitiize();
+void HardwareInitialize();
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -67,7 +67,7 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	kEnterCriticalSection(&g_criticalSection);
 
-	HardwareInitiize();
+	HardwareInitialize();
 	SkyConsole::Print("Hardware Init..\n");
 
 	SetInterruptVector();
@@ -199,7 +199,7 @@ HaltSystem("Ram Disk Create Fail");
 //Initialize FILESYSTEM
 //VFSInitialize();
 
-void HardwareInitiize()
+void HardwareInitialize()
 {
 	GDTInitialize();
 	IDTInitialize(0x8);
