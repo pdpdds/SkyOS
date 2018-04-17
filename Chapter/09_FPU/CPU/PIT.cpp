@@ -2,8 +2,6 @@
 #include "Hal.h"
 #include "SkyConsole.h"
 
-extern void SwitchTask(int tick, registers_t& regs);
-
 volatile uint32_t _pitTicks = 0;
 int g_esp = 0;
 uint32_t g_pageDirectory = 0;
@@ -12,7 +10,7 @@ DWORD _lastTickCount = 0;
 
 void ISRHandler(registers_t regs)
 {
-	SwitchTask(_pitTicks, regs);
+	//SwitchTask(_pitTicks, regs);
 }
 
 //타이머 인터럽트 핸들러

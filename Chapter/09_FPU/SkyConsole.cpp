@@ -218,6 +218,15 @@ namespace SkyConsole
 					break;
 				}
 
+				case 'f':
+					double double_temp;
+					double_temp = va_arg(args, double);
+					char buffer[512];
+					ftoa_fixed(buffer, double_temp);
+					Write(buffer);
+					i++;
+					break;
+
 				default:
 					va_end(args);
 					return;
@@ -229,7 +238,6 @@ namespace SkyConsole
 				WriteChar(str[i], m_Text, m_backGroundColor);
 				break;
 			}
-
 		}
 
 		va_end(args);

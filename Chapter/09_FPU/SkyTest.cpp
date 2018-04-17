@@ -510,25 +510,11 @@ void TestHardDisk()
 	}
 }
 
-//인터럽트 핸들러 테스트
-
-void throwArgumentException() {
-	//puts("Function reached.");
-	throw(ArgumentException, (char*)"Ooh! Some ArgumentException was thrown. ");
-}
-
-void TestTryCatch()
+void TestFPU()
 {
-	try {
-		throwArgumentException();
-	}
-	catch (ArgumentException) {
-		//	puts("ArgumentException block reached");
-		if (__ctrycatch_exception_message_exists)
-			SkyConsole::Print("message: %s\n", __ctrycatch_exception_message);
-	}
-	finally {
-		//puts("finally block reached");
-		SkyConsole::Print("Finally!!\n");
-	}
+	float sampleFloat = 0.3f;
+
+	sampleFloat *= 5.482f;
+
+	SkyConsole::Print("sample Float Value %f\n", sampleFloat);
 }

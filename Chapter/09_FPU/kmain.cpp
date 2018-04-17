@@ -8,10 +8,9 @@
 #include "FloppyDiskAdaptor.h"
 #include "StorageManager.h"
 #include "fileio.h"
-#include "ProcessManager.h"
-#include "KernelProcedure.h"
 #include "SysAPI.h"
-#include "tss.h"
+#include "FPU.h"
+
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -55,8 +54,6 @@ uint32_t g_freeMemorySize = 0;
 void HardwareInitiize();
 bool InitMemoryManager(multiboot_info* bootinfo);
 void ConstructFileSystem();
-void StartConsoleSystem();
-void JumpToNewKernelEntry(int entryPoint, unsigned int procStack);
 
 void kmain(unsigned long magic, unsigned long addr)
 {
@@ -101,25 +98,24 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	SkyConsole::Print("Heap %dMB Allocated\n", requiredHeapSize / 1048576);
 
+	if (false == InitFPU())
+	{
+		SkyConsole::Print("[Warning] Floating Pointer Unit Detection Fail\n");
+	}
+	else
+	{
+		EnableFPU();
+		SkyConsole::Print("FPU Init..\n");
+	}
+
+	TestFPU();
+
 	InitKeyboard();
 	SkyConsole::Print("Keyboard Init..\n");
-
-	InitializeSysCall();
-	install_tss(5, 0x10, 0);
-
-	ConstructFileSystem();
-
-	//kLeaveCriticalSection(&g_criticalSection);
-
-	//TestTryCatch();
-
-
-	//float num = 0.0f;
-		
-	StartConsoleSystem();
-
-	for (;;);
 	
+	ConstructFileSystem();	
+
+	for (;;);	
 }
 
 void HardwareInitiize()
@@ -237,61 +233,4 @@ void ConstructFileSystem()
 	{
 		delete pFloppyDiskAdaptor;
 	}				
-}
-
-void StartConsoleSystem()
-{	
-	kEnterCriticalSection();
-
-
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL, PROCESS_KERNEL);
-
-	if (pProcess == nullptr)
-		HaltSystem("Console Creation Fail!!");
-
-	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
-	//ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ProcessRemover", ProcessRemoverProc, NULL);
-	//ProcessManager::GetInstance()->CreateProcessFromMemory("SampleLoop", SampleLoop, NULL, PROCESS_KERNEL);
-	//ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc);
-
-	SkyConsole::Print("Init Console....\n");
-
-	Thread* pThread = pProcess->GetMainThread();
-
-	if (pThread == nullptr)
-		HaltSystem("Console Creation Fail!!");
-
-	pThread->m_taskState = TASK_STATE_RUNNING;
-
-	int entryPoint = (int)pThread->frame.eip;
-	unsigned int procStack = pThread->frame.esp;
-	
-	kLeaveCriticalSection();
-
-	SkyConsole::Print(" entryPoint : (0x%x)\n", entryPoint);
-	SkyConsole::Print(" procStack : (0x%x)\n", procStack);
-
-	JumpToNewKernelEntry(entryPoint, procStack);
-}
-
-void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
-{	
-	__asm
-	{
-		mov     ax, 0x10;
-		mov     ds, ax
-			mov     es, ax
-			mov     fs, ax
-			mov     gs, ax
-
-			//; create stack frame
-			//; push   0x10;
-			//; push procStack; stack
-			mov     esp, procStack
-			push	0x10;
-		push    0x200; EFLAGS
-			push    0x08; CS
-			push    entryPoint; EIP
-			iretd
-	}
 }
