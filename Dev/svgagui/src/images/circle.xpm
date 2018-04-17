@@ -1,0 +1,15 @@
+/* XPM */
+static char * circle_xpm[] = {
+"10 9 3 1",
+".	c none",
+"X	c black",
+"o	c special",
+"...XXXX...",
+".XXooooXX.",
+".XooooooX.",
+"XooooooooX",
+"XooooooooX",
+"XooooooooX",
+".XooooooX.",
+".XXooooXX.",
+"...XXXX..."};
