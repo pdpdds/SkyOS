@@ -4,7 +4,7 @@
 
 Process::Process()
 {
-	m_processId = 0;	
+	m_processId = PROC_INVALID_ID;
 
 	m_dwRunningTime = TASK_RUNNING_TIME;	
 	m_pPageDirectory = NULL;

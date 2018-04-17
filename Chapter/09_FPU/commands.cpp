@@ -146,17 +146,12 @@ long cmdProc(char* pName) {
 	if (pName == NULL)
 		return false;
 
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromFile(pName, PROCESS_KERNEL);
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromFile(pName, nullptr, PROCESS_KERNEL);
 	if (pProcess == 0)
 	{
 		SkyConsole::Print("Can't Execute Process. %d\n", pName);
 	}
-	else
-	{
-		pProcess->m_IskernelProcess = false;
-		ProcessManager::GetInstance()->AddProcess(pProcess);
-	}
-
+	
 	return false;
 }
 
@@ -164,7 +159,7 @@ long cmdTesttask(char* pName)
 {
 	kEnterCriticalSection();
 
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc, NULL);
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc, nullptr, PROCESS_KERNEL);
 
 	if (pProcess == 0)
 	{

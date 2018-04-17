@@ -10,8 +10,7 @@
 
 class Process;
 class Thread;
-
-#define PROC_INVALID_ID -1
+class Loader;
 
 class ProcessManager
 {
@@ -26,7 +25,7 @@ public:
 	Process* GetCurrentProcess();	
 
 	ProcessList* GetProcessList() { return &m_processList;}
-	int GetNextProcessId() { return m_nextProcessId++; }
+
 
 	static ProcessManager* GetInstance()
 	{		
@@ -36,14 +35,12 @@ public:
 		return m_processManager;
 	}
 		
-	Process* CreateKernelProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param);
-	Process* CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param);
-	
-	Process* CreateProcessFromFile(char* appName, UINT32 processType);	
+	Process* CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType);
+	Process* CreateProcessFromFile(char* appName, void* param, UINT32 processType);
+
 	Thread* CreateThread(Process* pProcess, FILE* pFile, LPVOID param);
 	Thread* CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID param);
 
-	bool AddProcess(Process* pProcess);
 	Process* FindProcess(int processId);
 
 	bool RemoveTerminatedProcess();
@@ -54,17 +51,15 @@ public:
 
 	TaskList* GetTaskList() { return &m_taskList; }
 
-//Page Directory Mapping
-	PageDirectory* MapKernelSpace();
-	//void MapSysAPIAddress(PageDirectory* dir);
-
-private:	
+private:
+	bool AddProcess(Process* pProcess);
 
 private:
 	static ProcessManager* m_processManager;
-
-	int m_nextProcessId;
 	int m_nextThreadId;
+
+	Loader* m_pKernelProcessLoader;
+	Loader* m_pUserProcessLoader;
 
 	ProcessList m_processList;
 	TaskList m_taskList;

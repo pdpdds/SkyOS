@@ -244,16 +244,15 @@ void StartConsoleSystem()
 	kEnterCriticalSection();
 
 
-	Process* pProcess = ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL);
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL, PROCESS_KERNEL);
 
 	if (pProcess == nullptr)
 		HaltSystem("Console Creation Fail!!");
 
-	ProcessManager::GetInstance()->CreateKernelProcessFromMemory("WatchDog", WatchDogProc, NULL);
+	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
 	//ProcessManager::GetInstance()->CreateKernelProcessFromMemory("ProcessRemover", ProcessRemoverProc, NULL);
-	//ProcessManager::GetInstance()->CreateProcessFromMemory("SampleLoop", SampleLoop);
+	//ProcessManager::GetInstance()->CreateProcessFromMemory("SampleLoop", SampleLoop, NULL, PROCESS_KERNEL);
 	//ProcessManager::GetInstance()->CreateProcessFromMemory("TestProc", TestProc);
-
 
 	SkyConsole::Print("Init Console....\n");
 
@@ -266,8 +265,11 @@ void StartConsoleSystem()
 
 	int entryPoint = (int)pThread->frame.eip;
 	unsigned int procStack = pThread->frame.esp;
-
+	
 	kLeaveCriticalSection();
+
+	SkyConsole::Print(" entryPoint : (0x%x)\n", entryPoint);
+	SkyConsole::Print(" procStack : (0x%x)\n", procStack);
 
 	JumpToNewKernelEntry(entryPoint, procStack);
 }

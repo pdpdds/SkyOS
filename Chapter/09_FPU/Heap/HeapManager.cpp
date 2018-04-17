@@ -13,7 +13,7 @@ namespace HeapManager
 
 	bool InitKernelHeap(int heapFrameCount)
 	{
-		PageDirectory* curPageDirectory = GetCurPageDirectory();
+		PageDirectory* curPageDirectory = GetKernelPageDirectory();
 
 		//힙의 가상주소
 		void* pVirtualHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);

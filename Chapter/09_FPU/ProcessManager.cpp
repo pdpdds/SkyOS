@@ -9,16 +9,23 @@
 #include "memory.h"
 #include "SkyConsole.h"
 #include "ProcessUtil.h"
+#include "SkyAPI.h"
 #include "sysapi.h"
+#include "KernelProcessLoader.h"
+#include "UserProcessLoader.h"
 
 
 ProcessManager* ProcessManager::m_processManager = nullptr;
 static int kernelStackIndex = 0;
 
+#define TASK_GENESIS_ID 1000
+
 ProcessManager::ProcessManager()
 {
-	m_nextProcessId = 1;
 	m_nextThreadId = 1000;
+
+	m_pKernelProcessLoader = new KernelProcessLoader();
+	m_pUserProcessLoader = new UserProcessLoader();;
 }
 
 ProcessManager::~ProcessManager()
@@ -168,86 +175,47 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE);
 	pThread->frame.esp = (uint32_t)pThread->m_initialStack;
 	pThread->frame.ebp = pThread->frame.esp;
-
+		
 	return pThread;
 }
 
-/*Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType)
-{
-	FILE file;
-
-	file = volOpenFile(appName);
-
-	if (file.flags == FS_INVALID)
-		return NULL;
-
-	if ((file.flags & FS_DIRECTORY) == FS_DIRECTORY)
-		return 0;
-
-
-	PageDirectory* addressSpace = MapKernelSpace();
-
-	if (!addressSpace)
-	{
-		volCloseFile(&file);
-		return NULL;
-	}
-
-	VirtualMemoryManager::MapHeap(addressSpace);
-
-	//MapSysAPIAddress(addressSpace);
-
-	Process* pProcess = new Process();
-	pProcess->m_processId = ProcessManager::GetInstance()->GetNextProcessId();
-	pProcess->m_pPageDirectory = addressSpace;
-	pProcess->m_dwPriority = 1;
-	pProcess->m_dwRunState = TASK_STATE_INIT;
-	pProcess->m_dwProcessType = processType;
-	strcpy(pProcess->m_processName, appName);
-
-	Thread* pThread = CreateThread(pProcess, &file, NULL);
-
-	pProcess->AddMainThread(pThread);
-
-	return pProcess;
-}*/
-
-Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param)
+Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType)
 {	
-	int flags = I86_PTE_PRESENT | I86_PTE_WRITABLE;
+	Process* pProcess = nullptr;
+	if (processType == PROCESS_KERNEL)
+		pProcess = m_pKernelProcessLoader->CreateProcessFromMemory(appName, lpStartAddress, param);
+	else
+		pProcess = m_pUserProcessLoader->CreateProcessFromMemory(appName, lpStartAddress, param);
 
-	Process* pProcess = new Process();
-	pProcess->m_processId = GetNextProcessId();
+	if (pProcess == nullptr)
+		return nullptr;
 
-	PageDirectory* pPageDirectory = VirtualMemoryManager::CreateCommonPageDirectory();
-	pProcess->SetPageDirectory(pPageDirectory);
-
-	pProcess->m_dwRunState = TASK_STATE_INIT;
-	strcpy(pProcess->m_processName, appName);
-	
-
-	pProcess->m_dwProcessType = PROCESS_KERNEL;
-	pProcess->m_dwPriority = 1;
-
-	HeapManager::MapHeapToAddressSpace(pPageDirectory);
+	if (param == nullptr)
+		param = pProcess;
 
 	Thread* pThread = CreateThread(pProcess, lpStartAddress, param);
 
-	pProcess->AddMainThread(pThread);
+	M_Assert(pThread != nullptr, "MainThread is null.");
 
-	AddProcess(pProcess);
+	bool result = pProcess->AddMainThread(pThread);
 
-#ifdef _DEBUG
-	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
+	M_Assert(result == true, "AddMainThread Method Failed.");
+
+	result = AddProcess(pProcess);
+
+	M_Assert(result == true, "AddProcess Method Failed.");
+
+#ifdef _SKY_DEBUG
+	SkyConsole::Print("Process Created. Process Id : %d\n", pProcess->m_processId);
 #endif
 
 	return pProcess;
 }
 
-Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType)
+Process* ProcessManager::CreateProcessFromFile(char* appName, void* param, UINT32 processType)
 {
 	FILE* file;
-	
+
 	file = StorageManager::GetInstance()->OpenFile(appName, "r");
 
 	if (file == nullptr || file->_flags == FS_INVALID)
@@ -256,77 +224,33 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, UINT32 processType
 	if ((file->_flags & FS_DIRECTORY) == FS_DIRECTORY)
 		return nullptr;
 
-	PageDirectory* addressSpace = MapKernelSpace();
+	Process* pProcess = nullptr;
+	if (processType == PROCESS_KERNEL)
+		pProcess = m_pKernelProcessLoader->CreateProcessFromFile(appName, param);
+	else
+		pProcess = m_pUserProcessLoader->CreateProcessFromFile(appName, param);
 
-	if (!addressSpace)
+	if (pProcess == nullptr)
 	{
 		StorageManager::GetInstance()->CloseFile(file);
 		return nullptr;
 	}
-
-	Process* pProcess = new Process();
-	pProcess->m_processId = GetNextProcessId();
-
-	pProcess->SetPageDirectory(addressSpace);
-	//PageDirectory* pPageDirectory = VirtualMemoryManager::CreatePageDirectory();
-	//pProcess->SetPageDirectory(pPageDirectory);	
-	pProcess->m_dwRunState = TASK_STATE_INIT;
-	strcpy(pProcess->m_processName, appName);
-
-	/*PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
-	if (identityPageTable == NULL)
-		return false;
-
-	//0-4MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
-	for (int i = 0, frame = 0x0, virt = 0x00000000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
-	{
-		PTE page = 0;
-		PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
-		PageTableEntry::SetFrame(&page, frame);
-
-		identityPageTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
-	}
-
-	PageDirectory* pPageDirectroy = pProcess->GetPageDirectory();
-	PDE* identityEntry = (PDE*)&(pPageDirectroy->m_entries[PAGE_DIRECTORY_INDEX(0x00000000)]);	
-	PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_PRESENT);
-	PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_WRITABLE);
-	PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
-
-
-	int flags = I86_PTE_PRESENT | I86_PTE_WRITABLE;
-
-	//커널 이미지를 주소공간에 매핑. 커널 크기는 4메가가 넘지 않는다고 가정한다
-	//1024 * PAGE_SIZE = 4MB
-	uint32_t virtualAddr = KERNEL_PHYSICAL_BASE_ADDRESS;
-	uint32_t physAddr = KERNEL_PHYSICAL_BASE_ADDRESS;
-
-	for (uint32_t i = 0; i < PAGES_PER_TABLE; i++)
-	{
-		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), flags);
-	}
-	*/
-	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)pProcess->GetPageDirectory(), (uint32_t)pProcess->GetPageDirectory(), I86_PTE_PRESENT | I86_PTE_WRITABLE);
 	
-	//20161109	
-	//pProcess->SetPageDirectory(VirtualMemoryManager::GetCurPageDirectory());
-
-	HeapManager::MapHeapToAddressSpace(pProcess->GetPageDirectory());
-
-	pProcess->m_dwProcessType = PROCESS_KERNEL;
-	pProcess->m_dwPriority = 1;
 
 	Thread* pThread = CreateThread(pProcess, file, NULL);
 
-	if (pThread == nullptr)
-	{
-		HaltSystem("ProcessManager::CreateProcessFromFile, Create Thread Fail");
-	}
+	M_Assert(pThread != nullptr, "MainThread is null.");
 
-	pProcess->AddMainThread(pThread);
-	
-#ifdef _DEBUG
-	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
+	bool result = pProcess->AddMainThread(pThread);
+
+	M_Assert(result == true, "AddMainThread Method Failed.");
+
+	result = AddProcess(pProcess);
+
+	M_Assert(result == true, "AddProcess Method Failed.");
+
+#ifdef _SKY_DEBUG
+	SkyConsole::Print("Process Created. Process Id : %d\n", pProcess->m_processId);
 #endif
 
 	return pProcess;
@@ -377,129 +301,6 @@ bool ProcessManager::AddProcess(Process* pProcess)
 
 	return true;
 }
-
-//firstProcess가 true일 경우 커널의 최초 프로세스를 생성한다.
-//이 시점에서만 이전에 커널힙이 생성되었다고 가정한다.
-//이후 프로세스는 여기서 힙을 별도로 생성한다.
-Process* ProcessManager::CreateKernelProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param)
-{
-	Process* pProcess = new Process();
-
-	if (pProcess == nullptr)
-		HaltSystem("ProcessManager::CreateKernelProcessFromMemory\n");
-
-	pProcess->m_processId = GetNextProcessId();
-
-	PageDirectory* pPageDirectory = VirtualMemoryManager::GetCurPageDirectory();
-	pProcess->SetPageDirectory(pPageDirectory);
-	
-	pProcess->m_dwRunState = TASK_STATE_RUNNING;
-	strcpy(pProcess->m_processName, appName);
-
-	pProcess->m_dwProcessType = PROCESS_KERNEL;
-	pProcess->m_dwPriority = 1;
-
-	if (param == nullptr)
-		param = pProcess;
-
-	Thread* pThread = CreateThread(pProcess, lpStartAddress, param);
-
-	if (pThread == nullptr)
-		HaltSystem("ProcessManager::CreateKernelProcessFromMemory\n");
-
-	pProcess->AddMainThread(pThread);
-
-	AddProcess(pProcess);
-
-#ifdef _DEBUG
-	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
-#endif
-
-	return pProcess;
-}
-
-//firstProcess가 true일 경우 커널의 최초 프로세스를 생성한다.
-//이 시점에서만 이전에 커널힙이 생성되었다고 가정한다.
-//이후 프로세스는 여기서 힙을 별도로 생성한다.
-/*Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress)
-{
-	Process* pProcess = new Process();
-	pProcess->m_processId = GetNextProcessId();
-
-	pProcess->m_pPageDirectory = VirtualMemoryManager::CreateAddressSpace();
-	pProcess->m_dwRunState = TASK_STATE_INIT;
-	strcpy(pProcess->m_processName, appName);
-
-	PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
-	if (identityPageTable == NULL)
-		return false;
-
-	//0-4MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
-	for (int i = 0, frame = 0x0, virt = 0x00000000; i < PAGES_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE)
-	{
-		PTE page = 0;
-		PageTableEntry::AddAttribute(&page, I86_PTE_PRESENT);
-		PageTableEntry::SetFrame(&page, frame);
-
-		identityPageTable->m_entries[PAGE_TABLE_INDEX(virt)] = page;
-	}
-
-	PDE* identityEntry = &pProcess->m_pPageDirectory->m_entries[PAGE_DIRECTORY_INDEX(0x00000000)];
-	PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_PRESENT);
-	PageDirectoryEntry::AddAttribute(identityEntry, I86_PDE_WRITABLE);
-	PageDirectoryEntry::SetFrame(identityEntry, (uint32_t)identityPageTable);
-
-	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, (uint32_t)pProcess->m_pPageDirectory, I86_PTE_PRESENT | I86_PTE_WRITABLE);
-	VirtualMemoryManager::MapHeap(pProcess->m_pPageDirectory);
-
-
-	int flags = I86_PTE_PRESENT | I86_PTE_WRITABLE;
-
-	//커널 이미지를 주소공간에 매핑. 커널 크기는 4메가가 넘지 않는다고 가정한다
-	//1024 * PAGE_SIZE = 4MB
-	uint32_t virtualAddr = KERNEL_PHYSICAL_BASE_ADDRESS;
-	uint32_t physAddr = KERNEL_PHYSICAL_BASE_ADDRESS;
-
-	for (uint32_t i = 0; i < PAGES_PER_TABLE; i++)
-	{
-		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->m_pPageDirectory, virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), flags);
-	}
-
-
-	pProcess->m_lpHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
-
-	pProcess->m_dwProcessType = PROCESS_KERNEL;
-	pProcess->m_dwPriority = 1;
-
-	Thread* pThread = CreateThread(pProcess, lpStartAddress, pProcess);
-
-
-	pProcess->AddMainThread(pThread);
-
-	AddProcess(pProcess);
-
-#ifdef _DEBUG
-	SkyConsole::Print("Create Success Task %d\n", pProcess->m_processId);
-#endif
-
-	return pProcess;
-}*/
-
-PageDirectory* ProcessManager::MapKernelSpace()
-{
-	return VirtualMemoryManager::CreateCommonPageDirectory();
-}
-
-/*void ProcessManager::MapSysAPIAddress(PageDirectory* dir)
-{
-	uint32_t virtualAddr = KERNEL_PHYSICAL_STACK_ADDRESS;
-	uint32_t physAddr = uint32_t(&_syscalls[0]);
-
-	for (uint32_t i = 0; i < PAGES_PER_TABLE; i++)
-	{
-		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(dir, virtualAddr + (i*PAGE_SIZE), physAddr + (i*PAGE_SIZE), I86_PTE_PRESENT | I86_PTE_WRITABLE);
-	}
-}*/
 
 Process* ProcessManager::GetCurrentProcess()
 {

@@ -4,6 +4,8 @@
 #include "VirtualMemoryManager.h"
 #include "kheap.h"
 
+#define PROC_INVALID_ID -1
+
 using namespace std;
 
 class Thread;
@@ -24,7 +26,7 @@ public:
 	Thread* GetThreadById(int index); //스레드 아이디로 스레드 객체를 얻는다.
 	Thread* GetMainThread(); //스레드 아이디로 스레드 객체를 얻는다.
 
-	UINT32		m_processId; //프로세스 아이디
+	int		m_processId; //프로세스 아이디
 	char		m_processName[MAX_PROCESS_NAME]; //프로세스 이름
 
 	UINT32		m_dwRunState; //프로세스 상태
