@@ -329,7 +329,7 @@ void TestJson()
 	}
 }
 
-void TestMap()
+/*void TestMap()
 {
 	std::map<int, int> m10;
 	std::map<int, int>::iterator it1;
@@ -359,7 +359,7 @@ void TestMap()
 		SkyConsole::Print("%d  %d\n", (*it1).first, (*it1).second);
 		i++;
 	}
-}
+}*/
 
 
 void TestString()

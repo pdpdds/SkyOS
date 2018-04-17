@@ -18,15 +18,14 @@ public:
 	Process();
 	virtual ~Process();
 
-	typedef std::map<int, Thread*> ThreadList;
+	typedef hash_map<int, Thread*> ThreadList;
 
 	bool AddMainThread(Thread* pThread); //메인스레드를 추가한다.
 	bool AddThread(Thread* pThread); //스레드를 추가한다.
 
 	Thread* GetThreadById(int index); //스레드 아이디로 스레드 객체를 얻는다.
 	Thread* GetMainThread(); //스레드 아이디로 스레드 객체를 얻는다.
-
-	int		m_processId; //프로세스 아이디
+	
 	char		m_processName[MAX_PROCESS_NAME]; //프로세스 이름
 
 	UINT32		m_dwRunState; //프로세스 상태
@@ -49,8 +48,11 @@ public:
 	PageDirectory* GetPageDirectory() { return m_pPageDirectory; }
 	void SetPageDirectory(PageDirectory* pPageDirectory);
 	
+	int GetProcessId() {return m_processId;}
+	void SetProcessId(int processId) { m_processId = processId; }
 
 private:
 	PageDirectory * m_pPageDirectory; //이 프로세스가 사용하는 페이지 디렉토리		
+	int		m_processId; //프로세스 아이디
 	
 };

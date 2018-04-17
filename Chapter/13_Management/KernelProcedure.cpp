@@ -8,6 +8,7 @@
 #include "ProcessManager.h"
 #include "SkyAPI.h"
 #include "ConsoleManager.h"
+#include "Scheduler.h"
 
 extern bool systemOn;
 
@@ -73,6 +74,21 @@ DWORD WINAPI WatchDogProc(LPVOID parameter)
 
 			first = GetTickCount();
 		}
+	}
+
+	return 0;
+}
+
+DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
+{
+	while (1)
+	{
+		kEnterCriticalSection();
+
+		//ProcessManager::GetInstance()->RemoveProcess();
+		//Scheduler::GetInstance()->Yield(kGetCurrentThreadId());
+
+		kLeaveCriticalSection();
 	}
 
 	return 0;

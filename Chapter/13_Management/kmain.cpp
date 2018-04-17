@@ -201,7 +201,7 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 void ConstructFileSystem()
 {	
 //IDE 하드 디스크
-	/*FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
+	FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
 	
 	pHDDAdaptor->Initialize();
 
@@ -215,7 +215,7 @@ void ConstructFileSystem()
 	else
 	{
 		delete pHDDAdaptor;		
-	}*/
+	}
 			
 //램 디스크
 	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');
@@ -254,6 +254,7 @@ void StartConsoleSystem()
 		HaltSystem("Console Creation Fail!!");
 
 	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
+	ProcessManager::GetInstance()->CreateProcessFromMemory("ProcessRemover", ProcessRemoverProc, NULL, PROCESS_KERNEL);
 	SkyConsole::Print("Init Console....\n");
 
 	Thread* pThread = pProcess->GetMainThread();
@@ -268,8 +269,8 @@ void StartConsoleSystem()
 
 	kLeaveCriticalSection();
 
-	SkyConsole::Print(" entryPoint : (0x%x)\n", entryPoint);
-	SkyConsole::Print(" procStack : (0x%x)\n", procStack);
+	SkyConsole::Print("ConsoleSystem : entryPoint : (0x%x)\n", entryPoint);
+	SkyConsole::Print("ConsoleSystem : procStack : (0x%x)\n", procStack);
 
 	JumpToNewKernelEntry(entryPoint, procStack);
 }

@@ -19,7 +19,7 @@ KernelProcessLoader::~KernelProcessLoader()
 Process* KernelProcessLoader::CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param)
 {
 	Process* pProcess = new Process();
-	pProcess->m_processId = GetNextProcessId();
+	pProcess->SetProcessId(GetNextProcessId());
 	PageDirectory* pPageDirectory = nullptr;
 
 	if (strcmp(appName, "ConsoleSystem") != 0)
@@ -47,7 +47,7 @@ Process* KernelProcessLoader::CreateProcessFromFile(char* appName, void* param)
 {
 	
 	Process* pProcess = new Process();
-	pProcess->m_processId = GetNextProcessId();
+	pProcess->SetProcessId(GetNextProcessId());
 
 	PageDirectory* pPageDirectory = VirtualMemoryManager::GetKernelPageDirectory();
 	pProcess->SetPageDirectory(pPageDirectory);

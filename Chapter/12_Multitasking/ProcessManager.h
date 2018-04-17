@@ -19,13 +19,11 @@ public:
 	ProcessManager();
 	virtual ~ProcessManager();
 
-	typedef std::map<int, Process*> ProcessList;
+	typedef hash_map<int, Process*> ProcessList;
 	typedef std::list<Thread*> TaskList;
 		
-	Process* GetCurrentProcess();	
-
 	ProcessList* GetProcessList() { return &m_processList;}
-
+	TaskList* GetTaskList() { return &m_taskList; }
 
 	static ProcessManager* GetInstance()
 	{		
@@ -42,12 +40,11 @@ public:
 	Thread* CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID param);
 
 	Process* FindProcess(int processId);
-	bool RemoveFromTaskList(Process* pProcess);
+	bool RemoveProcess(int processId);
 	
-	TaskList* GetTaskList() { return &m_taskList; }
-
 private:
 	bool AddProcess(Process* pProcess);
+
 
 private:
 	static ProcessManager* m_processManager;

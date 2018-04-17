@@ -21,17 +21,17 @@ Process::~Process()
 bool Process::AddMainThread(Thread* pThread)
 {
 	m_mainThreadId = pThread->m_threadId;
-	return m_threadList.insert(std::make_pair(pThread->m_threadId, pThread));	
+	return m_threadList.insert(pThread->m_threadId, pThread) != m_threadList.end();
 }
 
 bool Process::AddThread(Thread* pThread)
 {	
-	return m_threadList.insert(std::make_pair(pThread->m_threadId, pThread));
+	return m_threadList.insert(pThread->m_threadId, pThread) != m_threadList.end();
 }
 
 Thread* Process::GetThreadById(int threadId)
 {
-	if (m_threadList.empty())
+	if (m_threadList.size() == 0)
 		return nullptr;
 
 	ThreadList::iterator iter = m_threadList.find(threadId);
@@ -39,7 +39,7 @@ Thread* Process::GetThreadById(int threadId)
 	if (iter == m_threadList.end())
 		return nullptr;
 
-	return iter->second;
+	return *iter;
 }
 
 Thread* Process::GetMainThread()
@@ -49,7 +49,7 @@ Thread* Process::GetMainThread()
 	if (iter == m_threadList.end())
 		return nullptr;
 
-	return iter->second;
+	return *iter;
 }
 
 void Process::SetPageDirectory(PageDirectory* pPageDirectory)

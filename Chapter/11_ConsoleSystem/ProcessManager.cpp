@@ -234,7 +234,6 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, void* param, UINT3
 		StorageManager::GetInstance()->CloseFile(file);
 		return nullptr;
 	}
-	
 
 	Thread* pThread = CreateThread(pProcess, file, NULL);
 
@@ -262,7 +261,7 @@ Process* ProcessManager::FindProcess(int processId)
 	if (iter == m_processList.end())
 		return nullptr;
 
-	return iter->second;
+	return *iter;
 }
 
 bool ProcessManager::AddProcess(Process* pProcess)
@@ -273,7 +272,7 @@ bool ProcessManager::AddProcess(Process* pProcess)
 	int entryPoint = 0;
 	unsigned int procStack = 0;
 
-	if (pProcess->m_processId == PROC_INVALID_ID)
+	if (pProcess->GetProcessId() == PROC_INVALID_ID)
 		return false;
 
 	if (!pProcess->GetPageDirectory())
@@ -292,7 +291,7 @@ bool ProcessManager::AddProcess(Process* pProcess)
 #endif	
 
 	kEnterCriticalSection();
-	m_processList.insert(std::make_pair(pProcess->m_processId, pProcess));
+	m_processList.insert(pProcess->GetProcessId(), pProcess);
 
 	m_taskList.push_back(pThread);
 
@@ -301,30 +300,23 @@ bool ProcessManager::AddProcess(Process* pProcess)
 	return true;
 }
 
-Process* ProcessManager::GetCurrentProcess()
+bool ProcessManager::RemoveProcess(int processId)
 {
-	if (m_taskList.empty())
-		return nullptr;
+	kEnterCriticalSection();
 
-	Thread* pThread = m_taskList.front();
+	
+	hash_map<int, Process*>::iterator iter = m_processList.find(processId);
 
-	if (pThread == nullptr)
-		return nullptr;
+	Process* pProcess = *iter;
 
-	return pThread->m_pParent;
-}
+	if (pProcess == nullptr)
+		return false;
+	
+	m_processList.erase(iter);
+	
+	delete pProcess;
 
-bool ProcessManager::RemoveFromTaskList(Process* pProcess)
-{
-	Process::ThreadList::iterator iter = pProcess->m_threadList.begin();
-	TaskList tempThreadList;
+	kLeaveCriticalSection();
 
-	for (; iter != pProcess->m_threadList.end(); iter++)
-	{
-		tempThreadList.push_back(iter->second);
-	}
-
-	tempThreadList.clear();
-		
 	return true;
 }

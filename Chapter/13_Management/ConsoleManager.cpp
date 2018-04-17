@@ -45,32 +45,43 @@ long processCommandLine(char *a_szCommand)
 			// Copy the command.
 			strcpy(szCmdCopy, a_szCommand);
 
-			// This returns the command sub-string.
-			pCurrentToken = strtok(szCmdCopy, szDelim);
-
-			if (0 == stricmp(pCurrentToken, g_Commands[i].szCommand))
+			if (g_Commands[i].ProcessingFunc != nullptr)
 			{
-				pCurrentToken = strtok(NULL, szDelim);
+				// This returns the command sub-string.
+				pCurrentToken = strtok(szCmdCopy, szDelim);
 
-				if (g_Commands[i].ProcessingFunc != nullptr)
-				{					
-					g_Commands[i].ProcessingFunc(pCurrentToken);	
-					result = true;
-					break;
-				}								
+				if (0 == stricmp(pCurrentToken, g_Commands[i].szCommand))
+				{
+					pCurrentToken = strtok(NULL, szDelim);
+
+					if (pCurrentToken != nullptr)
+					{
+						g_Commands[i].ProcessingFunc(pCurrentToken);
+						result = true;
+						return result;
+					}
+					else
+					{
+						SkyConsole::Print("Argument insufficient\n");
+						return false;
+					}
+
+				}				
 			}
 		}
 		else
 		{
-			// Since we have no arguments, we do an exact match.
-			if (0 == stricmp(a_szCommand, g_Commands[i].szCommand))
+			if (g_Commands[i].ProcessingFunc != nullptr)
 			{
-				if (g_Commands[i].ProcessingFunc != nullptr)
+				// Since we have no arguments, we do an exact match.
+				if (0 == stricmp(a_szCommand, g_Commands[i].szCommand))
 				{
+
 					g_Commands[i].ProcessingFunc(NULL);
 					result = true;
-					break;
-				}				
+					return result;
+
+				}
 			}
 		}
 	}
@@ -81,7 +92,7 @@ long processCommandLine(char *a_szCommand)
 		{
 			if (g_Commands[i].ProcessingFunc == nullptr)
 			{
-				if (0 == strcmp("help", g_Commands[i].szCommand))
+				if (0 == strcmp("help", a_szCommand))
 				{
 					showHelp();
 					return true;

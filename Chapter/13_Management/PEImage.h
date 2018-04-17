@@ -1,13 +1,4 @@
-/************************************************************************
-*                                                                       *
-*	image.h - PE (Portable Executable)									*
-*                                                                       *
-*   Copyright (c) BrokenThorn Entertainment Co. All Rights Reserved.	*
-*                                                                       *
-************************************************************************/
-
-#ifndef IMAGE_H_INCLUDED
-#define IMAGE_H_INCLUDED
+#pragma once
 
 #include <stdint.h>
 
@@ -1025,5 +1016,3 @@ typedef struct _IMAGE_SEPARATE_DEBUG_HEADER {
 #define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4944
 
 #pragma pack (pop)
-
-#endif

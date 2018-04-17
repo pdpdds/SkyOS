@@ -4,4 +4,6 @@
 // Your title here
 ///////////////////////////////////////////////////////////////////////////////
 
-long clsCmd (char *theCommand);
+long CmdCls (char *theCommand);
+long CmdKill(char *theCommand);
+long CmdProcessList(char *theCommand);

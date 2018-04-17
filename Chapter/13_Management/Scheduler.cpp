@@ -116,7 +116,7 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 
 	if (count % 500 == 0)
 	{
-		SkyConsole::Print("\n%s, %s %d, %d\n", __FILE__, __func__, __LINE__, pTaskList->size());
+		//SkyConsole::Print("\n%s, %s %d, %d\n", __FILE__, __func__, __LINE__, pTaskList->size());
 	}
 	
 	pTaskList->erase(iter);

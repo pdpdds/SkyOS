@@ -3,7 +3,7 @@
 
 class Process;
 
-#define PROCESS_GENESIS_ID 1
+#define PROCESS_GENESIS_ID 101
 
 class Loader
 {

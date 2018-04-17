@@ -13,6 +13,7 @@
 #include "StorageManager.h"
 #include "fileio.h"
 #include "ctrycatch.h"
+#include "hash_map.h"
 
 //인터럽트 핸들러 테스트
 void TestDivideByZero();
@@ -148,7 +149,7 @@ void TestInheritance()
 //C++ 테스트 끝
 
 //공통 라이브러리 테스트
-void TestMap();
+
 void Testlist();
 void TestJson();
 void TestString();
@@ -330,7 +331,7 @@ void TestJson()
 	}
 }
 
-void TestMap()
+/*void TestMap()
 {
 	std::map<int, int> m10;
 	std::map<int, int>::iterator it1;
@@ -338,13 +339,13 @@ void TestMap()
 
 	m10[1] = 2;
 	m10[2] = 4;
-	m10[3] = 6;
 	m10[4] = 8;
+	m10[3] = 6;
 	m10[5] = 10;
 	m10[6] = 12;
 	m10[7] = 14;
 	m10[8] = 16;
-	m10[8] = 18;
+	
 	int i = 0;
 	for (it1 = m10.begin(); it1 != m10.end(); it1++) {
 		//cout << (*it1).first << "   " << (*it1).second << endl;
@@ -360,6 +361,51 @@ void TestMap()
 		SkyConsole::Print("%d  %d\n", (*it1).first, (*it1).second);
 		i++;
 	}
+}*/
+
+void TestMap2()
+{
+	//std::map<int, int> m10;
+	//std::map<int, int>::iterator it1;
+	//std::map<int, int>::iterator it2;
+
+	hash_map<int, int> hashmap;
+	
+
+	//Error
+	/*m10[2] = 4;
+	m10[101] = 2;
+	m10[1201] = 2122;
+	m10[4] = 8;
+	m10[3] = 6;*/
+
+	//Error2
+	/*m10[2] = 4;
+	m10[101] = 2;
+	m10[1201] = 2122;
+	*/
+	
+	
+	
+	
+/*
+	int i = 0;
+	for (it1 = m10.begin(); it1 != m10.end(); it1++) {
+		//cout << (*it1).first << "   " << (*it1).second << endl;
+		SkyConsole::Print("%d  %d\n", (*it1).first, (*it1).second);
+		i++;
+	}
+
+	SkyConsole::Print("\n\n");
+
+	//cout << "ERASE BY KEY" << endl;
+	m10.erase(101);
+	i = 0;
+	for (it1 = m10.begin(); it1 != m10.end(); it1++) {
+		//cout << (*it1).first << "   " << (*it1).second << endl;
+		SkyConsole::Print("%d  %d\n", (*it1).first, (*it1).second);
+		i++;
+	}*/
 }
 
 
