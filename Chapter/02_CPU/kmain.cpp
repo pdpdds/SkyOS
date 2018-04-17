@@ -35,7 +35,7 @@ _declspec(naked) void multiboot_entry(void)
 	}
 }
 
-void HardwareInitiize();
+void HardwareInitialize();
 
 void kmain(unsigned long magic, unsigned long addr)
 {
@@ -46,7 +46,7 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	kEnterCriticalSection(&g_criticalSection);
 
-	HardwareInitiize();
+	HardwareInitialize();
 	SkyConsole::Print("Hardware Init Complete\n");
 
 	kLeaveCriticalSection(&g_criticalSection);
@@ -56,7 +56,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	for (;;);
 }
 
-void HardwareInitiize()
+void HardwareInitialize()
 {
 	GDTInitialize();
 	IDTInitialize(0x8);

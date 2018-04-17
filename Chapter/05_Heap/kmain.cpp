@@ -42,7 +42,7 @@ _declspec(naked) void multiboot_entry(void)
 uint32_t g_freeMemoryStartAddress = 0x00400000; //자유공간 시작주소 : 4MB
 uint32_t g_freeMemorySize = 0;
 
-void HardwareInitiize();
+void HardwareInitialize();
 bool InitMemoryManager(multiboot_info* bootinfo);
 
 void kmain(unsigned long magic, unsigned long addr)
@@ -61,7 +61,7 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	kEnterCriticalSection(&g_criticalSection);
 
-	HardwareInitiize();
+	HardwareInitialize();
 	SkyConsole::Print("Hardware Init Complete\n");
 
 	SetInterruptVector();
@@ -95,7 +95,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	for (;;);
 }
 
-void HardwareInitiize()
+void HardwareInitialize()
 {
 	GDTInitialize();
 	IDTInitialize(0x8);
