@@ -20,3 +20,6 @@ int strspn(const char *strSrc, const char *str);
 char *strncpy(char *string1, const char *string2, size_t count);
 int strnicmp(const char * String1, const char * String2, unsigned int Len);
 const char *strrchr(const char * String, char const Character);
+
+void ftoa_fixed(char *buffer, double value);
+void ftoa_sci(char *buffer, double value);
