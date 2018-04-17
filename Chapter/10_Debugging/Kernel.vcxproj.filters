@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="SkyConsole.cpp" />
+    <ClCompile Include="CPU\Hal.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\IDT.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\Pic.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\PIT.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="InitKernel.cpp" />
+    <ClCompile Include="SkyAPI.cpp" />
+    <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="CPU\GDT.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyTest.cpp" />
+    <ClCompile Include="Memory\PhysicalMemoryManager.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\VirtualMemoryManager.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\PageDirectoryEntry.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\PageTableEntry.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Heap\kheap.cpp">
+      <Filter>Heap</Filter>
+    </ClCompile>
+    <ClCompile Include="Heap\ordered_array.cpp">
+      <Filter>Heap</Filter>
+    </ClCompile>
+    <ClCompile Include="Heap\HeapManager.cpp">
+      <Filter>Heap</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Plane.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\ZetPlane.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="SysAPI.cpp" />
+    <ClCompile Include="FileSystem\kfileio.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\Harddisk.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\ACEList.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SysInfo.cpp" />
+    <ClCompile Include="FileSystem\fat32.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\Partition.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\MintFileSystem.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\RAMDisk.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\HDDAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\ObjMan.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\RamDiskAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\StorageManager.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FAT12.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FloppyDisk.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FileSysAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FloppyDiskAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyBoard\KeyBoard.cpp" />
+    <ClCompile Include="KeyBoard\KeyboardController.cpp" />
+    <ClCompile Include="CPlusPlus\ctrycatch.cpp">
+      <Filter>CPlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlusPlus\setjmp.c">
+      <Filter>CPlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\FPU.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="kmain.h" />
+    <ClInclude Include="SkyConsole.h" />
+    <ClInclude Include="MultiBoot.h" />
+    <ClInclude Include="CPU\Hal.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\IDT.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\Pic.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\PIT.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="InitKernel.h" />
+    <ClInclude Include="SkyAPI.h" />
+    <ClInclude Include="Exception.h" />
+    <ClInclude Include="CPU\GDT.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyTest.h" />
+    <ClInclude Include="Memory\PhysicalMemoryManager.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\VirtualMemoryManager.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\PageDirectoryEntry.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\PageTableEntry.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap\kheap.h">
+      <Filter>Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap\ordered_array.h">
+      <Filter>Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap\HeapManager.h">
+      <Filter>Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Plane.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\TestInteger.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\ZetPlane.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="SysAPI.h" />
+    <ClInclude Include="Test\PureCallExtend.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\HardDisk.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\ACEList.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SysError.h" />
+    <ClInclude Include="SysInfo.h" />
+    <ClInclude Include="FileSystem\fat32.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\Partition.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\MintFileSystem.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\RAMDisk.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\Collect.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\HDDAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\ObjMan.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\RamDiskAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\StorageManager.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FAT12.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FloppyDisk.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FloppyDiskIO.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FileSysAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FloppyDiskAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyBoard\KeyBoard.h" />
+    <ClInclude Include="KeyBoard\KeyboardController.h" />
+    <ClInclude Include="KeyBoard\KeyBoardIO.h" />
+    <ClInclude Include="CPlusPlus\_mingw.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\ctrycatch.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\setjmp.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\signal.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\FPU.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CPU">
+      <UniqueIdentifier>{f90cc337-6617-45f5-ac76-08cfe2caa5a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{3ecdb3ef-d093-4961-af61-868ec3a1e9f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Heap">
+      <UniqueIdentifier>{640d957b-b9ef-4497-94a2-ffc23c8c1734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{506eb715-610c-4dae-8c11-f57a9696e441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FileSystem">
+      <UniqueIdentifier>{ce6fd751-bc89-48aa-bc30-d19a7ef1b762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CPlusPlus">
+      <UniqueIdentifier>{240e76cd-70d2-4123-ba5e-eec5ce2c056b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Debug\kernel.sys">
+      <Filter>Heap</Filter>
+    </None>
+    <None Include="CPlusPlus\ctrycatch_exception_types.conf">
+      <Filter>CPlusPlus</Filter>
+    </None>
+  </ItemGroup>
+</Project>
