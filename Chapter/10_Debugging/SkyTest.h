@@ -6,3 +6,5 @@ void TestCommonLibrary();
 void TestString();
 void TestHardDisk();
 void TestFPU();
+void TestTryCatch();
+void TestNullPointer();

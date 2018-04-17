@@ -187,19 +187,53 @@ interrupt void kHandleStackFault()
 	for (;;);
 }
 
-interrupt void kHandleGeneralProtectionFault() 
+void HandleGeneralProtectionFault(registers_t regs)
 {
 	kExceptionMessageHeader();
-	SkyConsole::Print("General Protection Fault\n");
+	SkyConsole::Print("General Protection Fault[0x%x:0x%x]\n", regs.cs, regs.eip);
+	SkyConsole::Print("EFLAGS[0x%x]\n", regs.eflags);
+	SkyConsole::Print("ss : 0x%x\n", regs.ss);
 	for (;;);
+}
+
+interrupt void kHandleGeneralProtectionFault()
+{
+
+	_asm {
+		cli
+		pushad
+
+		push ds
+		push es
+		push fs
+		push gs
+	}
+
+	_asm
+	{
+		call HandleGeneralProtectionFault
+	}
+
+	_asm {
+
+		pop gs
+		pop fs
+		pop es
+		pop ds
+
+		popad
+
+		mov al, 0x20
+		out 0x20, al
+		sti
+		iretd
+	}
 }
 
 void HandlePageFault(registers_t regs)
 {
 	kExceptionMessageHeader();
-	SkyConsole::Print("Page Fault at Address[0x%x:0x%x]\n", regs.cs, regs.eip);
-	SkyConsole::Print("EFLAGS[0x%x]\n", regs.eflags);
-	SkyConsole::Print("ss : 0x%x\n", regs.ss);
+	SkyConsole::Print("Page Fault at Address[0x%x]\n", regs.cs);	
 	for (;;);
 }
 

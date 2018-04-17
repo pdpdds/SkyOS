@@ -10,6 +10,7 @@
 #include "fileio.h"
 #include "SysAPI.h"
 #include "FPU.h"
+#include "TSS.h"
 
 
 _declspec(naked) void multiboot_entry(void)
@@ -108,12 +109,15 @@ void kmain(unsigned long magic, unsigned long addr)
 		SkyConsole::Print("FPU Init..\n");
 	}
 
-	TestFPU();
-
 	InitKeyboard();
 	SkyConsole::Print("Keyboard Init..\n");
 	
+	InstallTSS(5, 0x10, 0);
+	
 	ConstructFileSystem();	
+
+	TestTryCatch();
+	TestNullPointer();
 
 	for (;;);	
 }

@@ -5,7 +5,10 @@ VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonLib", "..\CommonLib\CommonLib.vcxproj", "{83EE476C-AA21-4A23-9D6F-4FE675115B13}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kernel", "09_FPU\Kernel.vcxproj", "{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kernel", "10_Debugging\Kernel.vcxproj", "{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}"
+	ProjectSection(ProjectDependencies) = postProject
+		{83EE476C-AA21-4A23-9D6F-4FE675115B13} = {83EE476C-AA21-4A23-9D6F-4FE675115B13}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

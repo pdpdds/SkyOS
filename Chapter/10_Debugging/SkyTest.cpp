@@ -518,3 +518,32 @@ void TestFPU()
 
 	SkyConsole::Print("sample Float Value %f\n", sampleFloat);
 }
+
+//Try Catch Å×½ºÆ®
+
+void throwArgumentException() {
+	//puts("Function reached.");
+	throw(ArgumentException, (char*)"Ooh! Some ArgumentException was thrown. ");
+}
+
+void TestTryCatch()
+{
+	try {
+		throwArgumentException();
+	}
+	catch (ArgumentException) {
+		//	puts("ArgumentException block reached");
+		if (__ctrycatch_exception_message_exists)
+			SkyConsole::Print("message: %s\n", __ctrycatch_exception_message);
+	}
+	finally {
+		//puts("finally block reached");
+		SkyConsole::Print("Finally!!\n");
+	}
+}
+
+void TestNullPointer()
+{
+	ZetPlane* pPlane = 0;
+	pPlane->IsRotate();
+}

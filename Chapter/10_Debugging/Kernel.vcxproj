@@ -53,6 +53,7 @@
     <ClCompile Include="SysInfo.cpp" />
     <ClCompile Include="Test\Plane.cpp" />
     <ClCompile Include="Test\ZetPlane.cpp" />
+    <ClCompile Include="TSS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPlusPlus\ctrycatch.h" />
@@ -105,6 +106,7 @@
     <ClInclude Include="Test\PureCallExtend.h" />
     <ClInclude Include="Test\TestInteger.h" />
     <ClInclude Include="Test\ZetPlane.h" />
+    <ClInclude Include="TSS.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Debug\kernel.sys" />
