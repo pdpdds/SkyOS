@@ -37,7 +37,7 @@ bool hash_map<Key,Value>::iterator::operator!=(const iterator& p) const{ return 
 
 template <typename Key, typename Value>
 Value& hash_map<Key,Value>::iterator::operator*(){ 
-	//if(_bucket != NULL){ return _bucket->_value; }
+	//if(_bucket != NULL){ return _bucket->_value; }	
 	return _bucket->_value;
 }
 

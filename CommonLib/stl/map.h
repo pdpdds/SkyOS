@@ -1,4 +1,5 @@
 #include "stl_pair.h"
+#include "IOStream.h"
 
 namespace std
 {
@@ -89,11 +90,11 @@ namespace std
 
 			bool operator == (typename map<T, V>::iterator nit)
 			{
-				if (nit.it == it) {
-					return true;
+				if (nit.it != it) {
+					return false;
 				}
 				else {
-					return false;
+					return true;
 				}
 			}
 
@@ -121,24 +122,22 @@ namespace std
 				//cout << "this = " << (*this).it -> value;
 				return (*this);
 			}
-			node<T, V> *find_it(node<T, V> *root, T data, int &flag, node<T, V> **p) {
-				if (root != NULL) {
+			node<T, V> *find_it(node<T, V> *root1, T data, int &flag, node<T, V> **p) {
+				if (root1 != NULL) {
 					// cout << " data = " << data << " flag =  " << flag << endl;
-					find_it(root->left, data, flag, &(*p));
-					if (data == root->key) {
+					find_it(root1->left, data, flag, &(*p));
+					if (data == root1->key) {
 						//    cout << "flag = 1 at " << root1 -> key << endl;
 						flag = 1;
 					}
 					else if (flag == 1) {
 						//  cout << "flag = 2 at " << root1 -> key << endl;
 						flag = 2;
-						(*p) = root;
-						return root;
+						(*p) = root1;
+						return root1;
 					}
-					find_it(root->right, data, flag, &(*p));
+					find_it(root1->right, data, flag, &(*p));
 				}
-
-				return NULL;
 			}
 			iterator operator --(int x) {
 				map<T, V>::iterator r = (*this);
@@ -530,13 +529,14 @@ namespace std
 			preorder(p->right);
 		}
 	}
-
+#define aaprintf(s) SkyConsole::Print(s);
 	template <class T, class V>
 	bool map<T, V>::delete_node(node<T, V> **p, T key)
 	{
+		aaprintf("asdsasd\n");
 		//cout << "deleting " << key << endl;
 		if ((*p) == NULL) {
-			//cout << "key mismatch" << endl;
+//			cout << "key mismatch" << endl;
 			return false;
 		}
 		else if ((*p)->key < key) {
@@ -549,19 +549,19 @@ namespace std
 		}
 		else {
 			if ((*p)->right == NULL && (*p)->left == NULL) {
-				//cout << "no node case\n";
+//				cout << "no node case\n";
 				(*p) = NULL;
 			}
 			else if ((*p)->right == NULL && (*p)->left != NULL) {
 //				cout << "one left child case" << endl;
 				(*p) = (*p)->left;
 			}
-			else if ((*p)->left == NULL && (*p)->right != NULL) {
-				//cout << "onoe right caswe\n";
+			else if ((*p)->right != NULL && (*p)->left == NULL) {
+//				cout << "onoe right caswe\n";
 				(*p) = (*p)->right;
 			}
 			else {
-				//cout << "two child case" << endl;
+//				cout << "two child case" << endl;
 				node<T, V> *q = (*p)->right;
 				if (q->left == NULL) {
 //					cout << "case of left = NULL\n";
@@ -569,10 +569,11 @@ namespace std
 					(*p)->right = q->right;
 				}
 				else {
-					//cout << "other case\n";
+//					cout << "other case\n";
 					while (q->left->left != NULL) {
 						q = q->left;
 					}
+					
 					(*p)->key = q->left->key;
 					q->left = q->left->right;
 				}
@@ -605,8 +606,6 @@ namespace std
 				}
 			}
 		}
-
-		return true;
 	}
 
 	template <class T, class V>
@@ -632,4 +631,4 @@ namespace std
 	{
 		return (!(x == k));
 	}
-};
+}

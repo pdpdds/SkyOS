@@ -29,14 +29,14 @@
  *	Created on: July 15, 2014
  */
 
-
+#include "stdint.h"
 #include "string.h"
-
+#include "stl_pair.h"
 
 //Constructor
 template <typename Key, typename Value>
 hash_map<Key,Value>::hash_map(){
-//	try{
+	//try{
 		for(int i = 0; i < capacity; i++){
 			HashTable[i] = new entry;
 		}
@@ -48,7 +48,7 @@ hash_map<Key,Value>::hash_map(){
 		trailer->next = trailer;	
 		hash_size = 0;
 
-/*	}catch(const std::bad_alloc& ba){
+		/*}catch(const std::bad_alloc& ba){
 		std::cerr << "exception caught:" << ba.what() << std::endl;
 	}*/
 }
@@ -71,8 +71,7 @@ hash_map<Key,Value>::~hash_map(){
 //Hash fuction: return hash index
 template <typename Key, typename Value>
 size_t hash_map<Key,Value>::hash (const Key& key){
-	//size_t index = key[0] % capacity;	//It's a simple hash just for testing
-	size_t index = key % capacity;	
+	size_t index = key % capacity;	//It's a simple hash just for testing
 //	std::cout << "index of " << key << "=" << index << std::endl;
 
 	return index;
