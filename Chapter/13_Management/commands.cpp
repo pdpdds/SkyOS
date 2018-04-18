@@ -55,3 +55,33 @@ long CmdProcessList(char *theCommand)
 
 	return true;
 }
+
+long cmdMemState(char *theCommand)
+{
+	SkyConsole::Print("free block count %d\n", PhysicalMemoryManager::GetFreeBlockCount());
+	SkyConsole::Print("total block count %d\n", PhysicalMemoryManager::GetTotalBlockCount());
+	SkyConsole::Print("\n");
+	return false;
+}
+
+long cmdCreateWatchdogTask(char* pName)
+{
+	kEnterCriticalSection();
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory2("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
+	kLeaveCriticalSection();
+	SkyConsole::Print("Can't Execute Process\n");
+	for (;;);
+
+	return false;
+}
+
+long cmdTaskCount(char *theCommand)
+{
+	kEnterCriticalSection();
+
+	ProcessManager::TaskList* taskList = ProcessManager::GetInstance()->GetTaskList();
+	SkyConsole::Print("current task count %d\n", taskList->size());
+
+	kLeaveCriticalSection();
+	return false;
+}

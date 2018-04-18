@@ -69,6 +69,7 @@ namespace VirtualMemoryManager
 	void FreePage(PTE* e);
 
 	PageDirectory* CreateCommonPageDirectory();
+	void SetPageDirectory(PageDirectory* dir);
 
 	//페이지 디렉토리를 PDTR 레지스터에 세트한다
 	bool SetCurPageDirectory(PageDirectory* dir);

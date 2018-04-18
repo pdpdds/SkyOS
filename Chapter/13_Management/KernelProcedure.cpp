@@ -9,13 +9,14 @@
 #include "SkyAPI.h"
 #include "ConsoleManager.h"
 #include "Scheduler.h"
+#include "PhysicalMemoryManager.h"
 
 extern bool systemOn;
 
 void NativeConsole()
 {
 	systemOn = true;
-		
+
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);	
 
 	ConsoleManager manager;
@@ -81,12 +82,31 @@ DWORD WINAPI WatchDogProc(LPVOID parameter)
 
 DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
 {
+	int static id = 0;
+	int temp = id++;
+	int first = GetTickCount();
 	while (1)
 	{
 		kEnterCriticalSection();
 
 		//ProcessManager::GetInstance()->RemoveProcess();
 		//Scheduler::GetInstance()->Yield(kGetCurrentThreadId());
+		VirtualMemoryManager::SetPageDirectory(VirtualMemoryManager::GetKernelPageDirectory());
+		
+		PhysicalMemoryManager::EnablePaging(false);
+		//for (;;);
+		PhysicalMemoryManager::EnablePaging(true);
+		
+		//VirtualMemoryManager::SetPageDirectory(VirtualMemoryManager::GetCurPageDirectory());
+		
+			int second = GetTickCount();
+			if (second - first >= 400)
+			{
+				SkyConsole::Print("aaa %d\n", temp);
+
+				first = GetTickCount();
+			}
+		
 
 		kLeaveCriticalSection();
 	}

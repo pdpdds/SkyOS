@@ -211,6 +211,40 @@ Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_S
 	return pProcess;
 }
 
+Process* ProcessManager::CreateProcessFromMemory2(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType)
+{
+	Process* pProcess = nullptr;
+
+	if (processType == PROCESS_KERNEL)
+		pProcess = m_pKernelProcessLoader->CreateProcessFromMemory(appName, lpStartAddress, param);
+	else
+		pProcess = m_pUserProcessLoader->CreateProcessFromMemory(appName, lpStartAddress, param);
+
+	if (pProcess == nullptr)
+		return nullptr;
+
+	if (param == nullptr)
+		param = pProcess;
+
+	Thread* pThread = CreateThread(pProcess, lpStartAddress, param);
+
+	M_Assert(pThread != nullptr, "MainThread is null.");
+
+	bool result = pProcess->AddMainThread(pThread);
+
+	M_Assert(result == true, "AddMainThread Method Failed.");
+
+	result = AddProcess(pProcess);
+
+	M_Assert(result == true, "AddProcess Method Failed.");
+
+#ifdef _SKY_DEBUG
+	SkyConsole::Print("Process Created. Process Id : %d\n", pProcess->m_processId);
+#endif
+
+	return pProcess;
+}
+
 Process* ProcessManager::CreateProcessFromFile(char* appName, void* param, UINT32 processType)
 {
 	FILE* file;
@@ -304,7 +338,6 @@ bool ProcessManager::RemoveProcess(int processId)
 {
 	kEnterCriticalSection();
 
-	
 	hash_map<int, Process*>::iterator iter = m_processList.find(processId);
 
 	Process* pProcess = *iter;
@@ -313,7 +346,30 @@ bool ProcessManager::RemoveProcess(int processId)
 		return false;
 	
 	m_processList.erase(iter);
-	
+	hash_map<int, Thread*>::iterator threadIter = pProcess->m_threadList.begin();
+
+	for (; threadIter != pProcess->m_threadList.end(); ++threadIter)
+	{
+		SkyConsole::Print("task deleted!! %d\n", pProcess->m_threadList.size());
+		Thread* pThread = *threadIter;
+		TaskList::Iterator task = m_taskList.find(pThread);
+
+		if (task != m_taskList.end())
+		{
+			SkyConsole::Print("task deleted!!\n");
+			m_taskList.erase(task);
+		}
+		else
+		{
+			if (*task == pThread)
+			{
+				SkyConsole::Print("task deletedqqq!!\n");
+				m_taskList.erase(task);
+			}
+		}
+		delete pThread;
+	}
+
 	delete pProcess;
 
 	kLeaveCriticalSection();

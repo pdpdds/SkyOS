@@ -99,6 +99,9 @@
       <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="str_util.h" />
+    <ClInclude Include="stl\hash_map.h">
+      <Filter>stl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jsmn\jsmn.cpp">

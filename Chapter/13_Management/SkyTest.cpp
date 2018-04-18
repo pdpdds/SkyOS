@@ -224,15 +224,15 @@ void Testlist()
 		fstlist.push_back(i);
 	}
 	list<int>::Iterator iter = fstlist.begin();
-	while (iter != fstlist.end())
+	for (int i = 0; i < fstlist.size(); i++, iter++)
 	{
 		SkyConsole::Print("item %d  done\n", *iter);
-		iter++;
+		
 	}
 
 	SkyConsole::Print("done!!\n");
 
-	while (1) 
+	/*while (1) 
 	{
 		for (int i = 0; i <= 10; ++i) {
 			fstlist.push_back(i);
@@ -253,7 +253,7 @@ void Testlist()
 		//std::cout << "Cycle # " << counter << " done" << std::endl;
 		SkyConsole::Print("Cycle %d  done\n", counter);
 		++counter;
-	}
+	}*/
 }
 
 static const char *JSON_STRING =

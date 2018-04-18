@@ -201,7 +201,7 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 void ConstructFileSystem()
 {	
 //IDE 하드 디스크
-	FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
+	/*FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
 	
 	pHDDAdaptor->Initialize();
 
@@ -215,7 +215,7 @@ void ConstructFileSystem()
 	else
 	{
 		delete pHDDAdaptor;		
-	}
+	}*/
 			
 //램 디스크
 	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');
@@ -255,6 +255,7 @@ void StartConsoleSystem()
 
 	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
 	ProcessManager::GetInstance()->CreateProcessFromMemory("ProcessRemover", ProcessRemoverProc, NULL, PROCESS_KERNEL);
+	
 	SkyConsole::Print("Init Console....\n");
 
 	Thread* pThread = pProcess->GetMainThread();

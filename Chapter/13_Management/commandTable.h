@@ -10,6 +10,8 @@ START_COMMAND_TABLE
 	CMD_ENTRY("cls", false, CmdCls, "Clear screen")
 	CMD_ENTRY("kill", true, CmdKill, "Kill Process")
 	CMD_ENTRY("process", false, CmdProcessList, "List Process")
-
+	CMD_ENTRY("memstate", false, cmdMemState, "Print memory state")
+	CMD_ENTRY("watchdog", false, cmdCreateWatchdogTask, "Create watchdog process")
+	CMD_ENTRY("taskcount", false, cmdTaskCount, "Get current task count")	
 END_COMMAND_TABLE
 

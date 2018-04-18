@@ -76,12 +76,13 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 		//SkyConsole::Print("TestProc %d\n", count);
 	}
 	
+	return true;
 	ProcessManager::TaskList* pTaskList = ProcessManager::GetInstance()->GetTaskList();
 
 	int taskCount = pTaskList->size();
 
 	if (taskCount == 0)
-		SkyConsole::Print("bug\n");
+		HaltSystem("Task Count Is 0\n");
 
 	if (taskCount == 1)
 		return true;
@@ -96,15 +97,10 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 	Thread* pThread = *iter;
 
 	pThread->m_waitingTime--;
-
 	
 	if (pThread->m_waitingTime > 0)
 	{
-		if (strcmp(pThread->m_pParent->m_processName, "TestProc") == 0)
-		{
-			//SkyConsole::Print("TestProc Switch555\n");
-		}
-
+		
 		g_pageDirectory = (uint32_t)pThread->m_pParent->GetPageDirectory();
 		VirtualMemoryManager::SetCurPageDirectory(pThread->m_pParent->GetPageDirectory());
 		return true;

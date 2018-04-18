@@ -152,7 +152,7 @@ namespace std
 		 * @return The iterator for the next node or for the end of the list if the last element was deleted
 		 */
 		Iterator erase(Iterator& iter);
-
+		Iterator find(ContentsType& content);
 		/**
 		 * Deletes all the elements of the list
 		 */

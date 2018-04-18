@@ -1,7 +1,7 @@
 
 #include "list_node_implement.h"
 #include "list_iterator_implement.h"
-
+extern void printf(const char* str, ...);
 namespace std
 {
 
@@ -104,7 +104,7 @@ namespace std
 	void list<ContentsType>::push_front() {
 		insertNode(new Node(), INSERT_BEFORE, firstNodePointer);
 	}
-
+	
 	template <typename ContentsType>
 	void list<ContentsType>::push_back(const ContentsType& _value) {
 		insertNode(new Node(_value), INSERT_BEFORE, END_OF_LIST);
@@ -289,6 +289,25 @@ namespace std
 		iter.myNodePointer = NULL;
 
 		return Iterator(nodeToPointForReturnedIter);
+	}
+
+//20180417
+	template <typename ContentsType>
+	listIterator<ContentsType> list<ContentsType>::find(ContentsType& content) {
+		
+		int j = 0;
+		printf("size %d\n", size());
+		listIterator<ContentsType> iter = begin();
+		for (; iter != end(); iter++)
+		{
+			ListNode<ContentsType>* myNode = iter.myNodePointer;
+			printf("list %d\n", j);
+			j++;
+			if (myNode->value == content)
+				return iter;
+		}
+
+		return end();
 	}
 
 	template <typename ContentsType>

@@ -24,7 +24,9 @@ Process* KernelProcessLoader::CreateProcessFromMemory(const char* appName, LPTHR
 
 	if (strcmp(appName, "ConsoleSystem") != 0)
 	{
+		
 		PhysicalMemoryManager::EnablePaging(false);
+		
 		pPageDirectory = VirtualMemoryManager::CreateCommonPageDirectory();
 		PhysicalMemoryManager::EnablePaging(true);
 		HeapManager::MapHeapToAddressSpace(pPageDirectory);

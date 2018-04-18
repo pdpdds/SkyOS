@@ -216,6 +216,15 @@ namespace VirtualMemoryManager
 		return dir;
 	}	
 
+	void SetPageDirectory(PageDirectory* dir)
+	{
+		_asm
+		{
+			mov	eax, [dir]
+			mov	cr3, eax		// PDBR is cr3 register in i86
+		}
+	}
+
 	bool Initialize()
 	{
 		SkyConsole::Print("Virtual Memory Manager Init..\n");
@@ -229,11 +238,7 @@ namespace VirtualMemoryManager
 		SetCurPageDirectory(dir);
 		SetKernelPageDirectory(dir);
 
-		_asm
-		{
-			mov	eax, [dir]
-			mov	cr3, eax		// PDBR is cr3 register in i86
-		}
+		SetPageDirectory(dir);
 
 		//페이징 기능을 다시 활성화시킨다
 		PhysicalMemoryManager::EnablePaging(true);
