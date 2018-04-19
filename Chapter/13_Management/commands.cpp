@@ -9,6 +9,7 @@
 #include "PIT.h"
 #include "KernelProcedure.h"
 #include "SkyAPI.h"
+#include "SystemProfiler.h"
 
 long CmdCls(char *theCommand)
 {
@@ -58,9 +59,7 @@ long CmdProcessList(char *theCommand)
 
 long cmdMemState(char *theCommand)
 {
-	SkyConsole::Print("free block count %d\n", PhysicalMemoryManager::GetFreeBlockCount());
-	SkyConsole::Print("total block count %d\n", PhysicalMemoryManager::GetTotalBlockCount());
-	SkyConsole::Print("\n");
+	SystemProfiler::GetInstance()->PrintMemoryState();
 	return false;
 }
 
@@ -68,10 +67,11 @@ long cmdCreateWatchdogTask(char* pName)
 {
 	kEnterCriticalSection();
 	
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory2("WatchDog2", WatchDogProc, NULL, PROCESS_KERNEL);	
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory2("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);	
 	kLeaveCriticalSection();
 	
-	SkyConsole::Print("Can't Execute Process\n");	
+	if(pProcess == nullptr)
+		SkyConsole::Print("Can't create process\n");	
 
 	return false;
 }
@@ -84,5 +84,11 @@ long cmdTaskCount(char *theCommand)
 	SkyConsole::Print("current task count %d\n", taskList->size());
 
 	kLeaveCriticalSection();
+	return false;
+}
+
+long cmdGlobalState(char *theCommand)
+{
+	SystemProfiler::GetInstance()->PrintGlobalState();
 	return false;
 }

@@ -15,11 +15,6 @@ extern bool systemOn;
 
 void NativeConsole()
 {
-	
-
-	
-	
-	//for (;;);
 	systemOn = true;
 	
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);	
@@ -92,12 +87,8 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
 	int first = GetTickCount();
 	while (1)
 	{
-		//kEnterCriticalSection();
-
-		//ProcessManager::GetInstance()->RemoveProcess();
-		//Scheduler::GetInstance()->Yield(kGetCurrentThreadId());
-		//VirtualMemoryManager::SetPageDirectory(VirtualMemoryManager::GetKernelPageDirectory());
 		
+//페이징 기능 전환 테스트		
 		kEnterCriticalSection();
 		PhysicalMemoryManager::EnablePaging(false);
 		PhysicalMemoryManager::EnablePaging(true);
@@ -106,46 +97,9 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
 			int second = GetTickCount();
 			if (second - first >= 400)
 			{
-				//SkyConsole::Print("aaa %d\n", temp);
-
+				
 				first = GetTickCount();
 			}
-		
-
-		//kLeaveCriticalSection();
-	}
-
-	return 0;
-}
-
-DWORD WINAPI ProcessRemoverProc2(LPVOID parameter)
-{
-	int static id = 0;
-	int temp = id++;
-	int first = GetTickCount();
-	while (1)
-	{
-		//kEnterCriticalSection();
-
-		//ProcessManager::GetInstance()->RemoveProcess();
-		//Scheduler::GetInstance()->Yield(kGetCurrentThreadId());
-		//VirtualMemoryManager::SetPageDirectory(VirtualMemoryManager::GetKernelPageDirectory());
-
-		kEnterCriticalSection();
-		PhysicalMemoryManager::EnablePaging(false);
-		PhysicalMemoryManager::EnablePaging(true);
-		kLeaveCriticalSection();
-
-		int second = GetTickCount();
-		if (second - first >= 400)
-		{
-			//SkyConsole::Print("aaa %d\n", temp);
-
-			first = GetTickCount();
-		}
-
-
-		//kLeaveCriticalSection();
 	}
 
 	return 0;

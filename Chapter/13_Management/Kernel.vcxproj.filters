@@ -119,6 +119,7 @@
     <ClCompile Include="KernelProcessLoader.cpp" />
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="Scheduler.cpp" />
+    <ClCompile Include="SystemProfiler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -260,6 +261,7 @@
     <ClInclude Include="KernelProcessLoader.h" />
     <ClInclude Include="Process.h" />
     <ClInclude Include="Scheduler.h" />
+    <ClInclude Include="SystemProfiler.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

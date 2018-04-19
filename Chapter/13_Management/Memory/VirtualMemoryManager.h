@@ -14,7 +14,7 @@
 #define KERNEL_VIRTUAL_STACK_ADDRESS			0x00800000
 
 #define KERNEL_VIRTUAL_HEAP_ADDRESS				0x80000000
-#define KERNEL_VIRTUAL_PAGE_BASE_ADDRESS		0x70000000
+
 
 
 using namespace PageTableEntry;
@@ -107,6 +107,7 @@ namespace VirtualMemoryManager
 	//페이지 디렉토리에 매핑된 페이지 디렉토리를 해제한다
 	void UnmapPageTable(PageDirectory* dir, uint32_t virt);
 	void UnmapPhysicalAddress(PageDirectory* dir, uint32_t virt);
+	void FreePageDirectory(PageDirectory* dir);
 
 	//페이지 디렉토리를 생성한다. 즉 가상주소공간을 생성한다는 의미다
 	PageDirectory* CreatePageDirectory();

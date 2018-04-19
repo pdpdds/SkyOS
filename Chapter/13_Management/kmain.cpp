@@ -14,6 +14,7 @@
 #include "ProcessManager.h"
 #include "KernelProcedure.h"
 #include "Scheduler.h"
+#include "SystemProfiler.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -53,6 +54,7 @@ _declspec(naked) void multiboot_entry(void)
 bool systemOn = false;
 uint32_t g_freeMemoryStartAddress = 0x00400000; //자유공간 시작주소 : 4MB
 uint32_t g_freeMemorySize = 0;
+extern PageDirectory* pageDirectoryPool[10];
 
 void HardwareInitialize();
 bool InitMemoryManager(multiboot_info* bootinfo);
@@ -73,6 +75,7 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	SkyConsole::Print("GRUB Information\n");
 	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
+	SkyConsole::Print("Boot Device : %x\n", pBootInfo->boot_device);
 
 	kEnterCriticalSection();
 
@@ -125,8 +128,15 @@ void kmain(unsigned long magic, unsigned long addr)
 	ProcessManager::GetInstance();
 	Scheduler::GetInstance();
 
-	//TestMap();
-	//for (;;);
+	GlobalSate state;
+	state._HeapLoadAddress = KERNEL_VIRTUAL_HEAP_ADDRESS;
+	state._heapSize = HeapManager::GetHeapSize();
+	state._kernelLoadAddress = KERNEL_VIRTUAL_BASE_ADDRESS;
+	state._kernelSize = KERNEL_END_ADDRESS;
+	state._stackPhysicalPoolAddress = KERNEL_STACK;
+	state._pageDirectoryPoolAddress = (DWORD)&(pageDirectoryPool[0]);
+
+	SystemProfiler::GetInstance()->SetGlobalState(state);
 
 	StartConsoleSystem();
 	
@@ -249,61 +259,9 @@ void ConstructFileSystem()
 		delete pFloppyDiskAdaptor;
 	}				
 }
-#include "map.h"
-long cmdTestCPlusPlus(char *theCommand)
-{
-	Process* pProcess = new Process();
-	Thread* pThread = new Thread();
-	pProcess = new Process();
-	pThread = new Thread();
-	pProcess = new Process();
-	pThread = new Thread();
-	pProcess = new Process();
-	pThread = new Thread();
-	pProcess = new Process();
-	pThread = new Thread();
-	pProcess = new Process();
-	pThread = new Thread();
-
-	delete pThread;
-	delete pProcess;
-
-	/*map<int, Process*> mapTest;
-	mapTest[101] = new Process();
-	Thread* pThread = new Thread();
-	mapTest[102] = new Process();
-	pThread = new Thread();
-	mapTest[103] = new Process();
-	pThread = new Thread();
-	mapTest[104] = new Process();
-	pThread = new Thread();
-	mapTest[105] = new Process();
-	pThread = new Thread();
-	mapTest[106] = new Process();
-	pThread = new Thread();
-
-	map<int, Process*>::iterator iter = mapTest.find(106);
-
-	if (iter != mapTest.end())
-	{
-		Process* pProcess = (*iter).second;
-		mapTest.erase(iter);
-
-		delete pThread;
-		delete pProcess;
-		
-	}*/
-
-
-
-	return false;
-}
 
 void StartConsoleSystem()
 {
-	cmdTestCPlusPlus(nullptr);
-	
-
 	kEnterCriticalSection();
 
 	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL, PROCESS_KERNEL);
@@ -313,14 +271,7 @@ void StartConsoleSystem()
 
 	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
 	ProcessManager::GetInstance()->CreateProcessFromMemory("ProcessRemover", ProcessRemoverProc, NULL, PROCESS_KERNEL);
-	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
-	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
-	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
 	
-
-	ProcessManager::GetInstance()->RemoveProcess(106);
-	//for (;;);
-
 	SkyConsole::Print("Init Console....\n");
 
 	Thread* pThread = pProcess->GetMainThread();
@@ -338,6 +289,41 @@ void StartConsoleSystem()
 	SkyConsole::Print("ConsoleSystem : entryPoint : (0x%x)\n", entryPoint);
 	SkyConsole::Print("ConsoleSystem : procStack : (0x%x)\n", procStack);
 	
+	JumpToNewKernelEntry(entryPoint, procStack);
+}
+
+void StartConsoleSystem2()
+{
+	kEnterCriticalSection();
+
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL, PROCESS_KERNEL);
+
+	if (pProcess == nullptr)
+		HaltSystem("Console Creation Fail!!");
+
+	Thread* pThread = ProcessManager::GetInstance()->CreateThread(pProcess, WatchDogProc, nullptr);
+	pProcess->AddThread(pThread);
+
+	pThread = ProcessManager::GetInstance()->CreateThread(pProcess, ProcessRemoverProc, nullptr);
+	pProcess->AddThread(pThread);
+
+	SkyConsole::Print("Init Console....\n");
+
+	Thread* pMainThread = pProcess->GetMainThread();
+
+	if (pThread == nullptr)
+		HaltSystem("Console Creation Fail!!");
+
+	pMainThread->m_taskState = TASK_STATE_RUNNING;
+
+	int entryPoint = (int)pMainThread->frame.eip;
+	unsigned int procStack = pMainThread->frame.esp;
+
+	kLeaveCriticalSection();
+
+	SkyConsole::Print("ConsoleSystem : entryPoint : (0x%x)\n", entryPoint);
+	SkyConsole::Print("ConsoleSystem : procStack : (0x%x)\n", procStack);
+
 	JumpToNewKernelEntry(entryPoint, procStack);
 }
 

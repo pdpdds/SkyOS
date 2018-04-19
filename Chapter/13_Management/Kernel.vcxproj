@@ -60,6 +60,7 @@
     <ClCompile Include="SkyTest.cpp" />
     <ClCompile Include="SysAPI.cpp" />
     <ClCompile Include="SysInfo.cpp" />
+    <ClCompile Include="SystemProfiler.cpp" />
     <ClCompile Include="Test\Plane.cpp" />
     <ClCompile Include="Test\ZetPlane.cpp" />
     <ClCompile Include="Thread.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="SysAPI.h" />
     <ClInclude Include="SysError.h" />
     <ClInclude Include="SysInfo.h" />
+    <ClInclude Include="SystemProfiler.h" />
     <ClInclude Include="Test\Plane.h" />
     <ClInclude Include="Test\PureCallExtend.h" />
     <ClInclude Include="Test\TestInteger.h" />
@@ -140,7 +142,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}</ProjectGuid>
     <RootNamespace>Kernel</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

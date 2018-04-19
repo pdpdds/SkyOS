@@ -28,6 +28,14 @@ Process* KernelProcessLoader::CreateProcessFromMemory(const char* appName, LPTHR
 		PhysicalMemoryManager::EnablePaging(false);
 		
 		pPageDirectory = VirtualMemoryManager::CreateCommonPageDirectory();
+
+		if (pPageDirectory == nullptr)
+		{
+			PhysicalMemoryManager::EnablePaging(true);
+			return nullptr;
+
+		}
+
 		HeapManager::MapHeapToAddressSpace(pPageDirectory);
 
 		PhysicalMemoryManager::EnablePaging(true);

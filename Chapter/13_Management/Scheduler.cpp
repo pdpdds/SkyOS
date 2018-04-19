@@ -120,9 +120,7 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 	if (pNextThread->m_taskState == TASK_STATE_INIT)
 	{		
 
-		
-		SkyConsole::Print("%s Initializing\n", pProcess->m_processName);
-		
+		//SkyConsole::Print("%s Initializing\n", pProcess->m_processName);
 		
 		pNextThread->m_waitingTime = TASK_RUNNING_TIME;
 		pNextThread->m_taskState = TASK_STATE_RUNNING;

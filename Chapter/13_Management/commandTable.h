@@ -12,6 +12,7 @@ START_COMMAND_TABLE
 	CMD_ENTRY("process", false, CmdProcessList, "List Process")
 	CMD_ENTRY("memstate", false, cmdMemState, "Print memory state")
 	CMD_ENTRY("watchdog", false, cmdCreateWatchdogTask, "Create watchdog process")
-	CMD_ENTRY("taskcount", false, cmdTaskCount, "Get current task count")	
+	CMD_ENTRY("taskcount", false, cmdTaskCount, "Get current task count")
+	CMD_ENTRY("globalstate", false, cmdGlobalState, "Get memory layout")
 END_COMMAND_TABLE
 

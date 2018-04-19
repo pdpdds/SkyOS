@@ -16,6 +16,7 @@
 //extern u32int end;
 //u32int placement_address = (u32int)&end;
 heap_t kheap;
+DWORD g_usedHeapSize = 0;
 
 u32int kmalloc_int(u32int sz, int align, u32int *phys)
 {
@@ -81,6 +82,9 @@ u32int malloc(u32int sz)
 u32int kmalloc(u32int sz)
 {
 	kEnterCriticalSection();
+	
+	g_usedHeapSize += sz + sizeof(footer_t) + sizeof(header_t);
+
 	u32int buffer = kmalloc_int(sz, 0, 0);
 	kLeaveCriticalSection();
 	return buffer;
@@ -384,11 +388,12 @@ void free(void *p, heap_t *heap)
     // Exit gracefully for null pointers.
     if (p == 0)
         return;
-	
 
     // Get the header and footer associated with this pointer.
     header_t *header = (header_t*) ( (u32int)p - sizeof(header_t) );
     footer_t *footer = (footer_t*) ( (u32int)header + header->size - sizeof(footer_t) );
+
+	g_usedHeapSize -= header->size;
 
     // Sanity checks.
     //ASSERT(header->magic == HEAP_MAGIC, "header->magic == HEAP_MAGIC");

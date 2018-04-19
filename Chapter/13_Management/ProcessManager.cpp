@@ -13,6 +13,7 @@
 #include "sysapi.h"
 #include "KernelProcessLoader.h"
 #include "UserProcessLoader.h"
+#include "MultiBoot.h"
 
 ProcessManager* ProcessManager::m_processManager = nullptr;
 static int kernelStackIndex = 1;
@@ -140,7 +141,6 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	return pThread;
 }
 
-#include "MultiBoot.h"
 Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID param)
 {
 	Thread* pThread = new Thread();
@@ -167,7 +167,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
 #endif
 
-	SkyConsole::Print("Virtual Stack : %x\n", stackVirtual);
+	//SkyConsole::Print("Virtual Stack : %x\n", stackVirtual);
 
 	/* map user process stack space */
 	//VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
@@ -381,12 +381,13 @@ bool ProcessManager::RemoveProcess(int processId)
 
 	for (; threadIter != pProcess->m_threadList.end(); threadIter++)
 	{
-		SkyConsole::Print("task deleted!! %d\n", pProcess->m_threadList.size());
 		Thread* pThread = (*threadIter).second;				
 		m_taskList.remove(pThread);
 		delete pThread;
 	}	
 	pProcess->m_threadList.clear();
+	VirtualMemoryManager::FreePageDirectory(pProcess->GetPageDirectory());
+
 	delete pProcess;
 	
 	kLeaveCriticalSection();

@@ -4,12 +4,18 @@
 
 using namespace VirtualMemoryManager;
 
+extern DWORD g_usedHeapSize;
+
 namespace HeapManager
 {
 	int m_heapFrameCount = 0;
 	
 	//Physical Heap Address
 	void* m_pKernelHeapPhysicalMemory = 0;
+
+	DWORD GetHeapSize() { return m_heapFrameCount * PAGE_SIZE; }
+
+	DWORD GetUsedHeapSize() { return g_usedHeapSize; }
 
 	bool InitKernelHeap(int heapFrameCount)
 	{
