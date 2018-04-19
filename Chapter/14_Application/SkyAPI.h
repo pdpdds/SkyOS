@@ -39,3 +39,11 @@ void printf(const char* str, ...);
 void ksleep(int millisecond);
 HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreateionFlags, LPDWORD lpThreadId);
 void PauseSystem(const char* msg);
+
+extern "C"
+{
+	void TerminateProcess();
+	uint32_t MemoryAlloc(size_t size);
+	void MemoryFree(void* p);
+	void CreateDefaultHeap();	
+}

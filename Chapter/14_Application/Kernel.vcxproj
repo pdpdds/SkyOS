@@ -188,7 +188,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./CPlusPlus;../../CommonLib/eastl</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SKY_DEBUG;DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
       </StringPooling>

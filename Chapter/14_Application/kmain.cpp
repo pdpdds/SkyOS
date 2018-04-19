@@ -120,6 +120,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	InitKeyboard();
 	SkyConsole::Print("Keyboard Init..\n");
 	
+	InitializeSysCall();
 	InstallTSS(5, 0x10, 0);
 	
 	ConstructFileSystem();	
@@ -139,7 +140,7 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	SystemProfiler::GetInstance()->SetGlobalState(state);
 
-	StartConsoleSystem2();
+	StartConsoleSystem();
 	
 	for (;;);	
 }
@@ -218,7 +219,7 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 void ConstructFileSystem()
 {	
 //IDE 하드 디스크
-	/*FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
+	FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
 	
 	pHDDAdaptor->Initialize();
 
@@ -232,7 +233,7 @@ void ConstructFileSystem()
 	else
 	{
 		delete pHDDAdaptor;		
-	}*/
+	}
 			
 //램 디스크
 	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');
@@ -254,11 +255,15 @@ void ConstructFileSystem()
 	{
 		StorageManager::GetInstance()->RegisterFileSystem(pFloppyDiskAdaptor, 'A');
 		StorageManager::GetInstance()->SetCurrentFileSystemByID('A');
+		
 	}
 	else
 	{
 		delete pFloppyDiskAdaptor;
-	}				
+	}	
+
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
+	SkyConsole::Print("C drive Selected\n");
 }
 
 void StartConsoleSystem()

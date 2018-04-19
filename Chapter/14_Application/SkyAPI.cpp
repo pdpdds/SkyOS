@@ -7,6 +7,7 @@
 #include "sprintf.h"
 #include "Exception.h"
 #include "ProcessManager.h"
+#include "PhysicalMemoryManager.h"
 
 void __M_Assert(const char* expr_str, bool expr, const char* file, int line, const char* msg)
 {
@@ -207,6 +208,116 @@ void PauseSystem(const char* msg)
 
 HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreateionFlags, LPDWORD lpThreadId)
 {
-	//Not Implemented
-	return 0;
+	Process* cur = ProcessManager::GetInstance()->GetCurrentTask()->m_pParent;
+
+	if (cur->GetProcessId() == PROC_INVALID_ID)
+	{
+		SkyConsole::Print("CreateThread Fail. Id : d\n", ProcessManager::GetInstance()->GetCurrentTask()->GetThreadId());
+		return 0;
+	}
+
+	Thread* newThread = ProcessManager::GetInstance()->CreateThread(cur, lpStartAddress, lpParameter);
+
+	if (newThread == nullptr)
+	{
+		SkyConsole::Print("Thread Create Fail!!\n");
+		return 0;
+	}
+
+	bool result = cur->AddThread(newThread);
+
+	M_Assert(result == true, "CreateThread Faill");
+
+	return (HANDLE)newThread;
+}
+
+extern "C"
+{
+	uint32_t MemoryAlloc(size_t size)
+	{
+		Process* pProcess = ProcessManager::GetInstance()->GetCurrentTask()->m_pParent;
+		void *addr = memory_alloc(size, (u8int)0, (heap_t*)pProcess->m_lpHeap);
+
+#ifdef _ORANGE_DEBUG
+		SkyConsole::Print("process heap alloc, %d %x\n", size, pProcess->m_lpHeap);
+#endif			
+		return (u32int)addr;
+	}
+
+	void MemoryFree(void* p)
+	{
+		//힙은 스레드가 모두 공유한다.
+		//따라서 메모리를 해제할시 컨텍스트 스위칭이 일어나서 다른 스레드가 같은 자원(힙)에 접근할 수 있는 가능성이 생기므로
+		//인터럽트가 일어나지 않게 처리한다.
+		kEnterCriticalSection();
+		Thread* pTask = ProcessManager::GetInstance()->GetCurrentTask();
+		Process* pProcess = pTask->m_pParent;
+		free(p, (heap_t*)pProcess->m_lpHeap);
+		kLeaveCriticalSection();
+	}
+
+	//프로세스 전용의 디폴트 힙을 생성한다
+	void CreateDefaultHeap()
+	{
+		kEnterCriticalSection();
+
+		Thread* pTask = ProcessManager::GetInstance()->GetCurrentTask();
+		Process* pProcess = pTask->m_pParent;		
+
+		//1메가 바이트의 힙을 생성
+		void* pHeapPhys = PhysicalMemoryManager::AllocBlocks(DEFAULT_HEAP_PAGE_COUNT);
+		u32int heapAddess = pProcess->m_imageBase + pProcess->m_imageSize + PAGE_SIZE + PAGE_SIZE * 2;
+
+		//힙 주소를 4K에 맞춰 Align	
+		heapAddess -= (heapAddess % PAGE_SIZE);
+	
+		//#ifdef _ORANGE_DEBUG
+		SkyConsole::Print("heap address %x, %x %d\n", pHeapPhys, heapAddess, pProcess->GetProcessId());
+		//#endif // _ORANGE_DEBUG
+		
+		for (int i = 0; i < DEFAULT_HEAP_PAGE_COUNT; i++)
+		{
+			VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss2(pProcess->GetPageDirectory(),
+				(uint32_t)heapAddess + i * PAGE_SIZE,
+				(uint32_t)pHeapPhys + i * PAGE_SIZE,
+				I86_PTE_PRESENT | I86_PTE_WRITABLE | I86_PTE_USER);
+		}
+		
+		memset((void*)heapAddess, 0, DEFAULT_HEAP_PAGE_COUNT * PAGE_SIZE);
+
+		
+
+		pProcess->m_lpHeap = create_heap((u32int)heapAddess, (uint32_t)heapAddess + DEFAULT_HEAP_PAGE_COUNT * PAGE_SIZE,
+			(uint32_t)heapAddess + DEFAULT_HEAP_PAGE_COUNT * PAGE_SIZE, 0, 0);
+
+		kLeaveCriticalSection();
+
+//#ifdef _ORANGE_DEBUG
+		SkyConsole::Print("CreateDefaultHeap End\n");
+//#endif // _ORANGE_DEBUG
+	}
+
+	//프로세스 종료	
+	extern "C" void TerminateProcess()
+	{
+		kEnterCriticalSection();
+
+		Thread* pTask = ProcessManager::GetInstance()->GetCurrentTask();
+		Process* pProcess = pTask->m_pParent;		
+
+		if (pProcess == nullptr || pProcess->GetProcessId() == PROC_INVALID_ID)
+		{
+			SkyConsole::Print("Invailid Process Termination\n");
+			kLeaveCriticalSection();
+			return;
+		}
+
+		//프로세스 매니저에서 해당 프로세스를 완전히 제거한다.
+		//태스크 목록에서도 제거되어 해당 프로세스는 더이상 스케쥴링 되지 않는다.		
+		ProcessManager::GetInstance()->RemoveProcess(pProcess->GetProcessId());
+
+		kLeaveCriticalSection();
+
+		for (;;);
+	}
 }

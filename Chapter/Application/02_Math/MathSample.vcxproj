@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C1C0AB99-8EA6-49E1-82B4-2D88862833C7}</ProjectGuid>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>App1</ProjectName>
+    <ProjectName>MathSample</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -54,7 +54,7 @@
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <AdditionalIncludeDirectories>../userlib;../commonlib;../include;../commonlib/stl/tinystl;../commonlib/stl;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../userlib;../../../commonlib;../../../include;../../../commonlib/stl</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
     </ClCompile>
@@ -62,7 +62,7 @@
       <AdditionalDependencies>userlib.lib;commonlib.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>false</GenerateMapFile>
       <MapFileName>proc.map</MapFileName>
       <SubSystem>Native</SubSystem>
@@ -72,7 +72,7 @@
       <BaseAddress>0x04000000</BaseAddress>
       <FixedBaseAddress>false</FixedBaseAddress>
       <AdditionalOptions>/ALIGN:512 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>../debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

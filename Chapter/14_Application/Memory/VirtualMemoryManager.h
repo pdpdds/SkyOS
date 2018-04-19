@@ -101,6 +101,7 @@ namespace VirtualMemoryManager
 	bool CreatePageTable(PageDirectory* dir, uint32_t virt, uint32_t flags);
 	//가상주소를 물리주소에 매핑한다. 이 과정에서 페이지 테이블 엔트리에 정보가 기록된다.
 	void MapPhysicalAddressToVirtualAddresss(PageDirectory* dir, uint32_t virt, uint32_t phys, uint32_t flags);
+	void MapPhysicalAddressToVirtualAddresss2(PageDirectory* dir, uint32_t virt, uint32_t phys, uint32_t flags);
 	
 	//가상주소로부터 실제 물리주소를 얻어낸다
 	void* GetPhysicalAddressFromVirtualAddress(PageDirectory* directory, uint32_t virtualAddress);

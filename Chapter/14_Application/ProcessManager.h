@@ -33,8 +33,7 @@ public:
 		return m_processManager;
 	}
 		
-	Process* CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType);
-	Process* CreateProcessFromMemory2(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType);
+	Process* CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType);	
 	Process* CreateProcessFromFile(char* appName, void* param, UINT32 processType);
 
 	Thread* CreateThread(Process* pProcess, FILE* pFile, LPVOID param);

@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2D420451-E2B4-451F-8FC4-C1315513D48E}</ProjectGuid>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>App</ProjectName>
+    <ProjectName>HelloWorld</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -54,13 +54,13 @@
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <AdditionalIncludeDirectories>../userlib;../commonlib;../include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../userlib;../../../commonlib;../../../include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>userlib.lib;commonlib.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>false</GenerateMapFile>
       <MapFileName>proc.map</MapFileName>
       <SubSystem>Native</SubSystem>
@@ -70,7 +70,7 @@
       <BaseAddress>0x04000000</BaseAddress>
       <FixedBaseAddress>false</FixedBaseAddress>
       <AdditionalOptions>/ALIGN:512 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>../debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

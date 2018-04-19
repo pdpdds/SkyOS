@@ -21,7 +21,7 @@ DWORD g_usedHeapSize = 0;
 u32int kmalloc_int(u32int sz, int align, u32int *phys)
 {
     
-        void *addr = halloc(sz, (u8int)align, &kheap);
+        void *addr = memory_alloc(sz, (u8int)align, &kheap);
 
 		//SkyConsole::Print("kmalloc_int 0x%x\n", kheap.start_address);
 		//SkyConsole::Print("kmalloc_int 0x%x\n", kheap.end_address);
@@ -260,7 +260,7 @@ heap_t *create_heap(u32int start, u32int end_addr, u32int max, u8int supervisor,
     return heap;
 }
 
-void *halloc(u32int size, u8int page_align, heap_t *heap)
+void *memory_alloc(u32int size, u8int page_align, heap_t *heap)
 {
 
     // Make sure we take the size of header/footer into account.
@@ -316,7 +316,7 @@ void *halloc(u32int size, u8int page_align, heap_t *heap)
             footer->magic = HEAP_MAGIC;
         }
         // We now have enough space. Recurse, and call the function again.
-        return halloc(size, page_align, heap);
+        return memory_alloc(size, page_align, heap);
     }
 
     header_t *orig_hole_header = (header_t *)lookup_ordered_array(iterator, &heap->index);
@@ -406,16 +406,7 @@ void free(void *p, heap_t *heap)
     header->is_hole = 1;
 
     // Do we want to add this header into the 'free holes' index?
-    char do_add = 1;
-
-	static int k = 0;
-	if (k == 1)
-	{
-		SkyConsole::Print("A : 0x%x 0x%x 0x%x 0x%x 0x%x\n", p, header, footer, heap->end_address, heap->start_address);
-	
-	}
-
-	k++;
+    char do_add = 1;	
 
     // Unify left
     // If the thing immediately to the left of us is a footer...
@@ -427,16 +418,7 @@ void free(void *p, heap_t *heap)
         header = test_footer->header;     // Rewrite our header with the new one.
         footer->header = header;          // Rewrite our footer to point to the new header.
         header->size += cache_size;       // Change the size.
-        do_add = 0;                       // Since this header is already in the index, we don't want to add it again.
-
-		static int a = 0;
-		if (a == 1)
-		{
-			SkyConsole::Print("B : 0x%x  0x%x 0x%x 0x%x 0x%x\n", p, header, footer, heap->end_address, heap->start_address);
-
-		}
-
-		a++;
+        do_add = 0;                       // Since this header is already in the index, we don't want to add it again.		
     }
 
     // Unify right
@@ -445,14 +427,13 @@ void free(void *p, heap_t *heap)
     if (test_header->magic == HEAP_MAGIC &&
         test_header->is_hole)
     {
-		SkyConsole::Print("test_header : 0x%x\n", test_header);
-		SkyConsole::Print("test_header_size : 0x%x\n", test_header->size);
+		//SkyConsole::Print("test_header : 0x%x\n", test_header);
+		//SkyConsole::Print("test_header_size : 0x%x\n", test_header->size);
         header->size += test_header->size; // Increase our size.
 
         test_footer = (footer_t*) ( (u32int)test_header + // Rewrite it's footer to point to our header.
                                     test_header->size - sizeof(footer_t) );
-
-		SkyConsole::Print("FSDSDF : 0x%x\n", test_footer);
+		
         footer = test_footer;
 
 //20180419 Heap Bug Fix
@@ -468,9 +449,8 @@ void free(void *p, heap_t *heap)
 		M_Assert(iterator < heap->index.size, "iterator < heap->index.size");
         // Remove it.
         remove_ordered_array(iterator, &heap->index);
-
-		
-			SkyConsole::Print("C : 0x%x  0x%x 0x%x 0x%x 0x%x\n", p, header, footer, heap->end_address, heap->start_address);
+					
+		//SkyConsole::Print("C : 0x%x  0x%x 0x%x 0x%x 0x%x\n", p, header, footer, heap->end_address, heap->start_address);
     }
 	
     // If the footer location is the end address, we can contract.
@@ -478,15 +458,6 @@ void free(void *p, heap_t *heap)
     {		
         u32int old_length = heap->end_address-heap->start_address;
 		u32int newSize = (u32int)footer - heap->start_address;
-
-		static int j = 0;
-		if (j == 1)
-		{
-			SkyConsole::Print("D : 0x%x 0x%x 0x%x 0x%x 0x%x\n", p, header, footer, heap->end_address, heap->start_address);
-			
-		}
-
-		j++;
 
         u32int new_length = contract(newSize, heap);
 		
@@ -514,7 +485,5 @@ void free(void *p, heap_t *heap)
 
     // If required, add us to the index.
     if (do_add == 1)
-        insert_ordered_array((void*)header, &heap->index);	
-
-	printf("endf\n");
+        insert_ordered_array((void*)header, &heap->index);		
 }

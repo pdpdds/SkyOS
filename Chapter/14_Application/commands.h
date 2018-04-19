@@ -11,3 +11,4 @@ long cmdMemState(char *theCommand);
 long cmdCreateWatchdogTask(char *theCommand);
 long cmdTaskCount(char *theCommand);
 long cmdGlobalState(char *theCommand);
+long CmdExec(char *theCommand);

@@ -58,10 +58,11 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	dosHeader = (IMAGE_DOS_HEADER*)buf;
 	ntHeaders = (IMAGE_NT_HEADERS*)(dosHeader->e_lfanew + (uint32_t)buf);
 
-	Thread* pThread = new Thread();
-	pThread->m_pParent = pProcess;
 	pProcess->m_imageBase = ntHeaders->OptionalHeader.ImageBase;
 	pProcess->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;
+
+	Thread* pThread = new Thread();
+	pThread->m_pParent = pProcess;	
 	pThread->m_imageBase = ntHeaders->OptionalHeader.ImageBase;
 	pThread->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;
 	pThread->m_dwPriority = 1;
@@ -75,32 +76,44 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	pThread->frame.flags = 0x200;
 
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	SkyConsole::Print("Process ImageBase : 0x%X\n", ntHeaders->OptionalHeader.ImageBase);
-#endif	
-
+//#endif	
+	
 	int pageRest = 0;
 
 	if ((pThread->m_imageSize % 4096) > 0)
 		pageRest = 1;
 
 	pProcess->m_dwPageCount = (pThread->m_imageSize / 4096) + pageRest;
+	
+	unsigned char* physicalMemory = (unsigned char*)PhysicalMemoryManager::AllocBlocks(pProcess->m_dwPageCount);
 
-	memory = (unsigned char*)PhysicalMemoryManager::AllocBlocks(pProcess->m_dwPageCount);
+//물리주소를 가상주소로 매핑한다
+//주의 현재 실행중인 프로세스의 가상주소와 생성될 프로세스의 가상주소에 로드된 실행파일의 물리주소를 똑같이 매핑한 후
+//복사가 완료되면 현재 실행중인 프로세스에 생성된 PTE를 삭제한다.
 
-	/* map page into address space */
+	for (DWORD i = 0; i < pProcess->m_dwPageCount; i++)
+	{
+		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(GetCurrentTask()->m_pParent->GetPageDirectory(),
+			ntHeaders->OptionalHeader.ImageBase + i * PAGE_SIZE,
+			(uint32_t)physicalMemory + i * PAGE_SIZE,
+			I86_PTE_PRESENT | I86_PTE_WRITABLE);
+	}
+
 	for (DWORD i = 0; i < pProcess->m_dwPageCount; i++)
 	{
 		VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(),
 			ntHeaders->OptionalHeader.ImageBase + i * PAGE_SIZE,
-			(uint32_t)memory + i * PAGE_SIZE,
+			(uint32_t)physicalMemory + i * PAGE_SIZE,
 			I86_PTE_PRESENT | I86_PTE_WRITABLE);
 	}
+	
+	memory = (unsigned char*)ntHeaders->OptionalHeader.ImageBase;
 	memset(memory, 0, pThread->m_imageSize);
 	memcpy(memory, buf, 512);
 
-	/* load image into memory */
-
+	//파일을 메모리로 로드한다.
 	int fileRest = 0;
 	if ((pThread->m_imageSize % 512) != 0)
 		fileRest = 1;
@@ -114,9 +127,8 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 		readCnt = StorageManager::GetInstance()->ReadFile(file, memory + 512 * i, 512, 1);
 	}
 
-	StorageManager::GetInstance()->CloseFile(file);
-
-
+	StorageManager::GetInstance()->CloseFile(file);	
+	
 	//스택을 생성하고 주소공간에 매핑한다.
 	void* stackVirtual = (void*)(USER_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_stackIndex++);
 	void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
@@ -139,6 +151,14 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	pThread->frame.esi = 0;
 	pThread->frame.edi = 0;
 
+//파일 로드에 사용된 페이지 테이블을 회수한다.
+	for (DWORD i = 0; i < pProcess->m_dwPageCount; i++)
+	{
+		VirtualMemoryManager::UnmapPageTable(GetCurrentTask()->m_pParent->GetPageDirectory(), (uint32_t)physicalMemory + i * PAGE_SIZE);
+	}
+	
+	m_taskList.push_back(pThread);
+	
 	return pThread;
 }
 
@@ -177,7 +197,6 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	pThread->frame.esp = (uint32_t)pThread->m_initialStack;
 	pThread->frame.ebp = pThread->frame.esp;
 
-	m_processList[pProcess->GetProcessId()] = pProcess;
 	m_taskList.push_back(pThread);
 
 	return pThread;
@@ -210,46 +229,8 @@ Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_S
 	M_Assert(result == true, "AddProcess Method Failed.");
 
 #ifdef _SKY_DEBUG
-	SkyConsole::Print("Process Created. Process Id : %d\n", pProcess->m_processId);
+	SkyConsole::Print("Process Created. Process Id : %d\n", pProcess->GetProcessId());
 #endif
-
-	return pProcess;
-}
-
-Process* ProcessManager::CreateProcessFromMemory2(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType)
-{
-	Process* pProcess = nullptr;
-
-	if (processType == PROCESS_KERNEL)
-		pProcess = m_pKernelProcessLoader->CreateProcessFromMemory(appName, lpStartAddress, param);
-	else
-		pProcess = m_pUserProcessLoader->CreateProcessFromMemory(appName, lpStartAddress, param);
-
-	if (pProcess == nullptr)
-		return nullptr;
-
-	if (param == nullptr)
-		param = pProcess;
-
-	Thread* pThread = CreateThread(pProcess, lpStartAddress, param);
-
-	M_Assert(pThread != nullptr, "MainThread is null.");
-
-	bool result = pProcess->AddMainThread(pThread);
-
-
-
-	M_Assert(result == true, "AddMainThread Method Failed.");
-
-	result = AddProcess(pProcess);
-
-	M_Assert(result == true, "AddProcess Method Failed.");
-
-#ifdef _SKY_DEBUG
-	SkyConsole::Print("Process Created. Process Id : %d\n", pProcess->m_processId);
-#endif	
-
-
 
 	return pProcess;
 }
@@ -257,6 +238,8 @@ Process* ProcessManager::CreateProcessFromMemory2(const char* appName, LPTHREAD_
 Process* ProcessManager::CreateProcessFromFile(char* appName, void* param, UINT32 processType)
 {
 	FILE* file;
+
+	SkyConsole::Print("Open File : %s\n", appName);
 
 	file = StorageManager::GetInstance()->OpenFile(appName, "r");
 
@@ -286,13 +269,17 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, void* param, UINT3
 
 	M_Assert(result == true, "AddMainThread Method Failed.");
 
+	kEnterCriticalSection();
 	result = AddProcess(pProcess);
+	kLeaveCriticalSection();
 
 	M_Assert(result == true, "AddProcess Method Failed.");
 
 #ifdef _SKY_DEBUG
-	SkyConsole::Print("Process Created. Process Id : %d\n", pProcess->m_processId);
+	SkyConsole::Print("Process Created. Process Id : %d\n", pProcess->GetProcessId());
 #endif
+
+	StorageManager::GetInstance()->CloseFile(file);
 
 	return pProcess;
 }
@@ -346,6 +333,8 @@ bool ProcessManager::AddProcess(Process* pProcess)
 	SkyConsole::Print("page directory : %x\n", pProcess->GetPageDirectory());
 	SkyConsole::Print("procStack : %x\n", procStack);
 #endif	
+
+	m_processList[pProcess->GetProcessId()] = pProcess;
 	
 	return true;
 }

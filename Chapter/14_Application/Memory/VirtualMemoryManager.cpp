@@ -65,6 +65,27 @@ namespace VirtualMemoryManager
 		kLeaveCriticalSection();
 	}
 
+	void MapPhysicalAddressToVirtualAddresss2(PageDirectory* dir, uint32_t virt, uint32_t phys, uint32_t flags)
+	{		
+		kEnterCriticalSection();
+		PhysicalMemoryManager::EnablePaging(false);		
+		for (;;);
+		PDE* pageDir = dir->m_entries;
+
+		if (pageDir[virt >> 22] == 0)
+		{
+			CreatePageTable(dir, virt, flags);
+		}
+
+		uint32_t mask = (uint32_t)(~0xfff);
+		uint32_t* pageTable = (uint32_t*)(pageDir[virt >> 22] & mask);
+
+		pageTable[virt << 10 >> 10 >> 12] = phys | flags;
+
+		PhysicalMemoryManager::EnablePaging(true);
+		kLeaveCriticalSection();
+	}
+
 	void FreePageDirectory(PageDirectory* dir)
 	{
 		PhysicalMemoryManager::EnablePaging(false);

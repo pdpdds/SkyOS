@@ -2,11 +2,18 @@
 #include "SkyAPI.h"
 #include "SkyConsole.h"
 
-#define MAX_SYSCALL 1
+#define MAX_SYSCALL 8
 
 static void* _syscalls[] = {
 
 	kprintf,
+	TerminateProcess,
+	MemoryAlloc,
+	MemoryFree,
+	CreateDefaultHeap,
+	GetTickCount,
+	CreateThread,
+	ksleep,
 	
 };
 

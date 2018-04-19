@@ -15,6 +15,6 @@ public:
 	virtual Process* CreateProcessFromFile(char* appName, void* param) = 0;
 
 	int GetNextProcessId() { return m_nextProcessId++; }
-	int m_nextProcessId;
+	static int m_nextProcessId;
 };
 

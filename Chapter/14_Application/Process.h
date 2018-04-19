@@ -44,6 +44,8 @@ public:
 	int			m_mainThreadId;
 	bool		m_IskernelProcess;
 
+	void*		m_lpHeap; //유저 프로세스가 사용하는 힙
+
 //페이지 디렉토리를 설정한다.
 	PageDirectory* GetPageDirectory() { return m_pPageDirectory; }
 	void SetPageDirectory(PageDirectory* pPageDirectory);

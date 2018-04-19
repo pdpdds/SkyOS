@@ -129,6 +129,7 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 
 		PageDirectory* pageDirectory = pNextThread->m_pParent->GetPageDirectory();
 		VirtualMemoryManager::SetCurPageDirectory(pageDirectory);
+		ProcessManager::GetInstance()->SetCurrentTask(pNextThread);
 		{
 
 			_asm

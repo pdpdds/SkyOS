@@ -39,7 +39,6 @@ FILE fsysFatDirectory (const char* DirectoryName) {
 #ifdef  _SKY_DEBUG
 	SkyConsole::Print("FileOpen From Floppy, FileName : %s\n", DosFileName);
 #endif //  _SKY_DEBUG
-
 	
 	//! 14 sectors per directory
 	for (int sector=0; sector<14; sector++) {
@@ -235,14 +234,14 @@ FILE fsysFatOpen (const char* FileName)
 	char* p = 0;
 	bool rootDir=true;
 	char* path = (char*) FileName;
-
+	
 	//! any '\'s in path?
 	p = strchr (path, '\\');
 	if (!p) {
-	
+		
 		//! nope, must be in root directory, search it
 		curDirectory = fsysFatDirectory (path);
-
+		
 		//! found file?
 		if (curDirectory._flags == FS_FILE)
 			return curDirectory;
@@ -255,6 +254,8 @@ FILE fsysFatOpen (const char* FileName)
 
 	//! go to next character after first '\'
 	p++;
+
+	
 	
 	while ( p ) {
 

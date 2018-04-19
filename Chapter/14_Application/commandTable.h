@@ -14,5 +14,6 @@ START_COMMAND_TABLE
 	CMD_ENTRY("watchdog", false, cmdCreateWatchdogTask, "Create watchdog process")
 	CMD_ENTRY("taskcount", false, cmdTaskCount, "Get current task count")
 	CMD_ENTRY("globalstate", false, cmdGlobalState, "Get memory layout")
+	CMD_ENTRY("exec", true, CmdExec, "Execute File")
 END_COMMAND_TABLE
 

@@ -67,7 +67,7 @@ long cmdCreateWatchdogTask(char* pName)
 {
 	kEnterCriticalSection();
 	
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory2("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);	
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);	
 	kLeaveCriticalSection();
 	
 	if(pProcess == nullptr)
@@ -90,5 +90,17 @@ long cmdTaskCount(char *theCommand)
 long cmdGlobalState(char *theCommand)
 {
 	SystemProfiler::GetInstance()->PrintGlobalState();
+	return false;
+}
+
+long CmdExec(char *theCommand)
+{
+
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromFile(theCommand, nullptr, PROCESS_USER);
+
+	if (pProcess == nullptr)
+		SkyConsole::Print("Can't create process %s\n", theCommand);
+	
+
 	return false;
 }

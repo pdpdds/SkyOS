@@ -70,7 +70,9 @@ void HDDAdaptor::PrintHDDInfo()
 
 int HDDAdaptor::Read(PFILE file, unsigned char* buffer, unsigned int size, int count)
 {	
-	return FATReadFile(file->_id, size * count, buffer);
+	int readCnt = FATReadFile(file->_id, size * count, buffer);
+	//SkyConsole::Print("HDDAdaptor::Read : %d\n", readCnt);
+	return readCnt;
 }
 
 bool HDDAdaptor::Close(PFILE file)

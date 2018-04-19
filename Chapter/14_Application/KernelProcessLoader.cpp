@@ -57,19 +57,7 @@ Process* KernelProcessLoader::CreateProcessFromMemory(const char* appName, LPTHR
 
 Process* KernelProcessLoader::CreateProcessFromFile(char* appName, void* param)
 {
-	
-	Process* pProcess = new Process();
-	pProcess->SetProcessId(GetNextProcessId());
+	//Not Implemented
 
-	PageDirectory* pPageDirectory = VirtualMemoryManager::GetKernelPageDirectory();
-	pProcess->SetPageDirectory(pPageDirectory);
-	
-	pProcess->m_dwRunState = TASK_STATE_INIT;
-	strcpy(pProcess->m_processName, appName);
-
-
-	pProcess->m_dwProcessType = PROCESS_KERNEL;
-	pProcess->m_dwPriority = 1;
-
-	return pProcess;
+	return nullptr;
 }

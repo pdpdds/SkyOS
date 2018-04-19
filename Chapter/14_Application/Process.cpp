@@ -12,6 +12,8 @@ Process::Process()
 	m_mainThreadId = -1;
 
 	m_IskernelProcess = true;
+
+	m_lpHeap = nullptr;
 }
 
 Process::~Process()
