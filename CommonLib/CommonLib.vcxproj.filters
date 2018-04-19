@@ -44,15 +44,6 @@
     <ClInclude Include="stl\IStream.h">
       <Filter>stl</Filter>
     </ClInclude>
-    <ClInclude Include="stl\list_implement.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\list_iterator_implement.h">
-      <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="stl\list_node_implement.h">
-      <Filter>stl</Filter>
-    </ClInclude>
     <ClInclude Include="stl\move.h">
       <Filter>stl</Filter>
     </ClInclude>

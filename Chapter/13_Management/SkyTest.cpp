@@ -209,59 +209,34 @@ void TestVector()
 		int data = vec.back();
 		SkyConsole::Print("%d\n", data);
 		vec.pop_back();
-	}
-
-	for (;;);
+	}	
 }
 
-typedef struct tag_aa
+typedef struct tag_testStruct
 {
 	int j;
 	int k;
-}aa;
+}testStruct;
 
 void Testlist()
 {
-	/*list<aa> fstlist;
+	list<testStruct> fstlist;
 	list<int> scndlist;
 	int counter = 0;
 
 	for (int i = 0; i <= 10; ++i) {
-		aa a;
+		testStruct a;
 		a.j = i;
 		a.k = i + 1;
 		fstlist.push_back(a);
 	}
-	list<aa>::iterator iter = fstlist.begin();
-	for (int i = 0; i < fstlist.size(); i++, iter++)
+	list<testStruct>::iterator iter = fstlist.begin();
+	for (size_t i = 0; i < fstlist.size(); i++, iter++)
 	{
-		SkyConsole::Print("item 0x%d 0x%d done\n", ((aa)(*iter)).j, ((aa)(*iter)).k);
+		SkyConsole::Print("item 0x%d 0x%d done\n", ((testStruct)(*iter)).j, ((testStruct(*iter)).k));
 	}
 
 	SkyConsole::Print("done!!\n");
-	*/
-	/*while (1) 
-	{
-		for (int i = 0; i <= 10; ++i) {
-			fstlist.push_back(i);
-		}
-
-		for (int i = 6; i <= 15; ++i) {
-			scndlist.push_front(i);
-		}
-
-		iter = fstlist.begin();
-
-		fstlist.splice(++iter, scndlist);
-		scndlist.concat(fstlist);
-		fstlist.concat(scndlist);
-
-		fstlist.pop_back();
-		fstlist.clear();
-		//std::cout << "Cycle # " << counter << " done" << std::endl;
-		SkyConsole::Print("Cycle %d  done\n", counter);
-		++counter;
-	}*/
 }
 
 static const char *JSON_STRING =
@@ -341,6 +316,7 @@ void TestJson()
 
 void TestMap()
 {
+	map<int, int> hashmap;
 	map<int, int> m10;
 	map<int, int>::iterator it1;
 	map<int, int>::iterator it2;
@@ -371,54 +347,6 @@ void TestMap()
 	}
 }
 
-
-
-void TestMap2()
-{
-	//std::map<int, int> m10;
-	//std::map<int, int>::iterator it1;
-	//std::map<int, int>::iterator it2;
-
-	map<int, int> hashmap;
-	
-
-	//Error
-	/*m10[2] = 4;
-	m10[101] = 2;
-	m10[1201] = 2122;
-	m10[4] = 8;
-	m10[3] = 6;*/
-
-	//Error2
-	/*m10[2] = 4;
-	m10[101] = 2;
-	m10[1201] = 2122;
-	*/
-	
-	
-	
-	
-/*
-	int i = 0;
-	for (it1 = m10.begin(); it1 != m10.end(); it1++) {
-		//cout << (*it1).first << "   " << (*it1).second << endl;
-		SkyConsole::Print("%d  %d\n", (*it1).first, (*it1).second);
-		i++;
-	}
-
-	SkyConsole::Print("\n\n");
-
-	//cout << "ERASE BY KEY" << endl;
-	m10.erase(101);
-	i = 0;
-	for (it1 = m10.begin(); it1 != m10.end(); it1++) {
-		//cout << (*it1).first << "   " << (*it1).second << endl;
-		SkyConsole::Print("%d  %d\n", (*it1).first, (*it1).second);
-		i++;
-	}*/
-}
-
-
 void TestString()
 {
 	std::string str("abc");
@@ -428,107 +356,10 @@ void TestString()
 	str2 = "cdf";
 	SkyConsole::Print("%s\n", str2.c_str());
 
-	/*void test(String str)
-	{
-	cout << str << endl;
-	}
-
-	int main()
-	{
-	String bar = "Hello";
-	cout << ("a" + String("b")) << endl;
-	}*/
-
-	/*int main()
-	{
-	String a = "foo";
-	String b = "bar";
+	std::string a = "foo";
+	std::string b = "bar";
 	a = b;
-	cout << a << endl;
-	}*/
-
-	/*int main()
-	{
-	cout << "|" << String("  baz  ").trim() << "|" << endl;
-	cout << "|" << String("  baz  ").trimleft() << "|" << endl;
-	cout << "|" << String("  baz  ").trimright() << "|" << endl;
-	cout << "|" << String("  ").trim() << "|" << endl;
-	cout << "|" << String("b  ").trim() << "|" << endl;
-	cout << "|" << String(" b  ").trim() << "|" << endl;
-	cout << "|" << String("  b").trim() << "|" << endl;
-	cout << "|" << String("  b ").trim() << "|" << endl;
-	}
-
-	int main()
-	{
-	String str;
-
-	int count = str.getline(cin);
-
-	cout << str << endl;
-	cout << count << endl;
-	}*/
-
-	/*void test(const String &a, String b)
-	{
-	cout << a << b << endl;
-	}
-
-	int main()
-	{
-	String a = "foo";
-	cout << a << endl;
-	cout << "---" << endl;
-
-	cout << strlen(a) << " should equal " << a.length() << endl;
-	cout << a + "bar" << endl;
-	test("foo", "bar");
-	cout << "---" << endl;
-
-	cout << a << endl;
-
-	cout << a.substr(0, 2) << endl;
-	cout << a.substr(1, 2) << endl;
-	cout << a.substr(0, 4) << endl;
-	cout << a.substr(3) << endl;
-	cout << a.substr(3, 3) << endl;
-	cout << a.substr(-2) << endl;
-	cout << a.substr(-2, 2) << endl;
-	cout << a.substr(-3) << endl;
-	cout << a.substr(-3, 2) << endl;
-	cout << a.substr(-3, 3) << endl;
-	cout << a.substr(-4) << endl;
-	cout << a.substr(-4, 4) << endl;
-	cout << a.substr(-4, 5) << endl;
-	cout << "---" << endl;
-
-	cout << a[0] << endl;
-	cout << a.get(0) << endl;
-	cout << a[-3] << endl;
-	cout << a.get(-3) << endl;
-
-	a.set(0, 'F');
-	cout << a << endl;
-	a.set(-3, 'B');
-	cout << a << endl;
-
-	cout << a.set(4, 'A') << endl;
-	cout << a.set(-4, 'A') << endl;
-	cout << a.set(0, '\0') << endl;
-	cout << a << endl;
-	cout << "---" << endl;
-
-	String c = "123";
-	cout << (atoi(c) + 1) << endl;
-	cout << "---" << endl;
-
-	String d;
-	cout << "Enter some text and then press enter:" << endl;
-	cout << "Entered " << d.getline(cin) << " characters." << endl;
-	cout << d << endl;
-
-	return 0;
-	}*/
+	cout << a.c_str() << endl;	
 }
 
 void TestDeque()

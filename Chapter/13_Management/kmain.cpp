@@ -60,6 +60,7 @@ void HardwareInitialize();
 bool InitMemoryManager(multiboot_info* bootinfo);
 void ConstructFileSystem();
 void StartConsoleSystem();
+void StartConsoleSystem2();
 void JumpToNewKernelEntry(int entryPoint, unsigned int procStack);
 
 void kmain(unsigned long magic, unsigned long addr)
@@ -75,7 +76,7 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	SkyConsole::Print("GRUB Information\n");
 	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
-	SkyConsole::Print("Boot Device : %x\n", pBootInfo->boot_device);
+	//SkyConsole::Print("Boot Device : %d\n", pBootInfo->boot_device);
 
 	kEnterCriticalSection();
 
@@ -138,7 +139,7 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	SystemProfiler::GetInstance()->SetGlobalState(state);
 
-	StartConsoleSystem();
+	StartConsoleSystem2();
 	
 	for (;;);	
 }
@@ -288,6 +289,8 @@ void StartConsoleSystem()
 
 	SkyConsole::Print("ConsoleSystem : entryPoint : (0x%x)\n", entryPoint);
 	SkyConsole::Print("ConsoleSystem : procStack : (0x%x)\n", procStack);
+
+	ProcessManager::GetInstance()->SetCurrentTask(pThread);
 	
 	JumpToNewKernelEntry(entryPoint, procStack);
 }
@@ -311,7 +314,7 @@ void StartConsoleSystem2()
 
 	Thread* pMainThread = pProcess->GetMainThread();
 
-	if (pThread == nullptr)
+	if (pMainThread == nullptr)
 		HaltSystem("Console Creation Fail!!");
 
 	pMainThread->m_taskState = TASK_STATE_RUNNING;
@@ -323,6 +326,8 @@ void StartConsoleSystem2()
 
 	SkyConsole::Print("ConsoleSystem : entryPoint : (0x%x)\n", entryPoint);
 	SkyConsole::Print("ConsoleSystem : procStack : (0x%x)\n", procStack);
+
+	ProcessManager::GetInstance()->SetCurrentTask(pMainThread);
 
 	JumpToNewKernelEntry(entryPoint, procStack);
 }

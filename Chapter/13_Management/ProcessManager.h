@@ -42,8 +42,17 @@ public:
 
 	Process* FindProcess(int processId);
 	bool RemoveProcess(int processId);
+	Thread* FindTask(DWORD taskId);
 
-	Thread* FindTask(int taskId);
+	void SetCurrentTask(Thread* pTask)
+	{
+		m_pCurrentTask = pTask;
+	}
+
+	Thread* GetCurrentTask()
+	{
+		return m_pCurrentTask;
+	}
 	
 private:
 	bool AddProcess(Process* pProcess);
@@ -59,4 +68,5 @@ private:
 	ProcessList m_processList;
 	TaskList m_taskList;
 	TaskList m_terminatedTaskList;
+	Thread* m_pCurrentTask;
 };

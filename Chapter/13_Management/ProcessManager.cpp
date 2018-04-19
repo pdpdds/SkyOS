@@ -24,6 +24,7 @@ ProcessManager::ProcessManager()
 {
 	m_nextThreadId = 1000;
 
+	m_pCurrentTask = nullptr;
 	m_pKernelProcessLoader = new KernelProcessLoader();
 	m_pUserProcessLoader = new UserProcessLoader();;
 }
@@ -67,7 +68,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	pThread->m_taskState = TASK_STATE_INIT;
 	pThread->m_initialStack = 0;
 	pThread->m_stackLimit = PAGE_SIZE;
-	pThread->m_threadId = m_nextThreadId++;
+	pThread->SetThreadId(m_nextThreadId++);
 
 	memset(&pThread->frame, 0, sizeof(trapFrame));
 	pThread->frame.eip = (uint32_t)ntHeaders->OptionalHeader.AddressOfEntryPoint + ntHeaders->OptionalHeader.ImageBase;
@@ -145,7 +146,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 {
 	Thread* pThread = new Thread();
 	pThread->m_pParent = pProcess;
-	pThread->m_threadId = m_nextThreadId++;
+	pThread->SetThreadId(m_nextThreadId++);
 	pThread->m_dwPriority = 1;
 	pThread->m_taskState = TASK_STATE_INIT;
 	pThread->m_waitingTime = TASK_RUNNING_TIME;
@@ -175,6 +176,9 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE);
 	pThread->frame.esp = (uint32_t)pThread->m_initialStack;
 	pThread->frame.ebp = pThread->frame.esp;
+
+	m_processList[pProcess->GetProcessId()] = pProcess;
+	m_taskList.push_back(pThread);
 
 	return pThread;
 }
@@ -302,13 +306,13 @@ Process* ProcessManager::FindProcess(int processId)
 
 	return (*iter).second;
 }
-Thread* ProcessManager::FindTask(int taskId)
+Thread* ProcessManager::FindTask(DWORD taskId)
 {
 	auto iter = m_taskList.begin();
 	for (; iter != m_taskList.end(); iter++)
 	{
 		Thread* pThread = *iter;
-		if (pThread->m_threadId == taskId)
+		if (pThread->GetThreadId() == taskId)
 			return pThread;
 	}
 
@@ -342,26 +346,7 @@ bool ProcessManager::AddProcess(Process* pProcess)
 	SkyConsole::Print("page directory : %x\n", pProcess->GetPageDirectory());
 	SkyConsole::Print("procStack : %x\n", procStack);
 #endif	
-
-	kEnterCriticalSection();
-
-
-	if (strcmp("WatchDog2", pProcess->m_processName) != 0)
-	{
-		m_processList[pProcess->GetProcessId()] = pProcess;
-		m_taskList.push_back(pThread);
-	}
-	else
-	{
-		m_processList[pProcess->GetProcessId()] = pProcess;
-		m_taskList.push_back(pThread);
-		SkyConsole::Print("procStack : %x\n", pThread);
-
-	}
-
-
-	kLeaveCriticalSection();
-
+	
 	return true;
 }
 

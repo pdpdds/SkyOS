@@ -12,7 +12,6 @@ SystemProfiler::SystemProfiler()
 {
 }
 
-
 SystemProfiler::~SystemProfiler()
 {
 }

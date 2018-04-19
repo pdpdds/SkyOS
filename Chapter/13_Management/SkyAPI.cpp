@@ -6,6 +6,7 @@
 #include "stdarg.h"
 #include "sprintf.h"
 #include "Exception.h"
+#include "ProcessManager.h"
 
 void __M_Assert(const char* expr_str, bool expr, const char* file, int line, const char* msg)
 {
@@ -26,7 +27,15 @@ void __M_Assert(const char* expr_str, bool expr, const char* file, int line, con
 /////////////////////////////////////////////////////////////////////////////
 DWORD SKYAPI kGetCurrentThreadId()
 {
-	return 0;
+	DWORD dwThreadId = 0;
+	kEnterCriticalSection();
+	Thread* pThread = ProcessManager::GetInstance()->GetCurrentTask();
+	if (pThread != nullptr)
+		dwThreadId = pThread->GetThreadId();
+
+	kLeaveCriticalSection();
+
+	return dwThreadId;
 }
 
 void GetLocalTime(LPSYSTEMTIME lpSystemTime)

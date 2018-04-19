@@ -30,9 +30,6 @@
     <ClInclude Include="stl\hash_map.h" />
     <ClInclude Include="stl\IOStream.h" />
     <ClInclude Include="stl\IStream.h" />
-    <ClInclude Include="stl\list_implement.h" />
-    <ClInclude Include="stl\list_iterator_implement.h" />
-    <ClInclude Include="stl\list_node_implement.h" />
     <ClInclude Include="stl\move.h" />
     <ClInclude Include="stl\OStream.h" />
     <ClInclude Include="stl\darray.h" />

@@ -20,14 +20,14 @@ Process::~Process()
 
 bool Process::AddMainThread(Thread* pThread)
 {
-	m_mainThreadId = pThread->m_threadId;
-	m_threadList[pThread->m_threadId] = pThread;
+	m_mainThreadId = pThread->GetThreadId();
+	m_threadList[pThread->GetThreadId()] = pThread;
 	return true;
 }
 
 bool Process::AddThread(Thread* pThread)
 {	
-	m_threadList[pThread->m_threadId] = pThread;
+	m_threadList[pThread->GetThreadId()] = pThread;
 	return true;
 }
 

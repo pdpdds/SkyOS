@@ -61,6 +61,8 @@ DWORD WINAPI WatchDogProc(LPVOID parameter)
 	char *addr = (char *)TS_WATCHDOG_CLOCK_POS, status[] = { '-', '\\', '|', '/', '-', '\\', '|', '/' };
 	int first = GetTickCount();
 
+	SkyConsole::Print("\nWatchDogProc Start. Thread Id : %d\n", kGetCurrentThreadId());
+
 	while (1) 
 	{
 	

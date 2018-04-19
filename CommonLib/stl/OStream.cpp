@@ -11,7 +11,13 @@ namespace std
 	{
 		printf(cp);
 		return *this;
-	}	
+	}
+
+	ostream& ostream::operator<<(const char *cp)
+	{
+		printf("%s", cp);
+		return *this;
+	}
 
 	ostream& ostream::operator<<(const char c)
 	{

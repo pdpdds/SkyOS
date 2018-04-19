@@ -28,8 +28,13 @@ public:
 	uint32_t	m_imageSize;  //파일의 크기. 파일을 로드해서 생성되는 스레드가 아닌 경우 m_imageBase와 m_imageSize는 의미가 없다.
 	
 	registers_t m_contextSnapshot; //태스크의 컨텍스트 스냅샷(레지스터)
-	int			m_threadId;
 
+	void SetThreadId(DWORD threadId) { m_threadId = threadId; }
+	DWORD GetThreadId() { return m_threadId; }
+	
 	//Thread Local Storage. Not Implemented
 	void*		m_lpTLS = nullptr;
+
+protected:
+	DWORD			m_threadId;	
 };

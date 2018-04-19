@@ -38,8 +38,6 @@ Scheduler::~Scheduler()
 {
 }
 
-
-
 bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 {
 
@@ -207,7 +205,9 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 		g_esp = pNextThread->m_esp;
 		
 		g_pageDirectory = (uint32_t)pNextThread->m_pParent->GetPageDirectory();
+
 		VirtualMemoryManager::SetCurPageDirectory(pNextThread->m_pParent->GetPageDirectory());
+		ProcessManager::GetInstance()->SetCurrentTask(pNextThread);
 
 		g_registers = pNextThread->m_contextSnapshot;
 

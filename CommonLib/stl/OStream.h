@@ -15,6 +15,7 @@ namespace std
 			ostream& operator<<(int value);
 			ostream& operator<<(unsigned char *cq);
 			ostream& operator<<(unsigned char c1);
+			ostream& ostream::operator<<(const char *cp);
 
 		private:
 	};
