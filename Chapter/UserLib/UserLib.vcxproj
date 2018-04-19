@@ -56,7 +56,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <AdditionalIncludeDirectories>../CommonLib;../include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../CommonLib;../../include;../../CommonLib/stl</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
