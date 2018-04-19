@@ -12,7 +12,7 @@
 #include "string.h"
 #include "memory.h"
 #include "str_util.h"
-#include "hash_map.h"
+#include "map.h"
 
 //-------------------FATInfo member functions-----------------------
 FATInfo::FATInfo(BYTE * DPF, struct _Partition * DiskPart, BYTE * FirstSector)
@@ -255,7 +255,8 @@ struct FATOpenFileInfo
 	UINT32 CurrentCluster;		//Current cluster number in the linked list of clusters
 };
 //Collection <struct FATOpenFileInfo *>* __SysFATOpenFileInfo;
-hash_map<int, struct FATOpenFileInfo *>* __SysFATOpenFileInfo;
+map<int, struct FATOpenFileInfo *>* __SysFATOpenFileInfo;
+
 Collection <class FATInfo *>* __SysFATInternal;
 BYTE NextHDDDrive = 'C';
 BYTE NextFloppyDrive = 'A';
@@ -305,7 +306,7 @@ void InitFATFileSystem()
 	//__SysFATOpenFileInfo = new Collection <struct FATOpenFileInfo *>();
 	//__SysFATOpenFileInfo->Initialize();	
 
-	__SysFATOpenFileInfo = new hash_map<int, struct FATOpenFileInfo *>();	
+	__SysFATOpenFileInfo = new map<int, struct FATOpenFileInfo *>();	
 }
 /* this function returns the FATInfo of the given Drive*/
 FATInfo * GetFATInfo(BYTE DriveLetter)
@@ -575,7 +576,7 @@ UINT16 FATFileOpen(BYTE driveLetter, const char * filepath, BYTE Mode)
 		FATFileInfo->TotalBytesPassed = 0;
 
 		hanldeId++;
-		__SysFATOpenFileInfo->insert(hanldeId, FATFileInfo);
+		(*__SysFATOpenFileInfo)[hanldeId] =  FATFileInfo;
 					
 		return hanldeId;
 		
@@ -586,13 +587,13 @@ UINT16 FATFileOpen(BYTE driveLetter, const char * filepath, BYTE Mode)
 
 bool FATFileClose(UINT16 handleID)
 {
-	hash_map<int, struct FATOpenFileInfo *>::iterator iter = __SysFATOpenFileInfo->find(handleID);
+	map<int, struct FATOpenFileInfo *>::iterator iter = (*__SysFATOpenFileInfo).find(handleID);
 
-	if (iter != __SysFATOpenFileInfo->end())
+	if (iter != (*__SysFATOpenFileInfo).end())
 	{
-		FATOpenFileInfo* fileInfo = *iter;
+		FATOpenFileInfo* fileInfo = (*iter).second;
 		delete fileInfo;
-		__SysFATOpenFileInfo->erase(iter);
+		(*__SysFATOpenFileInfo).erase(iter);
 		return true;
 	}
 
@@ -603,14 +604,14 @@ bool FATFileClose(UINT16 handleID)
 
 BYTE FATIsEndOfFile(UINT16 handleID)
 {
-	hash_map<int, FATOpenFileInfo *>::iterator iter = __SysFATOpenFileInfo->find(handleID);
-	if (iter == __SysFATOpenFileInfo->end())	
+	map<int, FATOpenFileInfo *>::iterator iter = (*__SysFATOpenFileInfo).find(handleID);
+	if (iter == (*__SysFATOpenFileInfo).end())
 	{
 		SkyConsole::Print("FAT :: File Read Error. File Not Opened\n");
 		return 0;
 	}
 
-	FATOpenFileInfo* FATFileInfo = *iter;
+	FATOpenFileInfo* FATFileInfo = (*iter).second;
 
 	BYTE Drive[2] = { 0,0 };
 	Drive[0] = FATFileInfo->DriveLetter;
@@ -668,14 +669,14 @@ UINT16 FATReadFile(UINT16 handleID, UINT32 SizeInBytes, BYTE * Buffer)
 {	
 	UINT32 TotReadBytes = 0, BufferTotalBytes = 0;
 	
-	hash_map<int, struct FATOpenFileInfo *>::iterator iter = __SysFATOpenFileInfo->find(handleID);
-	if (iter == __SysFATOpenFileInfo->end())
+	map<int, struct FATOpenFileInfo *>::iterator iter = (*__SysFATOpenFileInfo).find(handleID);
+	if (iter == (*__SysFATOpenFileInfo).end())
 	{
 		SkyConsole::Print("FAT :: File Read Error. File Not Opened\n");
 		return 0;
 	}
 
-	FATOpenFileInfo* FATFileInfo = *iter;
+	FATOpenFileInfo* FATFileInfo = (*iter).second;
 
 	if (FATFileInfo == 0)
 	{

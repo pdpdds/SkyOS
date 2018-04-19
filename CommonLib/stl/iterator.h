@@ -27,9 +27,12 @@
 #ifndef __SGI_STL_ITERATOR_H
 #define __SGI_STL_ITERATOR_H
 
-#include "windef.h"
-#include "iostream.h"
+//#include <stddef.h>
+//#include <iostream>
+#include "IOStream.h"
 #include <function.h>
+
+using namespace std;
 
 struct input_iterator_tag {};
 struct output_iterator_tag {};
@@ -697,7 +700,7 @@ class istream_iterator {
 friend bool operator==(const istream_iterator<T, Distance>& x,
                        const istream_iterator<T, Distance>& y);
 protected:
-	std::IStream* stream;
+    istream* stream;
     T value;
     bool end_marker;
     void read() {
@@ -713,7 +716,7 @@ public:
     typedef const T&           reference;
 
     istream_iterator() : stream(&cin), end_marker(false) {}
-    istream_iterator(std::IStream& s) : stream(&s) { read(); }
+    istream_iterator(istream& s) : stream(&s) { read(); }
     reference operator*() const { return value; }
 #ifndef __SGI_STL_NO_ARROW_OPERATOR
     pointer operator->() const { return &(operator*()); }
@@ -757,7 +760,7 @@ bool operator==(const istream_iterator<T, Distance>& x,
 template <class T>
 class ostream_iterator {
 protected:
-	std::OStream* stream;
+    ostream* stream;
     const char* string;
 public:
     typedef output_iterator_tag iterator_category;
@@ -766,8 +769,8 @@ public:
     typedef void                pointer;
     typedef void                reference;
 
-    ostream_iterator(std::OStream& s) : stream(&s), string(0) {}
-    ostream_iterator(std::OStream& s, const char* c) : stream(&s), string(c)  {}
+    ostream_iterator(ostream& s) : stream(&s), string(0) {}
+    ostream_iterator(ostream& s, const char* c) : stream(&s), string(c)  {}
     ostream_iterator<T>& operator=(const T& value) { 
         *stream << value;
         if (string) *stream << string;

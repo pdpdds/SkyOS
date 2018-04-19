@@ -1,634 +1,188 @@
-#include "stl_pair.h"
-#include "IOStream.h"
+/*
+ *
+ * Copyright (c) 1994
+ * Hewlett-Packard Company
+ *
+ * Permission to use, copy, modify, distribute and sell this software
+ * and its documentation for any purpose is hereby granted without fee,
+ * provided that the above copyright notice appear in all copies and
+ * that both that copyright notice and this permission notice appear
+ * in supporting documentation.  Hewlett-Packard Company makes no
+ * representations about the suitability of this software for any
+ * purpose.  It is provided "as is" without express or implied warranty.
+ *
+ *
+ * Copyright (c) 1996
+ * Silicon Graphics Computer Systems, Inc.
+ *
+ * Permission to use, copy, modify, distribute and sell this software
+ * and its documentation for any purpose is hereby granted without fee,
+ * provided that the above copyright notice appear in all copies and
+ * that both that copyright notice and this permission notice appear
+ * in supporting documentation.  Silicon Graphics makes no
+ * representations about the suitability of this software for any
+ * purpose.  It is provided "as is" without express or implied warranty.
+ */
 
-namespace std
-{
-	template <class T, class V>
-	struct node
-	{
-		T key;
-		V value;
-		struct node<T, V> *left;
-		struct node<T, V> *right;
-		struct node<T, V> *father;
-		int height;
-	};
+#ifndef __SGI_STL_MAP_H
+#define __SGI_STL_MAP_H
 
-	template <class T, class V>
-	class map
-	{
-	public:
-		typedef T key_type;
-		typedef pair<T, V> value_type;
-		typedef ptrdiff_t difference_type;
-		typedef size_t size_type;
-		//typedef typename  map<T, V>:: iterator reference;
-		struct node<T, V>  *root;
-		size_t size1;
-		//default constructor
-		map()
-		{
-			root = NULL;
-			size1 = 0;
-		}
+#include <tree.h>
 
-		//copy constructor
-		map(const map<T, V>  &x);
+#ifndef __STL_LIMITED_DEFAULT_TEMPLATES
+template <class Key, class T, class Compare = less<Key>, class Alloc = alloc>
+#else
+template <class Key, class T, class Compare, class Alloc = alloc>
+#endif
+class map {
+public:
 
-		//insert
-		bool insert(pair<T, V> c)
-		{
-			int t = insert_node(&root, c.first, c.second);
-			if (t == 1) {
-				size1++;
-			}
-			return t;
-		}
+// typedefs:
 
-		//iterator
-		class iterator
-		{
-		public:
-			struct node<T, V> *it;
-			struct node<T, V> *root1;
-			pair<T, V> s;
-			iterator()
-			{
-				it = NULL;
-			}
+  typedef Key key_type;
+  typedef T data_type;
+  typedef pair<const Key, T> value_type;
+  typedef Compare key_compare;
+    
+  class value_compare
+        : public binary_function<value_type, value_type, bool> {
+    friend class map<Key, T, Compare, Alloc>;
+    protected :
+        Compare comp;
+        value_compare(Compare c) : comp(c) {}
+    public:
+        bool operator()(const value_type& x, const value_type& y) const {
+            return comp(x.first, y.first);
+        }
+  };
 
-			void operator = (typename map<T, V>::iterator nit)
-			{
-				it = nit.it;
-				root1 = nit.root1;
-			}
+private:
+  typedef rb_tree<key_type, value_type, 
+                  select1st<value_type>, key_compare, Alloc> rep_type;
+  rep_type t;  // red-black tree representing map
+public:
+  typedef typename rep_type::pointer pointer;
+  typedef typename rep_type::reference reference;
+  typedef typename rep_type::const_reference const_reference;
+  typedef typename rep_type::iterator iterator;
+  typedef typename rep_type::const_iterator const_iterator;
+  typedef typename rep_type::reverse_iterator reverse_iterator;
+  typedef typename rep_type::const_reverse_iterator const_reverse_iterator;
+  typedef typename rep_type::size_type size_type;
+  typedef typename rep_type::difference_type difference_type;
 
-			pair<T, V>* operator-> () {
-				//	pair<T, V> s;
-				s.first = it->key;
-				s.second = it->value;
-				return (&s);
-			}
+  // allocation/deallocation
 
-			pair<T, V> operator * ()
-			{
-				//pair<T, V> s;
-				s.first = it->key;
-				s.second = it->value;
-				return s;
-			}
+  map() : t(Compare()) {}
+  explicit map(const Compare& comp) : t(comp) {}
 
-			bool operator != (typename map<T, V>::iterator nit)
-			{
-				if (nit.it == it) {
-					return false;
-				}
-				else {
-					return true;
-				}
-			}
+#ifdef __STL_MEMBER_TEMPLATES
+  template <class InputIterator>
+  map(InputIterator first, InputIterator last)
+    : t(Compare()) { t.insert_unique(first, last); }
 
-			bool operator == (typename map<T, V>::iterator nit)
-			{
-				if (nit.it != it) {
-					return false;
-				}
-				else {
-					return true;
-				}
-			}
+  template <class InputIterator>
+  map(InputIterator first, InputIterator last, const Compare& comp)
+    : t(comp) { t.insert_unique(first, last); }
+#else
+  map(const value_type* first, const value_type* last)
+    : t(Compare()) { t.insert_unique(first, last); }
+  map(const value_type* first, const value_type* last, const Compare& comp)
+    : t(comp) { t.insert_unique(first, last); }
 
-			iterator operator ++(int x) {
-				map<T, V>::iterator r = (*this);
-				++(*this);
-				return r;
-			}
-			iterator  operator ++() {
-				T key = it->key;
-				node<T, V> *temp = NULL;
-				int flag = 0;
-				node<T, V> *p = NULL;
-				temp = find_it(root1, key, flag, &p);
-				//cout << "key = " << p -> key << endl;
-				iterator it1;
-				it1.it = p;
-				it1.root1 = root1;
-				*this = it1;
-				if (flag != 2) {
-					it1.it = NULL;
-					it1.root1 = root1;
-					*this = it1;
-				}
-				//cout << "this = " << (*this).it -> value;
-				return (*this);
-			}
-			node<T, V> *find_it(node<T, V> *root1, T data, int &flag, node<T, V> **p) {
-				if (root1 != NULL) {
-					// cout << " data = " << data << " flag =  " << flag << endl;
-					find_it(root1->left, data, flag, &(*p));
-					if (data == root1->key) {
-						//    cout << "flag = 1 at " << root1 -> key << endl;
-						flag = 1;
-					}
-					else if (flag == 1) {
-						//  cout << "flag = 2 at " << root1 -> key << endl;
-						flag = 2;
-						(*p) = root1;
-						return root1;
-					}
-					find_it(root1->right, data, flag, &(*p));
-				}
-			}
-			iterator operator --(int x) {
-				map<T, V>::iterator r = (*this);
-				--(*this);
-				return r;
-			}
-			iterator operator --() {
-				T key = it->key;
-				node<T, V> *temp = NULL;
-				int flag = 0;
-				node<T, V> *p = NULL;
-				temp = find_it_minus(root1, key, flag, &p);
-				iterator it1;
-				it1.it = p;
-				it1.root1 = root1;
-				*this = it1;
-				return (*this);
-			}
-			node<T, V> *find_it_minus(node<T, V> *root1, T data, int &flag, node<T, V> **p) {
-				if (root1 != NULL) {
+  map(const_iterator first, const_iterator last)
+    : t(Compare()) { t.insert_unique(first, last); }
+  map(const_iterator first, const_iterator last, const Compare& comp)
+    : t(comp) { t.insert_unique(first, last); }
+#endif /* __STL_MEMBER_TEMPLATES */
 
-					find_it_minus(root1->right, data, flag, &(*p));
-					if (data == root1->key) {
-						flag = 1;
-					}
-					else if (flag == 1) {
-						flag = 2;
-						(*p) = root1;
-						return root1;
-					}
-					find_it_minus(root1->left, data, flag, &(*p));
-				}
-			}
+  map(const map<Key, T, Compare, Alloc>& x) : t(x.t) {}
+  map<Key, T, Compare, Alloc>& operator=(const map<Key, T, Compare, Alloc>& x)
+  {
+    t = x.t;
+    return *this; 
+  }
 
-		};
-		size_t size() const {
-			return size1;
-		}
-		iterator begin()const
-		{
-			iterator its;
-			its.it = root;
-			its.root1 = root;
-			if (root == NULL) {
-				return its;
-			}
+  // accessors:
 
-			while (its.it->left != NULL) {
-				its.it = its.it->left;
-			}
+  key_compare key_comp() const { return t.key_comp(); }
+  value_compare value_comp() const { return value_compare(t.key_comp()); }
+  iterator begin() { return t.begin(); }
+  const_iterator begin() const { return t.begin(); }
+  iterator end() { return t.end(); }
+  const_iterator end() const { return t.end(); }
+  reverse_iterator rbegin() { return t.rbegin(); }
+  const_reverse_iterator rbegin() const { return t.rbegin(); }
+  reverse_iterator rend() { return t.rend(); }
+  const_reverse_iterator rend() const { return t.rend(); }
+  bool empty() const { return t.empty(); }
+  size_type size() const { return t.size(); }
+  size_type max_size() const { return t.max_size(); }
+  T& operator[](const key_type& k) {
+    return (*((insert(value_type(k, T()))).first)).second;
+  }
+  void swap(map<Key, T, Compare, Alloc>& x) { t.swap(x.t); }
 
-			return its;
-		}
+  // insert/erase
 
-		iterator end() const
-		{
-			iterator itn;
-			itn.it = NULL;
-			itn.root1 = root;
-			return itn;
-		}
-		void clear() {
-			size1 = 0;
-			delete (root);
-			root = NULL;
-		}
+  pair<iterator,bool> insert(const value_type& x) { return t.insert_unique(x); }
+  iterator insert(iterator position, const value_type& x) {
+    return t.insert_unique(position, x);
+  }
+#ifdef __STL_MEMBER_TEMPLATES
+  template <class InputIterator>
+  void insert(InputIterator first, InputIterator last) {
+    t.insert_unique(first, last);
+  }
+#else
+  void insert(const value_type* first, const value_type* last) {
+    t.insert_unique(first, last);
+  }
+  void insert(const_iterator first, const_iterator last) {
+    t.insert_unique(first, last);
+  }
+#endif /* __STL_MEMBER_TEMPLATES */
 
-		void erase(iterator it);
-		bool empty();
-		bool count(T key);
-		iterator find(T key);
-		V& operator [] (T a);
-		iterator lower_bound(T key);
-		iterator upper_bound(T key);
-		pair<typename map<T, V>::iterator, typename map<T, V>::iterator> equal_range(T key);
-		iterator rend() const;
-		iterator rbegin() const;
-		bool delete_node(node<T, V> **p, T key);
-		void swap(map<T, V> &m);
-		node<T, V>* search(node<T, V> *p, T key);
-		void preorder(node<T, V> *p);
-		int max(int a, int b);
-		bool insert_node(node<T, V> **p, T key, V value);
-		node<T, V>* rotate_right(node<T, V> *y);
-		node<T, V>* rotate_left(node<T, V> *x);
-		node<T, V>* my_fun(node<T, V> *r, node<T, V> *p, T i);
-		int difference_of_heights(node<T, V> *n);
-		int height(node<T, V> *s);
-		size_t erase(T key);
-	};
-	//////////////class declaration ends ///////////////////////////////
+  void erase(iterator position) { t.erase(position); }
+  size_type erase(const key_type& x) { return t.erase(x); }
+  void erase(iterator first, iterator last) { t.erase(first, last); }
+  void clear() { t.clear(); }
 
-	template <class T, class V>
-	size_t map<T, V>::erase(T key)
-	{
-		if (this->delete_node(&(root), key)) {
-			size1--;
-		}
+  // map operations:
 
-		return size1;
-	}
-	template <class T, class V>
-	map<T, V>::map(const map<T, V> &m)
-	{
-		iterator it;
-		it = m.begin();
-		root = NULL;
-		size1 = 0;
-		for (it = m.begin(); it != m.end(); it++) {
-			this->insert(pair<T, V>((*it).first, (*it).second));
-		}
-	}
+  iterator find(const key_type& x) { return t.find(x); }
+  const_iterator find(const key_type& x) const { return t.find(x); }
+  size_type count(const key_type& x) const { return t.count(x); }
+  iterator lower_bound(const key_type& x) {return t.lower_bound(x); }
+  const_iterator lower_bound(const key_type& x) const {
+    return t.lower_bound(x); 
+  }
+  iterator upper_bound(const key_type& x) {return t.upper_bound(x); }
+  const_iterator upper_bound(const key_type& x) const {
+    return t.upper_bound(x); 
+  }
+  
+  pair<iterator,iterator> equal_range(const key_type& x) {
+    return t.equal_range(x);
+  }
+  pair<const_iterator,const_iterator> equal_range(const key_type& x) const {
+    return t.equal_range(x);
+  }
+  friend bool operator==(const map&, const map&);
+  friend bool operator<(const map&, const map&);
+};
 
-	template <class T, class V>
-	void map<T, V>::swap(map<T, V> &m)
-	{
-		node<T, V> *p = NULL;
-		p = root;
-		this->root = m.root;
-		m.root = p;
-	}
-
-	template <class T, class V>
-	typename map<T, V>::iterator map<T, V>::rend() const
-	{
-		return (this->begin());
-	}
-
-	template <class T, class V>
-	typename map<T, V>::iterator map<T, V>::rbegin() const
-	{
-		return (this->end());
-	}
-
-	template <class T, class V>
-	pair<typename map<T, V>::iterator, typename map<T, V>::iterator> map<T, V>::equal_range(T key)
-	{
-		pair<iterator, iterator> p;
-		p.first = this->lower_bound(key);
-		p.second = this->upper_bound(key);
-		return p;
-	}
-	template <class T, class V>
-	typename map<T, V>::iterator map<T, V>::upper_bound(T key)
-	{
-		iterator it;
-		it.root1 = root;
-		node <T, V> *n = NULL;
-		n = my_fun(root, root, key);
-		it.it = n;
-		it++;
-		return it;
-	}
-	template <class T, class V>
-	typename map<T, V>::iterator map<T, V>::lower_bound(T key)
-	{
-		iterator it;
-		it.root1 = root;
-		node<T, V> *n = NULL;
-
-		n = my_fun(root, root, key);
-		if (n->key == key) {
-			it.it = n;
-		}
-		else {
-			it.it = n;
-			it++;
-
-		}
-		return it;
-	}
-
-	template <class T, class V>
-	node<T, V>* map<T, V>::my_fun(node<T, V> *r, node<T, V> *p, T x)
-	{
-		if (r == NULL) {
-			return p;
-		}
-		else if (r->key == x) {
-			return r;
-		}
-		else if (r->key < x) {
-			my_fun(r->right, r, x);
-		}
-		else {
-			my_fun(r->left, r, x);
-		}
-
-	}
-
-	template <class T, class V>
-	V& map<T, V>::operator [](T a)
-	{
-		T y;
-		y = a;
-		iterator it;
-		node<T, V> *s = NULL;
-		s = search(root, a);
-		if (s != NULL) {
-			return (s->value);
-		}
-		else {
-			V c;
-			this->insert(pair<T, V>(a, c));
-			s = search(root, a);
-			return (s->value);
-		}
-	}
-
-	template <class T, class V>
-	typename map<T, V>::iterator map<T, V>::find(T key)
-	{
-		map<T, V>::iterator it1;
-		it1.root1 = root;
-		node<T, V> *p = NULL;
-		p = search(root, key);
-		it1.it = p;
-		return it1;
-
-	}
-	template <class T, class V>
-	bool map<T, V>::count(T key)
-	{
-		node<T, V> *p = NULL;
-		p = search(root, key);
-		if (p == NULL) {
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
-	template <class T, class V>
-	node<T, V>* map<T, V>::search(node<T, V> *p, T key)
-	{
-		if (p == NULL) {
-			return NULL;
-		}
-		else if (p->key == key) {
-			return p;
-		}
-		else if (p->key < key) {
-			return (search(p->right, key));
-		}
-		else {
-			return (search(p->left, key));
-		}
-
-	}
-
-	template <class T, class V>
-	bool map<T, V>::empty()
-	{
-		if (root == NULL) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	template <class T, class V>
-	void map<T, V>::erase(iterator it1)
-	{
-		T key;
-		key = it1.it->key;
-		if (this->delete_node(&root, key)) {
-			size1--;
-		}
-
-	}
-
-	template <class T, class V>
-	int map<T, V>::max(int a, int b)
-	{
-		if (a > b) {
-			return a;
-		}
-		return b;
-	}
-
-	template <class T, class V>
-	int map<T, V>::height(node<T, V> *s)
-	{
-		if (s != NULL) {
-			return (s->height);
-		}
-		return 0;
-	}
-
-	template <typename T, class V>
-	bool map<T, V>::insert_node(node<T, V> **p, T key, V value)
-	{
-		//cout << "in the insert function and key =  " << key << endl;
-		int diff;
-		if ((*p) == NULL) {
-			(*p) = new node<T, V>();
-			(*p)->key = key;
-			(*p)->value = value;
-			(*p)->left = NULL;
-			(*p)->right = NULL;
-			(*p)->height = 1; // since, its a leaf node
-			return true;
-		}
-		else if ((*p)->key == key) {
-			//	cout << "same key" << endl;
-			return false;
-		}
-		else if ((*p)->key < key) {
-			insert_node(&((*p)->right), key, value);
-		}
-		else if ((*p)->key > key) {
-			insert_node(&((*p)->left), key, value);
-		}
-		(*p)->height = max(height((*p)->left), height((*p)->right)) + 1;
-		diff = difference_of_heights((*p));
-		//cout << "diff  = " << diff << "of " << (*p) -> key << endl;
-		if (diff > 1 && (key < (*p)->left->key)) {
-			//RATATE RIGHT
-		//	cout << "rotate right case" << endl;
-			(*p) = rotate_right(*p);
-		}
-		else if (diff < -1 && (key > (*p)->right->key)) {
-			//LEFT ROTATE
-		  //  	cout << "rotate left case" << endl;
-			(*p) = rotate_left(*p);
-		}
-		else if (diff > 1 && (key > (*p)->left->key)) {
-			//LEFT RIGHT ROTATE
-	//	cout << "rotate left right case" << endl;
-			(*p)->left = rotate_left((*p)->left);
-			(*p) = rotate_right((*p));
-		}
-		else if (diff < -1 && (key < (*p)->right->key)) {
-			//RIGHT LEFT
-	//	cout << "rotate right left case\n";
-			(*p)->right = rotate_right(*p);
-			(*p) = rotate_left(*p);
-		}
-		return true;
-	}
-
-	template <typename T, class V>
-	int map<T, V>::difference_of_heights(node<T, V> *n)
-	{
-		if (n != NULL) {
-			return (height(n->left) - height(n->right));
-		}
-		return 0;
-	}
-
-	template <typename T, class V>
-	node<T, V>* map<T, V>::rotate_right(node<T, V> *y)
-	{
-		//cout << "rotating right of " << y -> key << endl;
-		node<T, V> *x = y->left;
-		node<T, V> *z = x->right;
-
-		y->left = z;
-		x->right = y;
-
-		y->height = max(height(y->left), height(y->right)) + 1;
-		x->height = max(height(x->left), height(x->right)) + 1;
-
-		return x;
-	}
-
-	template <typename T, class V>
-	node<T, V>* map<T, V>::rotate_left(node<T, V> *x)
-	{
-		//cout << "rotating left " << x -> key << endl;
-		node<T, V> *y = x->right;
-		node<T, V> *z = y->left;
-
-		y->left = x;
-		x->right = z;
-
-		y->height = max(height(y->left), height(y->right)) + 1;
-		x->height = max(height(x->left), height(x->right)) + 1;
-
-		return y;
-	}
-
-	template <typename T, class V>
-	void map<T, V>::preorder(node<T, V> *p)
-	{
-		if (p != NULL) {
-			cout << " " << p->key;
-			preorder(p->left);
-			preorder(p->right);
-		}
-	}
-#define aaprintf(s) SkyConsole::Print(s);
-	template <class T, class V>
-	bool map<T, V>::delete_node(node<T, V> **p, T key)
-	{
-		aaprintf("asdsasd\n");
-		//cout << "deleting " << key << endl;
-		if ((*p) == NULL) {
-//			cout << "key mismatch" << endl;
-			return false;
-		}
-		else if ((*p)->key < key) {
-			//	cout << "moving rigt of " << (*p) -> key << endl;
-			delete_node(&((*p)->right), key);
-		}
-		else if ((*p)->key > key) {
-			//	cout << "moving left of " << (*p) -> key << endl;
-			delete_node(&((*p)->left), key);
-		}
-		else {
-			if ((*p)->right == NULL && (*p)->left == NULL) {
-//				cout << "no node case\n";
-				(*p) = NULL;
-			}
-			else if ((*p)->right == NULL && (*p)->left != NULL) {
-//				cout << "one left child case" << endl;
-				(*p) = (*p)->left;
-			}
-			else if ((*p)->right != NULL && (*p)->left == NULL) {
-//				cout << "onoe right caswe\n";
-				(*p) = (*p)->right;
-			}
-			else {
-//				cout << "two child case" << endl;
-				node<T, V> *q = (*p)->right;
-				if (q->left == NULL) {
-//					cout << "case of left = NULL\n";
-					(*p)->key = q->key;
-					(*p)->right = q->right;
-				}
-				else {
-//					cout << "other case\n";
-					while (q->left->left != NULL) {
-						q = q->left;
-					}
-					
-					(*p)->key = q->left->key;
-					q->left = q->left->right;
-				}
-			}
-		}
-		if ((*p) != NULL) {
-			(*p)->height = max(height((*p)->left), height((*p)->right)) + 1;
-			int diff;
-			diff = difference_of_heights((*p));
-			if (diff > 1) {
-				int l_balance;
-				l_balance = difference_of_heights((*p)->left);
-				if (l_balance >= 0) {
-					(*p) = rotate_right((*p));
-				}
-				else {
-					(*p)->left = rotate_left((*p)->left);
-					(*p) = rotate_right((*p));
-				}
-			}
-			else if (diff < -1) {
-				int r_balance;
-				r_balance = difference_of_heights((*p)->right);
-				if (r_balance <= 0) {
-					(*p) = rotate_left((*p));
-				}
-				else {
-					(*p)->right = rotate_right((*p)->right);
-					(*p) = rotate_left(*p);
-				}
-			}
-		}
-	}
-
-	template <class T, class V>
-	bool operator==(const map<T, V>&x, const map<T, V>& k)
-	{
-		if (x.size() != k.size()) {
-			return false;
-		}
-		else {
-			typename map<T, V>::iterator it, it1;
-			for (it = x.begin(), it1 = k.begin(); it != x.end(); it++, it1++) {
-				if ((*it).first != (*it1).first || (*it).second != (*it1).second) {
-					return false;
-				}
-			}
-			return true;
-		}
-	}
-
-
-	template <class T, class V>
-	bool operator!=(const map<T, V>& x, const map<T, V>& k)
-	{
-		return (!(x == k));
-	}
+template <class Key, class T, class Compare, class Alloc>
+inline bool operator==(const map<Key, T, Compare, Alloc>& x, 
+                       const map<Key, T, Compare, Alloc>& y) {
+  return x.t == y.t;
 }
+
+template <class Key, class T, class Compare, class Alloc>
+inline bool operator<(const map<Key, T, Compare, Alloc>& x, 
+                      const map<Key, T, Compare, Alloc>& y) {
+  return x.t < y.t;
+}
+
+#endif /* __SGI_STL_MAP_H */
+

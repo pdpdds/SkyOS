@@ -5,7 +5,7 @@
 #include "memory.h"
 #include "ctype.h"
 #include "list.h"
-#include "hash_map.h"
+//#include "hash_map.h"
 #include "map.h"
 #include "stack.h"
 #include "vector.h"

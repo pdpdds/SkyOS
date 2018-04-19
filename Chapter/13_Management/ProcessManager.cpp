@@ -15,7 +15,7 @@
 #include "UserProcessLoader.h"
 
 ProcessManager* ProcessManager::m_processManager = nullptr;
-static int kernelStackIndex = 0;
+static int kernelStackIndex = 1;
 
 #define TASK_GENESIS_ID 1000
 
@@ -44,7 +44,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	if (0 == readCnt)
 		return nullptr;
 
-	if (!ValidatePEImage(buf)) 
+	if (!ValidatePEImage(buf))
 	{
 		SkyConsole::Print("Invalid PE Format!! %s\n", pProcess->m_processName);
 		StorageManager::GetInstance()->CloseFile(file);
@@ -61,7 +61,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	pProcess->m_imageBase = ntHeaders->OptionalHeader.ImageBase;
 	pProcess->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;
 	pThread->m_imageBase = ntHeaders->OptionalHeader.ImageBase;
-	pThread->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;	
+	pThread->m_imageSize = ntHeaders->OptionalHeader.SizeOfImage;
 	pThread->m_dwPriority = 1;
 	pThread->m_taskState = TASK_STATE_INIT;
 	pThread->m_initialStack = 0;
@@ -104,12 +104,12 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 		fileRest = 1;
 
 	int readCount = (pThread->m_imageSize / 512) + fileRest;
-	for (int i = 1; i < readCount; i++) 
+	for (int i = 1; i < readCount; i++)
 	{
 		if (file->_eof == 1)
 			break;
 
-		readCnt = StorageManager::GetInstance()->ReadFile(file, memory + 512 * i, 512, 1);		
+		readCnt = StorageManager::GetInstance()->ReadFile(file, memory + 512 * i, 512, 1);
 	}
 
 	StorageManager::GetInstance()->CloseFile(file);
@@ -140,6 +140,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	return pThread;
 }
 
+#include "MultiBoot.h"
 Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID param)
 {
 	Thread* pThread = new Thread();
@@ -157,29 +158,29 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	pThread->m_startParam = param;
 
 	//스택을 생성하고 주소공간에 매핑한다.
-	void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * kernelStackIndex++);
+	void* stackVirtual = (void*)(KERNEL_STACK - PAGE_SIZE * kernelStackIndex++);
 	//void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_kernelStackIndex++);
-	void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
+	//void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
 
 #ifdef _DEBUG
 	SkyConsole::Print("Virtual Stack : %x\n", stackVirtual);
 	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
 #endif
 
-	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
+	SkyConsole::Print("Virtual Stack : %x\n", stackVirtual);
 
 	/* map user process stack space */
-	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
+	//VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
 
 	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE);
 	pThread->frame.esp = (uint32_t)pThread->m_initialStack;
 	pThread->frame.ebp = pThread->frame.esp;
-		
+
 	return pThread;
 }
 
 Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType)
-{	
+{
 	Process* pProcess = nullptr;
 	if (processType == PROCESS_KERNEL)
 		pProcess = m_pKernelProcessLoader->CreateProcessFromMemory(appName, lpStartAddress, param);
@@ -232,6 +233,8 @@ Process* ProcessManager::CreateProcessFromMemory2(const char* appName, LPTHREAD_
 
 	bool result = pProcess->AddMainThread(pThread);
 
+
+
 	M_Assert(result == true, "AddMainThread Method Failed.");
 
 	result = AddProcess(pProcess);
@@ -240,7 +243,9 @@ Process* ProcessManager::CreateProcessFromMemory2(const char* appName, LPTHREAD_
 
 #ifdef _SKY_DEBUG
 	SkyConsole::Print("Process Created. Process Id : %d\n", pProcess->m_processId);
-#endif
+#endif	
+
+
 
 	return pProcess;
 }
@@ -295,8 +300,21 @@ Process* ProcessManager::FindProcess(int processId)
 	if (iter == m_processList.end())
 		return nullptr;
 
-	return *iter;
+	return (*iter).second;
 }
+Thread* ProcessManager::FindTask(int taskId)
+{
+	auto iter = m_taskList.begin();
+	for (; iter != m_taskList.end(); iter++)
+	{
+		Thread* pThread = *iter;
+		if (pThread->m_threadId == taskId)
+			return pThread;
+	}
+
+	return nullptr;
+}
+
 
 bool ProcessManager::AddProcess(Process* pProcess)
 {
@@ -314,6 +332,7 @@ bool ProcessManager::AddProcess(Process* pProcess)
 
 	Thread* pThread = pProcess->GetMainThread();
 
+
 #ifdef _DEBUG
 	// 메인스레드의 EIP, ESP를 얻는다
 	entryPoint = pThread->frame.eip;
@@ -325,9 +344,21 @@ bool ProcessManager::AddProcess(Process* pProcess)
 #endif	
 
 	kEnterCriticalSection();
-	m_processList.insert(pProcess->GetProcessId(), pProcess);
 
-	m_taskList.push_back(pThread);
+
+	if (strcmp("WatchDog2", pProcess->m_processName) != 0)
+	{
+		m_processList[pProcess->GetProcessId()] = pProcess;
+		m_taskList.push_back(pThread);
+	}
+	else
+	{
+		m_processList[pProcess->GetProcessId()] = pProcess;
+		m_taskList.push_back(pThread);
+		SkyConsole::Print("procStack : %x\n", pThread);
+
+	}
+
 
 	kLeaveCriticalSection();
 
@@ -338,40 +369,26 @@ bool ProcessManager::RemoveProcess(int processId)
 {
 	kEnterCriticalSection();
 
-	hash_map<int, Process*>::iterator iter = m_processList.find(processId);
+	map<int, Process*>::iterator iter = m_processList.find(processId);
 
-	Process* pProcess = *iter;
+	Process* pProcess = (*iter).second;
 
 	if (pProcess == nullptr)
 		return false;
-	
-	m_processList.erase(iter);
-	hash_map<int, Thread*>::iterator threadIter = pProcess->m_threadList.begin();
 
-	for (; threadIter != pProcess->m_threadList.end(); ++threadIter)
+	m_processList.erase(iter);
+	map<int, Thread*>::iterator threadIter = pProcess->m_threadList.begin();
+
+	for (; threadIter != pProcess->m_threadList.end(); threadIter++)
 	{
 		SkyConsole::Print("task deleted!! %d\n", pProcess->m_threadList.size());
-		Thread* pThread = *threadIter;
-		TaskList::Iterator task = m_taskList.find(pThread);
-
-		if (task != m_taskList.end())
-		{
-			SkyConsole::Print("task deleted!!\n");
-			m_taskList.erase(task);
-		}
-		else
-		{
-			if (*task == pThread)
-			{
-				SkyConsole::Print("task deletedqqq!!\n");
-				m_taskList.erase(task);
-			}
-		}
+		Thread* pThread = (*threadIter).second;				
+		m_taskList.remove(pThread);
 		delete pThread;
-	}
-
+	}	
+	pProcess->m_threadList.clear();
 	delete pProcess;
-
+	
 	kLeaveCriticalSection();
 
 	return true;

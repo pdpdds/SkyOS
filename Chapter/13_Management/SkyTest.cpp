@@ -13,7 +13,7 @@
 #include "StorageManager.h"
 #include "fileio.h"
 #include "ctrycatch.h"
-#include "hash_map.h"
+//#include "hash_map.h"
 
 //인터럽트 핸들러 테스트
 void TestDivideByZero();
@@ -214,24 +214,32 @@ void TestVector()
 	for (;;);
 }
 
+typedef struct tag_aa
+{
+	int j;
+	int k;
+}aa;
+
 void Testlist()
 {
-	list<int> fstlist = list<int>();
-	list<int> scndlist = list<int>();
+	/*list<aa> fstlist;
+	list<int> scndlist;
 	int counter = 0;
 
 	for (int i = 0; i <= 10; ++i) {
-		fstlist.push_back(i);
+		aa a;
+		a.j = i;
+		a.k = i + 1;
+		fstlist.push_back(a);
 	}
-	list<int>::Iterator iter = fstlist.begin();
+	list<aa>::iterator iter = fstlist.begin();
 	for (int i = 0; i < fstlist.size(); i++, iter++)
 	{
-		SkyConsole::Print("item %d  done\n", *iter);
-		
+		SkyConsole::Print("item 0x%d 0x%d done\n", ((aa)(*iter)).j, ((aa)(*iter)).k);
 	}
 
 	SkyConsole::Print("done!!\n");
-
+	*/
 	/*while (1) 
 	{
 		for (int i = 0; i <= 10; ++i) {
@@ -331,12 +339,12 @@ void TestJson()
 	}
 }
 
-/*void TestMap()
+void TestMap()
 {
-	std::map<int, int> m10;
-	std::map<int, int>::iterator it1;
-	std::map<int, int>::iterator it2;
-
+	map<int, int> m10;
+	map<int, int>::iterator it1;
+	map<int, int>::iterator it2;
+	
 	m10[1] = 2;
 	m10[2] = 4;
 	m10[4] = 8;
@@ -361,7 +369,9 @@ void TestJson()
 		SkyConsole::Print("%d  %d\n", (*it1).first, (*it1).second);
 		i++;
 	}
-}*/
+}
+
+
 
 void TestMap2()
 {
@@ -369,7 +379,7 @@ void TestMap2()
 	//std::map<int, int>::iterator it1;
 	//std::map<int, int>::iterator it2;
 
-	hash_map<int, int> hashmap;
+	map<int, int> hashmap;
 	
 
 	//Error

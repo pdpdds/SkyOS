@@ -31,7 +31,6 @@
 
 #include "stdint.h"
 #include "string.h"
-#include "stl_pair.h"
 
 //Constructor
 template <typename Key, typename Value>

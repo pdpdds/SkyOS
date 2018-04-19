@@ -52,7 +52,7 @@ heap_t *create_heap(u32int start, u32int end, u32int max, u8int supervisor, u8in
    Allocates a contiguous region of memory 'size' in size. If page_align==1, it creates that block starting
    on a page boundary.
 **/
-void *alloc(u32int size, u8int page_align, heap_t *heap);
+void *halloc(u32int size, u8int page_align, heap_t *heap);
 
 /**
    Releases a block allocated with 'alloc'.
@@ -92,6 +92,7 @@ u32int kmalloc_ap(u32int sz, u32int *phys);
    General allocation function.
 **/
 u32int kmalloc(u32int sz);
+u32int malloc(u32int sz);
 
 /**
    General deallocation function.

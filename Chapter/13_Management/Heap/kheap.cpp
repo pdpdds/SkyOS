@@ -10,6 +10,7 @@
 #include "Hal.h"
 #include "SkyConsole.h"
 #include "SkyAPI.h"
+#include "sprintf.h"
 
 // end is defined in the linker script.
 //extern u32int end;
@@ -19,15 +20,15 @@ heap_t kheap;
 u32int kmalloc_int(u32int sz, int align, u32int *phys)
 {
     
-        void *addr = alloc(sz, (u8int)align, &kheap);
+        void *addr = halloc(sz, (u8int)align, &kheap);
 
 		//SkyConsole::Print("kmalloc_int 0x%x\n", kheap.start_address);
 		//SkyConsole::Print("kmalloc_int 0x%x\n", kheap.end_address);
 		
-        if (phys != 0)
+        /*if (phys != 0)
         {
 			phys = (u32int*)VirtualMemoryManager::GetPhysicalAddressFromVirtualAddress(VirtualMemoryManager::GetKernelPageDirectory(), (uint32_t)addr);
-        }
+        }*/
 
         return (u32int)addr;
    
@@ -72,6 +73,11 @@ u32int kmalloc_ap(u32int sz, u32int *phys)
     return kmalloc_int(sz, 1, phys);
 }
 
+u32int malloc(u32int sz)
+{
+	return kmalloc(sz);
+}
+
 u32int kmalloc(u32int sz)
 {
 	kEnterCriticalSection();
@@ -109,9 +115,11 @@ static void expand(u32int new_size, heap_t *heap)
 }
 
 static u32int contract(u32int new_size, heap_t *heap)
-{
+{	
     // Sanity check.
-	M_Assert(new_size < heap->end_address-heap->start_address, "new_size < heap->end_address-heap->start_address");
+	char buf[256];
+	sprintf(buf, "0x%x 0x%x\n", new_size, heap->end_address - heap->start_address);
+	M_Assert(new_size < heap->end_address-heap->start_address, buf);
 
     // Get the nearest following page boundary.
     if (new_size&0x1000)
@@ -130,7 +138,7 @@ static u32int contract(u32int new_size, heap_t *heap)
     {
        // free_frame(get_page(heap->start_address+i, 0, kernel_directory));
         i -= 0x1000;
-    }
+    }	
 
     heap->end_address = heap->start_address + new_size;
     return new_size;
@@ -248,7 +256,7 @@ heap_t *create_heap(u32int start, u32int end_addr, u32int max, u8int supervisor,
     return heap;
 }
 
-void *alloc(u32int size, u8int page_align, heap_t *heap)
+void *halloc(u32int size, u8int page_align, heap_t *heap)
 {
 
     // Make sure we take the size of header/footer into account.
@@ -304,7 +312,7 @@ void *alloc(u32int size, u8int page_align, heap_t *heap)
             footer->magic = HEAP_MAGIC;
         }
         // We now have enough space. Recurse, and call the function again.
-        return alloc(size, page_align, heap);
+        return halloc(size, page_align, heap);
     }
 
     header_t *orig_hole_header = (header_t *)lookup_ordered_array(iterator, &heap->index);
@@ -376,6 +384,7 @@ void free(void *p, heap_t *heap)
     // Exit gracefully for null pointers.
     if (p == 0)
         return;
+	
 
     // Get the header and footer associated with this pointer.
     header_t *header = (header_t*) ( (u32int)p - sizeof(header_t) );
@@ -394,6 +403,15 @@ void free(void *p, heap_t *heap)
     // Do we want to add this header into the 'free holes' index?
     char do_add = 1;
 
+	static int k = 0;
+	if (k == 1)
+	{
+		SkyConsole::Print("A : 0x%x 0x%x 0x%x 0x%x 0x%x\n", p, header, footer, heap->end_address, heap->start_address);
+	
+	}
+
+	k++;
+
     // Unify left
     // If the thing immediately to the left of us is a footer...
     footer_t *test_footer = (footer_t*) ( (u32int)header - sizeof(footer_t) );
@@ -405,6 +423,15 @@ void free(void *p, heap_t *heap)
         footer->header = header;          // Rewrite our footer to point to the new header.
         header->size += cache_size;       // Change the size.
         do_add = 0;                       // Since this header is already in the index, we don't want to add it again.
+
+		static int a = 0;
+		if (a == 1)
+		{
+			SkyConsole::Print("B : 0x%x  0x%x 0x%x 0x%x 0x%x\n", p, header, footer, heap->end_address, heap->start_address);
+
+		}
+
+		a++;
     }
 
     // Unify right
@@ -413,10 +440,19 @@ void free(void *p, heap_t *heap)
     if (test_header->magic == HEAP_MAGIC &&
         test_header->is_hole)
     {
+		SkyConsole::Print("test_header : 0x%x\n", test_header);
+		SkyConsole::Print("test_header_size : 0x%x\n", test_header->size);
         header->size += test_header->size; // Increase our size.
+
         test_footer = (footer_t*) ( (u32int)test_header + // Rewrite it's footer to point to our header.
                                     test_header->size - sizeof(footer_t) );
+
+		SkyConsole::Print("FSDSDF : 0x%x\n", test_footer);
         footer = test_footer;
+
+//20180419 Heap Bug Fix
+		footer->header = header;
+
         // Find and remove this header from the index.
         u32int iterator = 0;
         while ( (iterator < heap->index.size) &&
@@ -427,13 +463,27 @@ void free(void *p, heap_t *heap)
 		M_Assert(iterator < heap->index.size, "iterator < heap->index.size");
         // Remove it.
         remove_ordered_array(iterator, &heap->index);
-    }
 
+		
+			SkyConsole::Print("C : 0x%x  0x%x 0x%x 0x%x 0x%x\n", p, header, footer, heap->end_address, heap->start_address);
+    }
+	
     // If the footer location is the end address, we can contract.
     if ( (u32int)footer+sizeof(footer_t) == heap->end_address)
-    {
+    {		
         u32int old_length = heap->end_address-heap->start_address;
-        u32int new_length = contract( (u32int)header - heap->start_address, heap);
+		u32int newSize = (u32int)footer - heap->start_address;
+
+		static int j = 0;
+		if (j == 1)
+		{
+			SkyConsole::Print("D : 0x%x 0x%x 0x%x 0x%x 0x%x\n", p, header, footer, heap->end_address, heap->start_address);
+			
+		}
+
+		j++;
+
+        u32int new_length = contract(newSize, heap);
 		
         // Check how big we will be after resizing.
         if (header->size - (old_length-new_length) > 0)
@@ -459,7 +509,7 @@ void free(void *p, heap_t *heap)
 
     // If required, add us to the index.
     if (do_add == 1)
-        insert_ordered_array((void*)header, &heap->index);
+        insert_ordered_array((void*)header, &heap->index);	
 
-
+	printf("endf\n");
 }

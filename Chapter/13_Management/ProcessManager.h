@@ -19,8 +19,8 @@ public:
 	ProcessManager();
 	virtual ~ProcessManager();
 
-	typedef hash_map<int, Process*> ProcessList;
-	typedef std::list<Thread*> TaskList;
+	typedef map<int, Process*> ProcessList;
+	typedef list<Thread*> TaskList;
 		
 	ProcessList* GetProcessList() { return &m_processList;}
 	TaskList* GetTaskList() { return &m_taskList; }
@@ -42,6 +42,8 @@ public:
 
 	Process* FindProcess(int processId);
 	bool RemoveProcess(int processId);
+
+	Thread* FindTask(int taskId);
 	
 private:
 	bool AddProcess(Process* pProcess);

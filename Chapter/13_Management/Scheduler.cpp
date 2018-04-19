@@ -75,8 +75,8 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 
 		//SkyConsole::Print("TestProc %d\n", count);
 	}
-	
-	return true;
+
+				
 	ProcessManager::TaskList* pTaskList = ProcessManager::GetInstance()->GetTaskList();
 
 	int taskCount = pTaskList->size();
@@ -87,12 +87,7 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 	if (taskCount == 1)
 		return true;
 
-	ProcessManager::TaskList::Iterator iter = pTaskList->begin();
-
-	if (iter == pTaskList->end())
-	{
-		HaltSystem("Timer");
-	}
+	ProcessManager::TaskList::iterator iter = pTaskList->begin();
 
 	Thread* pThread = *iter;
 
@@ -115,16 +110,19 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 		//SkyConsole::Print("\n%s, %s %d, %d\n", __FILE__, __func__, __LINE__, pTaskList->size());
 	}
 	
-	pTaskList->erase(iter);
+	pTaskList->remove(pThread);
+	pTaskList->push_back(pThread);	
 
-	pTaskList->push_back(pThread);
-
-	Thread* pNextThread = pTaskList->front();	
+	Thread* pNextThread = pTaskList->front();
 
 	Process* pProcess = pNextThread->m_pParent;
 
 	if (pNextThread->m_taskState == TASK_STATE_INIT)
 	{		
+
+		
+		SkyConsole::Print("%s Initializing\n", pProcess->m_processName);
+		
 		
 		pNextThread->m_waitingTime = TASK_RUNNING_TIME;
 		pNextThread->m_taskState = TASK_STATE_RUNNING;

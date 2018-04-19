@@ -24,15 +24,15 @@ long CmdKill(char *theCommand)
 
 	Process* pProcess = ProcessManager::GetInstance()->FindProcess(id);
 
+	kLeaveCriticalSection();
+
 	if (pProcess != nullptr)
 	{
 		SkyConsole::Print("kill process : %s, ID : %d\n", pProcess->m_processName, pProcess->GetProcessId());
 		ProcessManager::GetInstance()->RemoveProcess(pProcess->GetProcessId());
 	}
 	else
-		SkyConsole::Print("process don't exist(%d)\n", id);
-
-	kLeaveCriticalSection();
+		SkyConsole::Print("process don't exist(%d)\n", id);	
 
 	return false;
 }
@@ -43,11 +43,11 @@ long CmdProcessList(char *theCommand)
 	SkyConsole::Print(" ID : Process Name\n");
 
 	ProcessManager::ProcessList* processlist = ProcessManager::GetInstance()->GetProcessList();
-	hash_map<int, Process*>::iterator iter = processlist->begin();
+	map<int, Process*>::iterator iter = processlist->begin();
 
 	for (; iter != processlist->end(); ++iter)
 	{
-		Process* pProcess = *iter;
+		Process* pProcess = (*iter).second;
 		SkyConsole::Print("  %d %s\n", pProcess->GetProcessId(), pProcess->m_processName);
 	}
 
@@ -67,10 +67,11 @@ long cmdMemState(char *theCommand)
 long cmdCreateWatchdogTask(char* pName)
 {
 	kEnterCriticalSection();
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory2("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
+	
+	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory2("WatchDog2", WatchDogProc, NULL, PROCESS_KERNEL);	
 	kLeaveCriticalSection();
-	SkyConsole::Print("Can't Execute Process\n");
-	for (;;);
+	
+	SkyConsole::Print("Can't Execute Process\n");	
 
 	return false;
 }

@@ -13,7 +13,7 @@
 #include "TSS.h"
 #include "ProcessManager.h"
 #include "KernelProcedure.h"
-
+#include "Scheduler.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -121,7 +121,13 @@ void kmain(unsigned long magic, unsigned long addr)
 	ConstructFileSystem();	
 
 	kLeaveCriticalSection();
-	
+
+	ProcessManager::GetInstance();
+	Scheduler::GetInstance();
+
+	//TestMap();
+	//for (;;);
+
 	StartConsoleSystem();
 	
 	for (;;);	
@@ -243,9 +249,61 @@ void ConstructFileSystem()
 		delete pFloppyDiskAdaptor;
 	}				
 }
+#include "map.h"
+long cmdTestCPlusPlus(char *theCommand)
+{
+	Process* pProcess = new Process();
+	Thread* pThread = new Thread();
+	pProcess = new Process();
+	pThread = new Thread();
+	pProcess = new Process();
+	pThread = new Thread();
+	pProcess = new Process();
+	pThread = new Thread();
+	pProcess = new Process();
+	pThread = new Thread();
+	pProcess = new Process();
+	pThread = new Thread();
+
+	delete pThread;
+	delete pProcess;
+
+	/*map<int, Process*> mapTest;
+	mapTest[101] = new Process();
+	Thread* pThread = new Thread();
+	mapTest[102] = new Process();
+	pThread = new Thread();
+	mapTest[103] = new Process();
+	pThread = new Thread();
+	mapTest[104] = new Process();
+	pThread = new Thread();
+	mapTest[105] = new Process();
+	pThread = new Thread();
+	mapTest[106] = new Process();
+	pThread = new Thread();
+
+	map<int, Process*>::iterator iter = mapTest.find(106);
+
+	if (iter != mapTest.end())
+	{
+		Process* pProcess = (*iter).second;
+		mapTest.erase(iter);
+
+		delete pThread;
+		delete pProcess;
+		
+	}*/
+
+
+
+	return false;
+}
 
 void StartConsoleSystem()
 {
+	cmdTestCPlusPlus(nullptr);
+	
+
 	kEnterCriticalSection();
 
 	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL, PROCESS_KERNEL);
@@ -255,7 +313,14 @@ void StartConsoleSystem()
 
 	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
 	ProcessManager::GetInstance()->CreateProcessFromMemory("ProcessRemover", ProcessRemoverProc, NULL, PROCESS_KERNEL);
+	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
+	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
+	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
 	
+
+	ProcessManager::GetInstance()->RemoveProcess(106);
+	//for (;;);
+
 	SkyConsole::Print("Init Console....\n");
 
 	Thread* pThread = pProcess->GetMainThread();
@@ -272,7 +337,7 @@ void StartConsoleSystem()
 
 	SkyConsole::Print("ConsoleSystem : entryPoint : (0x%x)\n", entryPoint);
 	SkyConsole::Print("ConsoleSystem : procStack : (0x%x)\n", procStack);
-
+	
 	JumpToNewKernelEntry(entryPoint, procStack);
 }
 

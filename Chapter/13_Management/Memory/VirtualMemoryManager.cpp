@@ -13,6 +13,8 @@ namespace VirtualMemoryManager
 	PageDirectory*		_kernel_directory = 0;
 	PageDirectory*		_cur_directory = 0;	
 
+	PageDirectory* pageDirectoryPool[10];
+
 	//가상 주소와 매핑된 실제 물리 주소를 얻어낸다.
 	void* VirtualMemoryManager::GetPhysicalAddressFromVirtualAddress(PageDirectory* directory, uint32_t virtualAddress)
 	{
@@ -166,11 +168,15 @@ namespace VirtualMemoryManager
 	PageDirectory* CreateCommonPageDirectory()
 	{
 		
+		static int index = 0;
 		//페이지 디렉토리 생성. 가상주소 공간 
 		//4GB를 표현하기 위해서 페이지 디렉토리는 하나면 충분하다.
 		//페이지 디렉토리는 1024개의 페이지테이블을 가진다
 		//1024 * 1024(페이지 테이블 엔트리의 개수) * 4K(프레임의 크기) = 4G
-		PageDirectory* dir = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		//PageDirectory* dir = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+
+		PageDirectory* dir = pageDirectoryPool[index];
+		index++;
 
 		if (dir == NULL)
 			return nullptr;
@@ -228,8 +234,23 @@ namespace VirtualMemoryManager
 	bool Initialize()
 	{
 		SkyConsole::Print("Virtual Memory Manager Init..\n");
+		pageDirectoryPool[0] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		pageDirectoryPool[1] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		pageDirectoryPool[2] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		pageDirectoryPool[3] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		pageDirectoryPool[4] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		pageDirectoryPool[5] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		pageDirectoryPool[6] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		pageDirectoryPool[7] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		pageDirectoryPool[8] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		pageDirectoryPool[9] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
 
 		PageDirectory* dir = CreateCommonPageDirectory();
+
+		SkyConsole::Print("0x%x..\n", pageDirectoryPool[0]);
+		SkyConsole::Print("0x%x..\n", pageDirectoryPool[1]);
+		SkyConsole::Print("0x%x..\n", pageDirectoryPool[2]);
+		SkyConsole::Print("0x%x..\n", pageDirectoryPool[3]);		
 
 		if (nullptr == dir)
 			return false;

@@ -9,13 +9,13 @@ namespace std
 
 	const int BUFFSIZE = 256;
 
-	class IStream
+	class istream
 	{
 		public:
-			IStream& operator >> (char *cp);
-			IStream& operator >> (char &c);
-			IStream& operator >> (unsigned char *ucp);
-			IStream& operator >> (unsigned char &uc);
+			istream & operator >> (char *cp);
+			istream& operator >> (char &c);
+			istream& operator >> (unsigned char *ucp);
+			istream& operator >> (unsigned char &uc);
 
 			unsigned int getString();
 			void getWord(char *str1, char *p1);
@@ -24,7 +24,7 @@ namespace std
 			char buffer[BUFFSIZE];			
 	};
 
-	extern IStream cin;
+	extern istream cin;
 }
 
 #endif

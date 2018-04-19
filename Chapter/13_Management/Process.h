@@ -18,7 +18,7 @@ public:
 	Process();
 	virtual ~Process();
 
-	typedef hash_map<int, Thread*> ThreadList;
+	typedef map<int, Thread*> ThreadList;
 
 	bool AddMainThread(Thread* pThread); //메인스레드를 추가한다.
 	bool AddThread(Thread* pThread); //스레드를 추가한다.

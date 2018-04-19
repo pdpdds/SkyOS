@@ -7,19 +7,19 @@ namespace std
 
 	const char endl = '\n';
 
-	class OStream
+	class ostream
 	{
 		public:
-			OStream& operator<<(char *cp);
-			OStream& operator<<(char c);
-			OStream& operator<<(int value);
-			OStream& operator<<(unsigned char *cq);
-			OStream& operator<<(unsigned char c1);
+			ostream & operator<<(char *cp);
+			ostream& operator<<(char c);
+			ostream& operator<<(int value);
+			ostream& operator<<(unsigned char *cq);
+			ostream& operator<<(unsigned char c1);
 
 		private:
 	};
 
-	extern OStream cout;
+	extern ostream cout;
 }
 
 #endif

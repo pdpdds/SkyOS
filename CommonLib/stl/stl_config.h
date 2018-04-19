@@ -125,7 +125,7 @@
 #     define __STL_USE_EXCEPTIONS
 #   endif
 #   ifdef _MT
-#     define __STL_WIN32THREADS
+#     //define __STL_WIN32THREADS
 #   endif
 # endif
 

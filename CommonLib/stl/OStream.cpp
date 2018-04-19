@@ -5,33 +5,33 @@ extern void printf(const char* str, ...);
 
 namespace std
 {
-	OStream cout;		//OStream cout
+	ostream cout;		//OStream cout
 
-	OStream& OStream::operator<<(char *cp)
+	ostream& ostream::operator<<(char *cp)
 	{
 		printf(cp);
 		return *this;
 	}	
 
-	OStream& OStream::operator<<(const char c)
+	ostream& ostream::operator<<(const char c)
 	{
 		printf("%c", c);
 		return *this;
 	}
 
-	OStream& OStream::operator<<(int value)
+	ostream& ostream::operator<<(int value)
 	{
 		printf("%d", value);
 		return *this;
 	}
 
-	OStream& OStream::operator<<(unsigned char *cq)
+	ostream& ostream::operator<<(unsigned char *cq)
 	{
 		printf((char*)cq);		
 		return *this;
 	}
 
-	OStream& OStream::operator<<(unsigned char c1)
+	ostream& ostream::operator<<(unsigned char c1)
 	{
 		printf("%c", (char)c1);
 		return *this;

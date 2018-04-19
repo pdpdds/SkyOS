@@ -15,9 +15,9 @@ extern char GetKeyboardInput();
 
 namespace std
 {
-	IStream cin;
+	istream cin;
 
-	unsigned int IStream::getString()
+	unsigned int istream::getString()
 	{						//Acts like a console, prints char's as they are typed
 		char input = '\0';	// and returns on 'Enter'. Text in IStream buffer.
 		unsigned int control = 0;
@@ -56,7 +56,7 @@ namespace std
 		}
 	}
 
-	void IStream::getWord(char *str1, char *p1)
+	void istream::getWord(char *str1, char *p1)
 	{
 		//Obtains first word in a string
 
@@ -80,7 +80,7 @@ namespace std
 		}
 	}
 
-	IStream& IStream::operator >> (char *cp)
+	istream& istream::operator >> (char *cp)
 	{
 		getString();			//Allows input
 		getWord(buffer, cp);	//Obtains first word
@@ -88,7 +88,7 @@ namespace std
 		return *this;
 	}
 
-	IStream& IStream::operator >> (char &c)
+	istream& istream::operator >> (char &c)
 	{
 		getString();			//Allows input
 		c = buffer[0];			//Obtains first char
@@ -96,7 +96,7 @@ namespace std
 		return *this;
 	}
 
-	IStream& IStream::operator >> (unsigned char *ucp)
+	istream& istream::operator >> (unsigned char *ucp)
 	{
 		getString();			//Allows input
 		getWord(buffer, (char *)ucp);	//Obtains first word
@@ -104,7 +104,7 @@ namespace std
 		return *this;
 	}
 
-	IStream& IStream::operator >> (unsigned char &uc)
+	istream& istream::operator >> (unsigned char &uc)
 	{
 		getString();			//Allows input
 		uc = (unsigned char)buffer[0];	//Obtains first char

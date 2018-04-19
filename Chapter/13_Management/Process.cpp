@@ -21,12 +21,14 @@ Process::~Process()
 bool Process::AddMainThread(Thread* pThread)
 {
 	m_mainThreadId = pThread->m_threadId;
-	return m_threadList.insert(pThread->m_threadId, pThread) != m_threadList.end();
+	m_threadList[pThread->m_threadId] = pThread;
+	return true;
 }
 
 bool Process::AddThread(Thread* pThread)
 {	
-	return m_threadList.insert(pThread->m_threadId, pThread) != m_threadList.end();
+	m_threadList[pThread->m_threadId] = pThread;
+	return true;
 }
 
 Thread* Process::GetThreadById(int threadId)
@@ -39,7 +41,7 @@ Thread* Process::GetThreadById(int threadId)
 	if (iter == m_threadList.end())
 		return nullptr;
 
-	return *iter;
+	return (*iter).second;
 }
 
 Thread* Process::GetMainThread()
@@ -49,7 +51,7 @@ Thread* Process::GetMainThread()
 	if (iter == m_threadList.end())
 		return nullptr;
 
-	return *iter;
+	return (*iter).second;
 }
 
 void Process::SetPageDirectory(PageDirectory* pPageDirectory)
