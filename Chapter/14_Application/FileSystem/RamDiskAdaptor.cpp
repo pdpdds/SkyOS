@@ -123,7 +123,7 @@ bool RamDiskAdaptor::InstallPackage()
 	dwDataAddress = (UINT32)(((char*)pstHeader) + sizeof(PackageHeaderStruct));		
 	// 패키지 헤더의 첫 번째 파일 데이터
 	pstItem = (PACKAGEITEM*)dwDataAddress;
-
+	
 	// 패키지에 포함된 모든 파일을 찾아서 복사
 	for (DWORD i = 0; i < pstHeader->dwHeaderSize / sizeof(PACKAGEITEM); i++)
 	{
@@ -137,6 +137,7 @@ bool RamDiskAdaptor::InstallPackage()
 			return false;
 		}
 		
+		dwDataAddress += sizeof(PACKAGEITEM);
 		// 패키지 데이터 부분에 포함된 파일 내용을 램 디스크로 복사
 		if (fwrite((BYTE*)dwDataAddress, 1, pstItem[i].dwFileLength, fp) != pstItem[i].dwFileLength)
 		{

@@ -41,6 +41,8 @@ public:
 
 	Process* FindProcess(int processId);
 	bool RemoveProcess(int processId);
+	bool RemoveTerminatedProcess();
+	bool ReserveRemoveProcess(Process* pProcess);
 	Thread* FindTask(DWORD taskId);
 
 	void SetCurrentTask(Thread* pTask)
@@ -65,7 +67,7 @@ private:
 	Loader* m_pUserProcessLoader;
 
 	ProcessList m_processList;
-	TaskList m_taskList;
-	TaskList m_terminatedTaskList;
+	ProcessList m_terminatedProcessList;
+	TaskList m_taskList;	
 	Thread* m_pCurrentTask;
 };

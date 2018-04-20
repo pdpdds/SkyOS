@@ -5,7 +5,6 @@ int main()
 {		
 	char* message = "Hello world!!\n";
 	printf(message);
-	for(;;);
 
 	return 0;	
 }

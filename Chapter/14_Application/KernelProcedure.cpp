@@ -23,6 +23,10 @@ void NativeConsole()
 
 	char	commandBuffer[MAXPATH];
 
+	ProcessManager::GetInstance()->CreateProcessFromFile("Hello.exe", nullptr, PROCESS_USER);
+	ProcessManager::GetInstance()->CreateProcessFromFile("Hello.exe", nullptr, PROCESS_USER);
+	ProcessManager::GetInstance()->CreateProcessFromFile("Hello.exe", nullptr, PROCESS_USER);
+
 	while (1)
 	{
 		SkyConsole::Print("Command> ");
@@ -61,7 +65,7 @@ DWORD WINAPI WatchDogProc(LPVOID parameter)
 	char *addr = (char *)TS_WATCHDOG_CLOCK_POS, status[] = { '-', '\\', '|', '/', '-', '\\', '|', '/' };
 	int first = GetTickCount();
 
-	SkyConsole::Print("\nWatchDogProc Start. Thread Id : %d\n", kGetCurrentThreadId());
+	//SkyConsole::Print("\nWatchDogProc Start. Thread Id : %d\n", kGetCurrentThreadId());
 
 	while (1) 
 	{
@@ -92,14 +96,15 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
 		
 //페이징 기능 전환 테스트		
 		kEnterCriticalSection();
-		PhysicalMemoryManager::EnablePaging(false);
-		PhysicalMemoryManager::EnablePaging(true);
+		//PhysicalMemoryManager::EnablePaging(false);
+		//PhysicalMemoryManager::EnablePaging(true);
+
+		ProcessManager::GetInstance()->RemoveTerminatedProcess();
 		kLeaveCriticalSection();
 		
 			int second = GetTickCount();
 			if (second - first >= 400)
 			{
-				
 				first = GetTickCount();
 			}
 	}

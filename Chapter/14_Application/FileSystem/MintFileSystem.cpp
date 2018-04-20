@@ -828,6 +828,7 @@ DWORD kReadFile( void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstFile )
     {
         return 0;
     }
+
     pstFileHandle = &( pstFile->stFileHandle );
     
     // 파일의 끝이거나 마지막 클러스터이면 종료

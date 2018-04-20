@@ -545,38 +545,40 @@ UINT16 FATFileOpen(BYTE driveLetter, const char * filepath, BYTE Mode)
 
 	if (GetDirectoryEntry(filepath, &DEInfo) != 0)
 	{		
-		struct FATOpenFileInfo * FATFileInfo = (struct FATOpenFileInfo *)kmalloc(sizeof(struct FATOpenFileInfo));
-		if (FATFileInfo == 0)
+		struct FATOpenFileInfo * pFATFileInfo = (struct FATOpenFileInfo *)kmalloc(sizeof(struct FATOpenFileInfo));
+		if (pFATFileInfo == 0)
 		{
 			SkyConsole::Print("FAT :: File Open Error (Unable to allocate)\n");
 			return 0;
 		}
-		FATFileInfo->FInfo = GetFATInfo(driveLetter);
-		if (FATFileInfo->FInfo == 0)
+		pFATFileInfo->FInfo = GetFATInfo(driveLetter);
+		if (pFATFileInfo->FInfo == 0)
 		{
 			SkyConsole::Print("FAT :: Cannot Get FAT Information\n");
 			return 0;
 		}
-		FATFileInfo->Buffer = (BYTE *)kmalloc(FATFileInfo->FInfo->GetClusterSize()*FATFileInfo->FInfo->GetSectorSize());
-		if (FATFileInfo->Buffer == 0)
+		pFATFileInfo->Buffer = (BYTE *)kmalloc(pFATFileInfo->FInfo->GetClusterSize() * pFATFileInfo->FInfo->GetSectorSize());
+		if (pFATFileInfo->Buffer == 0)
 		{
 			SkyConsole::Print("FAT :: File Open Error (Unable to allocate)\n");
 			return 0;
 		}
-		FATFileInfo->Mode = Mode;
-		memcpy(&FATFileInfo->DEInfo, &DEInfo, sizeof(DirEntry));
-		FATFileInfo->CurrentCluster = DEInfo.FirstClusterHigh;
-		FATFileInfo->CurrentCluster <<= 16;
-		FATFileInfo->CurrentCluster |= DEInfo.FirstClusterLow;;
-		FATFileInfo->BufferOffset = 0;
-		FATFileInfo->BufferIsValid = FALSE;
+		pFATFileInfo->Mode = Mode;
+		memcpy(&pFATFileInfo->DEInfo, &DEInfo, sizeof(DirEntry));
+		pFATFileInfo->CurrentCluster = DEInfo.FirstClusterHigh;
+		pFATFileInfo->CurrentCluster <<= 16;
+		pFATFileInfo->CurrentCluster |= DEInfo.FirstClusterLow;;
+		pFATFileInfo->BufferOffset = 0;
+		pFATFileInfo->BufferIsValid = FALSE;
 
-		FATFileInfo->DriveLetter = driveLetter;
-		FATFileInfo->BufferedFATSector = 0;
-		FATFileInfo->TotalBytesPassed = 0;
+		pFATFileInfo->DriveLetter = driveLetter;
+		pFATFileInfo->BufferedFATSector = 0;
+		pFATFileInfo->TotalBytesPassed = 0;
 
 		hanldeId++;
-		(*__SysFATOpenFileInfo)[hanldeId] =  FATFileInfo;
+		SkyConsole::Print("Handle Id : %d\n", hanldeId);
+
+		(*__SysFATOpenFileInfo)[hanldeId] = pFATFileInfo;
 					
 		return hanldeId;
 		

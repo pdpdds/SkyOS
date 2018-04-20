@@ -58,7 +58,7 @@ extern PageDirectory* pageDirectoryPool[10];
 
 void HardwareInitialize();
 bool InitMemoryManager(multiboot_info* bootinfo);
-void ConstructFileSystem();
+void ConstructFileSystem(multiboot_info* info);
 void StartConsoleSystem();
 void StartConsoleSystem2();
 void JumpToNewKernelEntry(int entryPoint, unsigned int procStack);
@@ -113,17 +113,21 @@ void kmain(unsigned long magic, unsigned long addr)
 	}
 	else
 	{
-		EnableFPU();
+		//EnableFPU();
 		SkyConsole::Print("FPU Init..\n");
 	}
+
+
+	double sum = 1.0f;
 
 	InitKeyboard();
 	SkyConsole::Print("Keyboard Init..\n");
 	
 	InitializeSysCall();
+
 	InstallTSS(5, 0x10, 0);
 	
-	ConstructFileSystem();	
+	ConstructFileSystem(pBootInfo);
 
 	kLeaveCriticalSection();
 
@@ -216,7 +220,7 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 	return true;
 }
 
-void ConstructFileSystem()
+void ConstructFileSystem(multiboot_info* info)
 {	
 //IDE 하드 디스크
 	FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
@@ -264,6 +268,16 @@ void ConstructFileSystem()
 
 	StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
 	SkyConsole::Print("C drive Selected\n");
+
+	drive_info* driveInfo = info->drives_addr;
+
+	for (uint32_t i = 0; i < info->drives_length; i++)
+	{
+		int driveNum = driveInfo[i].drive_number;
+
+		if (driveNum != 0)
+			SkyConsole::Print("%d drive Detected\n", driveNum);
+	}
 }
 
 void StartConsoleSystem()

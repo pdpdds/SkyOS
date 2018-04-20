@@ -94,6 +94,7 @@ PFILE HDDAdaptor::Open(const char* fileName, const char *mode)
 	}
 
 	PFILE file = new FILE;
+	file->_flags = FS_FILE;
 	file->_deviceID = 'C';
 	strcpy(file->_name, fileName);
 	file->_id = handle;

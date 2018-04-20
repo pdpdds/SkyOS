@@ -41,8 +41,8 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	unsigned char* memory = 0;
 
 	//파일에서 512바이트를 읽고 유효한 PE 파일인지 검증한다.
-	int readCnt = StorageManager::GetInstance()->ReadFile(file, buf, 512, 1);
-
+	int readCnt = StorageManager::GetInstance()->ReadFile(file, buf, 1, 512);
+	//SkyConsole::Print("Read Count %s\n", buf);
 	if (0 == readCnt)
 		return nullptr;
 
@@ -52,8 +52,6 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 		StorageManager::GetInstance()->CloseFile(file);
 		return nullptr;
 	}
-
-	SkyConsole::Print("Valid PE Format %s\n", pProcess->m_processName);
 
 	dosHeader = (IMAGE_DOS_HEADER*)buf;
 	ntHeaders = (IMAGE_NT_HEADERS*)(dosHeader->e_lfanew + (uint32_t)buf);
@@ -127,17 +125,19 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 		readCnt = StorageManager::GetInstance()->ReadFile(file, memory + 512 * i, 512, 1);
 	}
 
-	StorageManager::GetInstance()->CloseFile(file);	
+	//StorageManager::GetInstance()->CloseFile(file);	
 	
 	//스택을 생성하고 주소공간에 매핑한다.
-	void* stackVirtual = (void*)(USER_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_stackIndex++);
+	/*void* stackVirtual = (void*)(USER_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_stackIndex++);
 	void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
 
 	SkyConsole::Print("Virtual Stack : %x\n", stackVirtual);
 	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
 
-	/* map user process stack space */
 	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
+	*/
+	//스택을 생성하고 주소공간에 매핑한다.
+	void* stackVirtual = (void*)(KERNEL_STACK - PAGE_SIZE * kernelStackIndex++);
 
 	/* final initialization */
 	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE);
@@ -254,16 +254,17 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, void* param, UINT3
 		pProcess = m_pKernelProcessLoader->CreateProcessFromFile(appName, param);
 	else
 		pProcess = m_pUserProcessLoader->CreateProcessFromFile(appName, param);
-
+	
 	if (pProcess == nullptr)
 	{
 		StorageManager::GetInstance()->CloseFile(file);
 		return nullptr;
 	}
-
+	
 	Thread* pThread = CreateThread(pProcess, file, NULL);
 
-	M_Assert(pThread != nullptr, "MainThread is null.");
+	if (pThread == nullptr)
+		return nullptr;
 
 	bool result = pProcess->AddMainThread(pThread);
 
@@ -348,7 +349,10 @@ bool ProcessManager::RemoveProcess(int processId)
 	Process* pProcess = (*iter).second;
 
 	if (pProcess == nullptr)
+	{
+		kLeaveCriticalSection();
 		return false;
+	}
 
 	m_processList.erase(iter);
 	map<int, Thread*>::iterator threadIter = pProcess->m_threadList.begin();
@@ -359,12 +363,67 @@ bool ProcessManager::RemoveProcess(int processId)
 		m_taskList.remove(pThread);
 		delete pThread;
 	}	
+
 	pProcess->m_threadList.clear();
+
+	if (pProcess->m_lpHeap)
+	{
+		delete pProcess->m_lpHeap;
+		pProcess->m_lpHeap = nullptr;
+	}
+
 	VirtualMemoryManager::FreePageDirectory(pProcess->GetPageDirectory());
 
 	delete pProcess;
 	
 	kLeaveCriticalSection();
 
+	return true;
+}
+
+bool ProcessManager::RemoveTerminatedProcess()
+{
+	//kEnterCriticalSection();
+
+	auto iter = m_terminatedProcessList.begin();
+	for (; iter != m_terminatedProcessList.end(); iter++)
+	{
+		RemoveProcess((*iter).second->GetProcessId());
+	}
+	
+	m_terminatedProcessList.clear();
+	
+	/*for (; iter != m_terminatedProcessList.end(); iter++)
+	{
+		Process* pProcess = (*iter).second;
+
+		if (pProcess == nullptr)
+			continue;
+
+		m_processList.erase(iter);
+		map<int, Thread*>::iterator threadIter = pProcess->m_threadList.begin();
+
+		for (; threadIter != pProcess->m_threadList.end(); threadIter++)
+		{
+			Thread* pThread = (*threadIter).second;
+			m_taskList.remove(pThread);
+			delete pThread;
+		}
+
+		pProcess->m_threadList.clear();
+		VirtualMemoryManager::FreePageDirectory(pProcess->GetPageDirectory());
+		delete pProcess;
+	}
+
+	m_terminatedProcessList.clear();*/
+
+	//kLeaveCriticalSection();
+
+	return true;
+}
+
+bool ProcessManager::ReserveRemoveProcess(Process* pProcess)
+{
+	m_terminatedProcessList[pProcess->GetProcessId()] = pProcess;
 	return true;
 }

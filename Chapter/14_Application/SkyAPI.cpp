@@ -230,7 +230,6 @@ HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, L
 
 	return (HANDLE)newThread;
 }
-
 extern "C"
 {
 	uint32_t MemoryAlloc(size_t size)
@@ -272,7 +271,7 @@ extern "C"
 		heapAddess -= (heapAddess % PAGE_SIZE);
 	
 		//#ifdef _ORANGE_DEBUG
-		SkyConsole::Print("heap address %x, %x %d\n", pHeapPhys, heapAddess, pProcess->GetProcessId());
+		SkyConsole::Print("%d : V(%x) P(%x)\n", pProcess->GetProcessId(), heapAddess, pHeapPhys);
 		//#endif // _ORANGE_DEBUG
 		
 		for (int i = 0; i < DEFAULT_HEAP_PAGE_COUNT; i++)
@@ -282,10 +281,8 @@ extern "C"
 				(uint32_t)pHeapPhys + i * PAGE_SIZE,
 				I86_PTE_PRESENT | I86_PTE_WRITABLE | I86_PTE_USER);
 		}
-		
-		memset((void*)heapAddess, 0, DEFAULT_HEAP_PAGE_COUNT * PAGE_SIZE);
 
-		
+		memset((void*)heapAddess, 0, DEFAULT_HEAP_PAGE_COUNT * PAGE_SIZE);
 
 		pProcess->m_lpHeap = create_heap((u32int)heapAddess, (uint32_t)heapAddess + DEFAULT_HEAP_PAGE_COUNT * PAGE_SIZE,
 			(uint32_t)heapAddess + DEFAULT_HEAP_PAGE_COUNT * PAGE_SIZE, 0, 0);
@@ -295,6 +292,7 @@ extern "C"
 //#ifdef _ORANGE_DEBUG
 		SkyConsole::Print("CreateDefaultHeap End\n");
 //#endif // _ORANGE_DEBUG
+
 	}
 
 	//프로세스 종료	
@@ -314,10 +312,10 @@ extern "C"
 
 		//프로세스 매니저에서 해당 프로세스를 완전히 제거한다.
 		//태스크 목록에서도 제거되어 해당 프로세스는 더이상 스케쥴링 되지 않는다.		
-		ProcessManager::GetInstance()->RemoveProcess(pProcess->GetProcessId());
+		//ProcessManager::GetInstance()->RemoveProcess(pProcess->GetProcessId());
 
-		kLeaveCriticalSection();
+		ProcessManager::GetInstance()->ReserveRemoveProcess(pProcess);
 
-		for (;;);
+		kLeaveCriticalSection();		
 	}
 }

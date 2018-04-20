@@ -8,7 +8,7 @@ extern "C" void EntryPoint()
 {
 	CreateHeap();	
 	int result = main();
-
+	
 	TerminateProcess();
 
 	for (;;);

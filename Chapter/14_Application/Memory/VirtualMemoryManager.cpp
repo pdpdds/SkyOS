@@ -69,7 +69,7 @@ namespace VirtualMemoryManager
 	{		
 		kEnterCriticalSection();
 		PhysicalMemoryManager::EnablePaging(false);		
-		for (;;);
+		
 		PDE* pageDir = dir->m_entries;
 
 		if (pageDir[virt >> 22] == 0)
