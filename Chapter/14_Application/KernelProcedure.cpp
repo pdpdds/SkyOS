@@ -23,9 +23,9 @@ void NativeConsole()
 
 	char	commandBuffer[MAXPATH];
 
-	ProcessManager::GetInstance()->CreateProcessFromFile("Hello.exe", nullptr, PROCESS_USER);
-	ProcessManager::GetInstance()->CreateProcessFromFile("Hello.exe", nullptr, PROCESS_USER);
-	ProcessManager::GetInstance()->CreateProcessFromFile("Hello.exe", nullptr, PROCESS_USER);
+	//ProcessManager::GetInstance()->CreateProcessFromFile("Hello.exe", nullptr, PROCESS_USER);
+	//ProcessManager::GetInstance()->CreateProcessFromFile("Hello.exe", nullptr, PROCESS_USER);
+	//ProcessManager::GetInstance()->CreateProcessFromFile("Hello.exe", nullptr, PROCESS_USER);
 
 	while (1)
 	{

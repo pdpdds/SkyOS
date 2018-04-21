@@ -354,7 +354,8 @@ bool ProcessManager::RemoveProcess(int processId)
 		return false;
 	}
 
-	m_processList.erase(iter);
+	m_processList.erase(iter);	
+
 	map<int, Thread*>::iterator threadIter = pProcess->m_threadList.begin();
 
 	for (; threadIter != pProcess->m_threadList.end(); threadIter++)
@@ -368,6 +369,7 @@ bool ProcessManager::RemoveProcess(int processId)
 
 	if (pProcess->m_lpHeap)
 	{
+		SkyConsole::Print("default heap free : 0x%x\n", pProcess->m_lpHeap);
 		delete pProcess->m_lpHeap;
 		pProcess->m_lpHeap = nullptr;
 	}

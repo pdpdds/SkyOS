@@ -19,13 +19,13 @@ void __cdecl operator delete(void *p)
 }
 
 void operator delete(void *p, size_t size)
-{	
+{
 	kfree(p);
 }
 
 void operator delete[](void *p)
 {
-	
+
 	kfree(p);
 }
 
@@ -88,3 +88,4 @@ void InitializeSysCall()
 {
 	setvect(0x80, SysCallDispatcher, I86_IDT_DESC_RING3);
 }
+

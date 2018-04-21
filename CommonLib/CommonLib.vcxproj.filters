@@ -7,6 +7,9 @@
     <Filter Include="stl">
       <UniqueIdentifier>{9bef8106-3953-438b-9a42-cb5a2791737a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="wchar">
+      <UniqueIdentifier>{ee5a29ac-ff6e-4af4-ad93-da3ad7b248ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jsmn\jsmn.h">
@@ -96,6 +99,7 @@
     <ClInclude Include="stl\alloc.h">
       <Filter>stl</Filter>
     </ClInclude>
+    <ClInclude Include="wchar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jsmn\jsmn.cpp">
@@ -118,5 +122,44 @@
       <Filter>stl</Filter>
     </ClCompile>
     <ClCompile Include="str_util.cpp" />
+    <ClCompile Include="widechar\wcscat.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\wcschr.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\wcscmp.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\wcscpy.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\wcslen.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\wcsncmp.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\wcsncpy.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\wcsnicmp.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\wcspbrk.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\wcsrchr.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\wcstombs.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\wcwidth.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
+    <ClCompile Include="widechar\unicode.c">
+      <Filter>wchar</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

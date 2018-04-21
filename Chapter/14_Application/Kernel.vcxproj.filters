@@ -120,6 +120,8 @@
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="SystemProfiler.cpp" />
+    <ClCompile Include="API.cpp" />
+    <ClCompile Include="PCI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -262,6 +264,7 @@
     <ClInclude Include="Process.h" />
     <ClInclude Include="Scheduler.h" />
     <ClInclude Include="SystemProfiler.h" />
+    <ClInclude Include="API.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

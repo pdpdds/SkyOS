@@ -110,9 +110,7 @@ typedef          char  s8int;
   typedef ULONG_PTR *PULONG_PTR;
 
 
-
-//20180124
-	
+//20180124	
   #define offsetof(st, m) ((size_t)&(((st *)0)->m))
   #define HUGE_VAL 10000000
   #define DBL_MAX_10_EXP                +308

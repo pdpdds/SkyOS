@@ -46,6 +46,7 @@
     <ClInclude Include="stl\tempbuf.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="str_util.h" />
+    <ClInclude Include="wchar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cstd.cpp" />
@@ -60,11 +61,24 @@
     <ClCompile Include="stl\stl_string.cpp" />
     <ClCompile Include="string.cpp" />
     <ClCompile Include="str_util.cpp" />
+    <ClCompile Include="widechar\unicode.c" />
+    <ClCompile Include="widechar\wcscat.c" />
+    <ClCompile Include="widechar\wcschr.c" />
+    <ClCompile Include="widechar\wcscmp.c" />
+    <ClCompile Include="widechar\wcscpy.c" />
+    <ClCompile Include="widechar\wcslen.c" />
+    <ClCompile Include="widechar\wcsncmp.c" />
+    <ClCompile Include="widechar\wcsncpy.c" />
+    <ClCompile Include="widechar\wcsnicmp.c" />
+    <ClCompile Include="widechar\wcspbrk.c" />
+    <ClCompile Include="widechar\wcsrchr.c" />
+    <ClCompile Include="widechar\wcstombs.c" />
+    <ClCompile Include="widechar\wcwidth.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{83EE476C-AA21-4A23-9D6F-4FE675115B13}</ProjectGuid>
     <RootNamespace>Kernel</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

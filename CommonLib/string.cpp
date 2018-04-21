@@ -243,6 +243,39 @@ int strspn(const char *strSrc, const char *str)
 	}
 	return 0;
 }
+
+int strcoll(const char *s1, const char *s2)
+{
+	return strcmp(s1, s2);
+}
+
+size_t strxfrm(char *dst, char *src, size_t n)
+{
+	size_t r = 0;
+	int c;
+
+	if (n != 0)
+	{
+		while ((c = *src++) != 0)
+		{
+			r++;
+
+			if (--n == 0)
+			{
+				while (*src++ != 0)
+					r++;
+
+				break;
+			}
+
+			*dst++ = c;
+		}
+
+		*dst = 0;
+	}
+
+	return r;
+}
 /*
 char *strncpy(char * Dest, const char * Source, unsigned short Length)
 {
@@ -251,6 +284,26 @@ char *strncpy(char * Dest, const char * Source, unsigned short Length)
 		Dest[i] = Source[i];
 	return Dest;
 }*/
+
+char *strnchr(const char *str, char c, size_t count)
+{
+	char *ptr = NULL;
+
+	while (*str && count > 0)
+	{
+		if (*str == c)
+		{
+			ptr = (char*)str;
+			break;
+		}
+
+		str++;
+
+		count--;
+	}
+
+	return ptr;
+}
 
 int strnicmp(const char * String1, const char * String2, unsigned int Len)
 {

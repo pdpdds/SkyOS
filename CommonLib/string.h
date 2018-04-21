@@ -19,7 +19,10 @@ char * strtok(char *s1, const char *delimit);
 int strspn(const char *strSrc, const char *str);
 char *strncpy(char *string1, const char *string2, size_t count);
 int strnicmp(const char * String1, const char * String2, unsigned int Len);
+char *strnchr(const char *str, char c, size_t count);
 const char *strrchr(const char * String, char const Character);
+size_t strxfrm(char *dst, char *src, size_t n);
+int strcoll(const char *s1, const char *s2);
 
 void ftoa_fixed(char *buffer, double value);
 void ftoa_sci(char *buffer, double value);

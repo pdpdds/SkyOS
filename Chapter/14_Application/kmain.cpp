@@ -15,6 +15,8 @@
 #include "KernelProcedure.h"
 #include "Scheduler.h"
 #include "SystemProfiler.h"
+#include "PCI.h"
+#include "SysInfo.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -63,6 +65,8 @@ void StartConsoleSystem();
 void StartConsoleSystem2();
 void JumpToNewKernelEntry(int entryPoint, unsigned int procStack);
 
+BYTE PrintPCIDeviceList(struct PCIConfigurationSpace * ptrPCIDet);
+
 void kmain(unsigned long magic, unsigned long addr)
 {
 	InitializeConstructors();
@@ -70,7 +74,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
 
 	SkyConsole::Initialize();
-
+	
 	//헥사를 표시할 때 %X는 integer, %x는 unsigned integer의 헥사값을 표시한다.	
 	SkyConsole::Print("*** Sky OS Console System Init ***\n");
 
@@ -113,12 +117,19 @@ void kmain(unsigned long magic, unsigned long addr)
 	}
 	else
 	{
-		//EnableFPU();
+		EnableFPU();
 		SkyConsole::Print("FPU Init..\n");
 	}
 
 
-	double sum = 1.0f;
+	UINT16 PCIDevices = InitPCIDevices();
+	SkyConsole::Print("%d device(s) found\n", PCIDevices);
+	if (PCIDevices)
+	{
+		SkyConsole::Print("Device Vendor Class SubClass\n");
+		EnumeratePCIDevices(PrintPCIDeviceList);
+	}	
+		
 
 	InitKeyboard();
 	SkyConsole::Print("Keyboard Init..\n");
@@ -223,7 +234,7 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 void ConstructFileSystem(multiboot_info* info)
 {	
 //IDE 하드 디스크
-	FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
+	/*FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
 	
 	pHDDAdaptor->Initialize();
 
@@ -237,7 +248,7 @@ void ConstructFileSystem(multiboot_info* info)
 	else
 	{
 		delete pHDDAdaptor;		
-	}
+	}*/
 			
 //램 디스크
 	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');
@@ -266,8 +277,8 @@ void ConstructFileSystem(multiboot_info* info)
 		delete pFloppyDiskAdaptor;
 	}	
 
-	StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
-	SkyConsole::Print("C drive Selected\n");
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('A');
+	SkyConsole::Print("A drive Selected\n");
 
 	drive_info* driveInfo = info->drives_addr;
 
@@ -351,6 +362,37 @@ void StartConsoleSystem2()
 	JumpToNewKernelEntry(entryPoint, procStack);
 }
 
+#define __PCI_MaxClass 0x12
+BYTE PrintPCIDeviceList(struct PCIConfigurationSpace * ptrPCIDet)
+{
+	SkyConsole::Print("%x %x ", ptrPCIDet->VendorID, ptrPCIDet->DeviceID);
+	BYTE SClCode = 0;
+	if (ptrPCIDet->ClassCode < __PCI_MaxClass)
+	{
+		SkyConsole::Print(" %s", PCIClassDetails[ptrPCIDet->ClassCode].Description);
+		if (ptrPCIDet->SubClass != 0)
+		{
+			struct PCISubClass * PCISubCl = PCIClassDetails[ptrPCIDet->ClassCode].SubClass;
+			
+			while (!(PCISubCl[SClCode].SubClassCode == 0 && PCISubCl[SClCode].Description == 0))
+			{
+				if (ptrPCIDet->SubClass == SClCode)
+
+				{
+					if (PCISubCl != NULL)
+						SkyConsole::Print(" - %s\n", PCISubCl[SClCode].Description);
+					else SkyConsole::Print("\n");
+					break;
+				}				
+				SClCode++;
+			}
+		}
+		else SkyConsole::Print("\n");
+	}
+
+	return SClCode;
+}
+
 void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
 {
 	__asm
@@ -372,3 +414,4 @@ void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
 			iretd
 	}
 }
+
