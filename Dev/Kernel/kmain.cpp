@@ -177,8 +177,6 @@ void kmain(unsigned long magic, unsigned long addr)
 	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
 
 
-
-
 	if (consoleMode == true)
 	{
 		StartConsoleSystem();

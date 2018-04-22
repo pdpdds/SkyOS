@@ -226,8 +226,6 @@ bool graphics_install_vesa(uint16_t resX, uint16_t resY, int bpp)
 				goto mem_found;
 			}
 		}
-
-
 	}
 mem_found:
 	/*
