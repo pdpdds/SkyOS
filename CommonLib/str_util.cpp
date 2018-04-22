@@ -361,7 +361,7 @@ char * str_get_token(char * src, unsigned int token_no, char token_separator, ch
 {
 	int unsigned token_len;
 	char *token = str_get_token_info(src, token_no, token_separator, &token_len);
-	if (buf_size < token_len)
+	if (buf_size < (int)token_len)
 		token_len = buf_size;
 
 	if (token)
