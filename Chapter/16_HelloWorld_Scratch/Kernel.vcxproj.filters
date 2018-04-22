@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="SkyConsole.cpp" />
+    <ClCompile Include="kentry.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="kmain.h" />
+    <ClInclude Include="SkyConsole.h" />
+    <ClInclude Include="MultiBoot.h" />
+  </ItemGroup>
+</Project>
