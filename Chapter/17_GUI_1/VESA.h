@@ -49,7 +49,7 @@ struct VesaModeInfo {
 extern "C" {
 #endif
 
-#define COLOR(r,g,b) ((r<<16) | (g<<8) | b)
+//#define COLOR(r,g,b) ((r<<16) | (g<<8) | b)
 	//#define WHITE COLOR(255,255,255)
 	//#define DARKGRAY COLOR(154,154,154)
 

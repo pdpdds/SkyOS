@@ -42,6 +42,7 @@
     <ClCompile Include="Heap\kheap.cpp" />
     <ClCompile Include="Heap\ordered_array.cpp" />
     <ClCompile Include="InitKernel.cpp" />
+    <ClCompile Include="JPEG.cpp" />
     <ClCompile Include="KernelProcedure.cpp" />
     <ClCompile Include="KernelProcessLoader.cpp" />
     <ClCompile Include="KeyBoard\KeyBoard.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="Heap\kheap.h" />
     <ClInclude Include="Heap\ordered_array.h" />
     <ClInclude Include="InitKernel.h" />
+    <ClInclude Include="JPEG.h" />
     <ClInclude Include="KernelProcedure.h" />
     <ClInclude Include="KernelProcessLoader.h" />
     <ClInclude Include="KeyBoard\KeyBoard.h" />

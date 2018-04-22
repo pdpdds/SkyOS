@@ -129,6 +129,7 @@
     <ClCompile Include="vesa.cpp" />
     <ClCompile Include="SkyWindow.cpp" />
     <ClCompile Include="VideoRam.cpp" />
+    <ClCompile Include="JPEG.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -279,6 +280,7 @@
     <ClInclude Include="VESA.h" />
     <ClInclude Include="SkyWindow.h" />
     <ClInclude Include="VideoRam.h" />
+    <ClInclude Include="JPEG.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

@@ -120,6 +120,6 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
 
 void StartGUISystem()
 {
-	SkyWindow* pWindow = new SkyHaribote();
-	pWindow->Initialize
+	//SkyWindow* pWindow = new SkyHaribote();
+	//pWindow->Initialize
 }
