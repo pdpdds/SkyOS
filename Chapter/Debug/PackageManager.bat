@@ -1,1 +1,1 @@
-PackageManager.exe kernel.sys Hello.exe
+PackageManager.exe kernel.sys Background.jpg
