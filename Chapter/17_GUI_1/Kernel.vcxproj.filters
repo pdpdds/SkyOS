@@ -130,6 +130,8 @@
     <ClCompile Include="SkyWindow.cpp" />
     <ClCompile Include="VideoRam.cpp" />
     <ClCompile Include="JPEG.cpp" />
+    <ClCompile Include="SkySimpleGUI.cpp" />
+    <ClCompile Include="SkyGUISystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -281,6 +283,8 @@
     <ClInclude Include="SkyWindow.h" />
     <ClInclude Include="VideoRam.h" />
     <ClInclude Include="JPEG.h" />
+    <ClInclude Include="SkySimpleGUI.h" />
+    <ClInclude Include="SkyGUISystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

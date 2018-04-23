@@ -20,11 +20,6 @@
 #include "RMEFunc.h"
 #include "VESA.h"
 
-
-//#define SKY_GUI
-//#define SKY_HARIBOTE
-//#define SKY_SVGA
-
 _declspec(naked) void multiboot_entry(void)
 {
 	__asm {
@@ -34,11 +29,7 @@ _declspec(naked) void multiboot_entry(void)
 		//멀티부트 헤더 사이즈 : 0X20
 		dd(MULTIBOOT_HEADER_MAGIC); magic number
 
-#ifdef SKY_GUI
-		dd(MULTIBOOT_HEADER_FLAGS_GUI); flags
-#else
 		dd(MULTIBOOT_HEADER_FLAGS); flags
-#endif
 		dd(CHECKSUM); checksum
 		dd(HEADER_ADRESS); //헤더 주소 KERNEL_LOAD_ADDRESS+ALIGN(0x100400)
 		dd(KERNEL_LOAD_ADDRESS); //커널이 로드된 가상주소 공간
@@ -46,30 +37,10 @@ _declspec(naked) void multiboot_entry(void)
 		dd(00); //사용되지 않음
 		dd(HEADER_ADRESS + 0x30); //커널 시작 주소 : 멀티부트 헤더 주소 + 0x20, kernel_entry
 
-		//비디오
-#ifdef SKY_GUI
-#ifdef SKY_HARIBOTE
-		dd(0); 
-		dd(800); 
-		dd(600); 
-		dd(16);
-#elseif SKY_SVGA
-		dd(0);
-		dd(800);
-		dd(600);
-		dd(16);
-#else
 		dd(0);
 		dd(1024);
 		dd(768);
 		dd(32)
-#endif
-#else
-		dd(1); //텍스트 모드
-		dd(0);
-		dd(0);
-		dd(0);
-#endif
 
 	kernel_entry:
 		mov     esp, KERNEL_STACK; //스택 설정

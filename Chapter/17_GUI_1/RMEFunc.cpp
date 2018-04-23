@@ -73,7 +73,7 @@ void RequesGUIResolution()
 		emu->DI.W = 0x0000;
 		RME_CallInt(emu, 0x10);
 
-		SkyConsole::Print("%d = %dx%d:%d %d\n", i, modeinfo->XRes, modeinfo->YRes, modeinfo->BitsPerPixel, modeinfo->PhysBasePtr);
+		SkyConsole::Print("%d = %dx%d:%d %d\n", i, modeinfo->XResolution, modeinfo->YResolution, modeinfo->BitsPerPixel, modeinfo->FrameBuffer);
 	}
 }
 

@@ -3,6 +3,10 @@
 
 #define RGB16_565(r,g,b) ((b&31) | ((g&63) << 5 | ((r&31) << 11)))
 
+#define COLOR(r,g,b) ((r<<16) | (g<<8) | b)
+#define WHITE COLOR(255,255,255)
+#define DARKGRAY COLOR(154,154,154)
+
 static int lfb_px = 0;
 static int lfb_py = 0;
 
@@ -36,16 +40,13 @@ void init_lfb(VbeModeInfo *mode_info)
 	lfb_py = 0;
 
 	
-	SkyConsole::Print("XRes : %d\n", mode_info->XRes);
-	SkyConsole::Print("YRes : %d\n", mode_info->YRes);
-	SkyConsole::Print("BitsPerPixel : %d\n", mode_info->BitsPerPixel);
-	SkyConsole::Print("PhysBasePtr : %d\n", mode_info->PhysBasePtr);
+	
 
-	lfb_width = mode_info->XRes;
-	lfb_height = mode_info->YRes;
+	lfb_width = mode_info->XResolution;
+	lfb_height = mode_info->YResolution;
 	lfb_depth = mode_info->BitsPerPixel;
 	lfb_type = 0;
-	lfb_ptr = (void*)mode_info->PhysBasePtr;
+	lfb_ptr = (void*)mode_info->FrameBuffer;
 
 	lfb = (ULONG*)lfb_ptr;
 	

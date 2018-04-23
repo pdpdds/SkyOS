@@ -17,13 +17,13 @@
 #include "SystemProfiler.h"
 #include "PCI.h"
 #include "SysInfo.h"
-#include "RMEFunc.h"
-#include "VESA.h"
+#include "SkyGUISystem.h"
 
 
-//#define SKY_GUI
+//#define SKY_GUI 1
 //#define SKY_HARIBOTE
 //#define SKY_SVGA
+
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -31,39 +31,29 @@ _declspec(naked) void multiboot_entry(void)
 		align 4
 
 		multiboot_header:
-		//멀티부트 헤더 사이즈 : 0X20
+		//멀티부트 헤더 사이즈 : 0X30
 		dd(MULTIBOOT_HEADER_MAGIC); magic number
 
 #ifdef SKY_GUI
 		dd(MULTIBOOT_HEADER_FLAGS_GUI); flags
+		dd(CHECKSUM_GUI); checksum
 #else
 		dd(MULTIBOOT_HEADER_FLAGS); flags
-#endif
 		dd(CHECKSUM); checksum
+#endif		
 		dd(HEADER_ADRESS); //헤더 주소 KERNEL_LOAD_ADDRESS+ALIGN(0x100400)
 		dd(KERNEL_LOAD_ADDRESS); //커널이 로드된 가상주소 공간
 		dd(00); //사용되지 않음
 		dd(00); //사용되지 않음
-		dd(HEADER_ADRESS + 0x30); //커널 시작 주소 : 멀티부트 헤더 주소 + 0x20, kernel_entry
+		dd(HEADER_ADRESS + 0x30); //커널 시작 주소 : 멀티부트 헤더 주소 + 0x30, kernel_entry
 
 		//비디오
 #ifdef SKY_GUI
-#ifdef SKY_HARIBOTE
-		dd(0); 
-		dd(800); 
-		dd(600); 
-		dd(16);
-#elseif SKY_SVGA
-		dd(0);
-		dd(800);
-		dd(600);
-		dd(16);
-#else
+
 		dd(0);
 		dd(1024);
 		dd(768);
 		dd(32)
-#endif
 #else
 		dd(1); //텍스트 모드
 		dd(0);
@@ -77,8 +67,8 @@ _declspec(naked) void multiboot_entry(void)
 		push    0; //플래그 레지스터 초기화
 		popf
 
-			//GRUB에 의해 담겨 있는 정보값을 스택에 푸쉬한다.
-			push    ebx; //멀티부트 구조체 포인터
+		//GRUB에 의해 담겨 있는 정보값을 스택에 푸쉬한다.
+		push    ebx; //멀티부트 구조체 포인터
 		push    eax; //매직 넘버
 
 		//위의 두 파라메터와 함께 kmain 함수를 호출한다.
@@ -91,6 +81,7 @@ _declspec(naked) void multiboot_entry(void)
 }
 
 bool systemOn = false;
+
 uint32_t g_freeMemoryStartAddress = 0x00400000; //자유공간 시작주소 : 4MB
 uint32_t g_freeMemorySize = 0;
 extern PageDirectory* pageDirectoryPool[10];
@@ -100,6 +91,7 @@ bool InitMemoryManager(multiboot_info* bootinfo);
 void ConstructFileSystem(multiboot_info* info);
 void StartConsoleSystem();
 void StartConsoleSystem2();
+
 void JumpToNewKernelEntry(int entryPoint, unsigned int procStack);
 
 BYTE PrintPCIDeviceList(struct PCIConfigurationSpace * ptrPCIDet);
@@ -183,30 +175,7 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	SystemProfiler::GetInstance()->SetGlobalState(state);
 
-	VbeInfoBlock* pblock = pBootInfo->vbe_control_info;
-
-	if (pblock != 0)
-	{
-		SkyConsole::Print("Vesa signature %s\n", pblock->Signature);
-
-		VbeModeInfo* info = pBootInfo->vbe_mode_info;
-
-		if (info != nullptr)
-		{
-			SkyConsole::Print("%d %d\n", info->XRes, info->YRes);
-			init_lfb(pBootInfo->vbe_mode_info);
-		}
-
-		
-	}	
-
-	uint16_t *graphics_memory = (uint16_t *)0xA0000;
-
-	
-		graphics_memory[0] = 0xff;
-		graphics_memory[1] = 0xff;
-		graphics_memory[2] = 0xff;
-	
+	SkyGUISystem::GetInstance()->Initialize(pBootInfo);
 
 	StartConsoleSystem();
 	
@@ -443,4 +412,3 @@ void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
 			iretd
 	}
 }
-

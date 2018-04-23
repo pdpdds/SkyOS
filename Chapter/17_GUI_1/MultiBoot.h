@@ -34,6 +34,8 @@ Base adress from advanced linker option
 #define MULTIBOOT_HEADER_FLAGS_GUI         0x00010007 
 #define STACK_SIZE              0x4000    
 #define CHECKSUM            -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
+#define CHECKSUM_GUI            -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS_GUI)
+
 
 #pragma pack(push,1)
 struct MULTIBOOT_HEADER {
@@ -167,7 +169,7 @@ struct VbeInfoBlock
 	short TotalMemory;
 };
 
-/*struct VbeModeInfo
+struct VbeModeInfo
 {
 	unsigned short Attributes;
 	unsigned char WinA;
@@ -205,9 +207,9 @@ struct VbeInfoBlock
 	unsigned char DirectColorAttributes;
 
 	unsigned int FrameBuffer;
-};*/
+};
 
-struct VbeModeInfo
+/*struct VbeModeInfo
 {
 	UINT16 ModeAttributes;
 	char WinAAttributes;
@@ -255,6 +257,20 @@ struct VbeModeInfo
 	char LinRsvdMaskSize;
 	char LinRsvdFieldPosition;
 	char res2[194];
+}*/
+
+typedef struct {
+	uint16_t	Offset;
+	uint16_t	Segment;
+}	t_farptr;
+
+struct VesaControllerInfo {
+	char	Signature[4];	// == "VBE2"
+	uint16_t	Version;	// == 0x0300 for Vesa 3.0
+	t_farptr	OemString;	// isa vbeFarPtr
+	uint8_t	Capabilities[4];
+	t_farptr	Videomodes;	// isa vbeParPtr
+	uint16_t	TotalMemory;// as # of 64KB blocks
 };
 
 struct multiboot_info
@@ -306,9 +322,35 @@ struct multiboot_info
 	uint16_t vbe_interface_seg;
 	uint16_t vbe_interface_off;
 	uint16_t vbe_interface_len;
+
+//GRUB2
+	uint64_t framebuffer_addr;	
+	uint64_t framebuffer_pitch;
+	uint64_t framebuffer_width;
+	uint64_t framebuffer_height;
+	uint64_t framebuffer_bpp;
+#define MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED 0
+#define MULTIBOOT_FRAMEBUFFER_TYPE_RGB     1
+#define MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT     2
+	uint8_t framebuffer_type;
+	union
+	{
+		struct
+		{
+			uint32_t framebuffer_palette_addr;
+			uint16_t framebuffer_palette_num_colors;
+		}framebuffer_palette;
+		struct
+		{
+			uint8_t framebuffer_red_field_position;
+			uint8_t framebuffer_red_mask_size;
+			uint8_t framebuffer_green_field_position;
+			uint8_t framebuffer_green_mask_size;
+			uint8_t framebuffer_blue_field_position;
+			uint8_t framebuffer_blue_mask_size;
+		}framebuffer_MASK;
+	};
 };
 typedef struct multiboot_info multiboot_info_t;
-
-
 
 #pragma pack(pop)

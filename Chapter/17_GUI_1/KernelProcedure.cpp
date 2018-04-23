@@ -11,6 +11,9 @@
 #include "Scheduler.h"
 #include "PhysicalMemoryManager.h"
 #include "SkyWindow.h"
+#include "VideoRam.h"
+#include "SkySimpleGUI.h"
+#include "SkyGUISystem.h"
 
 extern bool systemOn;
 
@@ -47,11 +50,15 @@ DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 	systemOn = true;
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
-#ifdef SKY_GUI
-	StartGUISystem();
-#else
-	NativeConsole();
-#endif
+	
+	if (SkyGUISystem::GetInstance()->GUIEnable() == true)
+	{
+		StartGUISystem();
+	}
+	else
+	{
+		NativeConsole();
+	}
 			
 	SkyConsole::Print("Bye!!");
 
@@ -120,6 +127,8 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
 
 void StartGUISystem()
 {
-	//SkyWindow* pWindow = new SkyHaribote();
-	//pWindow->Initialize
+	SkyWindow* pWindow = new SkySimpleGUI();
+	VideoRamInfo& info = VideoRam::GetInstance()->GetVideoRamInfo();
+	pWindow->Initialize(info._pVideoRamPtr, info._width, info._height, info._bpp);
+	pWindow->Run();
 }

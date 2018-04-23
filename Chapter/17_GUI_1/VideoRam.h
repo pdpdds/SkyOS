@@ -1,5 +1,22 @@
 #pragma once
 
+typedef struct tagVideoRamInfo
+{
+	void* _pVideoRamPtr;
+	int _width;
+	int _height;
+	int _bpp;
+
+	tagVideoRamInfo()
+	{
+		_pVideoRamPtr = nullptr;
+		_width = 0;
+		_height = 0;
+		_bpp = 0;
+	}
+
+}VideoRamInfo;
+
 class VideoRam
 {
 public:	
@@ -13,15 +30,12 @@ public:
 		return m_pVideoRam;
 	}
 
-	void* GetVideoRam() {return m_pVideoRamPtr;}
-	void  SetVideoRam(void* ptr) { m_pVideoRamPtr = ptr; }
+	VideoRamInfo& GetVideoRamInfo() {return m_videoRamInfo;}
+	void  SetVideoRamInfo(VideoRamInfo& info) { m_videoRamInfo = info; }
 
 private:
 	VideoRam();
 	static VideoRam* m_pVideoRam;
 
-	void* m_pVideoRamPtr;
-	int m_width;
-	int m_height;
-	int m_bpp;
+	VideoRamInfo m_videoRamInfo;
 };
