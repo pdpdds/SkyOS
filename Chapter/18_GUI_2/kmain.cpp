@@ -185,27 +185,56 @@ void kmain(unsigned long magic, unsigned long addr)
 		JPEG* jpeg = new JPEG;
 
 		char* buffer = new char[pFile->_fileLength];
-		COLOR* outBuffer = new COLOR[pFile->_fileLength * 5];
+		
 		StorageManager::GetInstance()->ReadFile(pFile, (unsigned char*)buffer, 1, pFile->_fileLength);
 
 		if (true == kJPEGInit(jpeg, (BYTE*)buffer, pFile->_fileLength))
 		{
 			SkyConsole::Print("kJPEGInit\n");
 
-			if (true == kJPEGDecode(jpeg, outBuffer))
+			// 디코딩할 메모리 할당
+			COLOR* outBuffer  = (COLOR*) new char[jpeg->width * jpeg->height *sizeof(COLOR)];
+			ULONG* rgb888Buffer = (ULONG*) new char[jpeg->width * jpeg->height * sizeof(ULONG)];
+
+			if (outBuffer != nullptr)
 			{
-				SkyConsole::Print("kJPEGDecode\n");
+				if (true == kJPEGDecode(jpeg, outBuffer))
+				{
+					SkyConsole::Print("kJPEGDecode\n");
+
+					for (int i = 0; i < jpeg->width * jpeg->height; i++)
+					{
+						COLOR color = outBuffer[i];
+						uint8_t r = ((color >> 11) & 0x1F);
+						uint8_t g = ((color >> 5) & 0x3F);
+						uint8_t b = (color & 0x1F);
+
+						r = ((((color >> 11) & 0x1F) * 527) + 23) >> 6;
+						g = ((((color >> 5) & 0x3F) * 259) + 33) >> 6;
+						b = (((color & 0x1F) * 527) + 23) >> 6;
+
+						uint32_t RGB888 = r << 16 | g << 8 | b;
+
+						rgb888Buffer[i] = RGB888;
+					}
+
+					SkyConsole::Print("RGB888 Converted\n");
+
+					unsigned* framebuffer = (unsigned*)(0xFD000000);
+					for (int y = 0; y < jpeg->height; ++y)
+					{
+						for (int x = 0; x < jpeg->width; ++x)
+						{
+							framebuffer[y * jpeg->width + x] = rgb888Buffer[y * jpeg->width + x]; //노란색
+						}
+					}
+
+					
+				}
 			}			
 
-			/*uint8_t r = ((color >> 11) & 0x1F);
-			uint8_t g = ((color >> 5) & 0x3F);
-			uint8_t b = (color & 0x1F);
 
-			r = ((((color >> 11) & 0x1F) * 527) + 23) >> 6;
-			g = ((((color >> 5) & 0x3F) * 259) + 33) >> 6;
-			b = (((color & 0x1F) * 527) + 23) >> 6;
-
-			uint32_t RGB888 = r << 16 | g << 8 | b;*/
+			
 
 		}
 		else
@@ -214,7 +243,7 @@ void kmain(unsigned long magic, unsigned long addr)
 		}
 	}
 
-	for (;;);
+	//for (;;);
 
 	StartConsoleSystem();
 	

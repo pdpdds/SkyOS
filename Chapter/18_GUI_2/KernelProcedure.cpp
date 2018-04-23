@@ -130,5 +130,6 @@ void StartGUISystem()
 	SkyWindow* pWindow = new SkySimpleGUI();
 	VideoRamInfo& info = VideoRam::GetInstance()->GetVideoRamInfo();
 	pWindow->Initialize(info._pVideoRamPtr, info._width, info._height, info._bpp);
+
 	pWindow->Run();
 }
