@@ -230,6 +230,87 @@
     <ClCompile Include="LUA\lstrlib.cpp">
       <Filter>LUA</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\_mouse.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\browser.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\button.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\check.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\choice.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\dialog.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\filedialog.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\general.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\iconlist.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\image.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\info.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\input.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\listbox.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\number.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\object.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\progress.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\pulldown.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\screen.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\slider.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\svgalib.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\text.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\window.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\window_draw.cPP">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\window_thread.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\xlib.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\svgaguientry.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\example\color.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -415,6 +496,27 @@
     <ClInclude Include="SkySheetController8.h" />
     <ClInclude Include="SkySheetController32.h" />
     <ClInclude Include="ConsoleIOListener.h" />
+    <ClInclude Include="GUI\svgagui\src\_mouse.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\src\bigfont.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\src\font.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\src\font2.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\src\local.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\svgagui.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\svgaguientry.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
@@ -450,6 +552,9 @@
     <Filter Include="LUA">
       <UniqueIdentifier>{8831c080-5b48-4063-833e-29929338d218}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GUI\SVGA">
+      <UniqueIdentifier>{80f91c2c-2488-4115-8a74-71b36f5b8144}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Debug\kernel.sys">
@@ -458,5 +563,22 @@
     <None Include="CPlusPlus\ctrycatch_exception_types.conf">
       <Filter>CPlusPlus</Filter>
     </None>
+    <None Include="GUI\svgagui\src\help">
+      <Filter>GUI\SVGA</Filter>
+    </None>
+    <None Include="GUI\svgagui\src\like.ld">
+      <Filter>GUI\SVGA</Filter>
+    </None>
+    <None Include="GUI\svgagui\src\Makefile">
+      <Filter>GUI\SVGA</Filter>
+    </None>
+    <None Include="GUI\svgagui\src\README.local">
+      <Filter>GUI\SVGA</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="GUI\svgagui\src\Readme.txt">
+      <Filter>GUI\SVGA</Filter>
+    </Text>
   </ItemGroup>
 </Project>

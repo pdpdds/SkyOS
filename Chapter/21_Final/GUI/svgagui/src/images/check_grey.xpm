@@ -1,0 +1,13 @@
+/* XPM */
+static char * check_grey_xpm[] = {
+"8 8 2 1",
+" 	c none",
+"X	c grey",
+"       X",
+"      XX",
+"     XXX",
+"X   XXX ",
+"XX XXX  ",
+"XXXXX   ",
+" XXX    ",
+"  X     "};

@@ -48,6 +48,33 @@
     <ClCompile Include="GUI\Simple\SkySimpleGUI.cpp" />
     <ClCompile Include="GUI\SkyGUISystem.cpp" />
     <ClCompile Include="GUI\SkyWindow.cpp" />
+    <ClCompile Include="GUI\svgagui\example\color.cpp" />
+    <ClCompile Include="GUI\svgagui\src\browser.cpp" />
+    <ClCompile Include="GUI\svgagui\src\button.cpp" />
+    <ClCompile Include="GUI\svgagui\src\check.cpp" />
+    <ClCompile Include="GUI\svgagui\src\choice.cpp" />
+    <ClCompile Include="GUI\svgagui\src\dialog.cpp" />
+    <ClCompile Include="GUI\svgagui\src\filedialog.cpp" />
+    <ClCompile Include="GUI\svgagui\src\general.cpp" />
+    <ClCompile Include="GUI\svgagui\src\iconlist.cpp" />
+    <ClCompile Include="GUI\svgagui\src\image.cpp" />
+    <ClCompile Include="GUI\svgagui\src\info.cpp" />
+    <ClCompile Include="GUI\svgagui\src\input.cpp" />
+    <ClCompile Include="GUI\svgagui\src\listbox.cpp" />
+    <ClCompile Include="GUI\svgagui\src\number.cpp" />
+    <ClCompile Include="GUI\svgagui\src\object.cpp" />
+    <ClCompile Include="GUI\svgagui\src\progress.cpp" />
+    <ClCompile Include="GUI\svgagui\src\pulldown.cpp" />
+    <ClCompile Include="GUI\svgagui\src\screen.cpp" />
+    <ClCompile Include="GUI\svgagui\src\slider.cpp" />
+    <ClCompile Include="GUI\svgagui\src\svgalib.cpp" />
+    <ClCompile Include="GUI\svgagui\src\text.cpp" />
+    <ClCompile Include="GUI\svgagui\src\window.cpp" />
+    <ClCompile Include="GUI\svgagui\src\window_draw.cPP" />
+    <ClCompile Include="GUI\svgagui\src\window_thread.cpp" />
+    <ClCompile Include="GUI\svgagui\src\xlib.cpp" />
+    <ClCompile Include="GUI\svgagui\src\_mouse.cpp" />
+    <ClCompile Include="GUI\svgagui\svgaguientry.cpp" />
     <ClCompile Include="Heap\HeapManager.cpp" />
     <ClCompile Include="Heap\kheap.cpp" />
     <ClCompile Include="Heap\ordered_array.cpp" />
@@ -155,6 +182,13 @@
     <ClInclude Include="GUI\Simple\SkySimpleGUI.h" />
     <ClInclude Include="GUI\SkyGUISystem.h" />
     <ClInclude Include="GUI\SkyWindow.h" />
+    <ClInclude Include="GUI\svgagui\src\bigfont.h" />
+    <ClInclude Include="GUI\svgagui\src\font.h" />
+    <ClInclude Include="GUI\svgagui\src\font2.h" />
+    <ClInclude Include="GUI\svgagui\src\local.h" />
+    <ClInclude Include="GUI\svgagui\src\_mouse.h" />
+    <ClInclude Include="GUI\svgagui\svgagui.h" />
+    <ClInclude Include="GUI\svgagui\svgaguientry.h" />
     <ClInclude Include="Heap\HeapManager.h" />
     <ClInclude Include="Heap\kheap.h" />
     <ClInclude Include="Heap\ordered_array.h" />
@@ -203,6 +237,13 @@
   <ItemGroup>
     <None Include="..\Debug\kernel.sys" />
     <None Include="CPlusPlus\ctrycatch_exception_types.conf" />
+    <None Include="GUI\svgagui\src\help" />
+    <None Include="GUI\svgagui\src\like.ld" />
+    <None Include="GUI\svgagui\src\Makefile" />
+    <None Include="GUI\svgagui\src\README.local" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="GUI\svgagui\src\Readme.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}</ProjectGuid>
@@ -252,8 +293,8 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./CPlusPlus;./V8086;./GUI/Haribote;./GUI/Simple;./GUI;../../CommonLib/math;./lua</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>__LE__;OLD_ANSI;_DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./CPlusPlus;./V8086;./GUI/Haribote;./GUI/Simple;./GUI;../../CommonLib/math;./lua;./gui/svgagui/example</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SKY_GUI;__LE__;OLD_ANSI;_DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
       </StringPooling>

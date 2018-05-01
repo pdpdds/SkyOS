@@ -1,0 +1,79 @@
+SVGAgui is a 'window manager' library for use on both svgalib and X. This library is used
+by the multitrack program to display the graphical user interface.
+
+To compile the library and the example simply type:
+make
+
+
+This documentation is far from complete. See the example for all possible
+functions and the use of them.
+
+Functions for handling the interface in SVGAlib:
+
+Windows:
+--------
+- create_window_thread
+	Creates the root of the window tree.
+- delete_window_thread
+	Removes the whole window tree.
+- add_window
+	Adds a window to the window tree.
+- delete_window
+	Removes a window from the tree.
+- create_window
+	Create the window image. This function must be called before adding
+	the objects to the window.
+- update_window
+	Update the contents of the window on the screen.
+- do_windows
+	Main loop of the current window tree.
+	
+
+Object classes:
+---------------
+- BUTTON : button
+	Types:
+	* NORMAL_BUTTON : normal button with some text on it.
+	* LIGHT_BUTTON  : button showing a light when pressed.
+	* PIXMAP_BUTTON : button containing a pixmap.
+	* CHECK_BUTTON  : button showing a check mark when pressed.
+- SLIDER : slider
+	Types:
+	* VERT_SLIDER : normal vertical slider. Up and down buttons as option.
+	* HOR_SLIDER  : normal horizontal slider. Left and right buttons as option
+        * NICE_SLIDER : slider used in mixer equipment
+        * NICE_VALUE_SLIDER : as NICE_SLIDER but showing the current value
+- WINTEXT : text
+	Types:
+        * NORMAL_TEXT
+- NUMBER : digital number
+	Types:
+        * DIGITAL_NUMBER
+- INPUT : input field
+	Types:
+        * NORMAL_INPUT : accepts all keys
+        * INT_INPUT    : accepts only integer input
+        * FLOAT_INPUT  : accepts only floating point input
+
+Object functions:
+-----------------
+Generic:	- set_object_color
+		- set_object_callback
+                - set_object_info
+                - set_object_user_data
+                - set_object_image
+                - hide_object
+
+BUTTON:		- add_button
+		- show_button
+SLIDER: 	- add_slider
+		- show_slider
+TEXT:   	- add_text
+		- show_text
+        	- string_length
+        		The length of the textstring in pixels.
+NUMBER:		- add_number
+		- show_number
+INPUT:  	- add_input
+		- show_input
+        	- set_input
