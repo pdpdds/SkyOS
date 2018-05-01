@@ -20,19 +20,39 @@ struct ieee_double {
 #endif
 
 };
+#ifdef  __cplusplus
+extern "C" {
+#endif
+	extern double log(double x);
+	extern double log10(double x);
+	extern double atan2(double y, double x);
+	extern double exp(double x);
+	extern double asin(double x);
+	double frexp(double value, int *eptr);
+	int abs(int j);
+	float pow(float x, int y);
+	long fact(int n); //factorial function
+	float fabs(float j);
+	double sin(float angle);
+	double cos(double x);
+	double tan(double x);
+	double sqrt(double a);
+	extern double ldexp(double value, int exp);
+	extern double atan(double x);
+	int rand(void);
+	void srand(unsigned int seed);
+	extern double ceil(double x);
+	float fmod(float a, float b);
+	int floor(float x);
 
-double frexp(double value, int *eptr);
-int abs(int j);
-float pow(float x, int y);
-long fact(int n); //factorial function
-float fabs(float j);
-double sin(float angle);
-float fmod(float a, float b);
+#ifdef  __cplusplus
+}
+#endif
 
 #define MIN( x, y )     ( ( ( x ) < ( y ) ) ? ( x ) : ( y ) )
 #define MAX( x, y )     ( ( ( x ) > ( y ) ) ? ( x ) : ( y ) )
 
-int floor(float x);
+
 #define RAND_MAX 0x7fff
 
 #define M_E	2.71828182845904523536 //e	

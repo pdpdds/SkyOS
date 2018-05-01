@@ -209,46 +209,64 @@ void TestVector()
 	for (;;);
 }
 
+void TestMap()
+{
+	map<int, int> hashmap;
+	map<int, int> m10;
+	map<int, int>::iterator it1;
+	map<int, int>::iterator it2;
+
+	m10[1] = 2;
+	m10[2] = 4;
+	m10[4] = 8;
+	m10[3] = 6;
+	m10[5] = 10;
+	m10[6] = 12;
+	m10[7] = 14;
+	m10[8] = 16;
+
+	int i = 0;
+	for (it1 = m10.begin(); it1 != m10.end(); it1++) {
+		//cout << (*it1).first << "   " << (*it1).second << endl;
+		SkyConsole::Print("%d  %d\n", (*it1).first, (*it1).second);
+		i++;
+	}
+
+	//cout << "ERASE BY KEY" << endl;
+	m10.erase(3);
+	i = 0;
+	for (it1 = m10.begin(); it1 != m10.end(); it1++) {
+		//cout << (*it1).first << "   " << (*it1).second << endl;
+		SkyConsole::Print("%d  %d\n", (*it1).first, (*it1).second);
+		i++;
+	}
+}
+
+typedef struct tag_testStruct
+{
+	int j;
+	int k;
+}testStruct;
+
 void Testlist()
 {
-	list<int> fstlist = list<int>();
-	list<int> scndlist = list<int>();
+	list<testStruct> fstlist;
+	list<int> scndlist;
 	int counter = 0;
 
 	for (int i = 0; i <= 10; ++i) {
-		fstlist.push_back(i);
+		testStruct a;
+		a.j = i;
+		a.k = i + 1;
+		fstlist.push_back(a);
 	}
-	list<int>::Iterator iter = fstlist.begin();
-	while (iter != fstlist.end())
+	list<testStruct>::iterator iter = fstlist.begin();
+	for (size_t i = 0; i < fstlist.size(); i++, iter++)
 	{
-		SkyConsole::Print("item %d  done\n", *iter);
-		iter++;
+		SkyConsole::Print("item 0x%d 0x%d done\n", ((testStruct)(*iter)).j, ((testStruct(*iter)).k));
 	}
 
 	SkyConsole::Print("done!!\n");
-
-	while (1) 
-	{
-		for (int i = 0; i <= 10; ++i) {
-			fstlist.push_back(i);
-		}
-
-		for (int i = 6; i <= 15; ++i) {
-			scndlist.push_front(i);
-		}
-
-		iter = fstlist.begin();
-
-		fstlist.splice(++iter, scndlist);
-		scndlist.concat(fstlist);
-		fstlist.concat(scndlist);
-
-		fstlist.pop_back();
-		fstlist.clear();
-		//std::cout << "Cycle # " << counter << " done" << std::endl;
-		SkyConsole::Print("Cycle %d  done\n", counter);
-		++counter;
-	}
 }
 
 static const char *JSON_STRING =

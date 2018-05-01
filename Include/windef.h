@@ -72,12 +72,17 @@ typedef          char  s8int;
   typedef long LONG;
   typedef void *PVOID;
   typedef PVOID HANDLE;
+  typedef HANDLE HWND;
+  
   typedef unsigned long		ULONG;
 
   typedef long               ISIZE;
   typedef unsigned long      LSIZE;
   typedef unsigned long      USIZE;
-
+  #define CALLBACK
+  typedef int WPARAM;
+  typedef int LPARAM;
+	  
 
   /* 32 bit data types*/
   typedef long INT32;
@@ -109,6 +114,10 @@ typedef          char  s8int;
   typedef ULONG_PTR DWORD_PTR;
   typedef ULONG_PTR *PULONG_PTR;
 
+  typedef	unsigned long long u_quad_t;	/* quads */
+  typedef	long long	quad_t;
+  typedef	quad_t *	qaddr_t;
+ 
 
 //20180124	
   #define offsetof(st, m) ((size_t)&(((st *)0)->m))

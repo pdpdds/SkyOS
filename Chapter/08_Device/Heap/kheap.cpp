@@ -19,7 +19,7 @@ heap_t kheap;
 u32int kmalloc_int(u32int sz, int align, u32int *phys)
 {
     
-        void *addr = alloc(sz, (u8int)align, &kheap);
+        void *addr = memory_alloc(sz, (u8int)align, &kheap);
 
 		//SkyConsole::Print("kmalloc_int 0x%x\n", kheap.start_address);
 		//SkyConsole::Print("kmalloc_int 0x%x\n", kheap.end_address);
@@ -248,7 +248,7 @@ heap_t *create_heap(u32int start, u32int end_addr, u32int max, u8int supervisor,
     return heap;
 }
 
-void *alloc(u32int size, u8int page_align, heap_t *heap)
+void *memory_alloc(u32int size, u8int page_align, heap_t *heap)
 {
 
     // Make sure we take the size of header/footer into account.
@@ -304,7 +304,7 @@ void *alloc(u32int size, u8int page_align, heap_t *heap)
             footer->magic = HEAP_MAGIC;
         }
         // We now have enough space. Recurse, and call the function again.
-        return alloc(size, page_align, heap);
+        return memory_alloc(size, page_align, heap);
     }
 
     header_t *orig_hole_header = (header_t *)lookup_ordered_array(iterator, &heap->index);

@@ -107,7 +107,6 @@
     <ClCompile Include="CPU\FPU.cpp">
       <Filter>CPU</Filter>
     </ClCompile>
-    <ClCompile Include="TSS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -234,7 +233,6 @@
     <ClInclude Include="CPU\FPU.h">
       <Filter>CPU</Filter>
     </ClInclude>
-    <ClInclude Include="TSS.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

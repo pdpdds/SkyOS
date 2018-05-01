@@ -81,6 +81,16 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	SetInterruptVector();
 
+	if (false == InitFPU())
+	{
+		SkyConsole::Print("[Warning] Floating Pointer Unit Detection Fail\n");
+	}
+	else
+	{
+		EnableFPU();
+		SkyConsole::Print("FPU Init..\n");
+	}
+
 	SkyConsole::Print("Interrput Handler Init Complete\n");
 
 	//물/가상 메모리 매니저를 초기화한다.
@@ -102,16 +112,6 @@ void kmain(unsigned long magic, unsigned long addr)
 	HeapManager::InitKernelHeap(heapFrameCount);
 
 	SkyConsole::Print("Heap %dMB Allocated\n", requiredHeapSize / 1048576);
-
-	if (false == InitFPU())
-	{
-		SkyConsole::Print("[Warning] Floating Pointer Unit Detection Fail\n");
-	}
-	else
-	{
-		EnableFPU();
-		SkyConsole::Print("FPU Init..\n");
-	}
 
 	InitKeyboard();
 	SkyConsole::Print("Keyboard Init..\n");
@@ -232,7 +232,7 @@ void ConstructFileSystem()
 	}
 
 //플로피 디스크
-	FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
+	/*FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
 	if (pFloppyDiskAdaptor->Initialize() == true)
 	{
 		StorageManager::GetInstance()->RegisterFileSystem(pFloppyDiskAdaptor, 'A');
@@ -241,7 +241,7 @@ void ConstructFileSystem()
 	else
 	{
 		delete pFloppyDiskAdaptor;
-	}				
+	}*/				
 }
 
 void StartConsoleSystem()

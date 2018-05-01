@@ -76,6 +76,16 @@ int vsprintf(char *str, const char *format, va_list ap) {
 						loc+=strlen(s) - 1;
 						break;
 					}
+
+					case 'f':
+						double double_temp;
+						double_temp = va_arg (ap, double);
+						char buffer[512];
+						ftoa_fixed(buffer, double_temp);
+						strcpy(&str[loc], buffer);
+						i++;
+						loc += strlen(buffer) - 1;
+						break;
 				}
 				break;
 
@@ -240,6 +250,52 @@ strtoul(const char* nptr, char** endptr, int base)
 int atoi ( const char * str ) {
 
 	return (int) strtol ( str, 0, 10 );
+}
+
+double atof(char *p)
+{
+	double          d, t;
+	int             len, val, sz, div, isneg;
+	char            tmp[18];
+
+	if (*p == '-') {
+		isneg = 1;
+		p++;
+	}
+	else
+		isneg = 0;
+
+	sz = strcspn(p, ".");
+	if (sz > 0) {
+		strncpy(tmp, p, sz);
+		tmp[sz] = 0;
+		if (!atob(&val, tmp, 10))
+			return (d);
+	}
+	else
+		val = 0;
+
+	d = (double)val;
+	p += sz;
+	if (*p)
+		p++;
+	if (*p) {
+		len = strlen(p);
+		if (!atob(&val, p, 10))
+			return (0);
+
+		div = 1;
+		for (; len > 0; len--)
+			div *= 10;
+
+		t = (double)val;
+		t /= div;
+
+		d += t;
+	}
+	if (isneg)
+		d = 0 - d;
+	return (d);
 }
 
 /**

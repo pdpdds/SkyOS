@@ -2,19 +2,19 @@
 #include "memory.h"
 #include "gdt.h"
 #include "tss.h"
+#include "SkyAPI.h"
 
 tss_entry TSS;
 
 void FlushTSS(uint16_t sel)
 {
-
+	kEnterCriticalSection();
 	_asm {
-		cli
 		mov eax, 0x2b
 		ltr ax
 		sti
 	}
-
+	kLeaveCriticalSection();
 	//_asm ltr [sel]
 }
 

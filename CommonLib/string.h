@@ -2,6 +2,10 @@
 #include <size_t.h>
 //표준 C 런타임 라이브러리
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
 char *strcpy(char *s1, const char *s2);
 size_t strlen ( const char* str );
 int strcmp (const char* str1, const char* str2);
@@ -23,6 +27,13 @@ char *strnchr(const char *str, char c, size_t count);
 const char *strrchr(const char * String, char const Character);
 size_t strxfrm(char *dst, char *src, size_t n);
 int strcoll(const char *s1, const char *s2);
+double strtod(const char *string, char **endPtr);
+size_t strcspn(const char* s1, const char *s2);
+unsigned long strtoul(const char *nptr, char **endptr, int base);
 
 void ftoa_fixed(char *buffer, double value);
 void ftoa_sci(char *buffer, double value);
+char * strichr(char *p, int c);
+#ifdef  __cplusplus
+}
+#endif

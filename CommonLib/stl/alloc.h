@@ -145,7 +145,7 @@ public:
 
 static void * allocate(size_t n)
 {
-    void *result = (void *)malloc(n);
+    void *result = (void *)kmalloc(n);
     if (0 == result) result = oom_malloc(n);
     return result;
 }
@@ -190,7 +190,7 @@ void * __malloc_alloc_template<inst>::oom_malloc(size_t n)
         my_malloc_handler = __malloc_alloc_oom_handler;
         if (0 == my_malloc_handler) { __THROW_BAD_ALLOC; }
         (*my_malloc_handler)();
-        result = (void*)malloc(n);
+        result = (void*)kmalloc(n);
         if (result) return(result);
     }
 }
@@ -473,7 +473,7 @@ __default_alloc_template<threads, inst>::chunk_alloc(size_t size, int& nobjs)
             ((obj *)start_free) -> free_list_link = *my_free_list;
             *my_free_list = (obj *)start_free;
         }
-        start_free = (char *)malloc(bytes_to_get);
+        start_free = (char *)kmalloc(bytes_to_get);
         if (0 == start_free) {
             int i;
             obj * __VOLATILE * my_free_list, *p;

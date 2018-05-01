@@ -19,8 +19,8 @@ public:
 	ProcessManager();
 	virtual ~ProcessManager();
 
-	typedef hash_map<int, Process*> ProcessList;
-	typedef std::list<Thread*> TaskList;
+	typedef map<int, Process*> ProcessList;
+	typedef list<Thread*> TaskList;
 		
 	ProcessList* GetProcessList() { return &m_processList;}
 	TaskList* GetTaskList() { return &m_taskList; }
@@ -34,6 +34,7 @@ public:
 	}
 		
 	Process* CreateProcessFromMemory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType);
+	Process* CreateProcessFromMemory2(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType);
 	Process* CreateProcessFromFile(char* appName, void* param, UINT32 processType);
 
 	Thread* CreateThread(Process* pProcess, FILE* pFile, LPVOID param);
@@ -41,6 +42,17 @@ public:
 
 	Process* FindProcess(int processId);
 	bool RemoveProcess(int processId);
+	Thread* FindTask(DWORD taskId);
+
+	void SetCurrentTask(Thread* pTask)
+	{
+		m_pCurrentTask = pTask;
+	}
+
+	Thread* GetCurrentTask()
+	{
+		return m_pCurrentTask;
+	}
 	
 private:
 	bool AddProcess(Process* pProcess);
@@ -56,4 +68,5 @@ private:
 	ProcessList m_processList;
 	TaskList m_taskList;
 	TaskList m_terminatedTaskList;
+	Thread* m_pCurrentTask;
 };

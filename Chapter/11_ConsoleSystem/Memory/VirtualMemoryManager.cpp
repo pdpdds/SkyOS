@@ -6,6 +6,10 @@
 #include "MultiBoot.h"	
 #include "SkyAPI.h"
 
+#define MAX_PAGE_DIRECTORY_COUNT 10
+PageDirectory* pageDirectoryPool[MAX_PAGE_DIRECTORY_COUNT];
+bool pageDirectoryAvailable[MAX_PAGE_DIRECTORY_COUNT];
+
 namespace VirtualMemoryManager
 {
 	//! current directory table
@@ -59,6 +63,36 @@ namespace VirtualMemoryManager
 
 		PhysicalMemoryManager::EnablePaging(true);
 		kLeaveCriticalSection();
+	}
+
+	void FreePageDirectory(PageDirectory* dir)
+	{
+		PhysicalMemoryManager::EnablePaging(false);
+		PDE* pageDir = dir->m_entries;
+		for (int i = 0; i < PAGES_PER_DIRECTORY; i++)
+		{
+			PDE& pde = pageDir[i];
+
+			if (pde != 0)
+			{
+				/* get mapped frame */
+				void* frame = (void*)(pageDir[i] & 0x7FFFF000);
+				PhysicalMemoryManager::FreeBlock(frame);
+				pde = 0;
+			}
+		}
+
+		for (int index = 0; index < MAX_PAGE_DIRECTORY_COUNT; index++)
+		{
+
+			if (pageDirectoryPool[index] == dir)
+			{
+				pageDirectoryAvailable[index] = true;
+				break;
+			}
+		}
+
+		PhysicalMemoryManager::EnablePaging(true);
 	}
 
 	void UnmapPageTable(PageDirectory* dir, uint32_t virt)
@@ -165,16 +199,28 @@ namespace VirtualMemoryManager
 
 	PageDirectory* CreateCommonPageDirectory()
 	{
-		
+				
 		//페이지 디렉토리 생성. 가상주소 공간 
 		//4GB를 표현하기 위해서 페이지 디렉토리는 하나면 충분하다.
 		//페이지 디렉토리는 1024개의 페이지테이블을 가진다
-		//1024 * 1024(페이지 테이블 엔트리의 개수) * 4K(프레임의 크기) = 4G
-		PageDirectory* dir = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		//1024 * 1024(페이지 테이블 엔트리의 개수) * 4K(프레임의 크기) = 4G		
+		int index = 0;
+		for (; index < MAX_PAGE_DIRECTORY_COUNT; index++)
+		{
+		
+			if (pageDirectoryAvailable[index] == true)
+				break;
+		}
 
+		if (index == MAX_PAGE_DIRECTORY_COUNT)
+			return nullptr;
+
+		PageDirectory* dir = pageDirectoryPool[index];
+	
 		if (dir == NULL)
 			return nullptr;
 
+		pageDirectoryAvailable[index] = false;
 		memset(dir, 0, sizeof(PageDirectory));
 
 		uint32_t frame = 0x00000000;
@@ -216,9 +262,24 @@ namespace VirtualMemoryManager
 		return dir;
 	}	
 
+	void SetPageDirectory(PageDirectory* dir)
+	{
+		_asm
+		{
+			mov	eax, [dir]
+			mov	cr3, eax		// PDBR is cr3 register in i86
+		}
+	}
+
 	bool Initialize()
 	{
 		SkyConsole::Print("Virtual Memory Manager Init..\n");
+
+		for (int i = 0; i < MAX_PAGE_DIRECTORY_COUNT; i++)
+		{
+			pageDirectoryPool[i] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+			pageDirectoryAvailable[i] = true;
+		}
 
 		PageDirectory* dir = CreateCommonPageDirectory();
 
@@ -229,11 +290,7 @@ namespace VirtualMemoryManager
 		SetCurPageDirectory(dir);
 		SetKernelPageDirectory(dir);
 
-		_asm
-		{
-			mov	eax, [dir]
-			mov	cr3, eax		// PDBR is cr3 register in i86
-		}
+		SetPageDirectory(dir);
 
 		//페이징 기능을 다시 활성화시킨다
 		PhysicalMemoryManager::EnablePaging(true);

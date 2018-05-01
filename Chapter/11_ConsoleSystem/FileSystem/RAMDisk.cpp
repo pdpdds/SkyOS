@@ -46,8 +46,8 @@ bool kReadRDDInformation(bool bPrimary, bool bMaster,
     
     // 총 섹터 수와 시리얼 번호, 그리고 모델 번호만 설정
     pstHDDInformation->dwTotalSectors = gs_stRDDManager.dwTotalSectorCount;
-    memcpy( pstHDDInformation->vwSerialNumber, "0000-0000", 9 );
-	memcpy( pstHDDInformation->vwModelNumber, "MINT RAM Disk v1.0", 18 );
+    memcpy( pstHDDInformation->vwSerialNumber, "0000-0001", 9 );
+	memcpy( pstHDDInformation->vwModelNumber, "SKYOS RAM Disk v1.0", 18 );
 
     return TRUE;
 }

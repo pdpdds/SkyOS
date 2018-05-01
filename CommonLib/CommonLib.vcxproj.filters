@@ -10,6 +10,9 @@
     <Filter Include="wchar">
       <UniqueIdentifier>{ee5a29ac-ff6e-4af4-ad93-da3ad7b248ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{1c1becf8-6cd3-4c3c-afb7-a87290c9fbe4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jsmn\jsmn.h">
@@ -100,6 +103,9 @@
       <Filter>stl</Filter>
     </ClInclude>
     <ClInclude Include="wchar.h" />
+    <ClInclude Include="math\fdlibm.h">
+      <Filter>math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jsmn\jsmn.cpp">
@@ -107,7 +113,6 @@
     </ClCompile>
     <ClCompile Include="cstd.cpp" />
     <ClCompile Include="ctype.cpp" />
-    <ClCompile Include="math.cpp" />
     <ClCompile Include="sprintf.cpp" />
     <ClCompile Include="stdio.cpp" />
     <ClCompile Include="string.cpp" />
@@ -161,5 +166,101 @@
     <ClCompile Include="widechar\unicode.c">
       <Filter>wchar</Filter>
     </ClCompile>
+    <ClCompile Include="math\e_fmod.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\e_acos.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math.c" />
+    <ClCompile Include="math\e_asin.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\e_atan2.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\e_exp.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\e_log10.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\e_log.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_ldexp.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_finite.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_scalbn.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_asinh.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_atan.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_cbrt.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_ceil.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_copysign.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_erf.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_expm1.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_fabs.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_floor.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_ilogb.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_isnan.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_lib_version.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_log1p.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_logb.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_matherr.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_modf.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_nextafter.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_rint.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_signgam.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_significand.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_tanh.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="atob.c" />
+    <ClCompile Include="vsprintf.c" />
   </ItemGroup>
 </Project>

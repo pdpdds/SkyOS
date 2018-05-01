@@ -10,7 +10,6 @@
 #include "fileio.h"
 #include "SysAPI.h"
 #include "FPU.h"
-#include "TSS.h"
 
 
 _declspec(naked) void multiboot_entry(void)
@@ -111,13 +110,13 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	InitKeyboard();
 	SkyConsole::Print("Keyboard Init..\n");
-	
-	InstallTSS(5, 0x10, 0);
+
+	//double fCrashVar = 1.3f;
 	
 	ConstructFileSystem();	
 
 	TestTryCatch();
-	TestNullPointer();
+	//TestNullPointer();
 
 	for (;;);	
 }
@@ -228,7 +227,7 @@ void ConstructFileSystem()
 
 //플로피 디스크
 	FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
-	if (pFloppyDiskAdaptor->Initialize() == true)
+	/*if (pFloppyDiskAdaptor->Initialize() == true)
 	{
 		StorageManager::GetInstance()->RegisterFileSystem(pFloppyDiskAdaptor, 'A');
 		StorageManager::GetInstance()->SetCurrentFileSystemByID('A');
@@ -236,5 +235,5 @@ void ConstructFileSystem()
 	else
 	{
 		delete pFloppyDiskAdaptor;
-	}				
+	}	*/			
 }
