@@ -2,6 +2,7 @@
 #include "VideoRam.h"
 #include "VirtualMemoryManager.h"
 #include "string.h"
+#include "vesa.h"
 
 SkyGUISystem* SkyGUISystem::m_GUISystem = nullptr;
 
@@ -35,6 +36,7 @@ bool SkyGUISystem::Initialize(multiboot_info* pBootInfo)
 			ramInfo._bpp = pBootInfo->framebuffer_bpp;
 
 			VideoRam::GetInstance()->SetVideoRamInfo(ramInfo);
+
 			return true;
 		}		
 	}

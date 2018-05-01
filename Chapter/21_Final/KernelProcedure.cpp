@@ -55,20 +55,21 @@ DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 
 	return 0;
 }
-
+#include "svgagui\svgaguientry.h"
 DWORD WINAPI SystemGUIProc(LPVOID parameter)
 {
 	systemOn = true;
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
-
 	//SkyWindow* pWindow = new SkySimpleGUI();
-	SkyWindow* pWindow = new SkyGUI();
+	/*SkyWindow* pWindow = new SkyGUI();
 	VideoRamInfo& info = VideoRam::GetInstance()->GetVideoRamInfo();
 
 	pWindow->Initialize(info._pVideoRamPtr, info._width, info._height, info._bpp);
 
-	pWindow->Run();
+	pWindow->Run();*/
+	
+	StartSampleGui();
 
 	return 0;
 }

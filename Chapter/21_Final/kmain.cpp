@@ -19,6 +19,7 @@
 #include "SysInfo.h"
 #include "SkyGUISystem.h"
 #include "JPEG.h"
+#include "VESA.h"
 
 //#define SKY_GUI 1
 //#define SKY_HARIBOTE
@@ -54,7 +55,7 @@ _declspec(naked) void multiboot_entry(void)
 		dd(0);
 		dd(1024);
 		dd(768);
-		dd(8)
+		dd(32)
 #else
 		dd(1); //텍스트 모드
 		dd(0);
@@ -177,6 +178,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	SystemProfiler::GetInstance()->SetGlobalState(state);
 
 	SkyGUISystem::GetInstance()->Initialize(pBootInfo);
+	init_lfb(pBootInfo->vbe_mode_info);
+	lfb_clear();
 
 #ifdef SKY_GUI
 	StartGUISystem();

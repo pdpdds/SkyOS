@@ -36,7 +36,7 @@ static char savechar = '\0';
 static unsigned long color[50];
 
 //32bit!!
-/*void update_svga_screen(void)
+void update_svga_screen(void)
 {
 	int length, line, x;
 	char *src;
@@ -53,10 +53,10 @@ static unsigned long color[50];
 		dst32 += guiscreen.width - length;
 		src += guiscreen.width - length;
 	}
-}*/
+}
 
 //24ºñÆ®
-void update_svga_screen(void)
+/*void update_svga_screen(void)
 {
 	int length, line, x;
 	char *src;
@@ -80,7 +80,7 @@ void update_svga_screen(void)
 			dst32[index] = (char)(*(color + src[srcIndex]) >> 16);
 		}		
 	}
-}
+}*/
 
 void init_svga_mouse()
 {

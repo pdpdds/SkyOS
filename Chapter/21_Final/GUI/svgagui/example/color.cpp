@@ -22,11 +22,8 @@
  *************************************************************************/
 
 #include "stdio.h"
-#include "fileio.h"
-#include "sprintf.h"
-//#include <stdlib.h>
-//#include <unistd.h>
-#include "main.h"
+#include "svgagui.h"
+#include "svgaguientry.h"
 
 
 static void select_color_cb(GuiObject * obj, int data)
@@ -66,11 +63,11 @@ void default_cb(GuiObject * obj, int data)
 
 void load_cb(GuiObject * obj, int data)
 {
-	FILE *invoer;
+	/*FILE *invoer;
 	int i, r, g, b;
 	char hulp[50];
 	
-	sprintf(hulp, "%s/.svgaguicolors", ".");	
+	sprintf(hulp, "%s/.svgaguicolors", getenv("HOME"));	
 	invoer = fopen(hulp, "r");
 	if (invoer != NULL) {
 		for (i = 0; i < 25; i++) {
@@ -80,17 +77,17 @@ void load_cb(GuiObject * obj, int data)
 		select_color_cb(NULL, kleur);
 		fclose(invoer);
 		message_dialog((obj->win)->win_thread, NULL, "Color settings loaded", DIA_INFO);
-	}
+	}*/
 }
 
 
 void save_cb(GuiObject * obj, int data)
 {
-	FILE *uitvoer;
+	/*FILE *uitvoer;
 	int i, r, g, b;
 	char hulp[50];
 
-	sprintf(hulp, "%s/.svgaguicolors", ".");
+	sprintf(hulp, "%s/.svgaguicolors", getenv("HOME"));	
 	uitvoer = fopen(hulp, "w");
 	if (uitvoer != NULL) {
 		for (i = 0;i < 25;i++) {
@@ -99,7 +96,7 @@ void save_cb(GuiObject * obj, int data)
 		}
 		fclose(uitvoer);
 		message_dialog((obj->win)->win_thread, NULL, "Color settings saved", DIA_INFO);
-	}
+	}*/
 }
 
 
@@ -176,11 +173,14 @@ void create_color_win(GuiWinThread * win_thread)
 	  color_win = win;
 	  create_color_choice(win);
 	  add_text(win, NORMAL_TEXT, 98, 55, "Example:");
+
 	  obj = add_slider(win, NICE_VALUE_SLIDER, 10, 60, 64, FALSE);
+
 	    color[0] = obj;
 	    set_object_callback(obj, set_color_cb);
 	    set_slider_maxvalue(obj, 63);
-	    set_object_color(obj, WIN_BACK, SLIDER_BACK, RED);
+	    set_object_color(obj, WIN_BACK, SLIDER_BACK, RED);		
+
 	  obj = add_slider(win, NICE_VALUE_SLIDER, 40, 60, 64, FALSE);
 	    color[1] = obj;
 	    set_object_callback(obj, set_color_cb);
@@ -191,7 +191,8 @@ void create_color_win(GuiWinThread * win_thread)
 	    set_object_callback(obj, set_color_cb);
 	    set_slider_maxvalue(obj, 63);
 	    set_object_color(obj, WIN_BACK, SLIDER_BACK, BLUE);
-	create_window(win);
+
+	create_window(win);	
 
 	/* set the current color (sliders etc.) */
 	get_gui_palette(kleur, &r, &g, &b);

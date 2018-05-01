@@ -1,5 +1,6 @@
 #include "vesa.h"
 #include "SkyConsole.h"
+#include "VideoRam.h"
 
 #define RGB16_565(r,g,b) ((b&31) | ((g&63) << 5 | ((r&31) << 11)))
 
@@ -31,8 +32,8 @@ ULONG getDepth() {
 
 void init_lfb(VbeModeInfo *mode_info)
 {
-	if (mode_info == nullptr)
-		return;
+	//if (mode_info == nullptr)
+		//return;
 
 	void *lfb_ptr;
 
@@ -42,11 +43,17 @@ void init_lfb(VbeModeInfo *mode_info)
 	
 	
 
-	lfb_width = mode_info->XResolution;
+	/*lfb_width = mode_info->XResolution;
 	lfb_height = mode_info->YResolution;
 	lfb_depth = mode_info->BitsPerPixel;
 	lfb_type = 0;
-	lfb_ptr = (void*)mode_info->FrameBuffer;
+	lfb_ptr = (void*)mode_info->FrameBuffer;*/
+
+	lfb_width = 1024;
+	lfb_height = 768;
+	lfb_depth = 32;
+	lfb_type = 0;
+	lfb_ptr = (void*)VIDEO_RAM_LOGICAL_ADDRESS;
 
 	lfb = (ULONG*)lfb_ptr;
 	

@@ -141,7 +141,6 @@ static void message_cb(GuiObject * obj, int data)
 	message_dialog((obj->win)->win_thread, NULL, "This is a message consisting\nof two lines", data);
 }
 
-
 void progress_cb(GuiObject * obj, int data)
 {
 	GuiWinThread *win_thread = (obj->win)->win_thread;
@@ -434,15 +433,14 @@ int StartSampleGui()
 	init_svgagui();
 	//open_screen(type, 640, 480, 256, "SVGAGui");
 	open_screen(type, 1024, 768, 256, "SVGAGui");
-
+	
 	init_mouse();
 	kleur = BACKGROUND;
 	win_thread = create_window_thread();
 
 	init_interface(win_thread);	
-
+	
 	show_window_thread(win_thread);
-
 	
 	while (!exit_program) {
 		obj = do_windows(win_thread);
