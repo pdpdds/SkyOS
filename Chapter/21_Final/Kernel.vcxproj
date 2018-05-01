@@ -11,7 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="3c905b.cpp" />
     <ClCompile Include="API.cpp" />
+    <ClCompile Include="bepci.cpp" />
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="ConsoleIOListener.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
@@ -113,6 +115,7 @@
     <ClCompile Include="Memory\PageTableEntry.cpp" />
     <ClCompile Include="Memory\PhysicalMemoryManager.cpp" />
     <ClCompile Include="Memory\VirtualMemoryManager.cpp" />
+    <ClCompile Include="nic.cpp" />
     <ClCompile Include="PCI.cpp" />
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="ProcessManager.cpp" />
@@ -139,7 +142,9 @@
     <ClCompile Include="VideoRam.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="3c905b.h" />
     <ClInclude Include="API.h" />
+    <ClInclude Include="bepci.h" />
     <ClInclude Include="commandMacros.h" />
     <ClInclude Include="commands.h" />
     <ClInclude Include="commandTable.h" />
@@ -206,6 +211,7 @@
     <ClInclude Include="Memory\PhysicalMemoryManager.h" />
     <ClInclude Include="Memory\VirtualMemoryManager.h" />
     <ClInclude Include="MultiBoot.h" />
+    <ClInclude Include="nic.h" />
     <ClInclude Include="PEImage.h" />
     <ClInclude Include="Process.h" />
     <ClInclude Include="ProcessManager.h" />
@@ -248,7 +254,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}</ProjectGuid>
     <RootNamespace>Kernel</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -294,7 +300,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./CPlusPlus;./V8086;./GUI/Haribote;./GUI/Simple;./GUI;../../CommonLib/math;./lua;./gui/svgagui;./gui/svgagui/example</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>SKY_GUI;__LE__;OLD_ANSI;_DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__LE__;OLD_ANSI;_DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
       </StringPooling>

@@ -20,6 +20,8 @@
 #include "SkyGUISystem.h"
 #include "JPEG.h"
 #include "VESA.h"
+#include "nic.h"
+#include "bepci.h"
 
 //#define SKY_GUI 1
 //#define SKY_HARIBOTE
@@ -177,11 +179,16 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	SystemProfiler::GetInstance()->SetGlobalState(state);
 
+	
+	scan_pci_devices();
+	init_nic();
+	for (;;);
+	
+#ifdef SKY_GUI
 	SkyGUISystem::GetInstance()->Initialize(pBootInfo);
 	init_lfb(pBootInfo->vbe_mode_info);
 	lfb_clear();
 
-#ifdef SKY_GUI
 	StartGUISystem();
 #else
 	StartConsoleSystem();
@@ -281,7 +288,7 @@ void ConstructFileSystem(multiboot_info* info)
 		StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
 		
 		//TestHardDisk();			
-		TestLua();
+		//TestLua();
 	}
 	else
 	{

@@ -43,6 +43,7 @@ void PauseSystem(const char* msg);
 
 extern "C"
 {
+	int kdbg_printf(char *pFmt, ...);
 	void TerminateProcess();
 	uint32_t MemoryAlloc(size_t size);
 	void MemoryFree(void* p);

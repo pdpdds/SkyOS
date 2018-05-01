@@ -3,6 +3,7 @@
 #include "Hal.h"
 #include "string.h"
 #include "va_list.h"
+#include "stdio.h"
 #include "stdarg.h"
 #include "sprintf.h"
 #include "Exception.h"
@@ -360,4 +361,19 @@ void DumpMemory(void *data, size_t nbytes, size_t bytes_per_line)
 	}
 
 	printf("\n");
+}
+
+int kdbg_printf(char *pFmt, ...)
+{
+	va_list 	va;
+	int 		nI;
+	char		szTX[1024];
+
+	va_start(va, pFmt);
+	nI = vsprintf(szTX, pFmt, va);
+	va_end(va);
+
+	SkyConsole::Print("%s", szTX);
+
+	return(nI);
 }

@@ -311,6 +311,9 @@
     <ClCompile Include="GUI\svgagui\example\color.cpp">
       <Filter>GUI\SVGA</Filter>
     </ClCompile>
+    <ClCompile Include="3c905b.cpp" />
+    <ClCompile Include="nic.cpp" />
+    <ClCompile Include="bepci.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -517,6 +520,9 @@
     <ClInclude Include="GUI\svgagui\svgaguientry.h">
       <Filter>GUI\SVGA</Filter>
     </ClInclude>
+    <ClInclude Include="3c905b.h" />
+    <ClInclude Include="nic.h" />
+    <ClInclude Include="bepci.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
