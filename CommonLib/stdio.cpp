@@ -4,6 +4,14 @@
 #include <ctype.h>
 #include "limits.h"
 #include "sprintf.h"
+#include "ffmt.h"
+
+/*int vsprintf(char *buffer, char *format, va_list argptr)
+{
+	int nR;
+	nR = _ffmt(buffer, format, (unsigned long*)argptr);
+	return(nR);
+}*/
 
 //! writes formatted string to buffer
 int vsprintf(char *str, const char *format, va_list ap) {

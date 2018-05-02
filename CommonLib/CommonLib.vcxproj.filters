@@ -106,6 +106,7 @@
     <ClInclude Include="math\fdlibm.h">
       <Filter>math</Filter>
     </ClInclude>
+    <ClInclude Include="ffmt.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jsmn\jsmn.cpp">
@@ -262,5 +263,6 @@
     </ClCompile>
     <ClCompile Include="atob.c" />
     <ClCompile Include="vsprintf.c" />
+    <ClCompile Include="ffmt.c" />
   </ItemGroup>
 </Project>
