@@ -1,6 +1,4 @@
-#include "SysInfo.h"
-#include "SysAPI.h"
-#include "PhysicalMemoryManager.h"
+#include "SkyOS.h"
 
 DWORD dw_SysLastError = 0;
 CPUID_DATA sysCPUBasicInformation[CPUID_MAX_BASIC_LEVEL];

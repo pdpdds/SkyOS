@@ -1,6 +1,4 @@
 #pragma once
-#include "kheap.h"
-#include "stdint.h"
 #include "hal.h"
 
 class Scheduler

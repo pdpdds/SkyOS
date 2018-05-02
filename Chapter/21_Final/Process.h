@@ -1,8 +1,8 @@
 #pragma once
 #include "windef.h"
+#include "list.h"
+#include "map.h"
 #include "VirtualMemoryManager.h"
-#include "kheap.h"
-#include "SkyStruct.h"
 
 #define PROC_INVALID_ID -1
 
@@ -53,8 +53,12 @@ public:
 	int GetProcessId() {return m_processId;}
 	void SetProcessId(int processId) { m_processId = processId; }
 
+	bool AddMessage(char* pMsg);
+	list<char*>& GetMessageList() { return m_messageList; }
+
 private:
-	PageDirectory * m_pPageDirectory; //이 프로세스가 사용하는 페이지 디렉토리		
+	PageDirectory * m_pPageDirectory; //이	프로세스가 사용하는 페이지 디렉토리		
 	int		m_processId; //프로세스 아이디
+	list<char*> m_messageList;
 	
 };

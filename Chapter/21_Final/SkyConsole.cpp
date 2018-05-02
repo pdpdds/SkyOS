@@ -1,14 +1,11 @@
-﻿#include "SkyConsole.h"
-#include <stdarg.h>
-#include <stdint.h>
-#include <string.h>
-#include "sprintf.h"
-#include "Hal.h"
-#include "sysapi.h"
-#include "KeyBoard.h"
+﻿#include "SkyOS.h"
 #include "KeyboardController.h"
+#include "KeyBoard.h"
+#include "SkyGUISystem.h"
 
 using namespace KeyBoard;
+
+extern bool g_heapInit;
 
 namespace SkyConsole
 {
@@ -152,95 +149,206 @@ namespace SkyConsole
 		MoveCursor(1, m_yPos);
 	}
 
-	void Print(const char* str, ...)
+	void PrintGUI(const char* str, ...)
 	{
 
+	}
+
+	void Print(const char* str, ...)
+	{	
 		if (!str)
 			return;
 
-		va_list		args;
-		va_start(args, str);
-		size_t i;
-		for (i = 0; i < strlen(str); i++) {
+		if (g_heapInit == true && SkyGUISystem::GetInstance()->GUIEnable() == true)
+			//if (0)
+		{
+			va_list		args;
+			va_start(args, str);
+			size_t i;		
 
-			switch (str[i]) {
+			char buffer[256];
+			memset(buffer, 0, 256);
+			int index = 0;
 
-			case '%':
+			for (i = 0; i < strlen(str); i++) {
 
-				switch (str[i + 1]) {
+				switch (str[i]) {
 
-					/*** characters ***/
-				case 'c': {
-					char c = va_arg(args, char);
-					WriteChar(c, m_Text, m_backGroundColor);
-					i++;		// go to next character
-					break;
-				}
+				case '%':
 
-						  /*** address of ***/
-				case 's': {
-					int c = (int&)va_arg(args, char);
-					char str[256];
-					strcpy(str, (const char*)c);
-					Write(str);
-					i++;		// go to next character
-					break;
-				}
+					switch (str[i + 1]) {
 
-						  /*** integers ***/
-				case 'd':
-				case 'i': {
-					int c = va_arg(args, int);
-					char str[32] = { 0 };
-					itoa_s(c, 10, str);
-					Write(str);
-					i++;		// go to next character
-					break;
-				}
+						/*** characters ***/
+					case 'c': {
+						char c = va_arg(args, char);
+						buffer[index] = c;
+						index++;
+						i++;		// go to next character
+						break;
+					}
 
-						  /*** display in hex ***/
-						  /*int*/
-				case 'X': {
-					int c = va_arg(args, int);
-					char str[32] = { 0 };
-					itoa_s(c, 16, str);
-					Write(str);
-					i++;		// go to next character
-					break;
-				}
-						  /*unsigned int*/
-				case 'x': {
-					unsigned int c = va_arg(args, unsigned int);
-					char str[32] = { 0 };
-					itoa_s(c, 16, str);
-					Write(str);
-					i++;		// go to next character
-					break;
-				}
+							  /*** address of ***/
+					case 's': {
+						int c = (int&)va_arg(args, char);						
+						strcpy(buffer + index, (const char*)c);						
+						index += strlen((const char*)c);
+						
+						i++;		// go to next character
+						break;
+					}
 
-				case 'f':
-					double double_temp;
-					double_temp = va_arg(args, double);
-					char buffer[512];
-					ftoa_fixed(buffer, double_temp);
-					Write(buffer);
-					i++;
+							  /*** integers ***/
+					case 'd':
+					case 'i': {
+						int c = va_arg(args, int);
+						char str[32] = { 0 };
+						itoa_s(c, 10, str);
+						strcpy(buffer + index, str);
+						index += strlen(str);
+						i++;		// go to next character
+						break;
+					}
+
+							  /*** display in hex ***/
+							  /*int*/
+					case 'X': {
+						int c = va_arg(args, int);
+						char str[32] = { 0 };
+						itoa_s(c, 16, str);
+						strcpy(buffer + index, str);
+						index += strlen(str);
+						i++;		// go to next character
+						break;
+					}
+							  /*unsigned int*/
+					case 'x': {
+						unsigned int c = va_arg(args, unsigned int);
+						char str[32] = { 0 };
+						itoa_s(c, 16, str);
+						strcpy(buffer + index, str);
+						index += strlen(str);
+						i++;		// go to next character
+						break;
+					}
+
+					case 'f':
+						double double_temp;
+						double_temp = va_arg(args, double);
+						char buffer2[128];
+						ftoa_fixed(buffer, double_temp);
+						strcpy(buffer + index, buffer2);
+						index += strlen(buffer);
+						i++;
+						break;
+
+					default:
+						va_end(args);
+						return;
+					}
+
 					break;
 
 				default:
-					va_end(args);
-					return;
+					buffer[index] = str[i];
+					index++;
+					break;
+				}
+			}
+
+			va_end(args);
+			
+			SkyGUISystem::GetInstance()->Print(buffer);
+
+
+		}
+		else
+		{
+			va_list		args;
+			va_start(args, str);
+			size_t i;
+
+				for (i = 0; i < strlen(str); i++) {
+
+					switch (str[i]) {
+
+					case '%':
+
+						switch (str[i + 1]) {
+
+							/*** characters ***/
+						case 'c': {
+							char c = va_arg(args, char);
+							WriteChar(c, m_Text, m_backGroundColor);
+							i++;		// go to next character
+							break;
+						}
+
+								  /*** address of ***/
+						case 's': {
+							int c = (int&)va_arg(args, char);
+							char str[256];
+							strcpy(str, (const char*)c);
+							Write(str);
+							i++;		// go to next character
+							break;
+						}
+
+								  /*** integers ***/
+						case 'd':
+						case 'i': {
+							int c = va_arg(args, int);
+							char str[32] = { 0 };
+							itoa_s(c, 10, str);
+							Write(str);
+							i++;		// go to next character
+							break;
+						}
+
+								  /*** display in hex ***/
+								  /*int*/
+						case 'X': {
+							int c = va_arg(args, int);
+							char str[32] = { 0 };
+							itoa_s(c, 16, str);
+							Write(str);
+							i++;		// go to next character
+							break;
+						}
+								  /*unsigned int*/
+						case 'x': {
+							unsigned int c = va_arg(args, unsigned int);
+							char str[32] = { 0 };
+							itoa_s(c, 16, str);
+							Write(str);
+							i++;		// go to next character
+							break;
+						}
+
+						case 'f':
+							double double_temp;
+							double_temp = va_arg(args, double);
+							char buffer[512];
+							ftoa_fixed(buffer, double_temp);
+							Write(buffer);
+							i++;
+							break;
+
+						default:
+							va_end(args);
+							return;
+						}
+
+						break;
+
+					default:
+
+						WriteChar(str[i], m_Text, m_backGroundColor);
+						break;
+					}
 				}
 
-				break;
-
-			default:
-				WriteChar(str[i], m_Text, m_backGroundColor);
-				break;
-			}
+			va_end(args);
 		}
-
-		va_end(args);
 	}
 	void GetCursorPos(uint& x, uint& y) { x = m_xPos; y = m_yPos; }
 

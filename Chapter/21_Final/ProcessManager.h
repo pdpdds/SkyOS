@@ -1,11 +1,7 @@
 #pragma once
-#include "VirtualMemoryManager.h"
-#include "SkyStruct.h"
-#include "ProcessUtil.h"
-#include "List.h"
-#include "PEImage.h"
-#include "Process.h"
-#include "Thread.h"
+#include "windef.h"
+#include "list.h"
+#include "map.h"
 #include "fileio.h"
 
 class Process;

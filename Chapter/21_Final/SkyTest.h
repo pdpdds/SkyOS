@@ -4,7 +4,6 @@ void TestInterrupt();
 void TestCPlusPlus();
 void TestMap();
 void Testlist();
-void TestMap2();
 void TestCommonLibrary();
 void TestString();
 void TestHardDisk();

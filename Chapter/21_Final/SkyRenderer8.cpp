@@ -1,11 +1,7 @@
+#include "SkyOS.h"
 #include "SkyRenderer8.h"
-#include "SkyAPI.h"
 #include "SkySheet.h"
-#include "Hal.h"
-#include "SkyAPI.h"
-#include "StorageManager.h"
 #include "JPEG.h"
-#include "VideoRam.h"
 
 extern char closebtn[14][16];
 extern char cursor[16][16];
@@ -40,7 +36,6 @@ void SkyRenderer8::SetPalette(int start, int end, unsigned char *rgb)
 	}
 
 	kLeaveCriticalSection();
-
 }
 
 void SkyRenderer8::InitPalette()
@@ -70,6 +65,9 @@ void SkyRenderer8::PutFonts_ASC(char *vram, int xsize, int x, int y, char c, uns
 {
 	for (; *s != 0x00; s++)
 	{
+		if(*s == '\n')
+			continue;
+
 		PutFont(vram, xsize, x, y, c, hankaku + *s * 16);
 		x += 8;
 	}

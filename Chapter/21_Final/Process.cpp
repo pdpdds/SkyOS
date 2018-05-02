@@ -1,6 +1,4 @@
-#include "Process.h"
-#include "Thread.h"
-#include "SkyAPI.h"
+#include "SkyOS.h"
 
 Process::Process()
 {
@@ -61,4 +59,17 @@ void Process::SetPageDirectory(PageDirectory* pPageDirectory)
 	M_Assert(pPageDirectory != nullptr, "PageDirectory Is Null.");
 
 	m_pPageDirectory = pPageDirectory;
+}
+
+bool Process::AddMessage(char* pMsg)
+{
+	if (pMsg == nullptr)
+		return false;
+
+	if (m_messageList.size() > 10)
+		return false;
+
+	m_messageList.push_back(pMsg);
+
+	return true;
 }

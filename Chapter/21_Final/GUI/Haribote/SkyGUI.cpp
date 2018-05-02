@@ -1,9 +1,7 @@
 #include "SkyGUI.h"
-#include "memory.h"
+#include "SkyOS.h"
 #include "FontData.h"
 #include "ProcessManager.h"
-#include "sprintf.h"
-#include "SkyAPI.h"
 #include "SkyMouse.h"
 #include "fifo.h"
 #include "PhysicalMemoryManager.h"
@@ -16,6 +14,36 @@
 #include "Scheduler.h"
 #include "KernelProcedure.h"
 #include "ConsoleIOListener.h"
+#include "Process.h"
+#include "Thread.h"
+
+#define DMA_PICU1       0x0020
+#define DMA_PICU2       0x00A0
+__declspec(naked) void SendEOI()
+{
+	_asm
+	{
+		PUSH EBP
+		MOV  EBP, ESP
+		PUSH EAX
+
+		; [EBP] < -EBP
+		; [EBP + 4] < -RET Addr
+		; [EBP + 8] < -IRQ 번호
+
+		MOV AL, 20H; EOI 신호를 보낸다.
+		OUT DMA_PICU1, AL
+
+		CMP BYTE PTR[EBP + 8], 7
+		JBE END_OF_EOI
+		OUT DMA_PICU2, AL; Send to 2 also
+
+		END_OF_EOI :
+		POP EAX
+		POP EBP
+		RET
+	}
+}
 
 extern void enable_mouse(struct FIFO32 *fifo, int data0, struct MOUSE_DEC *mdec);
 extern void inthandler2c();
@@ -25,8 +53,9 @@ __declspec(naked) void kSkyMouseHandler()
 {
 
 	_asm {
-		cli
-		pushad
+		PUSHAD
+		PUSHFD
+		CLI
 	}
 
 	_asm
@@ -34,12 +63,13 @@ __declspec(naked) void kSkyMouseHandler()
 		call inthandler2c
 	}
 
-	_asm {
-		mov al, 0x20
-		out 0x20, al
-		popad
-		sti
-		iretd
+	SendEOI();
+
+	_asm
+	{
+		POPFD
+		POPAD
+		IRETD
 	}
 }
 static char keytable0[0x80] = {
@@ -65,10 +95,10 @@ static char keytable1[0x80] = {
 
 __declspec(naked) void kSkyKeyboardHandler()
 {
-
 	_asm {
-		cli
-		pushad
+		PUSHAD
+		PUSHFD
+		CLI
 	}
 
 	_asm
@@ -76,12 +106,13 @@ __declspec(naked) void kSkyKeyboardHandler()
 		call inthandler21
 	}
 
-	_asm {
-		mov al, 0x20
-		out 0x20, al
-		popad
-		sti
-		iretd
+	SendEOI();
+
+	_asm
+	{
+		POPFD
+		POPAD
+		IRETD
 	}
 }
 
@@ -91,6 +122,7 @@ SkyGUI::SkyGUI()
 {
 	m_pPressedSheet = nullptr;
 	m_RButtonPressed = false;
+	m_debugProcessId = -1;
 }
 
 
@@ -98,7 +130,40 @@ SkyGUI::~SkyGUI()
 {
 }
 
-bool SkyGUI::Initialize(void* pVideoRamPtr, int width, int height, int bpp)
+bool SkyGUI::Print(char* pMsg)
+{
+	int len = strlen(pMsg);
+
+	if (len <= 0 || len > 256)
+		return false;
+
+	if (m_pRenderer && m_mainSheet)
+	{
+		/*m_pRenderer->PutFontAscToSheet(sht_back, xPos, yPos, COL8_FFFFFF, COL8_000000, pMsg, len);
+
+		yPos += 16;
+		xPos = 8;
+
+		if (yPos >= 600)
+			yPos = 0;*/
+		//len = 5;
+		char* pMessage = new char[len + 1];
+		memset(pMessage, 0, len + 1);
+		memcpy(pMessage, pMsg, len);
+		//memcpy(pMessage, "aaaaa", 5);
+		//delete pMessage;
+		kEnterCriticalSection();
+		SendToMessage(m_debugProcessId, pMessage);
+		kLeaveCriticalSection();
+		/*kEnterCriticalSection();
+		SendToMessage(m_debugProcessId, pMessage);
+		kLeaveCriticalSection();*/
+	}
+
+	return true;
+}
+
+bool SkyGUI::Initialize(void* pVideoRamPtr, int width, int height, int bpp, uint8_t buffertype)
 {
 	m_pVideoRamPtr = (ULONG*)pVideoRamPtr;
 	m_width = width;
@@ -111,17 +176,12 @@ bool SkyGUI::Initialize(void* pVideoRamPtr, int width, int height, int bpp)
 	MakeInitScreen();
 	//입출력 시스템 재구성
 	MakeIOSystem();
-	
+
 	return true;
 }
 
 bool SkyGUI::MakeInitScreen()
 {
-	m_pVideoRamPtr = (ULONG*)0xFD000000;
-	m_width = 1024;
-	m_height = 768;
-	m_bpp = 8;
-
 	m_pRenderer = new SkyRenderer8();
 	m_pRenderer->Initialize();
 
@@ -131,6 +191,7 @@ bool SkyGUI::MakeInitScreen()
 	//백그라운드 쉬트를 생성
 	sht_back = m_mainSheet->Alloc();
 	unsigned char* buf_back = m_mainSheet->AllocBuffer(m_width, m_height);
+
 	sht_back->SetBuf(buf_back, m_width, m_height, -1);
 	sht_back->m_movable = false;
 	m_pRenderer->InitScreen((unsigned char *)buf_back, m_width, m_height);
@@ -142,7 +203,7 @@ bool SkyGUI::MakeInitScreen()
 	sht_mouse->m_movable = false;
 	m_pRenderer->InitMouseCursor((char *)buf_mouse, 99);
 
-	
+
 	mx = (m_width - 16) / 2;
 	my = (m_height - 28 - 16) / 2;
 
@@ -150,7 +211,7 @@ bool SkyGUI::MakeInitScreen()
 	sht_mouse->Slide(mx, my);
 
 	sht_back->Updown(0);
-	sht_mouse->Updown(3);
+	sht_mouse->Updown(1);
 
 	return true;
 }
@@ -212,7 +273,6 @@ bool SkyGUI::MakeIOSystem()
 	kEnterCriticalSection();
 
 	fifo32_init(&fifo, 128, fifobuf);
-
 	fifo32_init(&keycmd, 32, keycmd_buf);
 
 	init_keyboard(&fifo, 256);
@@ -226,13 +286,10 @@ bool SkyGUI::MakeIOSystem()
 
 	kLeaveCriticalSection();
 
-	
 	wait_KBC_sendready();
 	OutPortByte(PORT_KEYCMD, KEYCMD_WRITE_MODE);
 	wait_KBC_sendready();
 	OutPortByte(PORT_KEYDAT, KBC_MODE);
-
-	
 
 	/* 마우스 유효 */
 	wait_KBC_sendready();
@@ -245,10 +302,6 @@ bool SkyGUI::MakeIOSystem()
 	OutPortByte(PIC0_IMR, 0xf8); /* PIT와 PIC1와 키보드를 허가(11111000) */
 	OutPortByte(PIC1_IMR, 0xef); /* 마우스를 허가(11101111) */
 
-	//kEnterCriticalSection();
-	
-	//kLeaveCriticalSection();	
-	
 	return true;
 }
 
@@ -258,14 +311,15 @@ bool SkyGUI::kGetMessage(LPSKY_MSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 	lpMsg->_extra = 0;
 
 	kEnterCriticalSection();
-	if (fifo32_status(&keycmd) > 0 && keycmd_wait < 0) 
+	if (fifo32_status(&keycmd) > 0 && keycmd_wait < 0)
 	{
 		/* 키보드 컨트롤러에 보낼 데이터가 있으면, 보낸다 */
 		keycmd_wait = fifo32_get(&keycmd);
 		kLeaveCriticalSection();
 		wait_KBC_sendready();
 		OutPortByte(PORT_KEYDAT, keycmd_wait);
-	}	
+		//SkySimpleGUI::FillRect8(100, 100, 100, 100, COL8_C6C6C6, 1024, 768);
+	}
 	else
 		kLeaveCriticalSection();
 
@@ -281,7 +335,7 @@ bool SkyGUI::kGetMessage(LPSKY_MSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 		//if(pProcess != nullptr)
 		//	Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
 	}
-	
+
 	kLeaveCriticalSection();
 
 	return true;
@@ -289,19 +343,29 @@ bool SkyGUI::kGetMessage(LPSKY_MSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 
 bool SkyGUI::kTranslateAccelerator(HWND hWnd, HANDLE hAccTable, LPSKY_MSG lpMsg)
 {
-	return lpMsg->_msgId != SKY_MSG_MESSAGE;	
+	return lpMsg->_msgId != SKY_MSG_MESSAGE;
 }
 
 bool SkyGUI::Run()
-{
+{	
+	kEnterCriticalSection();
+	bool result = CreateGUIDebugProcess();
+
+	if (result == true)
+	{
+		Print("Debug Console Started!!\n");
+	}
+
+	kLeaveCriticalSection();
+
 	SKY_MSG msg;
 	while (kGetMessage(&msg, nullptr, 0, 0))
-	{			
+	{
 		//if (!kTranslateAccelerator(msg._hwnd, nullptr, &msg))
-		{			
+		{
 			kTranslateMessage(&msg);
 			kDispatchMessage(&msg);
-		}			
+		}
 	}
 
 	return msg._msgId == SKY_MSG_EXIT;
@@ -309,7 +373,7 @@ bool SkyGUI::Run()
 
 bool SkyGUI::kTranslateMessage(const LPSKY_MSG lpMsg)
 {
-	
+
 	if (256 <= lpMsg->_extra && lpMsg->_extra <= 511) //키보드 데이터
 	{
 		lpMsg->_msgId = SKY_MSG_KEYBOARD;
@@ -335,20 +399,20 @@ bool CALLBACK SkyGUI::kWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 	{
 	case SKY_MSG_KEYBOARD:
 	{
-		//ProcessKeyboard(wParam);
+		ProcessKeyboard(wParam);
 	}
 	break;
 	case SKY_MSG_MOUSE:
 	{
-		
+
 		ProcessMouse(wParam);
 	}
 	break;
 	case SKY_MSG_EXIT:
 		//Not Implemented
 		break;
-	//default:
-		//return DefWindowProc(hWnd, message, wParam, lParam);
+		//default:
+			//return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	return 0;
 }
@@ -374,16 +438,16 @@ void SkyGUI::ProcessKeyboard(int value)
 		}
 	}
 	kEnterCriticalSection();
-	if (s[0] != 0) 
-	{ 
+	if (s[0] != 0)
+	{
 		SendToMessage(m_pFocusSheet, SKY_MSG_KEYBOARD, s[0] + 256);
 	}
 	if (value == 256 + 0x0e) // 백 스페이스
-	{	
+	{
 		SendToMessage(m_pFocusSheet, SKY_MSG_KEYBOARD, 8 + 256);
 	}
 	if (value == 256 + 0x1c)// Enter 
-	{	
+	{
 		SendToMessage(m_pFocusSheet, SKY_MSG_KEYBOARD, 10 + 256);
 	}
 	if (value == 256 + 0x2a) {	/* 왼쪽 쉬프트 ON */
@@ -429,7 +493,7 @@ void SkyGUI::ProcessKeyboard(int value)
 
 void SkyGUI::ProcessMouse(int value)
 {
-	if (mouse_decode(&mdec, value - 512) != 0) 
+	if (mouse_decode(&mdec, value - 512) != 0)
 	{
 		/* 마우스 커서의 이동 */
 		mx += mdec.x;
@@ -451,26 +515,26 @@ void SkyGUI::ProcessMouse(int value)
 
 		sht_mouse->Slide(mx, my);
 		//sht_mouse->Updown(100);
-		
-		/*if ((mdec.btn & 0x01) != 0)  //왼쪽 버튼을 눌렀다면 마우스 바로 아래의 윈도우를 드래그 처리한다.
+
+		if ((mdec.btn & 0x01) != 0)  //왼쪽 버튼을 눌렀다면 마우스 바로 아래의 윈도우를 드래그 처리한다.
 		{
-			if(m_pPressedSheet == nullptr)
-				ProcessMouseLButton(mx,  my);
+			if (m_pPressedSheet == nullptr)
+				ProcessMouseLButton(mx, my);
 		}
 		else
 		{
 			if (m_pPressedSheet)
 			{
 				m_pPressedSheet->Slide(mx, my);
-				
+
 			}
 			m_pPressedSheet = nullptr;
 		}
-	
-		if((mdec.btn & 0x02) != 0) //오른쪽 버튼을 눌렀다면 콘솔 프로세스를 생성한다.
+
+		if ((mdec.btn & 0x02) != 0) //오른쪽 버튼을 눌렀다면 콘솔 프로세스를 생성한다.
 		{
 			if (m_RButtonPressed == false)
-			{				
+			{
 				m_RButtonPressed = true;
 				CreateGUIConsoleProcess();
 			}
@@ -479,10 +543,10 @@ void SkyGUI::ProcessMouse(int value)
 		else
 		{
 			m_RButtonPressed = false;
-		}*/
+		}
 
 		kLeaveCriticalSection();
-		
+
 	}
 }
 
@@ -507,6 +571,9 @@ bool SkyGUI::SendToMessage(SkySheet* pSheet, int message, int value)
 	if (pSheet == nullptr)
 		return false;
 
+	if (pSheet->m_ownerProcess == m_debugProcessId)
+		return false;
+
 	map<int, ConsoleIOListener*>::iterator iter = m_mapIOListener.find(pSheet->m_ownerProcess);
 
 	if (iter == m_mapIOListener.end())
@@ -516,6 +583,18 @@ bool SkyGUI::SendToMessage(SkySheet* pSheet, int message, int value)
 
 	ConsoleIOListener* listener = (*iter).second;
 	listener->PushMessage(message, value);
+
+	return true;
+}
+
+bool SkyGUI::SendToMessage(int processID, char* pMsg)
+{
+	Process* pProcess = ProcessManager::GetInstance()->FindProcess(processID);
+
+	if (pProcess == nullptr)
+		return false;
+
+	pProcess->AddMessage(pMsg);
 
 	return true;
 }
@@ -535,10 +614,36 @@ void SkyGUI::CreateGUIConsoleProcess()
 		m_pRenderer->MakeWindow(buf, 256, 165, "Sky Console", 0);
 		m_pRenderer->MakeTextBox(console, 8, 28, 240, 128, COL8_000000);
 		console->Slide(32, 4);
-		console->Updown(4);
+		console->Updown(20);
 		console->m_ownerProcess = pProcess->GetProcessId();
 	}
 	kLeaveCriticalSection();
+}
+
+bool SkyGUI::CreateGUIDebugProcess()
+{
+	Process* pProcess = nullptr;
+	bool result = false;
+	
+	pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("DEBUGGUI", ConsoleDebugGUIProc, this, PROCESS_KERNEL);
+	if (pProcess != nullptr)
+	{
+		//콘솔 태스크 쉬트를 구성
+		SkySheet* console = m_mainSheet->Alloc();
+		unsigned char* buf = m_mainSheet->AllocBuffer(256, 165);
+		console->SetBuf(buf, 256, 165, -1);
+		m_pRenderer->MakeWindow(buf, 256, 165, "DEBUG GUI", 0);
+		m_pRenderer->MakeTextBox(console, 8, 28, 240, 128, COL8_000000);
+		console->Slide(32, 4);
+		console->Updown(20);
+		console->m_ownerProcess = pProcess->GetProcessId();
+
+		m_debugProcessId = pProcess->GetProcessId();
+		result = true;
+	}
+
+
+	return result;
 }
 
 void SkyGUI::RegisterIOListener(int processID, ConsoleIOListener* listener)
@@ -569,3 +674,228 @@ SkyRenderer::MakeTextBox8(sht_win, 8, 28, 128, 16, COL8_FFFFFF);
 
 //sht_win->Slide(64, 56);
 //sht_win->Updown(2);
+int cons_newline(int cursor_y, SkySheet *sheet)
+{
+	int x, y;
+	unsigned char* buf = sheet->GetBuf();
+	int bxsize = sheet->GetXSize();
+	if (cursor_y < 28 + 112) {
+		cursor_y += 16; /* 다음 행에 */
+	}
+	else {
+		/* 스크롤 */
+		for (y = 28; y < 28 + 112; y++) {
+			for (x = 8; x < 8 + 240; x++) {
+				buf[x + y * bxsize] = buf[x + (y + 16) * bxsize];
+			}
+		}
+		for (y = 28 + 112; y < 28 + 128; y++) {
+			for (x = 8; x < 8 + 240; x++) {
+				buf[x + y * bxsize] = COL8_000000;
+			}
+		}
+		sheet->Refresh(8, 28, 8 + 240, 28 + 128);
+	}
+	return cursor_y;
+}
+
+DWORD WINAPI ConsoleDebugGUIProc(LPVOID parameter)
+{
+	kEnterCriticalSection();
+	Thread* pThread = ProcessManager::GetInstance()->GetCurrentTask();
+	Process* pProcess = pThread->m_pParent;
+
+	SkyGUI* pGUI = (SkyGUI*)parameter;
+	SkyRenderer* pRenderer = pGUI->GetRenderer();
+
+	SkySheet *sheet = pGUI->FindSheetByID(pProcess->GetProcessId());
+
+	char s[30], cmdline[30];
+	int  cursor_x = 16, cursor_y = 28, cursor_c = -1;
+
+	kLeaveCriticalSection();
+
+	cursor_c = COL8_FFFFFF;
+
+	if(sheet == 0 || pProcess == 0 || pThread == 0 || pGUI == 0)
+		SkySimpleGUI::FillRect8(100, 100, 100, 100, COL8_C6C6C6, 1024, 768);
+
+	for (;;)
+	{
+		kEnterCriticalSection();
+		
+		list<char*>& messages = pProcess->GetMessageList();
+		if (messages.size() > 0)
+		{
+		
+			auto iter = messages.begin();
+			for (; iter != messages.end(); iter++)
+			{
+				if (sheet)
+				{
+					pRenderer->PutFontAscToSheet(sheet, 8, cursor_y, COL8_FFFFFF, COL8_000000, *iter, strlen(*iter));
+					cursor_y = cons_newline(cursor_y, sheet);
+				}
+			}
+
+			iter = messages.begin();
+			for (; iter != messages.end(); iter++)
+			{
+				delete *iter;
+			}
+
+			messages.clear();			
+
+			if(sheet)
+				sheet->Refresh(cursor_x, cursor_y, cursor_x + 8, cursor_y + 16);
+		}
+
+		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
+
+		kLeaveCriticalSection();
+		
+	}
+
+	return 0;
+}
+
+DWORD WINAPI ConsoleGUIProc(LPVOID parameter)
+{
+	kEnterCriticalSection();
+	Thread* pThread = ProcessManager::GetInstance()->GetCurrentTask();
+	Process* pProcess = pThread->m_pParent;
+
+	SkyGUI* pGUI = (SkyGUI*)parameter;
+	SkyRenderer* pRenderer = pGUI->GetRenderer();
+	ConsoleIOListener* listener = new ConsoleIOListener();
+
+	SkySheet *sheet = pGUI->FindSheetByID(pProcess->GetProcessId());
+
+	pGUI->RegisterIOListener(pProcess->GetProcessId(), listener);
+
+	char s[30], cmdline[30];
+	int  cursor_x = 16, cursor_y = 28, cursor_c = -1;
+
+	cursor_c = COL8_FFFFFF;
+
+	/* prompt 표시 */
+	pRenderer->PutFontAscToSheet(sheet, 8, 28, COL8_FFFFFF, COL8_000000, ">", 1);
+
+	kLeaveCriticalSection();
+
+	for (;;)
+	{
+
+		kEnterCriticalSection();
+		if (listener->ReadyStatus() == false)
+		{
+			Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
+			kLeaveCriticalSection();
+			continue;
+		}
+		else
+		{
+			int i = listener->GetStatus();
+			if (i <= 1) { /* 커서용 타이머 */
+				if (i != 0) {
+					//timer_init(timer, &task->fifo, 0); /* 다음은 0을 */
+					if (cursor_c >= 0) {
+						cursor_c = COL8_FFFFFF;
+					}
+				}
+				else {
+					//timer_init(timer, &task->fifo, 1); /* 다음은 1을 */
+					if (cursor_c >= 0) {
+						cursor_c = COL8_000000;
+					}
+				}
+				//timer_settime(timer, 50);
+			}
+			if (i == 2) {	/* 커서 ON */
+				cursor_c = COL8_FFFFFF;
+			}
+			if (i == 3) {	/* 커서 OFF */
+				pRenderer->BoxFill(sheet->GetBuf(), sheet->GetXSize(), COL8_000000, cursor_x, cursor_y, cursor_x + 7, cursor_y + 15);
+				cursor_c = -1;
+			}
+			if (256 <= i && i <= 511) { /* 키보드 데이터(태스크 A경유) */
+				if (i == 8 + 256) {
+					/* 백 스페이스 */
+					if (cursor_x > 16) {
+						/* 스페이스로 지우고 나서, 커서를 1개 back */
+						pRenderer->PutFontAscToSheet(sheet, cursor_x, cursor_y, COL8_FFFFFF, COL8_000000, " ", 1);
+						cursor_x -= 8;
+					}
+				}
+				else if (i == 10 + 256) {
+
+					/* Enter */
+					/* 커서를 스페이스에서 지우고 나서 개행한다 */
+					pRenderer->PutFontAscToSheet(sheet, cursor_x, cursor_y, COL8_FFFFFF, COL8_000000, " ", 1);
+					cmdline[cursor_x / 8 - 2] = 0;
+					cursor_y = cons_newline(cursor_y, sheet);
+
+					if (strcmp(cmdline, "mem") == 0)
+					{
+						size_t totalMemory = PhysicalMemoryManager::GetMemorySize();
+						sprintf(s, "total   %dMB", totalMemory / (1024 * 1024));
+						pRenderer->PutFontAscToSheet(sheet, 8, cursor_y, COL8_FFFFFF, COL8_000000, s, 30);
+						cursor_y = cons_newline(cursor_y, sheet);
+						sprintf(s, "free %dKB", PhysicalMemoryManager::GetFreeMemory() / 1024);
+						pRenderer->PutFontAscToSheet(sheet, 8, cursor_y, COL8_FFFFFF, COL8_000000, s, 30);
+						cursor_y = cons_newline(cursor_y, sheet);
+						cursor_y = cons_newline(cursor_y, sheet);
+					}
+					else if (strcmp(cmdline, "cls") == 0) /* cls 커맨드 */
+					{
+
+						unsigned char* buf = sheet->GetBuf();
+						int bxsize = sheet->GetXSize();
+						for (int y = 28; y < 28 + 128; y++) {
+							for (int x = 8; x < 8 + 240; x++) {
+								buf[x + y * bxsize] = COL8_000000;
+							}
+						}
+						sheet->Refresh(8, 28, 8 + 240, 28 + 128);
+						cursor_y = 28;
+					}
+
+					else if (cmdline[0] != 0) {
+						/* 커멘드도 아니고 빈 행도 아니다 */
+						pRenderer->PutFontAscToSheet(sheet, 8, cursor_y, COL8_FFFFFF, COL8_000000, "Bad command.", 12);
+						cursor_y = cons_newline(cursor_y, sheet);
+					}
+					/* prompt 표시 */
+					pRenderer->PutFontAscToSheet(sheet, 8, cursor_y, COL8_FFFFFF, COL8_000000, ">", 1);
+					cursor_x = 16;
+				}
+				else {
+
+					/* 일반 문자 */
+					if (cursor_x < 240) {
+						/* 한 글자 표시하고 나서 커서를 1개 진행한다 */
+						s[0] = i - 256;
+						s[1] = 0;
+						cmdline[cursor_x / 8 - 2] = i - 256;
+						pRenderer->PutFontAscToSheet(sheet, cursor_x, cursor_y, COL8_FFFFFF, COL8_000000, s, 1);
+						cursor_x += 8;
+					}
+
+				}
+			}
+			/* 커서재표시 */
+			if (cursor_c >= 0) {
+				pRenderer->BoxFill(sheet->GetBuf(), sheet->GetXSize(), cursor_c, cursor_x, cursor_y, cursor_x + 7, cursor_y + 15);
+			}
+			sheet->Refresh(cursor_x, cursor_y, cursor_x + 8, cursor_y + 16);
+		}
+
+		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
+
+		kLeaveCriticalSection();
+
+		
+	}
+
+	return 0;
+}

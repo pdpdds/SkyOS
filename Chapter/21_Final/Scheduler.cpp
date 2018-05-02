@@ -1,13 +1,4 @@
-#include "Scheduler.h"
-#include "SkyConsole.h"
-#include "PhysicalMemoryManager.h"
-#include "ProcessManager.h"
-#include "Process.h"
-#include "Thread.h"
-#include "Hal.h"
-#include "sysapi.h"
-#include "string.h"
-#include "memory.h"
+#include "SkyOS.h"
 
 Scheduler* Scheduler::m_pScheduler = 0;
 extern bool systemOn;

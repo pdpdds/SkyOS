@@ -1,6 +1,6 @@
-#include "windef.h"
+#include "SkyOS.h"
 #include "3c905b.h"
-#include "SkyAPI.h"
+
 // initialize network inteerface card
 int init_nic()
 {

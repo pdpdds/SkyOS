@@ -32,6 +32,7 @@ class ConsoleIOListener;
 #define SKY_MSG_KEYBOARD          3
 #define SKY_MSG_MOUSE			  4
 #define SKY_MSG_PROCESS_INIT	  5
+#define SKY_MSG_STRING			  6
 
 typedef struct tag_SKY_MSG
 {
@@ -47,21 +48,23 @@ typedef struct tag_SKY_MSG
 
 }SKY_MSG, *LPSKY_MSG;
 
-class SkyGUI : public SkyWindow
+class SkyGUI
 {
 public:
 	SkyGUI();
 	~SkyGUI();
 	
-	virtual bool Initialize(void* pVideoRamPtr, int width, int height, int bpp) override;
-	virtual bool Run() override;
+	bool Initialize(void* pVideoRamPtr, int width, int height, int bpp, uint8_t buffertype);
+	bool Run();
+	bool Print(char* pMsg);
 
 	void RegisterIOListener(int processID, ConsoleIOListener* listener);
 	SkyRenderer* GetRenderer() { return m_pRenderer; }
 	SkySheet* FindSheetByID(int processId);
 
-protected:
-	bool LoadFontFromMemory();
+	static bool LoadFontFromMemory();
+
+protected:	
 
 	bool MakeInitScreen();
 	bool MakeIOSystem();
@@ -77,7 +80,9 @@ protected:
 
 	void ProcessMouseLButton(int x, int y);
 	void CreateGUIConsoleProcess();
+	bool CreateGUIDebugProcess();
 	bool SendToMessage(SkySheet* pSheet, int message, int value);
+	bool SendToMessage(int processID, char* pMsg);
 
 private:
 	ULONG* m_pVideoRamPtr;
@@ -109,4 +114,6 @@ private:
 	
 	int key_to = 0, key_shift = 0, key_leds = 0, keycmd_wait = -1;
 	char s[30], cmdline[30];
+
+	int m_debugProcessId;
 };

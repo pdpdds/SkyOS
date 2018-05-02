@@ -6,16 +6,9 @@
 
 	Supports PCI 2.2
 */
-
-#include "PCI.h"
-#include "string.h"
-#include "kheap.h"
+#include "SkyOS.h"
 #include "list.h"
-#include "Hal.h"
-#include "memory.h"
-#include "SkyConsole.h"
-#include "SystemProfiler.h"
-
+#include "PCI.h"
 
 #define PCI_CONFIG_ADDRESS 0xCF8
 #define PCI_CONFIG_DATA 0xCFC

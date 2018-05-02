@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-	void init_lfb(VbeModeInfo *mode_info);
+	void init_lfb();
 	void lfb_clear();
 	ULONG getDepth();
 	static ULONG *lfb = 0;

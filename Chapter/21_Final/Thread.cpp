@@ -1,4 +1,4 @@
-#include "Thread.h"
+#include "SkyOS.h"
 
 Thread::Thread()
 {

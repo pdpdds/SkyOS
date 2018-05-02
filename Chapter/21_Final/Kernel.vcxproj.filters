@@ -120,22 +120,17 @@
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="SystemProfiler.cpp" />
-    <ClCompile Include="API.cpp" />
     <ClCompile Include="PCI.cpp" />
     <ClCompile Include="v8086\rme.cpp">
       <Filter>V8086</Filter>
     </ClCompile>
     <ClCompile Include="RMEFunc.cpp" />
     <ClCompile Include="vesa.cpp" />
-    <ClCompile Include="VideoRam.cpp" />
     <ClCompile Include="JPEG.cpp" />
     <ClCompile Include="GUI\Haribote\fifo.cpp">
       <Filter>GUI\SkyGUI</Filter>
     </ClCompile>
     <ClCompile Include="GUI\SkyGUISystem.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\SkyWindow.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="GUI\Haribote\SkyGUI.cpp">
@@ -314,6 +309,7 @@
     <ClCompile Include="3c905b.cpp" />
     <ClCompile Include="nic.cpp" />
     <ClCompile Include="bepci.cpp" />
+    <ClCompile Include="SkySVGA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -456,13 +452,11 @@
     <ClInclude Include="Process.h" />
     <ClInclude Include="Scheduler.h" />
     <ClInclude Include="SystemProfiler.h" />
-    <ClInclude Include="API.h" />
     <ClInclude Include="v8086\rme.h">
       <Filter>V8086</Filter>
     </ClInclude>
     <ClInclude Include="RMEFunc.h" />
     <ClInclude Include="VESA.h" />
-    <ClInclude Include="VideoRam.h" />
     <ClInclude Include="JPEG.h" />
     <ClInclude Include="GUI\Haribote\fifo.h">
       <Filter>GUI\SkyGUI</Filter>
@@ -523,6 +517,9 @@
     <ClInclude Include="3c905b.h" />
     <ClInclude Include="nic.h" />
     <ClInclude Include="bepci.h" />
+    <ClInclude Include="SkyOS.h" />
+    <ClInclude Include="SkySVGA.h" />
+    <ClInclude Include="SkyStartOption.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

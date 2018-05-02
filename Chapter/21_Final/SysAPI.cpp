@@ -1,7 +1,17 @@
-#include "sysapi.h"
-#include "kheap.h"
-#include "idt.h"
-#include "SkyConsole.h"
+#include "SkyOS.h"
+
+static void* _syscalls[] = {
+
+	kprintf,
+	TerminateProcess,
+	MemoryAlloc,
+	MemoryFree,
+	CreateDefaultHeap,
+	GetTickCount,
+	CreateThread,
+	ksleep,
+
+};
 
 void *operator new(size_t size)
 {

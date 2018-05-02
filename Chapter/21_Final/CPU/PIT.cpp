@@ -20,6 +20,7 @@ __declspec(naked) void InterruptPITHandler()
 {	
 	_asm
 	{
+		PUSHFD
 		cli
 		pushad;
 
@@ -64,7 +65,7 @@ __declspec(naked) void InterruptPITHandler()
 
 		mov al, 0x20
 			out 0x20, al
-			sti
+			POPFD
 			iretd;
 
 	pass:
@@ -76,7 +77,7 @@ __declspec(naked) void InterruptPITHandler()
 			popad;
 		mov al, 0x20
 			out 0x20, al
-			sti
+			POPFD
 			iretd;
 	}
 }
@@ -105,7 +106,7 @@ void StartPITCounter(uint32_t freq, uint8_t counter, uint8_t mode) {
 }
 
 //PIT √ ±‚»≠
-void InitializePIT()
+void PITInitialize()
 {
 	setvect(32, InterruptPITHandler);
 }

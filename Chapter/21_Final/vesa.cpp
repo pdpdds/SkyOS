@@ -1,6 +1,5 @@
-#include "vesa.h"
-#include "SkyConsole.h"
-#include "VideoRam.h"
+#include "SkyOS.h"
+#include "VESA.h"
 
 #define RGB16_565(r,g,b) ((b&31) | ((g&63) << 5 | ((r&31) << 11)))
 
@@ -30,7 +29,7 @@ ULONG getDepth() {
 	return lfb_depth;
 }
 
-void init_lfb(VbeModeInfo *mode_info)
+void init_lfb()
 {
 	//if (mode_info == nullptr)
 		//return;
@@ -40,20 +39,13 @@ void init_lfb(VbeModeInfo *mode_info)
 	lfb_px = 0;
 	lfb_py = 0;
 
-	
-	
 
-	/*lfb_width = mode_info->XResolution;
-	lfb_height = mode_info->YResolution;
-	lfb_depth = mode_info->BitsPerPixel;
-	lfb_type = 0;
-	lfb_ptr = (void*)mode_info->FrameBuffer;*/
 
-	lfb_width = 1024;
-	lfb_height = 768;
-	lfb_depth = 32;
+	lfb_width = SkyGUISystem::GetInstance()->GetVideoRamInfo()._width;
+	lfb_height = SkyGUISystem::GetInstance()->GetVideoRamInfo()._height;
+	lfb_depth = SkyGUISystem::GetInstance()->GetVideoRamInfo()._bpp;
 	lfb_type = 0;
-	lfb_ptr = (void*)VIDEO_RAM_LOGICAL_ADDRESS;
+	lfb_ptr = (void*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr;
 
 	lfb = (ULONG*)lfb_ptr;
 	

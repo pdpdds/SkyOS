@@ -1,9 +1,5 @@
-#ifndef SKYCONSOLE_H
-#define SKYCONSOLE_H
+#pragma once
 #include "windef.h"
-#include "KeyBoard.h"
-
-using namespace KeyBoard;
 
 enum ConsoleColor
 {
@@ -61,4 +57,3 @@ namespace SkyConsole
 	//KEYCODE	GetChar(); 
 	char	GetChar();
 }
-#endif

@@ -1,9 +1,6 @@
 #pragma once
 #include "windef.h"
 #include "SkyStruct.h"
-#include "Hal.h"
-#include "PIT.h"
-
 
 #define ASSERT(a, b) if(a == false) SkyConsole::Print("Kernel Panic : %s\n", b); _asm hlt
 
@@ -47,5 +44,8 @@ extern "C"
 	void TerminateProcess();
 	uint32_t MemoryAlloc(size_t size);
 	void MemoryFree(void* p);
-	void CreateDefaultHeap();	
+	void CreateDefaultHeap();
+
+	void* GetSkyAPIEntryPoint(char * strAPIName);
+	void RegisterSkyAPI(char* strAPIName, void * ptrAPIFunction);
 }

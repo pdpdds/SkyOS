@@ -2,7 +2,8 @@
 
 struct FIFO32 {
 	int *buf;
-	int p, q, size, free, flags;	
+	int p, q, size, free, flags;
+	int message;
 };
 
 void fifo32_init(FIFO32 *fifo, int size, int *buf);

@@ -1,0 +1,41 @@
+
+3C905B PCI configuration register value
+
+UINT16  wVendorID        : 10B7
+UINT16  wDeviceID        : 9055
+UINT16  wCmdRegister     : 7
+UINT16  wStatusRegister  : 210
+UCHAR   byRevisionID     : 30
+UCHAR   class_code[0]    : 0
+UCHAR   class_code[1]    : 0
+UCHAR   class_code[2]    : 2
+UCHAR   byCacheLineSize  : 8
+UCHAR   byLatencyTimer   : 20
+UCHAR   byHeaderType     : 0
+UCHAR   byBIST           : 0
+DWORD   base_addr[0]     : 9401
+DWORD   base_addr[1]     : E8000000
+DWORD   base_addr[2]     : 0
+DWORD   base_addr[3]     : 0
+DWORD   base_addr[4]     : 0
+DWORD   base_addr[5]     : 0
+DWORD   dwCISPointer     : 0
+UINT16  wSubVendorID     : 10B7
+UINT16  wSubSystemID     : 9055
+DWORD   dwRomBaseAddr    : E7000000
+UCHAR   byCapabilityBase : DC
+UCHAR   rsv0[3]          : 0
+UCHAR   rsv1[4]          : 5
+UCHAR   byIntLine        : 5
+UCHAR   byIntPin         : 1
+UCHAR   byMinGnt         : A
+UCHAR   byMaxLat         : A     
+
+MAC Address from EEPROM
+3C905B NIC MAC Address : 00:50:DA:8D:7B:EE
+
+MAC ADDRESS of Register Window before setting value from EEPROM.
+MAC : 0000.0000.0000
+
+MAC ADDRESS of Register Window after setting value from EEPROM.
+MAC : 0050.DA8D.DA8D     

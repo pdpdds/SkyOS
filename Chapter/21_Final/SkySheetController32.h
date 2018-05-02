@@ -1,6 +1,5 @@
 #pragma once
 #include "SkySheetController.h"
-#include "windef.h"
 
 class SkySheetController32 : public SkySheetController
 {

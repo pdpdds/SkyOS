@@ -1,8 +1,4 @@
-#include <string.h>
-#include "memory.h"
-#include "gdt.h"
-#include "tss.h"
-#include "SkyAPI.h"
+#include "SkyOS.h"
 
 tss_entry TSS;
 

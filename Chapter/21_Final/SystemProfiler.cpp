@@ -1,7 +1,4 @@
-#include "SystemProfiler.h"
-#include "SkyConsole.h"
-#include "PhysicalMemoryManager.h"
-#include "HeapManager.h"
+#include "SkyOS.h"
 
 SystemProfiler* SystemProfiler::m_pSystemProfiler = nullptr;
 

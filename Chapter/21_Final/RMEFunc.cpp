@@ -1,8 +1,4 @@
-#include "RMEFunc.h"
-#include "SkyConsole.h"
-#include "string.h"
-#include "memory.h"
-#include "sprintf.h"
+#include "SkyOS.h"
 #include "RME.h"
 #include "VESA.h"
 

@@ -1,21 +1,9 @@
 #pragma once
-#include "SkyAPI.h"
+#include "windef.h"
+#include "PIT.h"
 #include "SkyConsole.h"
 
 #define MAX_SYSCALL 8
-
-static void* _syscalls[] = {
-
-	kprintf,
-	TerminateProcess,
-	MemoryAlloc,
-	MemoryFree,
-	CreateDefaultHeap,
-	GetTickCount,
-	CreateThread,
-	ksleep,
-	
-};
 
 void *operator new(size_t size);
 void *operator new[](size_t size);

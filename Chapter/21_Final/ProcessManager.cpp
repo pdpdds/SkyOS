@@ -1,19 +1,6 @@
-﻿#include "ProcessManager.h"
-#include "PhysicalMemoryManager.h"
-#include "HeapManager.h"
-#include "StorageManager.h"
-#include "Process.h"
-#include "Thread.h"
-#include "Hal.h"
-#include "string.h"
-#include "memory.h"
-#include "SkyConsole.h"
-#include "ProcessUtil.h"
-#include "SkyAPI.h"
-#include "sysapi.h"
+﻿#include "SkyOS.h"
 #include "KernelProcessLoader.h"
 #include "UserProcessLoader.h"
-#include "MultiBoot.h"
 
 ProcessManager* ProcessManager::m_processManager = nullptr;
 static int kernelStackIndex = 1;

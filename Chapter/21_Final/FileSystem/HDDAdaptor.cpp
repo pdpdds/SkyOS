@@ -1,6 +1,4 @@
-#include "HDDAdaptor.h"
-#include "SkyConsole.h"
-#include "SkyStruct.h"
+#include "SkyOS.h"
 
 HardDiskHandler* g_pHDDHandler = nullptr;
 
@@ -51,19 +49,48 @@ void HDDAdaptor::PrintHDDInfo()
 		HDDInfo = (struct __HDDInfo *)g_pHDDHandler->GetHDDInfo(Key);
 		if (HDDInfo != NULL)
 		{
-			SkyConsole::Print("\n%s Device ( %s ) :: ", HDDInfo->DeviceNumber ? "Slave " : "Master", Key);
+			char buf[256];
+			int index = 0;
+			SkyConsole::Print("\n");
+
+			sprintf(buf, "%s Device ( %s ) :: ", HDDInfo->DeviceNumber ? "Slave " : "Master", Key);
+			index += strlen(buf);
+
 			if (HDDInfo->ModelNumber[0] == 0)
-				SkyConsole::Print(" N/A ");
+			{
+				strcpy(buf + index, " N/A ");	
+				index += strlen(" N/A ");
+			}
 			else
+			{
 				for (BYTE j = 0; j < 20; j++)
-					SkyConsole::WriteChar(HDDInfo->ModelNumber[j]);
-			SkyConsole::Print(" - ");
+				{
+					buf[index] = HDDInfo->ModelNumber[j];
+					index++;
+				}
+			}
+
+			strcpy(buf + index, " - ");
+			index += strlen(" - ");
+			
 			if (HDDInfo->SerialNumber[0] == 0)
-				SkyConsole::Print(" N/A ");
+			{
+				strcpy(buf + index, " N/A ");
+				index += strlen(" N/A ");
+			}
 			else
+			{
+				
 				for (BYTE j = 0; j < 20; j++)
-					SkyConsole::WriteChar(HDDInfo->SerialNumber[j]);
-			SkyConsole::Print("\n\r Cylinders %d Heads %d Sectors %d. LBA Sectors %d\n", HDDInfo->CHSCylinderCount, HDDInfo->CHSHeadCount, HDDInfo->CHSSectorCount, HDDInfo->LBACount);
+				{
+					buf[index] = HDDInfo->SerialNumber[j];
+					index++;
+				}
+				buf[index] = 0;
+				SkyConsole::Print(buf);
+			}
+			SkyConsole::Print("\n");
+			SkyConsole::Print("Cylinders %d Heads %d Sectors %d. LBA Sectors %d\n", HDDInfo->CHSCylinderCount, HDDInfo->CHSHeadCount, HDDInfo->CHSSectorCount, HDDInfo->LBACount);
 		}
 		Key[1]++;
 	}

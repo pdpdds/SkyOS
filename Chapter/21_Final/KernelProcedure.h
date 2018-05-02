@@ -8,3 +8,5 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter);
 
 DWORD WINAPI SystemGUIProc(LPVOID parameter);
 DWORD WINAPI ConsoleGUIProc(LPVOID parameter);
+DWORD WINAPI ConsoleDebugGUIProc(LPVOID parameter);
+DWORD WINAPI CreateGUIConsoleProcess(LPVOID parameter);

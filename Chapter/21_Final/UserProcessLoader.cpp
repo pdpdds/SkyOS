@@ -1,11 +1,5 @@
 #include "UserProcessLoader.h"
-#include "Process.h"
-#include "defines.h"
-#include "HeapManager.h"
-#include "fileio.h"
-#include "StorageManager.h"
-#include "SkyConsole.h"
-
+#include "SkyOS.h"
 
 UserProcessLoader::UserProcessLoader()
 {

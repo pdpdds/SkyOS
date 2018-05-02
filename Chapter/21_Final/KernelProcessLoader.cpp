@@ -1,11 +1,5 @@
+#include "SkyOS.h"
 #include "KernelProcessLoader.h"
-#include "Process.h"
-#include "defines.h"
-#include "HeapManager.h"
-#include "fileio.h"
-#include "StorageManager.h"
-#include "SkyConsole.h"
-#include "VideoRam.h"
 
 KernelProcessLoader::KernelProcessLoader()
 {
@@ -39,10 +33,12 @@ Process* KernelProcessLoader::CreateProcessFromMemory(const char* appName, LPTHR
 
 	HeapManager::MapHeapToAddressSpace(pPageDirectory);
 
-#ifdef SKY_GUI
-	VideoRamInfo ramInfo = VideoRam::GetInstance()->GetVideoRamInfo();
-	VirtualMemoryManager::CreateVideoDMAVirtualAddress(pPageDirectory, VIDEO_RAM_LOGICAL_ADDRESS, (uintptr_t)ramInfo._pVideoRamPtr, 0xFE000000);
-#endif
+	if (SkyGUISystem::GetInstance()->GUIEnable() == true)
+	{	
+		VirtualMemoryManager::CreateVideoDMAVirtualAddress(pPageDirectory, (uintptr_t)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, (uintptr_t)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 
+			(uintptr_t)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr + VIDEO_RAM_LOGICAL_ADDRESS_OFFSET);
+	}
+	
 
 	PhysicalMemoryManager::EnablePaging(true);
 

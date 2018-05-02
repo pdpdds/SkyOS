@@ -1,7 +1,10 @@
+#include "SkyOS.h"
 #include "SkySimpleGUI.h"
 #include "SkyConsole.h"
 
 #include "SkyConsole.h"
+#include "SkyRenderer32.h"
+#include "SkyGUI.h"
 
 #define RGB16_565(r,g,b) ((b&31) | ((g&63) << 5 | ((r&31) << 11)))
 
@@ -18,32 +21,64 @@ SkySimpleGUI::~SkySimpleGUI()
 {
 }
 
-bool SkySimpleGUI::Initialize(void* pVideoRamPtr, int width, int height, int bpp)
-{
-	/*uint16_t *graphics_memory = (uint16_t *)0xA0000;
+SkyRenderer* renderer;
+static int yPos = 80;
+static int xPos = 8;
 
-
+bool SkySimpleGUI::Initialize(void* pVideoRamPtr, int width, int height, int bpp, uint8_t buffertype)
+{	
+	renderer = new SkyRenderer32();
+	SkyGUI::LoadFontFromMemory();
+	
+	/*
+	uint16_t *graphics_memory = (uint16_t *)0xA0000;
 	graphics_memory[0] = 0xff;
 	graphics_memory[1] = 0xff;
-	graphics_memory[2] = 0xff;
-	
-	SkyConsole::Print("XRes : %d\n", width);
-	SkyConsole::Print("YRes : %d\n", height);
-	SkyConsole::Print("BitsPerPixel : %d\n", bpp);
-	SkyConsole::Print("PhysBasePtr : %d\n", pVideoRamPtr);*/
-
-	m_pVideoRamPtr = (ULONG*)0xFD000000;
+	graphics_memory[2] = 0xff;*/
+		
+	m_pVideoRamPtr = (ULONG*)pVideoRamPtr;
 	m_width = width;
 	m_height = height;
 	m_bpp = bpp;
+
+	unsigned char buf[512];
+	sprintf((char*)buf, "XRes : %d", width);
+	renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, xPos, 0, 0xFF, buf);
+
+	sprintf((char*)buf, "YRes : %d", height);
+	renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, xPos, 16, 0xFF, buf);
+
+	sprintf((char*)buf, "BitsPerPixel : %d", bpp);
+	renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, xPos, 32, 0xFF, buf);
+
+	sprintf((char*)buf, "Ram Virtual Address : %x", (uint32_t)pVideoRamPtr);
+	renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, xPos, 48, 0xFF, buf);
+
+	if(buffertype == 0)
+		renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, 0, 64, 0xFF, (unsigned char*)("MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED"));
+	else if (buffertype == 1)
+		renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, 0, 64, 0xFF, (unsigned char*)("MULTIBOOT_FRAMEBUFFER_TYPE_RGB"));
+	else if (buffertype == 2)
+		renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, 0, 64, 0xFF, (unsigned char*)("MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT"));
+
 	return false;
 }
 
+extern char hankaku[4096];
 bool SkySimpleGUI::Run()
 {	
+	Thread* pThread = ProcessManager::GetInstance()->GetCurrentTask();
+	Process* pProcess = pThread->m_pParent;
+
 	while (1)
 	{
-		FillRect(100, 100, 100, 100, 0x00FF0000, 1024, 768, 32);
+		kEnterCriticalSection();
+		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
+		kLeaveCriticalSection();
+
+		//FillRect(200, 100, 100, 100, 0x00FF0000, 1024, 768, 32);
+		//renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, 0, 0, 0xFF, (unsigned char*)"aaaaaaaaaaaaaaaa");
+		
 		//Clear();
 	}
 
@@ -146,4 +181,11 @@ void SkySimpleGUI::Update(unsigned long *buf) {
 		p2++;
 	}
 
+}
+
+bool SkySimpleGUI::Print(char* pMsg)
+{
+	renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, xPos, yPos, 0xFF, (unsigned char*)pMsg);
+	yPos += 16;
+	return true;
 }

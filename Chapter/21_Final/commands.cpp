@@ -1,17 +1,12 @@
 #include "SkyConsole.h"
-#include "string.h"
-#include "memory.h"
-#include "stdio.h"
-#include "Hal.h"
+#include "SkyOS.h"
 #include "ProcessManager.h"
 #include "ZetPlane.h"
-#include "PhysicalMemoryManager.h"
-#include "PIT.h"
-#include "KernelProcedure.h"
-#include "SkyAPI.h"
-#include "SystemProfiler.h"
 #include "RMEFunc.h"
 #include "PCI.h"
+#include "SystemProfiler.h"
+#include "Process.h"
+#include "Thread.h"
 
 long CmdCls(char *theCommand)
 {

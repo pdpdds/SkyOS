@@ -1,25 +1,15 @@
-#include "SkyAPI.h"
-#include "SkyConsole.h"
-#include "Hal.h"
-#include "string.h"
-#include "va_list.h"
-#include "stdio.h"
-#include "stdarg.h"
-#include "sprintf.h"
-#include "Exception.h"
-#include "ProcessManager.h"
-#include "PhysicalMemoryManager.h"
+#include "SkyOS.h"
 
 void __M_Assert(const char* expr_str, bool expr, const char* file, int line, const char* msg)
 {
 	if (!expr)
-	{		
+	{
 		//SkyConsole::Print("%s %s, %s %d\n", msg, expr_str, file, line);
 		//for (;;);
 		char buf[256];
-		sprintf(buf, "Assert failed: %s Expected: %s %s %d\n", msg, expr_str, file, line);	
+		sprintf(buf, "Assert failed: %s Expected: %s %s %d\n", msg, expr_str, file, line);
 
-		
+
 		HaltSystem(buf);
 	}
 }
@@ -92,7 +82,7 @@ BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime)
 	OutPortByte(RTC_INDEX_REG, RTC_STATUS_A);    //checking status -read access
 	TimeOut = 1000;
 	while (InPortByte(RTC_VALUE_REG) & 0x80)
-		if (TimeOut< 0)
+		if (TimeOut < 0)
 			return 0;
 		else
 			TimeOut--;
@@ -121,7 +111,7 @@ void ksleep(int millisecond)
 
 void printf(const char* str, ...)
 {
-	if(!str)
+	if (!str)
 		return;
 
 	va_list		args;
@@ -262,7 +252,7 @@ extern "C"
 		kEnterCriticalSection();
 
 		Thread* pTask = ProcessManager::GetInstance()->GetCurrentTask();
-		Process* pProcess = pTask->m_pParent;		
+		Process* pProcess = pTask->m_pParent;
 
 		//1메가 바이트의 힙을 생성
 		void* pHeapPhys = PhysicalMemoryManager::AllocBlocks(DEFAULT_HEAP_PAGE_COUNT);
@@ -270,11 +260,11 @@ extern "C"
 
 		//힙 주소를 4K에 맞춰 Align	
 		heapAddess -= (heapAddess % PAGE_SIZE);
-	
+
 		//#ifdef _ORANGE_DEBUG
 		SkyConsole::Print("%d : V(%x) P(%x)\n", pProcess->GetProcessId(), heapAddess, pHeapPhys);
 		//#endif // _ORANGE_DEBUG
-		
+
 		for (int i = 0; i < DEFAULT_HEAP_PAGE_COUNT; i++)
 		{
 			VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss2(pProcess->GetPageDirectory(),
@@ -290,9 +280,9 @@ extern "C"
 
 		kLeaveCriticalSection();
 
-//#ifdef _ORANGE_DEBUG
+		//#ifdef _ORANGE_DEBUG
 		SkyConsole::Print("CreateDefaultHeap End\n");
-//#endif // _ORANGE_DEBUG
+		//#endif // _ORANGE_DEBUG
 
 	}
 
@@ -302,7 +292,7 @@ extern "C"
 		kEnterCriticalSection();
 
 		Thread* pTask = ProcessManager::GetInstance()->GetCurrentTask();
-		Process* pProcess = pTask->m_pParent;		
+		Process* pProcess = pTask->m_pParent;
 
 		if (pProcess == nullptr || pProcess->GetProcessId() == PROC_INVALID_ID)
 		{
@@ -317,22 +307,22 @@ extern "C"
 
 		ProcessManager::GetInstance()->ReserveRemoveProcess(pProcess);
 
-		kLeaveCriticalSection();		
+		kLeaveCriticalSection();
 	}
 }
 
-void DumpMemory(void *data, size_t nbytes, size_t bytes_per_line) 
+void DumpMemory(void *data, size_t nbytes, size_t bytes_per_line)
 {
 	uint8_t *mem = (uint8_t *)data;
-	for (size_t y = 0; y < nbytes; y++) 
+	for (size_t y = 0; y < nbytes; y++)
 	{
-		if (y == 0 || y % bytes_per_line == 0) 
+		if (y == 0 || y % bytes_per_line == 0)
 		{
-			if (y % bytes_per_line == 0 && y) 
+			if (y % bytes_per_line == 0 && y)
 			{
 				printf("%c[%uG", 0x1B, 10 + bytes_per_line * 3);
 				printf("| ");
-				for (size_t i = 0; i < bytes_per_line; i++) 
+				for (size_t i = 0; i < bytes_per_line; i++)
 				{
 					char c = mem[y - bytes_per_line + i];
 					printf("%c", c >= ' ' && c <= '~' ? c : '.');
@@ -376,4 +366,60 @@ int kdbg_printf(char *pFmt, ...)
 	SkyConsole::Print("%s", szTX);
 
 	return(nI);
+}
+
+typedef struct tag_SKY_APIStruct
+{
+	char * strAPIName;		//함수 이름
+	void * ptrAPIFunction;		//함수 포인터
+	tag_SKY_APIStruct * Next;
+}SKY_APIStruct;
+SKY_APIStruct* g_pRegisteredSkyAPIEntries = nullptr;
+
+void RegisterSkyAPI(char* strAPIName, void * ptrAPIFunction)
+{
+	SKY_APIStruct* newAPIStruct;
+	char *strName = nullptr;
+
+	SkyConsole::Print("Reg : %s %x\n", strAPIName, ptrAPIFunction);
+
+	newAPIStruct = new SKY_APIStruct;
+	strName = new char[strlen(strAPIName) + 1];
+
+	strcpy(strName, strAPIName);
+
+	//함수이름과 함수 포인터를 설정
+	newAPIStruct->strAPIName = strName;
+	newAPIStruct->ptrAPIFunction = ptrAPIFunction;
+	newAPIStruct->Next = nullptr;
+
+	if (g_pRegisteredSkyAPIEntries) //루트 엔트리가 존재하면 검색을 해서 마지막에 새 엔트리를 연결하고 그렇지 않으면 새 엔트리를 루트 엔트리로
+	{
+		SKY_APIStruct* curAPIStruct = g_pRegisteredSkyAPIEntries;
+		while (curAPIStruct->Next)
+		{
+			if (strcmp(curAPIStruct->strAPIName, strAPIName) == 0) //already the function exists update the pointer value
+				break;
+			curAPIStruct = curAPIStruct->Next;
+		}
+		curAPIStruct->Next = newAPIStruct;
+	}
+	else
+		g_pRegisteredSkyAPIEntries = newAPIStruct;
+}
+
+void* GetSkyAPIEntryPoint(char * strAPIName)
+{
+	SKY_APIStruct* curAPIStruct = g_pRegisteredSkyAPIEntries;
+	while (curAPIStruct)
+	{
+		SkyConsole::Print("[%s] [%s]\n", strAPIName, curAPIStruct->strAPIName);
+
+		if (strcmp(curAPIStruct->strAPIName, strAPIName) == 0)
+			return curAPIStruct->ptrAPIFunction;
+
+		curAPIStruct = curAPIStruct->Next;
+	}
+
+	return 0;
 }

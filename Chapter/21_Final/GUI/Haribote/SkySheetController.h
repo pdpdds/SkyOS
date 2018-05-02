@@ -1,4 +1,5 @@
 #pragma once
+#include "windef.h"
 #include "SkySheet.h"
 
 #define MAX_SHEETS		256

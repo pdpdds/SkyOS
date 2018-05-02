@@ -1,6 +1,5 @@
 #pragma once
 #include "windef.h"
-#include "Hal.h"
 #include "struct.h"
 
 class Process;

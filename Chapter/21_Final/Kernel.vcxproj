@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3c905b.cpp" />
-    <ClCompile Include="API.cpp" />
     <ClCompile Include="bepci.cpp" />
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="ConsoleIOListener.cpp" />
@@ -49,7 +48,6 @@
     <ClCompile Include="GUI\Haribote\SkySheetController.cpp" />
     <ClCompile Include="GUI\Simple\SkySimpleGUI.cpp" />
     <ClCompile Include="GUI\SkyGUISystem.cpp" />
-    <ClCompile Include="GUI\SkyWindow.cpp" />
     <ClCompile Include="GUI\svgagui\example\color.cpp" />
     <ClCompile Include="GUI\svgagui\src\browser.cpp" />
     <ClCompile Include="GUI\svgagui\src\button.cpp" />
@@ -128,6 +126,7 @@
     <ClCompile Include="SkyRenderer8.cpp" />
     <ClCompile Include="SkySheetController32.cpp" />
     <ClCompile Include="SkySheetController8.cpp" />
+    <ClCompile Include="SkySVGA.cpp" />
     <ClCompile Include="SkyTest.cpp" />
     <ClCompile Include="SysAPI.cpp" />
     <ClCompile Include="SysInfo.cpp" />
@@ -139,11 +138,9 @@
     <ClCompile Include="UserProcessLoader.cpp" />
     <ClCompile Include="v8086\rme.cpp" />
     <ClCompile Include="vesa.cpp" />
-    <ClCompile Include="VideoRam.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3c905b.h" />
-    <ClInclude Include="API.h" />
     <ClInclude Include="bepci.h" />
     <ClInclude Include="commandMacros.h" />
     <ClInclude Include="commands.h" />
@@ -220,10 +217,13 @@
     <ClInclude Include="Scheduler.h" />
     <ClInclude Include="SkyAPI.h" />
     <ClInclude Include="SkyConsole.h" />
+    <ClInclude Include="SkyOS.h" />
     <ClInclude Include="SkyRenderer32.h" />
     <ClInclude Include="SkyRenderer8.h" />
     <ClInclude Include="SkySheetController32.h" />
     <ClInclude Include="SkySheetController8.h" />
+    <ClInclude Include="SkyStartOption.h" />
+    <ClInclude Include="SkySVGA.h" />
     <ClInclude Include="SkyTest.h" />
     <ClInclude Include="SysAPI.h" />
     <ClInclude Include="SysError.h" />
@@ -238,7 +238,6 @@
     <ClInclude Include="UserProcessLoader.h" />
     <ClInclude Include="v8086\rme.h" />
     <ClInclude Include="VESA.h" />
-    <ClInclude Include="VideoRam.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Debug\kernel.sys" />

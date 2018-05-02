@@ -1,15 +1,16 @@
 #pragma once
-#include "SkyWindow.h"
 #include "windef.h"
 
-class SkySimpleGUI : public SkyWindow
+class SkySimpleGUI
 {
 public:
 	SkySimpleGUI();
 	~SkySimpleGUI();
 
-	virtual bool Initialize(void* pVideoRamPtr, int width, int height, int bpp) override;
-	virtual bool Run() override;
+	bool Initialize(void* pVideoRamPtr, int width, int height, int bpp, uint8_t buffertype);
+	bool Run();
+	bool Print(char* pMsg);
+
 
 	void Clear();
 	ULONG GetBPP();	
