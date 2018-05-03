@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModuleRelocation", "ModuleRelocation\ModuleRelocation.vcxproj", "{061A1CD6-A447-4A10-AEF0-7D58C9CDA906}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleDll", "SampleDll\SampleDll.vcxproj", "{50C33E30-CC40-4CEA-AD4F-629A5E9C05BF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleDll2", "SampleDll2\SampleDll2.vcxproj", "{E92DBB74-575C-4C83-82ED-1A2D8CC91B18}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{061A1CD6-A447-4A10-AEF0-7D58C9CDA906}.Debug|Win32.ActiveCfg = Debug|Win32
+		{061A1CD6-A447-4A10-AEF0-7D58C9CDA906}.Debug|Win32.Build.0 = Debug|Win32
+		{061A1CD6-A447-4A10-AEF0-7D58C9CDA906}.Release|Win32.ActiveCfg = Release|Win32
+		{061A1CD6-A447-4A10-AEF0-7D58C9CDA906}.Release|Win32.Build.0 = Release|Win32
+		{50C33E30-CC40-4CEA-AD4F-629A5E9C05BF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{50C33E30-CC40-4CEA-AD4F-629A5E9C05BF}.Debug|Win32.Build.0 = Debug|Win32
+		{50C33E30-CC40-4CEA-AD4F-629A5E9C05BF}.Release|Win32.ActiveCfg = Release|Win32
+		{50C33E30-CC40-4CEA-AD4F-629A5E9C05BF}.Release|Win32.Build.0 = Release|Win32
+		{E92DBB74-575C-4C83-82ED-1A2D8CC91B18}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E92DBB74-575C-4C83-82ED-1A2D8CC91B18}.Debug|Win32.Build.0 = Debug|Win32
+		{E92DBB74-575C-4C83-82ED-1A2D8CC91B18}.Release|Win32.ActiveCfg = Release|Win32
+		{E92DBB74-575C-4C83-82ED-1A2D8CC91B18}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E4B395EA-E752-44A4-976D-69915933BC21}
+	EndGlobalSection
+EndGlobal
