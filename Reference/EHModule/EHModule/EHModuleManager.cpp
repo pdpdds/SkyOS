@@ -14,8 +14,7 @@ CEHModuleManager::~CEHModuleManager(void)
 BOOL CEHModuleManager::RegisterHandler()
 {
 	CEHExceptionHandlerDispatcher::GetInstance()->RegisterExceptionHandler(EH_MINIDUMP, MiniDumpHandler);
-	CEHExceptionHandlerDispatcher::GetInstance()->RegisterExceptionHandler(EH_BUGTRAP, BugTrapHandler);
-	CEHExceptionHandlerDispatcher::GetInstance()->RegisterExceptionHandler(EH_BREAKPAD, BreakPadHandler);
+	CEHExceptionHandlerDispatcher::GetInstance()->RegisterExceptionHandler(EH_BUGTRAP, BugTrapHandler);	
 	CEHExceptionHandlerDispatcher::GetInstance()->RegisterExceptionHandler(EH_USER_DEFINED, UserDefinedHandler);
 	CEHExceptionHandlerDispatcher::GetInstance()->RegisterExceptionHandler(EH_BUGTRAP_MIX, BugTrapMixHandler);
 

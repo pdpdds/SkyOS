@@ -4,22 +4,9 @@
 #include <process.h>
 #include "BugTrap.h"
 #include <MAP>
-#include "exception_handler.h"
 
 using namespace std;
-using namespace google_breakpad;
 
-static bool BreakPadHandlerCallBack(const wchar_t* dump_path,
-									const wchar_t* minidump_id,
-									void* context,
-									EXCEPTION_POINTERS* exinfo,
-									MDRawAssertionInfo* assertion,
-									bool succeeded)
-{
-	printf("%s is dumped\n", minidump_id);
-
-	return succeeded;
-}
 
 void MiniDumpHandler(enumDumpDetectionLevel eLevel)
 {		
@@ -70,31 +57,6 @@ void BugTrapHandler(enumDumpDetectionLevel eLevel)
 	if(DL_MY_HANDLER == eLevel || DL_MY_HANDLER_STACKOVERFLOW == eLevel)
 	{
 		BT_InterceptSUEF(GetModuleHandle(NULL), TRUE);
-	}
-
-	std::set_new_handler(New_OutOfMemory_Handler);
-}
-
-void BreakPadHandler(enumDumpDetectionLevel eLevel)
-{
-	TCHAR szCurDirectory[MAX_PATH] = {0,};
-	TCHAR* pEnd = NULL;
-	GetModuleFileName(NULL, szCurDirectory, MAX_PATH);
-	pEnd = _tcsrchr(szCurDirectory, _T('\\'));
-
-	if(NULL == pEnd)
-	{
-		return;
-	}
-
-	*pEnd = _T('\0');
-	pEnd = pEnd + 1;
-
-	ExceptionHandler* pBreakPadHandler = new ExceptionHandler(szCurDirectory, NULL, BreakPadHandlerCallBack, NULL, true);
-
-	if(DL_MY_HANDLER == eLevel || DL_MY_HANDLER_STACKOVERFLOW == eLevel)
-	{
-		PreventSetUnhandledExceptionFilter();
 	}
 
 	std::set_new_handler(New_OutOfMemory_Handler);

@@ -19,6 +19,3 @@
 
 
 #pragma comment(lib, "BugTrapU.lib")
-#pragma comment(lib, "exception_handler.lib")
-#pragma comment(lib, "crash_generation_client.lib")
-#pragma comment(lib, "common.lib")
