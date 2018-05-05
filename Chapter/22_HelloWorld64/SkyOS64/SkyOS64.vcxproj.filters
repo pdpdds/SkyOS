@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="SkyConsole.cpp" />
+    <ClCompile Include="sprintf.cpp" />
+    <ClCompile Include="string.cpp" />
+    <ClCompile Include="stdio.cpp" />
+    <ClCompile Include="ctype.cpp" />
+    <ClCompile Include="ffmt.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="kmain.h" />
+    <ClInclude Include="SkyConsole.h" />
+    <ClInclude Include="sprintf.h" />
+    <ClInclude Include="string.h" />
+    <ClInclude Include="stdio.h" />
+    <ClInclude Include="ctype.h" />
+    <ClInclude Include="ffmt.h" />
+  </ItemGroup>
+</Project>
