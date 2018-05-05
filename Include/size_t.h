@@ -5,9 +5,7 @@
 extern "C"
 {
 #endif
-
-typedef unsigned size_t;
-
+typedef unsigned int size_t;
 #ifdef __cplusplus
 }
 #endif
