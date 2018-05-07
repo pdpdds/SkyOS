@@ -22,6 +22,13 @@ struct PureCallExtend : public PureCallBase
 	virtual void pvf() {}
 };
 
+#include <crtdbg.h>
+
+int MyReportHook(int reportType, char *message, int *returnValue)
+{
+	printf("런타임 에러 발생\n");
+	return 0;
+}
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -31,6 +38,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		printf("예외 핸들러 설치 실패\n");
 	}
+
+	_CrtSetReportHook(MyReportHook);
 
 ////////////////////////////////////////////////////////////////////////
 //Generic Error

@@ -12,6 +12,7 @@ CEHStackWalker::CEHStackWalker(void)
 
 void CEHStackWalker::SetLogFilePath(void)
 {
+	_set_printf_count_output(true);
 	GetOutofMemoryLogPath(m_szDumpPath);
 }
 
