@@ -1,6 +1,8 @@
 ﻿#include "kmain.h"
+#include "GDT.h"
 
 extern "C" void main64();
+extern "C" void gdt64();
 extern void __cdecl InitializeConstructors();
 
 #pragma pack(push, 1)
@@ -46,23 +48,15 @@ void _PrintStringXY2(char* str)
 //void kmain64(unsigned long magic, unsigned long addr)
 void kmain64()
 {
-	InitializeConstructors();
-	afffs[0] = 'm';
-	int skyos64 = 0x0000000;
-	char* aaa = (char*)skyos64;
+	//InitializeGDTWithTSS();
+	//gdt64();
+	//InitializeConstructors();
+	//for (;;);
 
-	if((QWORD)kmain64 == 0x00000204)
-		for (;;);
-
-	for (int i = 0; i < 0x00300000; i++)
+	for (int i = 0; i < 5000000; i++)
 	{
-		if (aaa[i] == 'm')
-			if (aaa[i + 1] == 'a')
-				if (aaa[i + 2] == 'r')
-				{
-					*((ushort*)0xB8002) = ('G' | (ushort)(((uchar)((0 << 4) | (15 & 0xF))) << 8));
-					for (;;);
-				}
+		if (*(int*)(i * 4) == 0x12345678)
+			for (;;);
 	}
 
 	*((ushort*)0xB8000) = (afff | (ushort)(((uchar)((0 << 4) | (15 & 0xF)) ) << 8));

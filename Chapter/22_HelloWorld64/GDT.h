@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 //! maximum amount of descriptors allowed
-#define MAX_DESCRIPTORS					10
+#define MAX_DESCRIPTORS					3
 
 /***	 gdt descriptor access bit flags.	***/
 
