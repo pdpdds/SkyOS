@@ -5,12 +5,12 @@
 void InitializePageTable()
 {
 
-	PML4ENTRY*	pml4entry  = (PML4ENTRY*) 0x160000;
-	PDPTENTRY*	pdptentry  = (PDPTENTRY*) 0x161000;
-	PDENTRY*	pdentry    = (PDENTRY*	) 0x162000;
+	PML4ENTRY*	pml4entry  = (PML4ENTRY*) 0x60000;
+	PDPTENTRY*	pdptentry  = (PDPTENTRY*) 0x61000;
+	PDENTRY*	pdentry    = (PDENTRY*	) 0x62000;
 
 	//P = 1 Rw = 1
-	SetPageEntryData(&pml4entry[0], 0x00, 0x161000, PAGE_FLAG_DEFAULT, 0);
+	SetPageEntryData(&pml4entry[0], 0x00, 0x61000, PAGE_FLAG_DEFAULT, 0);
 
 	for(int i = 1; i< PAGE_MAX_ENTRY_COUNT; i++)
 	{
@@ -19,7 +19,7 @@ void InitializePageTable()
 	//P = 1 Rw = 1
 	for(int i = 0; i < 64; i++)
 	{
-		SetPageEntryData(&pdptentry[i], 0, 0x162000 + i * PAGE_TABLE_SIZE,
+		SetPageEntryData(&pdptentry[i], 0, 0x62000 + i * PAGE_TABLE_SIZE,
 						 PAGE_FLAG_DEFAULT, 0);
 	}
 

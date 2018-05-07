@@ -1,141 +1,86 @@
 #pragma once
-#include <windef.h>
+#include <stdint.h>
 
-/*
-GDT Descriptor
-Load GDTR on 0x142000
-*/
+//! maximum amount of descriptors allowed
+#define MAX_DESCRIPTORS					10
 
+/***	 gdt descriptor access bit flags.	***/
 
-/*
+//! set access bit
+#define I86_GDT_DESC_ACCESS			0x0001			//00000001
 
-; GDT Entry 필드
-; Limit or Size[32]: 세그먼트 크기
-; Base Address [20]: 세그먼트 시작 주소
-; Type		    [4]: 세그먼트 타입
-; S 			[1]: 디스크립터 타입
-; DPL			[2]: 권한
-; P				[1]: 유효 여부
-; AVL			[1]: 임시
-; L				[1]: IA-32e 에서 64,32 구분
-; D/B			[1]: 기본 연산 크기 (0-16, 1-32)
-; G				[1]: 가중치 1일시 4KB 곱함
+//! descriptor is readable and writable. default: read only
+#define I86_GDT_DESC_READWRITE			0x0002			//00000010
 
-*/
+//! set expansion direction bit
+#define I86_GDT_DESC_EXPANSION			0x0004			//00000100
 
+//! executable code segment. Default: data segment
+#define I86_GDT_DESC_EXEC_CODE			0x0008			//00001000
 
-#define GDT_TYPE_CODE       0x0A    //0b00001010
-#define GDT_TYPE_DATA       0x02    //0b00000010
-#define GDT_TYPE_TSS        0x09    //0b00001001
-//Flag Low Area
-#define GDT_ENTRY_LOW_S     0x10    //0b00010000
-#define GDT_ENTRY_LOW_DPL0  0x00    //0b00000000
-#define GDT_ENTRY_LOW_DPL1  0x20    //0b00100000
-#define GDT_ENTRY_LOW_DPL2  0x40    //0b01000000
-#define GDT_ENTRY_LOW_DPL3  0x60    //0b01100000
-#define GDT_ENTRY_LOW_P     0x80    //0b10000000
-//Flag High Area
-#define GDT_ENTRY_HIGH_L    0x20    //0b00100000
-#define GDT_ENTRY_HIGH_DB   0x40    //0b01000000
-#define GDT_ENTRY_HIGH_G    0x80    //0b10000000
+//! set code or data descriptor. defult: system defined descriptor
+#define I86_GDT_DESC_CODEDATA			0x0010			//00010000
 
-//Kernel Code Low Area Flags
-#define GDT_ENTRY_LOW_KERNEL_CODE   (GDT_TYPE_CODE |GDT_ENTRY_LOW_S| \
-                                GDT_ENTRY_LOW_DPL0 | GDT_ENTRY_LOW_P)
-//Kernel Data Low Area Flags
-#define GDT_ENTRY_LOW_KERNEL_DATA   (GDT_TYPE_DATA |GDT_ENTRY_LOW_S| \
-                                GDT_ENTRY_LOW_DPL0 | GDT_ENTRY_LOW_P)
-//User Code Low Area Flags
-#define GDT_ENTRY_LOW_USER_CODE   (GDT_TYPE_CODE |GDT_ENTRY_LOW_S| \
-                                GDT_ENTRY_LOW_DPL3 | GDT_ENTRY_LOW_P)
-//User Data Low Area Flags
-#define GDT_ENTRY_LOW_USER_DATA   (GDT_TYPE_DATA |GDT_ENTRY_LOW_S| \
-                                GDT_ENTRY_LOW_DPL3 | GDT_ENTRY_LOW_P)
+//! set dpl bits
+#define I86_GDT_DESC_DPL			0x0060			//01100000
 
+//! set "in memory" bit
+#define I86_GDT_DESC_MEMORY			0x0080			//10000000
 
-#define GDT_ENTRY_HIGH_CODE (GDT_ENTRY_HIGH_G | GDT_ENTRY_HIGH_L)
-#define GDT_ENTRY_HIGH_DATA (GDT_ENTRY_HIGH_G | GDT_ENTRY_HIGH_L)
+/**	gdt descriptor grandularity bit flags	***/
 
-#define GDT_ENTRY_LOW_TSS   (GDT_ENTRY_LOW_DPL0 | GDT_ENTRY_LOW_P)
-#define GDT_ENTRY_HIGH_TSS  (GDT_ENTRY_HIGH_G)
+//! masks out limitHi (High 4 bits of limit)
+#define I86_GDT_GRAND_LIMITHI_MASK		0x0f			//00001111
 
-#define GDT_KERNEL_CODE_SEGMENT 0x08
-#define GDT_KERNEL_DATA_SEGMENT 0x10
-#define GDT_TSS_SEGMENT         0x18
+//! set os defined bit
+#define I86_GDT_GRAND_OS			0x10			//00010000
 
-#define GDTR_POINTER            0x142000    //1MB + 264KB
+//! set if 32bit. default: 16 bit
+#define I86_GDT_GRAND_32BIT			0x40			//01000000
 
-#define GDT_MAX_ENTRY8_COUNT    3
-#define GDT_MAX_ENTRY16COUNT    0  
+//! 4k grandularity. default: none
+#define I86_GDT_GRAND_4K			0x80			//10000000
 
-#define GDT_TABLE_SIZE          ((sizeof(GDT_ENTRY8) * GDT_MAX_ENTRY8_COUNT)\
-                                  + (sizeof(GDT_ENTRY16) * GDT_MAX_ENTRY16COUNT)) 
+//============================================================================
+//    INTERFACE CLASS PROTOTYPES / EXTERNAL CLASS REFERENCES
+//============================================================================
+//============================================================================
+//    INTERFACE STRUCTURES / UTILITY CLASSES
+//============================================================================
 
-#define TSS_SEGMENT_SIZE        (sizeof(TSS_SEGMENT))
+#ifdef _MSC_VER
+#pragma pack (push, 1)
+#endif
 
-#pragma pack(push, 1)
+//! gdt descriptor. A gdt descriptor defines the properties of a specific
+//! memory block and permissions.
 
-typedef struct _Struct_DTR_Struct
-{
-    WORD Size;              //2Byte
-    DWORD BaseAddress;      //8Byte
-    WORD _WORD_PADDING;     //2Byte
-    DWORD _DWORD_PADDING;   //4Byte
-                            //=16Byte .
-    
-}GDTR, IDTR;
+struct gdt_descriptor {
 
-typedef struct _Struct_GDT_Entry8
-{
-    WORD Low_Size;          //2Byte
-    WORD Low_BaseAddress;   //2Byte
+	//! bits 0-15 of segment limit
+	uint16_t		limit;
 
-    BYTE Low_BaseAddress1;  //1Byte
-    BYTE Low_Flags;         //1Byte
-    BYTE High_FlagsAndSize; //1Byte
-    BYTE High_BaseAddress;  //1Byte
-}GDT_ENTRY8;
+	//! bits 0-23 of base address
+	uint16_t		baseLo;
+	uint8_t			baseMid;
 
-typedef struct tag_GDTR_STRUCT
-{
-	GDTR _gdtr;
-	GDT_ENTRY8 _gdt[3];
-}GDTR_STRUCT;
+	//! descriptor access flags
+	uint8_t			flags;
 
+	uint8_t			grand;
 
-typedef struct _Struct_GDT_Entry16
-{
-    WORD Low_Size;
-    WORD Low_BaseAddress;
+	//! bits 24-32 of base address
+	uint8_t			baseHi;
+};
 
-    BYTE Mid_BaseAddress;
-    BYTE Low_Flags;
-    BYTE High_FlagsAndSize;
-    BYTE High_BaseAddress;
+#ifdef _MSC_VER
+#pragma pack (pop)
+#endif
 
-    DWORD High_BaseAddress2;
-    DWORD Reserved;
+//! Setup a descriptor in the Global Descriptor Table
+extern void gdt_set_descriptor(uint32_t i, uint64_t base, uint64_t limit, uint8_t access, uint8_t grand);
 
-}GDT_ENTRY16;
-
-
-//104Byte
-typedef struct _Struct_TSS_Segment
-{
-    DWORD Reserved;     //4Byte
-    QWORD RSP[3];       //8 * 3 = 24Byte
-    QWORD Reserved2;    //8Byte
-    QWORD IST[7];       //8 * 7 = 56Byte
-    QWORD Reserved3;    //8Byte
-    WORD  Reserved4;    //2Byte
-    WORD  IOMapBaseAddress; //2Byte
-}TSS_SEGMENT;
-
-
-#pragma pack(pop)
-
-
-void InitializeGDT();
-
-void SetGDT_Entry8(GDT_ENTRY8* _entry, DWORD _BaseAddress,
-                     DWORD _Size, BYTE _HighFlags, BYTE _LowFlags, BYTE _Type);
+//! returns descritor
+extern gdt_descriptor* i86_gdt_get_descriptor (int i);
+extern	int GDTInitialize();
+extern	int GDTInitialize2();

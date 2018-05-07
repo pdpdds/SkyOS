@@ -5,6 +5,8 @@
 #include "memory.h"
 #include "Page.h"
 
+extern "C" void ModeSwitchAndJumpKernel64();
+
 _declspec(naked) void multiboot_entry(void)
 {
 	__asm {
@@ -44,14 +46,13 @@ bool DetectionCPUID();
 bool IsLongModeCheckPossible();
 bool IsLongModePossible();
 uint32_t FindKernel64Entry(const char* filename, char* buffer);
-void EnterKernel64_2(void* entry, multiboot_info* info);
-void EnterKernel64_3(void* entry, multiboot_info* info);
+void EnterKernel64_2(void* entry, multiboot_info* info, Module* module);
+void EnterKernel64_3(void* entry, multiboot_info* info, Module* moudle);
 char* g_szKernelName = "SKYOS64_SYS";
-extern GDTR_STRUCT g_gdtr;
 
 extern "C" void __writecr4(unsigned __int64 Data);
 extern "C"  unsigned long __readcr4(void);
-
+uint32_t kernelEntry;
 void EnterKernel64(void* entry, multiboot_info* info)
 {
 	__asm
@@ -61,7 +62,7 @@ void EnterKernel64(void* entry, multiboot_info* info)
 		mov cr0, eax; Set control register 0 to the A - register.
 
 
-		mov edi, 0x300000; Set the destination index to 0x1000.
+		mov edi, 0x1000; Set the destination index to 0x1000.
 		mov cr3, edi; Set control register 3 to the destination index.
 		xor eax, eax; Nullify the A - register.
 		mov ecx, 4096; Set the C - register to 4096.
@@ -69,20 +70,21 @@ void EnterKernel64(void* entry, multiboot_info* info)
 		mov edi, cr3; Set the destination index to control register 3.
 
 
-		mov[edi], 0x2003; Set the uint32_t at the destination index to 0x2003.
-		add edi, 0x1000; Add 0x1000 to the destination index.
-		mov[edi], 0x3003; Set the uint32_t at the destination index to 0x3003.
-		add edi, 0x1000; Add 0x1000 to the destination index.
-		mov[edi], 0x4003; Set the uint32_t at the destination index to 0x4003.
-		add edi, 0x1000; Add 0x1000 to the destination index.
+		mov [edi], 0x00002003; Set the uint32_t at the destination index to 0x2003.
+		add edi, 0x00001000; Add 0x1000 to the destination index.
+		mov [edi], 0x00003003; Set the uint32_t at the destination index to 0x3003.
+		add edi, 0x00001000; Add 0x1000 to the destination index.
+		mov [edi], 0x00004003; Set the uint32_t at the destination index to 0x4003.
+		add edi, 0x00001000; Add 0x1000 to the destination index.
 
 		mov ebx, 0x00000003; Set the B - register to 0x00000003.
 		mov ecx, 512; Set the C - register to 512.
+
 		SetEntry:
 		mov [edi], ebx; Set the uint32_t at the destination index to the B - register.
 			add ebx, 0x1000; Add 0x1000 to the B - register.
 			add edi, 8; Add eight to the destination index.
-		loop SetEntry; Set the next entry.
+			loop SetEntry; Set the next entry.
 	}
 
 	
@@ -103,7 +105,7 @@ void EnterKernel64(void* entry, multiboot_info* info)
 		wrmsr; Write to the model - specific register.
 	}
 
-	for (;;);
+	
 	__asm
 	{
 		mov eax, cr0; Set the A - register to control register 0.
@@ -111,24 +113,29 @@ void EnterKernel64(void* entry, multiboot_info* info)
 		mov cr0, eax; Set control register 0 to the A - register.
 	}
 	
+	for (;;);
+	//EnterKernel64_3(entry, info);
 
-	EnterKernel64_2(entry, info);
-
-		
-
+	
 }
 
-void EnterKernel64_2(void* entry, multiboot_info* info)
+void Test2()
 {
-	int aa = 0x1F0b40;
+	//SkyConsole::Print("ererewrewre\n");
+	//EnterKernel64_2((void*)kernelEntry, (multiboot_info*)0);
+	for (;;);
+}
+
+void EnterKernel64_2(void* entry, multiboot_info* info, Module* module)
+{
+	
+
 	unsigned long regCR4 = __readcr4();
 	__asm or regCR4, 0x20
 	__writecr4(regCR4);
 	__asm
 	{
-		
-		
-		mov eax, 0x160000
+		mov eax, 0x60000
 		mov cr3, eax
 
 		; IA_EFER 레지스터의 LME 비트를 활성화
@@ -137,31 +144,48 @@ void EnterKernel64_2(void* entry, multiboot_info* info)
 		or eax, 0x0100
 		wrmsr
 
-		
-		
 		; Write Table
 		mov eax, cr0
 		or eax, 0xE0000000
 		xor eax, 0x60000000
 		; NW(29) = 0, CD(30) = 0, PG(31) = 1
-
-		
 		mov cr0, eax
-
+	}
 	
-		/*
+	GDTInitialize();
+
+
+	int skyos64 = 0x00180000;
+	char* aaa = (char*)skyos64;
+
+	for (int i = 0; i < (int)module->ModuleEnd - (int)module->ModuleStart; i++)
+	{
+		if (aaa[i] == 'm')
+			if (aaa[i + 1] == 'a')
+				if (aaa[i + 2] == 'r')
+				{
+					SkyConsole::Print("detected\n");
+					break;
+				}
+	}
+
+	ModeSwitchAndJumpKernel64();
+
+	__asm
+	{	
+		
+		\
 		; IA - 32e 세그먼트 설렉트 후 2MB 영역으로 점프
-		jmp cs:aa
+		call entry
 
 		; Not Entry
-		jmp $*/
+		jmp $
 	
 	}
 }
 
-void EnterKernel64_3(void* entry, multiboot_info* info)
+void EnterKernel64_3(void* entry, multiboot_info* info, Module* module)
 {
-	int aa = 0x1F0b40;
 	SkyConsole::Print("sdffsd");
 	__asm
 	{
@@ -169,16 +193,13 @@ void EnterKernel64_3(void* entry, multiboot_info* info)
 		mov	ebp, esp; Set up the stack so the variables passed from the C code can be read
 
 		mov	esi, [ebp + 8]; This is the kernel entry point
-		mov eax, aa
-		mov [k_ptr], eax
+		mov [k_ptr], esi
 	
-		lgdt[g_gdtr]; Load GDT
-
 		mov	ax, 0x10; Reload data segment selectors
 		mov	ss, ax
 		mov	ds, ax
 		mov	es, ax
-	//	hlt
+		hlt
 	
 		jmp	cs : jmp_k; Reload code selector by jumping to 64 - bit code
 		jmp_k :
@@ -198,9 +219,13 @@ void EnterKernel64_3(void* entry, multiboot_info* info)
 
 void kmain(unsigned long magic, unsigned long addr)
 {
+	GDTInitialize2();
 	SkyConsole::Initialize();
 	
 	SkyConsole::Print("32Bit Kernel Entered..\n");
+
+	__asm cli
+	
 
 	if (DetectionCPUID() == true)
 	{
@@ -214,8 +239,8 @@ void kmain(unsigned long magic, unsigned long addr)
 			{
 				SkyConsole::Print("Long Mode Possible..\n");
 
-				InitializeGDT();
-				InitializePageTable();
+				
+				
 
 
 				const multiboot_info_t* mb_info = (multiboot_info_t*)addr;            /* Make pointer to multiboot_info_t struct */
@@ -241,16 +266,39 @@ void kmain(unsigned long magic, unsigned long addr)
 							SkyConsole::Print("Start : %x, End : %x\n", module->ModuleStart, module->ModuleEnd);
 
 							SkyConsole::Print("Calcalate 64 Entry Point\n", module_string);
-							uint32_t kernelEntry = FindKernel64Entry(module_string, (char*)module->ModuleStart);
+							kernelEntry = FindKernel64Entry(module_string, (char*)module->ModuleStart);
 
 							if (kernelEntry != 0)
 							{
 								SkyConsole::Print("SkyOS64 Entry Point 0x%x\n", kernelEntry);
-								int skyos64 = 0x001F0000;
-								memcpy((void*)skyos64, (void*)module->ModuleStart, (int)module->ModuleEnd - (int)module->ModuleStart);
+								SkyConsole::Print("Module Size %x\n", (int)module->ModuleEnd - (int)module->ModuleStart);
 
-								EnterKernel64_2((void*)kernelEntry, (multiboot_info*)addr);
-								EnterKernel64_3((void*)kernelEntry, (multiboot_info*)addr);
+								
+								int skyos64 = 0x00180000;
+								memcpy((void*)skyos64, (void*)module->ModuleStart, (int)module->ModuleEnd - (int)module->ModuleStart);
+								char* aaa = (char*)skyos64;
+
+								for (int i = 0; i < (int)module->ModuleEnd - (int)module->ModuleStart; i++)
+								{
+									if(aaa[i] == 'm')
+										if (aaa[i+1] == 'a')
+											if (aaa[i + 2] == 'r')
+											{
+												SkyConsole::Print("detected\n");
+												break;
+											}
+								}
+								
+								InitializePageTable();
+								//memcpy((void*)0x00185638, "m", 1);
+								
+								//void*)kernelEntry, (multiboot_info*)addr
+								//ModeSwitchAndJumpKernel64(kernelEntry);
+								
+								//GDTInitialize2();
+								//__asm jmp cs : Test2;
+								EnterKernel64_2((void*)kernelEntry,nullptr, module);
+								
 							}
 
 							//kentry = load_elf_module(module->mod_start, module->mod_end);
@@ -265,8 +313,6 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	for (;;);
 }
-
-
 
 
 bool DetectionCPUID()
@@ -321,7 +367,7 @@ bool IsLongModeCheckPossible()
 		NoLongMode:
 	}
 
-	return true;
+	return result;
 }
 
 bool IsLongModePossible()
@@ -337,7 +383,7 @@ bool IsLongModePossible()
 		NoLongMode:
 	}
 
-	return true;
+	return result;
 }
 
 uint32_t FindKernel64Entry(const char* szFileName, char* buf)

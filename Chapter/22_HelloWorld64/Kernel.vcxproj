@@ -26,6 +26,13 @@
     <ClInclude Include="ProcessUtil.h" />
     <ClInclude Include="SkyConsole.h" />
   </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="modeswitch.asm">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nasmw -f win32 modeswitch.asm</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">modeswitch.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}</ProjectGuid>
     <RootNamespace>Kernel</RootNamespace>
@@ -98,7 +105,7 @@
 /ALIGN:1024
  /SUBSYSTEM:CONSOLE
 /NODEFAULTLIB:LIBC %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>CommonLib.lib</AdditionalDependencies>
+      <AdditionalDependencies>CommonLib.lib;</AdditionalDependencies>
       <OutputFile>$(OutDir)kernel.sys</OutputFile>
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
@@ -121,10 +128,24 @@
       <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
       <LinkTimeCodeGeneration>
       </LinkTimeCodeGeneration>
+      <AddModuleNamesToAssembly>
+      </AddModuleNamesToAssembly>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+      <AssemblyLinkResource>
+      </AssemblyLinkResource>
     </Link>
     <PostBuildEvent>
       <Command />
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Inputs>
+      </Inputs>
+    </CustomBuildStep>
+    <CustomBuild>
+      <Outputs>
+      </Outputs>
+    </CustomBuild>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

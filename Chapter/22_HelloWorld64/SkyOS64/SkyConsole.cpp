@@ -155,6 +155,7 @@ namespace SkyConsole
 		va_list		args;
 		va_start(args, str);
 		size_t i;
+
 		for (i = 0; i < strlen(str); i++) {
 
 			switch (str[i]) {

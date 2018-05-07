@@ -5,4 +5,5 @@
 #include "sprintf.h"
 #include "SkyConsole.h"
 
-void kmain64(unsigned long, unsigned long);
+//extern "C" void kmain64(unsigned long, unsigned long);
+extern "C" void kmain64();

@@ -19,9 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cstd.cpp" />
     <ClCompile Include="ctype.cpp" />
-    <ClCompile Include="ffmt.c" />
+    <ClCompile Include="ffmt.cpp" />
+    <ClCompile Include="GDT.cpp" />
     <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="memory.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
     <ClCompile Include="sprintf.cpp" />
     <ClCompile Include="stdio.cpp" />
@@ -30,11 +33,20 @@
   <ItemGroup>
     <ClInclude Include="ctype.h" />
     <ClInclude Include="ffmt.h" />
+    <ClInclude Include="GDT.h" />
     <ClInclude Include="kmain.h" />
+    <ClInclude Include="memory.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="sprintf.h" />
     <ClInclude Include="stdio.h" />
     <ClInclude Include="string.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="entry64.asm">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nasmw -f win64 entry64.asm </Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">entry64.obj</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}</ProjectGuid>
@@ -92,7 +104,7 @@
     <ExtensionsToDeleteOnClean>*.exp *.obj%3b*.ilk%3b*.tlb%3b*.tli%3b*.tlh%3b*.tmp%3b*.rsp%3b*.pgc%3b*.pgd%3b$(TargetPath)</ExtensionsToDeleteOnClean>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
-    <TargetName>kernel</TargetName>
+    <TargetName>SkyOS64</TargetName>
     <TargetExt>.sys</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -179,8 +191,7 @@
       <AssemblerOutput>
       </AssemblerOutput>
       <WarningLevel>Level4</WarningLevel>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CallingConvention>Cdecl</CallingConvention>
       <DisableSpecificWarnings>4457;4189;4100;4702;4102;4244</DisableSpecificWarnings>
       <FunctionLevelLinking>false</FunctionLevelLinking>
@@ -199,24 +210,26 @@
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>../Debug/kernel.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Console</SubSystem>
       <Driver>NotSet</Driver>
-      <OptimizeReferences>false</OptimizeReferences>
-      <EnableCOMDATFolding>false</EnableCOMDATFolding>
-      <FunctionOrder>@order.txt</FunctionOrder>
-      <EntryPointSymbol>kmain64</EntryPointSymbol>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FunctionOrder>
+      </FunctionOrder>
+      <EntryPointSymbol>main64</EntryPointSymbol>
       <NoEntryPoint>false</NoEntryPoint>
-      <BaseAddress>0x001F0000</BaseAddress>
+      <BaseAddress>0x00180000</BaseAddress>
       <FixedBaseAddress>
       </FixedBaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <GenerateDebugInformation>No</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <FullProgramDatabaseFile>
       </FullProgramDatabaseFile>
       <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
       <LinkTimeCodeGeneration>
       </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
       <Command>

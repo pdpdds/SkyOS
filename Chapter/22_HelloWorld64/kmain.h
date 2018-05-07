@@ -7,3 +7,4 @@
 #include "SkyConsole.h"
 
 void kmain(unsigned long, unsigned long);
+//extern "C" void ModeSwitchAndJumpKernel64(int kernelEntry);

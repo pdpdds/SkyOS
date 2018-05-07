@@ -1,44 +1,124 @@
-#include "GDT.h"
+#include "gdt.h"
+#include "string.h"
+#include "memory.h"
+#include "windef.h"
+#include "defines.h"
 
-/*
-    GDTЛ≥─ TSSК╔╪ Л╢┬Й╦╟М≥■ М∙╘К▀┬К▀╓.
-    32К╧└М┼╦ Л╫■К⌠°Л≈░Л└° Л┌╛Л ╘М√┬К█≤ GDTЛ²≤ CЛ√╦Л√╢ К╡└Л═└Л²╢К²╪ЙЁ═ Л┐²Й╟│М∙╢К▐└ К╛╢Й╢─.
-    0x142000 К┼■ 1MBЛ≤│Л≈╜Л≈░Л└° М▌≤Л²╢Л╖─ Л·░Кё▄Й╣╛Л║╟ 264KBК╔╪ К█■М∙° Л°└Л╧≤
-    
-    0x142000 |GDTR |
-    0x142010 | GDT |
-             |     |
-    0x142038 | TSS |
-             |     |
-    0x1420A0 | IDTR|
-    0x1420B0 | IDT |
-             |     |
-    Й╟│ К■■Л┼╓М│╛К╕╫М└╟ КЁ└ Л°└Л╧≤.
-    Й╣╛Л╡╢Л═│Л²╦Й╠╢ 
-    https://devsdk.github.io/development/2017/07/10/ReadyInterrupt.html
+#ifdef _MSC_VER
+#pragma pack (push, 1)
+#endif
 
-*/
+//! processor gdtr register points to base of gdt. This helps
+//! us set up the pointer
+struct gdtr {
 
-GDTR_STRUCT g_gdtr;
+	//! size of gdt
+	uint16_t		m_limit;
 
-void InitializeGDT()
-{
-    GDTR* _gdtr = (GDTR*)&g_gdtr;
-    GDT_ENTRY8* _gdt_entry      = (GDT_ENTRY8*)&g_gdtr._gdt[0];
-    _gdtr->Size         = GDT_TABLE_SIZE - 1;
-    _gdtr->BaseAddress  = (QWORD)_gdt_entry;
+	//! base address of gdt
+	uint32_t		m_base;
+};
 
-    SetGDT_Entry8((&_gdt_entry[0]), 0, 0, 0, 0, 0);
-    SetGDT_Entry8((&_gdt_entry[1]),0,0xFFFFF, GDT_ENTRY_HIGH_CODE, GDT_ENTRY_LOW_KERNEL_CODE, GDT_TYPE_CODE);
-    SetGDT_Entry8((&_gdt_entry[2]),0,0xFFFFF, GDT_ENTRY_HIGH_DATA, GDT_ENTRY_LOW_KERNEL_DATA, GDT_TYPE_DATA);  
+#ifdef _MSC_VER
+#pragma pack (pop, 1)
+#endif
+
+//! global descriptor table is an array of descriptors
+static struct gdt_descriptor	_gdt [MAX_DESCRIPTORS];
+
+//! gdtr data
+static struct gdtr				_gdtr;
+
+
+//! install gdtr
+static void InstallGDT () {
+#ifdef _MSC_VER
+	_asm lgdt [_gdtr]
+#endif
 }
-void SetGDT_Entry8(GDT_ENTRY8* _entry, DWORD _BaseAddress,
-                     DWORD _Size, BYTE _HighFlags, BYTE _LowFlags, BYTE _Type)
+
+//! Setup a descriptor in the Global Descriptor Table
+void gdt_set_descriptor(uint32_t i, uint64_t base, uint64_t limit, uint8_t access, uint8_t grand)
 {
-    _entry->Low_Size            =   _Size & 0xFFFF;
-    _entry->Low_BaseAddress     = _BaseAddress & 0xFFFF;
-    _entry->Low_BaseAddress1    = ( _BaseAddress >> 16 ) & 0xFF;
-    _entry->Low_Flags           = _LowFlags | _Type;
-    _entry->High_FlagsAndSize   = ((_Size>>16) & 0x0F) | _HighFlags;
-    _entry->High_BaseAddress    = (_BaseAddress>>24) & 0xFF;
+	if (i > MAX_DESCRIPTORS)
+		return;
+
+	//! null out the descriptor
+	memset ((void*)&_gdt[i], 0, sizeof (gdt_descriptor));
+
+	//! set limit and base addresses
+	_gdt[i].baseLo	= uint16_t(base & 0xffff);
+	_gdt[i].baseMid	= uint8_t((base >> 16) & 0xff);
+	_gdt[i].baseHi	= uint8_t((base >> 24) & 0xff);
+	_gdt[i].limit	= uint16_t(limit & 0xffff);
+
+	//! set flags and grandularity bytes
+	_gdt[i].flags = access;
+	_gdt[i].grand = uint8_t((limit >> 16) & 0x0f);
+	_gdt[i].grand |= grand & 0xf0;
+}
+
+
+//! returns descriptor in gdt
+gdt_descriptor* i86_gdt_get_descriptor (int i) {
+
+	if (i > MAX_DESCRIPTORS)
+		return 0;
+
+	return &_gdt[i];
+}
+
+//GDT цй╠Бх╜ ╧в GDTR ╥╧аЖ╫╨ем©║ GDT ╥н╣Е
+int GDTInitialize()
+{
+	//GDTR ╥╧аЖ╫╨ем©║ ╥н╣Е╣и _gdtr ╠╦а╤ц╪юг ╟╙ цй╠Бх╜
+	//_gdtr ╠╦а╤ц╪юг аж╪р╢б фДюлб║ юЭ╢э╟Хюл╦Г ╫га╕ ╧╟╦╝аж╪р©║ гь╢Г ╨╞╪Ж╟║ гр╢Г╣г╬Н юж╢ы.
+	//╣П╫╨е╘╦Ёемюг ╪Ж╦╕ Ё╙е╦Ё╩╢б MAX_DESCRIPTORSюг ╟╙ю╨ 5юл╢ы.
+	//NULL ╣П╫╨е╘╦Ёем, д©Ён дз╣Е ╣П╫╨е╘╦Ёем, д©Ён ╣╔юлем ╣П╫╨е╘╦Ёем, ю╞юЗ дз╣Е ╣П╫╨е╘╦Ёем
+	//ю╞юЗ ╣╔юлем ╣П╫╨е╘╦Ёем юл╥╦╟т ця 5╟Ёюл╢ы.
+	//╣П╫╨е╘╦Ёем╢Г 6╧ыюлф╝юл╧г╥н GDTюг е╘╠Б╢б 30╧ыюлф╝╢ы.
+	_gdtr.m_limit = (sizeof(struct gdt_descriptor) * MAX_DESCRIPTORS) - 1;
+	_gdtr.m_base = (uint32_t)&_gdt[0];
+
+	//NULL ╣П╫╨е╘╦Ёемюг ╪Ёа╓
+	gdt_set_descriptor(0, 0, 0, 0, 0);
+
+	//ю╞юЗ╦П╣Е ╣П╫╨е╘╦Ёемюг ╪Ёа╓
+	gdt_set_descriptor(1, 0, 0xffffffff,
+		0x9A, 0XCF);
+
+	//ю╞юЗ╦П╣Е ╣╔юлем ╣П╫╨е╘╦Ёемюг ╪Ёа╓
+	gdt_set_descriptor(2, 0, 0xffffffff, 0x92, 0xCF);
+
+
+
+	//GDTR ╥╧аЖ╫╨ем©║ GDT ╥н╣Е
+	InstallGDT();
+
+	return 0;
+}
+
+int GDTInitialize2()
+{
+	//GDTR ╥╧аЖ╫╨ем©║ ╥н╣Е╣и _gdtr ╠╦а╤ц╪юг ╟╙ цй╠Бх╜
+	//_gdtr ╠╦а╤ц╪юг аж╪р╢б фДюлб║ юЭ╢э╟Хюл╦Г ╫га╕ ╧╟╦╝аж╪р©║ гь╢Г ╨╞╪Ж╟║ гр╢Г╣г╬Н юж╢ы.
+	//╣П╫╨е╘╦Ёемюг ╪Ж╦╕ Ё╙е╦Ё╩╢б MAX_DESCRIPTORSюг ╟╙ю╨ 5юл╢ы.
+	//NULL ╣П╫╨е╘╦Ёем, д©Ён дз╣Е ╣П╫╨е╘╦Ёем, д©Ён ╣╔юлем ╣П╫╨е╘╦Ёем, ю╞юЗ дз╣Е ╣П╫╨е╘╦Ёем
+	//ю╞юЗ ╣╔юлем ╣П╫╨е╘╦Ёем юл╥╦╟т ця 5╟Ёюл╢ы.
+	//╣П╫╨е╘╦Ёем╢Г 6╧ыюлф╝юл╧г╥н GDTюг е╘╠Б╢б 30╧ыюлф╝╢ы.
+	_gdtr.m_limit = (sizeof(struct gdt_descriptor) * MAX_DESCRIPTORS) - 1;
+	_gdtr.m_base = (uint32_t)&_gdt[0];
+
+	//NULL ╣П╫╨е╘╦Ёемюг ╪Ёа╓
+	gdt_set_descriptor(0, 0, 0, 0, 0);
+
+	gdt_set_descriptor(1, 0, 0xffffffff,
+		0x9A, 0xAF);
+	
+	gdt_set_descriptor(2, 0, 0xffffffff,
+		0x92, 0xAF);
+
+	InstallGDT();
+
+	return 0;
 }

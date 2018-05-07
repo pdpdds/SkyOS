@@ -35,7 +35,7 @@ bool ValidatePEImage(void* image)
             make sure to move these into kernel land
     */
 	
-	SkyConsole::Print("0x%x\n", ntHeaders->OptionalHeader.ImageBase);
+	//SkyConsole::Print("0x%x\n", ntHeaders->OptionalHeader.ImageBase);
 	//로드되는 프로세스의 베이스 주소는 0x00400000다. 
 	//비쥬얼 스튜디오에서 속성=> 링커 => 고급의 기준주소 항목에서 확인 가능하다
     //if ( (ntHeaders->OptionalHeader.ImageBase < 0x200000) || (ntHeaders->OptionalHeader.ImageBase > 0x80000000))

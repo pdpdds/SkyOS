@@ -16,4 +16,7 @@
     <ClInclude Include="ProcessUtil.h" />
     <ClInclude Include="Page.h" />
   </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="modeswitch.asm" />
+  </ItemGroup>
 </Project>
