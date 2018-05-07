@@ -1,5 +1,0 @@
-﻿  kmain.cpp
-d:\dev\skyos\skyos.git\trunk\chapter\22_helloworld64\skyos64\kmain.h(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'stdint.h': No such file or directory
-  SkyConsole.cpp
-d:\dev\skyos\skyos.git\trunk\chapter\22_helloworld64\skyos64\SkyConsole.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'windef.h': No such file or directory
-  코드를 생성하고 있습니다...
