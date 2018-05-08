@@ -4,8 +4,13 @@
 #include "PEImage.h"
 #include "memory.h"
 #include "Page.h"
+#include "GDT.h"
+#include "IDT.h"
+#include "PIC.h"
+#include "PIT.h"
 
 extern "C" void ModeSwitchAndJumpKernel64();
+extern "C" void start();
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -53,11 +58,41 @@ char* g_szKernelName = "SKYOS64_SYS";
 extern "C" void __writecr4(unsigned __int64 Data);
 extern "C"  unsigned long __readcr4(void);
 uint32_t kernelEntry;
+VOID HardwareInitialize();
+
+void EnablePaging(bool state)
+{
+#ifdef _MSC_VER
+	_asm
+	{
+		mov	eax, cr0
+		cmp[state], 1
+		je	enable
+		jmp disable
+		enable :
+		or eax, 0x80000000		//set bit 31
+			mov	cr0, eax
+			jmp done
+			disable :
+		and eax, 0x7FFFFFFF		//clear bit 31
+			mov	cr0, eax
+			done :
+	}
+#endif
+}
 
 void kmain(unsigned long magic, unsigned long addr)
 {
-	
 	SkyConsole::Initialize();
+	InitializePageTable();	
+	
+//	SkyConsole::Initialize();
+	//GDTInitialize();
+//	HardwareInitialize();
+//	EnablePaging(false);
+	start();
+	for (;;);
+	/*SkyConsole::Initialize();
 
 	SkyConsole::Print("32Bit Kernel Entered..\n");
 
@@ -75,7 +110,7 @@ void kmain(unsigned long magic, unsigned long addr)
 		return;
 
 	SkyConsole::Print("Long Mode Possible..\n");
-
+	*/
 	const multiboot_info_t* mb_info = (multiboot_info_t*)addr;            /* Make pointer to multiboot_info_t struct */
 	uint32_t mb_flags = mb_info->flags;                  /* Get flags from mb_info */
 
@@ -125,8 +160,11 @@ void kmain(unsigned long magic, unsigned long addr)
 								}
 					}
 					
-					GDTInitialize();
-					InitializePageTable();
+					//GDTInitialize();
+					//InitializePageTable();
+
+					//PAGE64();
+					for (;;);
 					
 					EnterKernel64((void*)kernelEntry, nullptr, module);
 
@@ -323,3 +361,10 @@ void EnterKernel64_3(void* entry, multiboot_info* info, Module* module)
 
 
 
+void HardwareInitialize()
+{
+	GDTInitialize();
+	IDTInitialize(0x8);
+	PICInitialize(0x20, 0x28);
+	InitializePIT();
+}

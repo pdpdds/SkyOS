@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 //! maximum amount of descriptors allowed
-#define MAX_DESCRIPTORS					10
+#define MAX_DESCRIPTORS					3
 
 /***	 gdt descriptor access bit flags.	***/
 
@@ -83,3 +83,4 @@ extern void gdt_set_descriptor(uint32_t i, uint64_t base, uint64_t limit, uint8_
 //! returns descritor
 extern gdt_descriptor* i86_gdt_get_descriptor (int i);
 extern	int GDTInitialize();
+extern	int GDTInitialize2();

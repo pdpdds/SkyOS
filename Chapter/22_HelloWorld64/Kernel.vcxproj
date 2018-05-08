@@ -12,17 +12,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GDT.cpp" />
+    <ClCompile Include="Hal.cpp" />
+    <ClCompile Include="IDT.cpp" />
     <ClCompile Include="kmain.cpp" />
     <ClCompile Include="Page.cpp" />
+    <ClCompile Include="Pic.cpp" />
+    <ClCompile Include="PIT.cpp" />
     <ClCompile Include="ProcessUtil.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GDT.h" />
+    <ClInclude Include="Hal.h" />
+    <ClInclude Include="IDT.h" />
     <ClInclude Include="kmain.h" />
     <ClInclude Include="MultiBoot.h" />
     <ClInclude Include="Page.h" />
     <ClInclude Include="PEImage.h" />
+    <ClInclude Include="Pic.h" />
+    <ClInclude Include="PIT.h" />
     <ClInclude Include="ProcessUtil.h" />
     <ClInclude Include="SkyConsole.h" />
   </ItemGroup>
