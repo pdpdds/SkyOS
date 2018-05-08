@@ -395,7 +395,8 @@ void TestHardDisk()
 void TestLua()
 {
 	lua_open();
-	lua_pushstring("> "); lua_setglobal("_PROMPT");
+	lua_pushstring("> "); 
+	lua_setglobal("_PROMPT");
 	lua_userinit();
 
 	int result = lua_dofile("1.LUA");

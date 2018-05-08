@@ -16,6 +16,7 @@
 #include "ConsoleIOListener.h"
 #include "Process.h"
 #include "Thread.h"
+#include "SkyConsoleTask.h"
 
 #define DMA_PICU1       0x0020
 #define DMA_PICU2       0x00A0
@@ -709,8 +710,6 @@ DWORD WINAPI ConsoleDebugGUIProc(LPVOID parameter)
 	SkyRenderer* pRenderer = pGUI->GetRenderer();
 
 	SkySheet *sheet = pGUI->FindSheetByID(pProcess->GetProcessId());
-
-	char s[30], cmdline[30];
 	int  cursor_x = 16, cursor_y = 28, cursor_c = -1;
 
 	kLeaveCriticalSection();
@@ -763,139 +762,14 @@ DWORD WINAPI ConsoleGUIProc(LPVOID parameter)
 {
 	kEnterCriticalSection();
 	Thread* pThread = ProcessManager::GetInstance()->GetCurrentTask();
-	Process* pProcess = pThread->m_pParent;
-
 	SkyGUI* pGUI = (SkyGUI*)parameter;
-	SkyRenderer* pRenderer = pGUI->GetRenderer();
-	ConsoleIOListener* listener = new ConsoleIOListener();
 
-	SkySheet *sheet = pGUI->FindSheetByID(pProcess->GetProcessId());
-
-	pGUI->RegisterIOListener(pProcess->GetProcessId(), listener);
-
-	char s[30], cmdline[30];
-	int  cursor_x = 16, cursor_y = 28, cursor_c = -1;
-
-	cursor_c = COL8_FFFFFF;
-
-	/* prompt 표시 */
-	pRenderer->PutFontAscToSheet(sheet, 8, 28, COL8_FFFFFF, COL8_000000, ">", 1);
+	SkyConsoleTask* pTask = new SkyConsoleTask();
+	pTask->Init(pGUI, pThread);
 
 	kLeaveCriticalSection();
 
-	for (;;)
-	{
-
-		kEnterCriticalSection();
-		if (listener->ReadyStatus() == false)
-		{
-			Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
-			kLeaveCriticalSection();
-			continue;
-		}
-		else
-		{
-			int i = listener->GetStatus();
-			if (i <= 1) { /* 커서용 타이머 */
-				if (i != 0) {
-					//timer_init(timer, &task->fifo, 0); /* 다음은 0을 */
-					if (cursor_c >= 0) {
-						cursor_c = COL8_FFFFFF;
-					}
-				}
-				else {
-					//timer_init(timer, &task->fifo, 1); /* 다음은 1을 */
-					if (cursor_c >= 0) {
-						cursor_c = COL8_000000;
-					}
-				}
-				//timer_settime(timer, 50);
-			}
-			if (i == 2) {	/* 커서 ON */
-				cursor_c = COL8_FFFFFF;
-			}
-			if (i == 3) {	/* 커서 OFF */
-				pRenderer->BoxFill(sheet->GetBuf(), sheet->GetXSize(), COL8_000000, cursor_x, cursor_y, cursor_x + 7, cursor_y + 15);
-				cursor_c = -1;
-			}
-			if (256 <= i && i <= 511) { /* 키보드 데이터(태스크 A경유) */
-				if (i == 8 + 256) {
-					/* 백 스페이스 */
-					if (cursor_x > 16) {
-						/* 스페이스로 지우고 나서, 커서를 1개 back */
-						pRenderer->PutFontAscToSheet(sheet, cursor_x, cursor_y, COL8_FFFFFF, COL8_000000, " ", 1);
-						cursor_x -= 8;
-					}
-				}
-				else if (i == 10 + 256) {
-
-					/* Enter */
-					/* 커서를 스페이스에서 지우고 나서 개행한다 */
-					pRenderer->PutFontAscToSheet(sheet, cursor_x, cursor_y, COL8_FFFFFF, COL8_000000, " ", 1);
-					cmdline[cursor_x / 8 - 2] = 0;
-					cursor_y = cons_newline(cursor_y, sheet);
-
-					if (strcmp(cmdline, "mem") == 0)
-					{
-						size_t totalMemory = PhysicalMemoryManager::GetMemorySize();
-						sprintf(s, "total   %dMB", totalMemory / (1024 * 1024));
-						pRenderer->PutFontAscToSheet(sheet, 8, cursor_y, COL8_FFFFFF, COL8_000000, s, 30);
-						cursor_y = cons_newline(cursor_y, sheet);
-						sprintf(s, "free %dKB", PhysicalMemoryManager::GetFreeMemory() / 1024);
-						pRenderer->PutFontAscToSheet(sheet, 8, cursor_y, COL8_FFFFFF, COL8_000000, s, 30);
-						cursor_y = cons_newline(cursor_y, sheet);
-						cursor_y = cons_newline(cursor_y, sheet);
-					}
-					else if (strcmp(cmdline, "cls") == 0) /* cls 커맨드 */
-					{
-
-						unsigned char* buf = sheet->GetBuf();
-						int bxsize = sheet->GetXSize();
-						for (int y = 28; y < 28 + 128; y++) {
-							for (int x = 8; x < 8 + 240; x++) {
-								buf[x + y * bxsize] = COL8_000000;
-							}
-						}
-						sheet->Refresh(8, 28, 8 + 240, 28 + 128);
-						cursor_y = 28;
-					}
-
-					else if (cmdline[0] != 0) {
-						/* 커멘드도 아니고 빈 행도 아니다 */
-						pRenderer->PutFontAscToSheet(sheet, 8, cursor_y, COL8_FFFFFF, COL8_000000, "Bad command.", 12);
-						cursor_y = cons_newline(cursor_y, sheet);
-					}
-					/* prompt 표시 */
-					pRenderer->PutFontAscToSheet(sheet, 8, cursor_y, COL8_FFFFFF, COL8_000000, ">", 1);
-					cursor_x = 16;
-				}
-				else {
-
-					/* 일반 문자 */
-					if (cursor_x < 240) {
-						/* 한 글자 표시하고 나서 커서를 1개 진행한다 */
-						s[0] = i - 256;
-						s[1] = 0;
-						cmdline[cursor_x / 8 - 2] = i - 256;
-						pRenderer->PutFontAscToSheet(sheet, cursor_x, cursor_y, COL8_FFFFFF, COL8_000000, s, 1);
-						cursor_x += 8;
-					}
-
-				}
-			}
-			/* 커서재표시 */
-			if (cursor_c >= 0) {
-				pRenderer->BoxFill(sheet->GetBuf(), sheet->GetXSize(), cursor_c, cursor_x, cursor_y, cursor_x + 7, cursor_y + 15);
-			}
-			sheet->Refresh(cursor_x, cursor_y, cursor_x + 8, cursor_y + 16);
-		}
-
-		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
-
-		kLeaveCriticalSection();
-
-		
-	}
+	pTask->Run();
 
 	return 0;
 }

@@ -310,6 +310,7 @@
     <ClCompile Include="nic.cpp" />
     <ClCompile Include="bepci.cpp" />
     <ClCompile Include="SkySVGA.cpp" />
+    <ClCompile Include="SkyConsoleTask.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -520,6 +521,7 @@
     <ClInclude Include="SkyOS.h" />
     <ClInclude Include="SkySVGA.h" />
     <ClInclude Include="SkyStartOption.h" />
+    <ClInclude Include="SkyConsoleTask.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

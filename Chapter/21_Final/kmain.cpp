@@ -151,7 +151,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	
 	scan_pci_devices();
 	//init_nic();	
-
+	TestLua();
+	for (;;);
 	ProcessManager::GetInstance();
 	Scheduler::GetInstance();
 	
@@ -245,7 +246,7 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 void ConstructFileSystem(multiboot_info* info)
 {	
 //IDE 하드 디스크
-	/*FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
+	FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
 	
 	pHDDAdaptor->Initialize();
 
@@ -260,7 +261,7 @@ void ConstructFileSystem(multiboot_info* info)
 	else
 	{
 		delete pHDDAdaptor;		
-	}*/
+	}
 			
 //램 디스크
 	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');
@@ -289,7 +290,7 @@ void ConstructFileSystem(multiboot_info* info)
 		delete pFloppyDiskAdaptor;
 	}*/	
 
-	StorageManager::GetInstance()->SetCurrentFileSystemByID('K');
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
 	SkyConsole::Print("K drive Selected\n");
 
 	drive_info* driveInfo = info->drives_addr;

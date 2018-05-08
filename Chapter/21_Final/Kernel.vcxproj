@@ -122,6 +122,7 @@
     <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="SkyAPI.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
+    <ClCompile Include="SkyConsoleTask.cpp" />
     <ClCompile Include="SkyRenderer32.cpp" />
     <ClCompile Include="SkyRenderer8.cpp" />
     <ClCompile Include="SkySheetController32.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Scheduler.h" />
     <ClInclude Include="SkyAPI.h" />
     <ClInclude Include="SkyConsole.h" />
+    <ClInclude Include="SkyConsoleTask.h" />
     <ClInclude Include="SkyOS.h" />
     <ClInclude Include="SkyRenderer32.h" />
     <ClInclude Include="SkyRenderer8.h" />
@@ -253,7 +255,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}</ProjectGuid>
     <RootNamespace>Kernel</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
