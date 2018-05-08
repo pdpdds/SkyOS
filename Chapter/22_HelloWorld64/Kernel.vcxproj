@@ -11,6 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="elf.cpp" />
+    <ClCompile Include="elf32.cpp" />
+    <ClCompile Include="elf64.cpp" />
     <ClCompile Include="GDT.cpp" />
     <ClCompile Include="Hal.cpp" />
     <ClCompile Include="IDT.cpp" />
@@ -22,6 +25,9 @@
     <ClCompile Include="SkyConsole.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="elf.h" />
+    <ClInclude Include="elf32.h" />
+    <ClInclude Include="elf64.h" />
     <ClInclude Include="GDT.h" />
     <ClInclude Include="Hal.h" />
     <ClInclude Include="IDT.h" />

@@ -10,6 +10,9 @@
     <ClCompile Include="IDT.cpp" />
     <ClCompile Include="Pic.cpp" />
     <ClCompile Include="PIT.cpp" />
+    <ClCompile Include="elf64.cpp" />
+    <ClCompile Include="elf32.cpp" />
+    <ClCompile Include="elf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -23,6 +26,9 @@
     <ClInclude Include="IDT.h" />
     <ClInclude Include="Pic.h" />
     <ClInclude Include="PIT.h" />
+    <ClInclude Include="elf64.h" />
+    <ClInclude Include="elf.h" />
+    <ClInclude Include="elf32.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="modeswitch.asm" />
