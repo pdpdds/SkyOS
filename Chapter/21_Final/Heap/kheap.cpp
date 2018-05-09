@@ -79,6 +79,11 @@ u32int malloc(u32int sz)
 	return kmalloc(sz);
 }
 
+u32int calloc(u32int count, u32int size)
+{
+	return count * size;
+}
+
 u32int kmalloc(u32int sz)
 {
 	kEnterCriticalSection();

@@ -5,6 +5,7 @@
 #include "limits.h"
 #include "sprintf.h"
 #include "ffmt.h"
+#include "memory.h"
 
 /*int vsprintf(char *buffer, char *format, va_list argptr)
 {
@@ -262,9 +263,10 @@ int atoi ( const char * str ) {
 
 double atof(char *p)
 {
-	double          d, t;
-	int             len, val, sz, div, isneg;
+	double          d = 0, t = 0;
+	int             len = 0, val = 0, sz = 0, div = 0, isneg = 0;
 	char            tmp[18];
+	memset(tmp, 0, 18);
 
 	if (*p == '-') {
 		isneg = 1;

@@ -152,7 +152,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	scan_pci_devices();
 	//init_nic();	
 	TestLua();
-	for (;;);
+	
 	ProcessManager::GetInstance();
 	Scheduler::GetInstance();
 	

@@ -27,21 +27,18 @@ typedef struct PCICfgTag
 	UCHAR	byIntPin;
 	UCHAR	byMinGnt;
 	UCHAR	byMaxLat;
-};
-typedef struct PCICfgTag PCICfgStt;
+}PCICfgTag, PCICfgStt;
 
 typedef struct PCIDeviceTag
 {
 	PCICfgStt	cfg;
-};
-typedef struct PCIDeviceTag PCIDeviceStt;
+}PCIDeviceTag, PCIDeviceStt;
 
 typedef struct PCITag
 {
 	int				nTotal;
 	PCIDeviceStt	ent[MAX_PCI_DEVICE];
-};
-typedef struct PCITag PCIStt;
+}PCITag, PCIStt;
 
 extern int scan_pci_devices();
 extern int find_pci_device( int nIndex, PCIDeviceStt *pPCI, UCHAR *pClass );

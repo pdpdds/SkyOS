@@ -103,8 +103,8 @@ static double zero = 0.0;
 	double x;
 #endif
 {
-	double hfsq,f,c,s,z,R,u;
-	int k,hx,hu,ax;
+	double hfsq = 0,f = 0,c = 0,s = 0,z = 0,R = 0,u = 0;
+	int k = 0,hx = 0,hu = 0,ax = 0;
 
 	hx = __HI(x);		/* high word of x */
 	ax = hx&0x7fffffff;

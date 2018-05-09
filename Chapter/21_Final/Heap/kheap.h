@@ -1,10 +1,4 @@
-// kheap.h -- Interface for kernel heap functions, also provides
-//            a placement malloc() for use before the heap is 
-//            initialised.
-//            Written for JamesM's kernel development tutorials.
-
-#ifndef KHEAP_H
-#define KHEAP_H
+#pragma once
 
 #include "windef.h"
 #include "ordered_array.h"
@@ -96,6 +90,7 @@ u32int kmalloc_ap(u32int sz, u32int *phys);
 **/
 u32int kmalloc(u32int sz);
 u32int malloc(u32int sz);
+u32int calloc(u32int count, u32int size);
 
 /**
    General deallocation function.
@@ -105,4 +100,3 @@ void kfree(void *p);
 }
 #endif
 
-#endif // KHEAP_H

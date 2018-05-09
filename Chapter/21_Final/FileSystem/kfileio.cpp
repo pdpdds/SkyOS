@@ -50,8 +50,8 @@ int fgetc(FILE * stream)
 
 char* fgets(char *dst, int max, FILE *fp)
 {
-	int c;
-	char *p;
+	int c = 0;
+	char *p = nullptr;
 
 	/* get max bytes or upto a newline */
 
@@ -71,26 +71,26 @@ char* fgets(char *dst, int max, FILE *fp)
 #define MAX_FLOAT_SIZE 320
 int vfscanf(FILE* stream, const char* format, va_list args)
 {
-	int suppress;		/* TRUE means scan value but don't actual
+	int suppress = 0;		/* TRUE means scan value but don't actual
 						* modify an element of args. */
-	int storeShort;		/* TRUE means store a short value. */
-	int storeLong;		/* TRUE means store a long value. */
-	int width;			/* Field width. */
-	register char formatChar; 	/* Current character from format string.
+	int storeShort = 0;		/* TRUE means store a short value. */
+	int storeLong = 0;		/* TRUE means store a long value. */
+	int width = 0;			/* Field width. */
+	register char formatChar = 0; 	/* Current character from format string.
 								* Eventually it ends up holding the format
 								* type (e.g. 'd' for decimal). */
-	register int streamChar;	/* Next character from stream. */
-	int assignedFields;		/* Counts number of successfully-assigned
+	register int streamChar = 0;	/* Next character from stream. */
+	int assignedFields = 0;		/* Counts number of successfully-assigned
 							* fields. */
-	int base;			/* Gives base for numbers:  0 means float,
+	int base = 0;			/* Gives base for numbers:  0 means float,
 						* -1 means not a number.
 						*/
-	int sign;			/* TRUE means negative sign. */
+	int sign = 0;			/* TRUE means negative sign. */
 	char buf[MAX_FLOAT_SIZE + 1];
 	/* Place to accumulate floating-point
 	* number for processing. */
 	register char *ptr = (char *)0;
-	char *savedPtr, *end, *firstPtr;
+	char *savedPtr = 0, *end = 0, *firstPtr = 0;
 
 	assignedFields = 0;
 	streamChar = fgetc(stream);

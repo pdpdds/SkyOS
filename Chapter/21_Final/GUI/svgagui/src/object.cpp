@@ -384,10 +384,10 @@ void set_object_image_data(GuiObject * obj, char **data, int x_off, int y_off, i
 	 "darkblue", "blue", "lightblue", "darkyellow", "yellow",
 	 "none", "special"};
 	int color_int[16] =
-	{WHITE, BLACK, DARKGREY, GREY, LIGHTGREY,
-	 DARKGREEN, GREEN, DARKRED, RED,
-	 DARKBLUE, BLUE, LIGHTBLUE, DARKYELLOW, YELLOW,
-	 bg_col, obj->bg_col2};
+	{(int)WHITE, (int)BLACK, (int)DARKGREY, (int)GREY, (int)LIGHTGREY,
+		(int)DARKGREEN, (int)GREEN, (int)DARKRED, (int)RED,
+		(int)DARKBLUE, (int)BLUE, (int)LIGHTBLUE, (int)DARKYELLOW, (int)YELLOW,
+		(int)bg_col, (int)(obj->bg_col2)};
 
 	check_object(obj, "obj", "set_object_image_data");
 
@@ -423,10 +423,10 @@ void set_object_image_data2(GuiObject * obj, char **data, int x_off, int y_off, 
 {
 	int x, y, position, i;
 	int color_int[16] =
-	{WHITE, BLACK, DARKGREY, GREY, LIGHTGREY,
-	 DARKGREEN, GREEN, DARKRED, RED,
-	 DARKBLUE, BLUE, LIGHTBLUE, DARKYELLOW, YELLOW,
-	 bg_col, obj->bg_col2};
+	{ (int)WHITE, (int)BLACK, (int)DARKGREY, (int)GREY, (int)LIGHTGREY,
+		(int)DARKGREEN, (int)GREEN, (int)DARKRED, (int)RED,
+		(int)DARKBLUE, (int)BLUE, (int)LIGHTBLUE, (int)DARKYELLOW, (int)YELLOW,
+		(int)bg_col, (int)(obj->bg_col2)};
 
 	check_object(obj, "obj", "set_object_image_data");
 

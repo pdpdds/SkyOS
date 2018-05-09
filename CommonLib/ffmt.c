@@ -15,7 +15,8 @@ long _ffmt(char *outptr, char *fmt, unsigned long *argptr)
 	unsigned long width, value, i, total;
 
 	total = 0;
-	while(chr = *fmt++) 
+	chr = *fmt++;
+	while(chr != 0)
 	{
 		if(chr == '%') 
 		{					/* format code */
@@ -133,6 +134,8 @@ long _ffmt(char *outptr, char *fmt, unsigned long *argptr)
 			*outptr++ = chr;
 			++total;
 		}
+
+		chr = *fmt++;
 	}
 
 	*outptr = 0;

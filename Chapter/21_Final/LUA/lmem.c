@@ -46,17 +46,17 @@ void *luaM_growaux (void *block, unsigned long nelems, int inc, int size,
 }
 
 
-#ifndef _DEBUG
+//#ifndef _DEBUG
 
 /*
 ** generic allocation routine.
 */
-void *luaM_realloc (void *block, unsigned long size) {
+/*void *luaM_realloc (void *block, unsigned long size) {
   size_t s = (size_t)size;
   if (s != size)
     lua_error("memory allocation error: block too big");
   if (size == 0) {
-    Kfree(block);  /* block may be NULL, that is OK for free */
+    Kfree(block); 
     return NULL;
   }
   block = realloc(block, s);
@@ -67,7 +67,7 @@ void *luaM_realloc (void *block, unsigned long size) {
 
 
 
-#else
+#else*/
 /* DEBUG */
 
 #include <string.h>
@@ -137,4 +137,4 @@ void *luaM_realloc (void *block, unsigned long size) {
 }
 
 
-#endif
+//#endif

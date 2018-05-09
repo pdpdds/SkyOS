@@ -145,7 +145,7 @@ void change_input(GuiObject * input, char ch)
 	hulp[1] = '\0';
 	
 	if (ch != 127 && ch != 8) {	/* backspace or delete */
-		if (strlen(input->label) < input->length - 1)
+		if (strlen(input->label) < (size_t)(input->length - 1))
 		if (string_length(input->label) + string_length(hulp) < input->width - 2) {
 			if (((isdigit(ch) || ch == '-') && input->type == INT_INPUT) ||
 			    ((isdigit(ch) || ch == '.' || ch == ',' || ch == '-' || ch == 'e' || ch == 'E') &&

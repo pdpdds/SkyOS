@@ -5,7 +5,7 @@
 
 extern char closebtn[14][16];
 extern char cursor[16][16];
-extern char hankaku[4096];
+extern char skyFontData[4096];
 
 SkyRenderer8::SkyRenderer8()
 {
@@ -68,7 +68,7 @@ void SkyRenderer8::PutFonts_ASC(char *vram, int xsize, int x, int y, char c, uns
 		if(*s == '\n')
 			continue;
 
-		PutFont(vram, xsize, x, y, c, hankaku + *s * 16);
+		PutFont(vram, xsize, x, y, c, skyFontData + *s * 16);
 		x += 8;
 	}
 	return;

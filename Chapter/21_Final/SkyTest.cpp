@@ -401,7 +401,7 @@ void TestLua()
 
 	int result = lua_dofile("1.LUA");
 
-	SkyConsole::Print("Lua Exec Result : %d", result);	
+	SkyConsole::Print("Lua Exec Result : %d\n", result);	
 }
 
 void TestFPU()

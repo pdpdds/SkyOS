@@ -43,9 +43,8 @@ static int wild_match(const char *string, char *pattern);
 
 static void reread_dir(void)
 {
-	char hulp[256], hulp2[256], abs_path[256];
-	int i;
-
+	char hulp[256], hulp2[256];// , abs_path[256];
+	
 	check_window(filewin, "reread_dir");
 
 	sprintf(hulp, "%s", dir_name->label);
@@ -62,13 +61,13 @@ static void reread_dir(void)
 		return;
 	}
 	/* delete directory objects */
-	for (i = 0; i < dir_list->tot_nr_items; i++)
+	for (int i = 0; i < dir_list->tot_nr_items; i++)
 		delete_object(dir_obj[i]);
 	free(dir_obj);
 	dir_list->tot_nr_items = 0;
 
 	/* delete file objects */
-	for (i = 0; i < file_list->tot_nr_items; i++)
+	for (int i = 0; i < file_list->tot_nr_items; i++)
 		delete_object(file_obj[i]);
 	free(file_obj);
 	file_list->tot_nr_items = 0;
@@ -167,7 +166,7 @@ static int select_dirs(const struct dirent *dp)
 GuiObject **create_directory_list(char *dirname, int files, GuiObject * List)
 {
 	GuiObject **Items;
-	int i, nr = 0, extra = 0;
+	int nr = 0, extra = 0;
 	struct dirent **namelist=NULL;
 
 	if (files)
@@ -282,7 +281,7 @@ int file_dialog(char *directory, char *filename, char *mask)
 {
 	GuiObject *obj = NULL;
 	int ret_value = FALSE;
-	char hulp[256], hulp2[256], abs_path[256], *line1, *line2;
+	char hulp[256], hulp2[256], *line1, *line2;// , abs_path[256];
 
 	if (filewin == NULL) {
 //		fprintf(stderr, "Filewindow not initialized.\n");

@@ -2,14 +2,12 @@
 #include "Hal.h"
 #include "fifo.h"
 #include "SkyGUI.h"
+#include "SkyGUIConsole.h"
 
-struct FIFO32 *mousefifo;
+FIFO32 *mousefifo;
 int mousedata0;
 
-
-
-void inthandler2c()
-/* PS/2 마우스로부터의 인터럽트 */
+void ProcessSkyMouseHandler()
 {
 	int data;
 	OutPortByte(PIC1_OCW2, 0x64);	/* IRQ-12 접수 완료를 PIC1에 통지 */
@@ -27,9 +25,7 @@ void inthandler2c()
 #define KEYCMD_WRITE_MODE		0x60
 #define KBC_MODE				0x47
 
-
-
-void enable_mouse(struct FIFO32 *fifo, int data0, struct MOUSE_DEC *mdec)
+void EnableMouse(FIFO32 *fifo, int data0, MOUSE_DEC *mdec)
 {
 	/* write할 FIFO 버퍼를 기억 */
 	mousefifo = fifo;
@@ -38,8 +34,7 @@ void enable_mouse(struct FIFO32 *fifo, int data0, struct MOUSE_DEC *mdec)
 	return;
 }
 
-#include "SkySimpleGUI.h"
-int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat)
+int DecodeMouseValue(MOUSE_DEC *mdec, unsigned char dat)
 {
 	if (mdec->phase == 0) {
 		/* 마우스의 0xfa를 기다리고 있는 단계 */
@@ -80,15 +75,15 @@ int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat)
 		return 1;
 	}
 
-	SkySimpleGUI::FillRect8(100, 100, 100, 100, 8, 1024, 768);
+	SkyGUIConsole::FillRect8(100, 100, 100, 100, 8, 1024, 768);
 	return -1; /* 여기에 올 일은 없을 것 */
 }
 
 
-struct FIFO32 *keyfifo;
+FIFO32 *keyfifo;
 int keydata0;
 
-void inthandler21()
+void ProcessSkyKeyboardHandler()
 {
 	int data;
 	OutPortByte(PIC0_OCW2, 0x61);	/* IRQ-01 접수 완료를 PIC에 통지 */
@@ -114,7 +109,7 @@ void wait_KBC_sendready(void)
 }
 
 
-void init_keyboard(struct FIFO32 *fifo, int data0)
+void init_keyboard(FIFO32 *fifo, int data0)
 {
 	/* write할 FIFO 버퍼를 기억 */
 	keyfifo = fifo;

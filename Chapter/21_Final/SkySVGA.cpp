@@ -26,3 +26,8 @@ bool SkySVGA::Run()
 	for (;;);
 	return false;
 }
+
+bool SkySVGA::Print(char* pMsg)
+{
+	return false;
+}

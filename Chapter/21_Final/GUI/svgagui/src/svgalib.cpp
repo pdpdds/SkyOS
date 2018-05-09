@@ -41,11 +41,11 @@ void update_svga_screen(void)
 	int length, line, x;
 	char *src;
 	unsigned long *dst32;
-	unsigned long *lfb = getlfb();
+	unsigned long *buffer = getlfb();
 		
 	src = guiscreen.data + guiscreen.x_min + guiscreen.y_min * guiscreen.width;
 	length = guiscreen.x_max - guiscreen.x_min + 1;
-	dst32 = lfb + guiscreen.x_min + guiscreen.y_min * guiscreen.width;
+	dst32 = buffer + guiscreen.x_min + guiscreen.y_min * guiscreen.width;
 	
 	for (line = 0; line < guiscreen.y_max - guiscreen.y_min + 1;line++) {
 		for (x = 0;x < length;x++)
@@ -153,18 +153,18 @@ char get_svga_keyboard_char(void)
 void save_svga_screen_to_xpm(void)
 {
 	//FILE *fd;
-	int x, y, i, count, r, g, b, nr_colors;
-	int color[256];
+	//int x, y, i, count, r, g, b, nr_colors;
+	//int buffer[256];
 #if 0
 	/* determine the number of colors used */
 	nr_colors = 0;
 	for (i = 0; i < guiscreen.width * guiscreen.height; i++) {
 		count = 0;
-		while (color[count] != guiscreen.data[i] && count < nr_colors)
+		while (buffer[count] != guiscreen.data[i] && count < nr_colors)
 			count++;
 		if (count == nr_colors) {	/* color not found */
 			nr_colors++;
-			color[nr_colors] = guiscreen.data[i];
+			buffer[nr_colors] = guiscreen.data[i];
 		}
 	}
 
@@ -332,13 +332,13 @@ void close_svga_screen(void)
 }
 
 
-void set_svga_palette(int color, int red, int green, int blue)
+void set_svga_palette(int col, int red, int green, int blue)
 {
 //	gl_setpalettecolor(color, red, green, blue);
 }
 
 
-void get_svga_palette(int color, int *red, int *green, int *blue)
+void get_svga_palette(int col, int *red, int *green, int *blue)
 {
 //	gl_getpalettecolor(color, red, green, blue);
 }

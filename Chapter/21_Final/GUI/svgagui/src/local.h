@@ -46,7 +46,6 @@ typedef struct GuiCursor
 
 extern GuiCursor cursor[10];
 extern Mouse mouse;
-extern char *savescreen;
 
 /* --------------------- The screen handling functions ------------------ */
 void open_svga_screen(int width, int height, int colors);

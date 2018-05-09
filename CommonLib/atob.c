@@ -32,9 +32,9 @@
  */
 #include "windef.h"
 #include "string.h"
+#include "memory.h"
 
-static char *
-_getbase(char *p, int *basep)
+static char* _getbase(char *p, int *basep)
 {
 	if (p[0] == '0') {
 		switch (p[1]) {
@@ -160,11 +160,13 @@ llatob(u_quad_t *vp, char *p, int base)
  *  char *btoa(dst,value,base) 
  *      converts value to ascii, result in dst
  */
-char *
-btoa(char *dst, UINT32 value, int base)
+char *btoa(char *dst, UINT32 value, int base)
 {
-	char buf[34], digit;
-	int i, j, rem, neg;
+	char buf[34];
+	char digit = 0;
+	int i = 0, j = 0, rem = 0, neg = 0;
+
+	memset(buf, 0, 34);
 
 	if (value == 0) {
 		dst[0] = '0';

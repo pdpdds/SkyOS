@@ -151,7 +151,7 @@ int determine_clip(int *x1, int *y1, int *x2, int *y2)
 }
 
 
-void copy_window_to_screen_image(GuiWindow *win, int savescreen, int update_mouse, int show_other)
+void copy_window_to_screen_image(GuiWindow *win, int savescreen_, int update_mouse, int show_other)
 {
 	GuiWindow *tmp_win;
 	GuiWinThread *win_thread;
@@ -176,7 +176,7 @@ void copy_window_to_screen_image(GuiWindow *win, int savescreen, int update_mous
 		delete_mouse();
 	}
 
-	if (savescreen) {
+	if (savescreen_) {
 		data = win_thread->background + x1 + y1 * guiscreen.width;
 		length = guiscreen.width;
 	} else {
@@ -204,7 +204,7 @@ void copy_window_to_screen_image(GuiWindow *win, int savescreen, int update_mous
 	}
 	
 	/* redraw the other windows */
-	if (savescreen)
+	if (savescreen_)
 		z = (win->win_thread)->number - 1;
 	else 
 		z = win->z_order - 1;

@@ -34,8 +34,7 @@
 GuiObject *add_number(GuiWindow * win, int type, int x, int y, int seg_length, char *mask)
 {
 	GuiObject *number;
-	int i;
-
+	
 	check_window(win, "add_number");
 
 	number = (GuiObject *) malloc(sizeof(GuiObject));
@@ -54,7 +53,7 @@ GuiObject *add_number(GuiWindow * win, int type, int x, int y, int seg_length, c
 	number->bg_col1 = BLACK;
 
 	number->width = 0;
-	for (i = 0;i < strlen(mask);i++)
+	for (size_t i  = 0;i < strlen(mask);i++)
 		if (mask[i] == ' ')
 			number->width += 13;
 		else

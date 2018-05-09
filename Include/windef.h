@@ -130,7 +130,7 @@ typedef          char  s8int;
   #endif
 
   #define __FLAT__ 1
-  #define FAR far
+//  #define FAR far
   #define NEAR near
   #define PASCAL pascal
   #define CDECL cdecl

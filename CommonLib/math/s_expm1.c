@@ -133,9 +133,9 @@ Q5  =  -2.01099218183624371326e-07; /* BE8AFDB7 6E09C32D */
 	double x;
 #endif
 {
-	double y,hi,lo,c,t,e,hxs,hfx,r1;
-	int k,xsb;
-	unsigned hx;
+	double y = 0,hi = 0,lo = 0,c = 0,t = 0,e = 0,hxs = 0,hfx = 0,r1 = 0;
+	int k = 0,xsb = 0;
+	unsigned hx = 0;
 
 	hx  = __HI(x);	/* high word of x */
 	xsb = hx&0x80000000;		/* sign bit of x */

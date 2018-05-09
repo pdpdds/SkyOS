@@ -229,7 +229,7 @@ void update_listentry_icon(GuiObject * obj)
 {
 	check_object(obj, "obj", "update_listentry_icon");
 	int folder_character[4] = {' ','.','+','@'};
-	int folder_color[4] = {31337, BLACK, RED, WHITE};	
+	int folder_color[4] = {31337, (int)BLACK, (int)RED, (int)WHITE};
 	
 	if (!obj->hide) {
 		set_object_image_data2(obj, folder_xpm, 30, 0, FALSE, obj->bg_col1, 48, 48, 4, folder_character, folder_color);

@@ -4,8 +4,7 @@
 
 #define FLAGS_OVERRUN		0x0001
 
-//void fifo32_init(struct FIFO32 *fifo, int size, int *buf, struct TASK *task)
-void fifo32_init(struct FIFO32 *fifo, int size, int *buf)
+void fifo32_init(FIFO32 *fifo, int size, int *buf)
 /* FIFO 버퍼의 초기화 */
 {
 	fifo->size = size;
@@ -18,7 +17,7 @@ void fifo32_init(struct FIFO32 *fifo, int size, int *buf)
 	return;
 }
 
-int fifo32_put(struct FIFO32 *fifo, int data)
+int fifo32_put(FIFO32 *fifo, int data)
 /* FIFO에 데이터를 보내 쌓는다 */
 {
 	if (fifo->free == 0) {
@@ -40,7 +39,7 @@ int fifo32_put(struct FIFO32 *fifo, int data)
 	return 0;
 }
 
-int fifo32_get(struct FIFO32 *fifo)
+int fifo32_get(FIFO32 *fifo)
 /* FIFO로부터 데이터를 1개 가져온다 */
 {
 	int data;
@@ -57,7 +56,7 @@ int fifo32_get(struct FIFO32 *fifo)
 	return data;
 }
 
-int fifo32_status(struct FIFO32 *fifo)
+int fifo32_status(FIFO32 *fifo)
 /* 어느 정도 데이터가 모여 있을까를 보고한다 */
 {
 	return fifo->size - fifo->free;

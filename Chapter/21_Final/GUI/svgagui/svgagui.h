@@ -448,7 +448,7 @@ int GuiMouseGetButton(void);
 char GuiKeyboardGetChar(void);
 
 void update_screen(void);
-void copy_window_to_screen_image(GuiWindow *win, int savescreen, int update_mouse, int show_other);
+void copy_window_to_screen_image(GuiWindow *win, int savescreen_, int update_mouse, int show_other);
 
 void enable_clipping(void);
 void disable_clipping(void);

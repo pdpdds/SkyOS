@@ -270,7 +270,7 @@ static int read_pattern (FILE *f, char *p) {
       }
     }
   } break_while:
-  if (c != NEED_OTHER)
+  //if (c != NEED_OTHER)
 	  ;// ungetc(c, f);
   return (*p == '\0');
 }

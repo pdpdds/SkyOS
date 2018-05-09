@@ -352,7 +352,6 @@ void luaD_gcIM (TObject *o)
 int lua_dofile (char *filename) {
   ZIO z;
   int status;
-  int c;
   int bin = 0;
   char source[MAXFILENAME];
   FILE *f = fopen(filename, "r");

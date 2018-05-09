@@ -73,8 +73,8 @@ qS4 =  7.70381505559019352791e-02; /* 0x3FB3B8C5, 0xB12E9282 */
 	double x;
 #endif
 {
-	double t,w,p,q,c,r,s;
-	int hx,ix;
+	double t = 0,w = 0,p = 0,q = 0,c = 0,r = 0,s = 0;
+	int hx = 0,ix = 0;
 	hx = __HI(x);
 	ix = hx&0x7fffffff;
 	if(ix>= 0x3ff00000) {		/* |x|>= 1 */

@@ -79,7 +79,7 @@ protected:
 	bool CALLBACK kWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	void ProcessMouseLButton(int x, int y);
-	void CreateGUIConsoleProcess();
+	void CreateGUIConsoleProcess(int xPos, int yPos);
 	bool CreateGUIDebugProcess();
 	bool SendToMessage(SkySheet* pSheet, int message, int value);
 	bool SendToMessage(int processID, char* pMsg);

@@ -1,7 +1,7 @@
 #pragma once
 #include "MultiBoot.h"
 #include "SkyGUI.h"
-#include "SkySimpleGUI.h"
+#include "SkyGUIConsole.h"
 #include "SkySVGA.h"
 
 typedef struct tagVideoRamInfo

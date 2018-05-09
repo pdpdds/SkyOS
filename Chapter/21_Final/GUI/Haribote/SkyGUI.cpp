@@ -8,7 +8,7 @@
 #include "SkySheetController8.h"
 #include "SkySheetController32.h"
 #include "SkyRenderer.h"
-#include "SkySimpleGUI.h"
+#include "SkyGUIConsole.h"
 #include "SkyRenderer8.h"
 #include "SkyRenderer32.h"
 #include "Scheduler.h"
@@ -18,8 +18,15 @@
 #include "Thread.h"
 #include "SkyConsoleTask.h"
 
+extern void EnableMouse(FIFO32 *fifo, int data0, MOUSE_DEC *mdec);
+extern void ProcessSkyMouseHandler();
+extern void ProcessSkyKeyboardHandler();
+
+extern char skyFontData[4096];
+
 #define DMA_PICU1       0x0020
 #define DMA_PICU2       0x00A0
+
 __declspec(naked) void SendEOI()
 {
 	_asm
@@ -46,10 +53,6 @@ __declspec(naked) void SendEOI()
 	}
 }
 
-extern void enable_mouse(struct FIFO32 *fifo, int data0, struct MOUSE_DEC *mdec);
-extern void inthandler2c();
-extern void inthandler21();
-
 __declspec(naked) void kSkyMouseHandler()
 {
 
@@ -61,7 +64,7 @@ __declspec(naked) void kSkyMouseHandler()
 
 	_asm
 	{
-		call inthandler2c
+		call ProcessSkyMouseHandler
 	}
 
 	SendEOI();
@@ -73,6 +76,7 @@ __declspec(naked) void kSkyMouseHandler()
 		IRETD
 	}
 }
+
 static char keytable0[0x80] = {
 	0,   0,   '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 0,   0,
 	'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', 0,   0,   'A', 'S',
@@ -104,7 +108,7 @@ __declspec(naked) void kSkyKeyboardHandler()
 
 	_asm
 	{
-		call inthandler21
+		call ProcessSkyKeyboardHandler
 	}
 
 	SendEOI();
@@ -116,8 +120,6 @@ __declspec(naked) void kSkyKeyboardHandler()
 		IRETD
 	}
 }
-
-extern char hankaku[4096];
 
 SkyGUI::SkyGUI()
 {
@@ -140,25 +142,14 @@ bool SkyGUI::Print(char* pMsg)
 
 	if (m_pRenderer && m_mainSheet)
 	{
-		/*m_pRenderer->PutFontAscToSheet(sht_back, xPos, yPos, COL8_FFFFFF, COL8_000000, pMsg, len);
-
-		yPos += 16;
-		xPos = 8;
-
-		if (yPos >= 600)
-			yPos = 0;*/
-		//len = 5;
 		char* pMessage = new char[len + 1];
 		memset(pMessage, 0, len + 1);
 		memcpy(pMessage, pMsg, len);
-		//memcpy(pMessage, "aaaaa", 5);
-		//delete pMessage;
+		
 		kEnterCriticalSection();
 		SendToMessage(m_debugProcessId, pMessage);
 		kLeaveCriticalSection();
-		/*kEnterCriticalSection();
-		SendToMessage(m_debugProcessId, pMessage);
-		kLeaveCriticalSection();*/
+		
 	}
 
 	return true;
@@ -219,7 +210,7 @@ bool SkyGUI::MakeInitScreen()
 
 bool SkyGUI::LoadFontFromMemory()
 {
-	unsigned char* buffer = (unsigned char*)hankaku;
+	unsigned char* buffer = (unsigned char*)skyFontData;
 	int bufferIndex = 0;
 	int charIndex = 0;
 
@@ -277,7 +268,7 @@ bool SkyGUI::MakeIOSystem()
 	fifo32_init(&keycmd, 32, keycmd_buf);
 
 	init_keyboard(&fifo, 256);
-	enable_mouse(&fifo, 512, &mdec);
+	EnableMouse(&fifo, 512, &mdec);
 
 	setvect(0x21, kSkyKeyboardHandler);
 	setvect(0x2c, kSkyMouseHandler);
@@ -319,7 +310,6 @@ bool SkyGUI::kGetMessage(LPSKY_MSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 		kLeaveCriticalSection();
 		wait_KBC_sendready();
 		OutPortByte(PORT_KEYDAT, keycmd_wait);
-		//SkySimpleGUI::FillRect8(100, 100, 100, 100, COL8_C6C6C6, 1024, 768);
 	}
 	else
 		kLeaveCriticalSection();
@@ -357,12 +347,14 @@ bool SkyGUI::Run()
 		Print("Debug Console Started!!\n");
 	}
 
+	CreateGUIConsoleProcess(300, 4);
+
 	kLeaveCriticalSection();
 
 	SKY_MSG msg;
 	while (kGetMessage(&msg, nullptr, 0, 0))
 	{
-		//if (!kTranslateAccelerator(msg._hwnd, nullptr, &msg))
+		if (!kTranslateAccelerator(msg._hwnd, nullptr, &msg))
 		{
 			kTranslateMessage(&msg);
 			kDispatchMessage(&msg);
@@ -494,7 +486,7 @@ void SkyGUI::ProcessKeyboard(int value)
 
 void SkyGUI::ProcessMouse(int value)
 {
-	if (mouse_decode(&mdec, value - 512) != 0)
+	if (DecodeMouseValue(&mdec, value - 512) != 0)
 	{
 		/* 마우스 커서의 이동 */
 		mx += mdec.x;
@@ -532,19 +524,19 @@ void SkyGUI::ProcessMouse(int value)
 			m_pPressedSheet = nullptr;
 		}
 
-		if ((mdec.btn & 0x02) != 0) //오른쪽 버튼을 눌렀다면 콘솔 프로세스를 생성한다.
+		/*if ((mdec.btn & 0x02) != 0) //오른쪽 버튼을 눌렀다면 콘솔 프로세스를 생성한다.
 		{
 			if (m_RButtonPressed == false)
 			{
 				m_RButtonPressed = true;
 				CreateGUIConsoleProcess();
 			}
-			//SkySimpleGUI::FillRect8(100, 100, 100, 100, COL8_C6C6C6, 1024, 768);
+			//SkyGUIConsole::FillRect8(100, 100, 100, 100, COL8_C6C6C6, 1024, 768);
 		}
 		else
 		{
 			m_RButtonPressed = false;
-		}
+		}*/
 
 		kLeaveCriticalSection();
 
@@ -600,7 +592,7 @@ bool SkyGUI::SendToMessage(int processID, char* pMsg)
 	return true;
 }
 
-void SkyGUI::CreateGUIConsoleProcess()
+void SkyGUI::CreateGUIConsoleProcess(int xPos, int yPos)
 {
 	Process* pProcess = nullptr;
 
@@ -614,7 +606,7 @@ void SkyGUI::CreateGUIConsoleProcess()
 		console->SetBuf(buf, 256, 165, -1);
 		m_pRenderer->MakeWindow(buf, 256, 165, "Sky Console", 0);
 		m_pRenderer->MakeTextBox(console, 8, 28, 240, 128, COL8_000000);
-		console->Slide(32, 4);
+		console->Slide(xPos, yPos);
 		console->Updown(20);
 		console->m_ownerProcess = pProcess->GetProcessId();
 	}
@@ -717,7 +709,7 @@ DWORD WINAPI ConsoleDebugGUIProc(LPVOID parameter)
 	cursor_c = COL8_FFFFFF;
 
 	if(sheet == 0 || pProcess == 0 || pThread == 0 || pGUI == 0)
-		SkySimpleGUI::FillRect8(100, 100, 100, 100, COL8_C6C6C6, 1024, 768);
+		SkyGUIConsole::FillRect8(100, 100, 100, 100, COL8_C6C6C6, 1024, 768);
 
 	for (;;)
 	{

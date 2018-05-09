@@ -80,10 +80,12 @@ void str_fmt(char* p, int size, int fmt)
   */
 int vsprintf1(char *d, const char *s, va_list ap)
 {
-	const char *t;
-	char *p, *dst, tmp[40];
-	unsigned int n;
-	int fmt, trunc, haddot, width, base, longlong;
+	const char *t = 0;
+	char *p = 0, *dst = 0, tmp[40];
+	unsigned int n = 0;
+	int fmt = 0, trunc = 0, haddot = 0, width = 0, base = 0, longlong = 0;
+	memset(tmp, 0, 40);
+
 #ifdef FLOATINGPT
 	double dbl;
 
@@ -165,7 +167,8 @@ int vsprintf1(char *d, const char *s, va_list ap)
 							*d++ = 'x';
 						}
 						fmt = FMT_RJUST0;
-						if (sizeof(long) > 4) {
+						int sizeofLong = sizeof(long);
+						if (sizeofLong > 4) {
 							width = 16;
 							longlong = 1;
 						}
@@ -180,7 +183,8 @@ int vsprintf1(char *d, const char *s, va_list ap)
 							*d++ = 'x';
 						}
 						fmt = FMT_RJUST0;
-						if (sizeof(register_t) > 4) {
+						int sizeofRegister_t = sizeof(register_t);
+						if (sizeofRegister_t > 4) {
 							width = 16;
 							longlong = 1;
 						} else {

@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonLib", "..\CommonLib\C
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PackageManager", "Tool\PackageMaker\PackageManager.vcxproj", "{64EF4EB4-1D41-4DFA-9094-095CB857F78D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kernel", "21_Final\Kernel.vcxproj", "{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkyOS32", "21_Final\SkyOS32.vcxproj", "{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}"
 	ProjectSection(ProjectDependencies) = postProject
 		{83EE476C-AA21-4A23-9D6F-4FE675115B13} = {83EE476C-AA21-4A23-9D6F-4FE675115B13}
 	EndProjectSection

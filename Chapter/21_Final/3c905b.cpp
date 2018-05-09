@@ -251,16 +251,6 @@ static int issue_3c905b_command( UINT16 wCommandValue )
 	return( 0 );
 }
 
-// free upd blocks	(not used yet!)
-static int free_ucbs( UPDControlStt *pUCB )
-{
-
-
-
-
-	return( 0 );
-}
-
 // allocate upd blocks
 static int alloc_ucbs( UPDControlStt *pUCB )
 {

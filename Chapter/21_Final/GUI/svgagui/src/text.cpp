@@ -33,9 +33,9 @@
 
 int string_length(char *s)
 {
-	int width = 0, i;
+	int width = 0;
 
-	for (i = 0; i < strlen(s); i++)
+	for (int i = 0; i < (int)strlen(s); i++)
 		width += font_width[s[i] - ' '];
 
 	if (strlen(s) > 256) {
@@ -49,10 +49,10 @@ int string_length(char *s)
 void string_to_data(char *label, int x_off, int y_off, int width, int height, 
 		    int color, char *data, int *font_w, int font_h, char **font_data)
 {
-	int count, position, pos = 0, x, y, i;
+	int position, pos = 0, x, y, i;
 	char ch;
 
-	for (count = 0; count < strlen(label); count++) {
+	for (size_t count = 0; count < strlen(label); count++) {
 		ch = label[count];
 		if (ch >= ' ' && ch <= '~') {
 			pos = ch - ' ';

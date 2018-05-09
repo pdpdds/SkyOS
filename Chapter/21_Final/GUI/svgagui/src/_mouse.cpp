@@ -79,7 +79,7 @@ void show_mouse(void)
 	mask_data = cursor[mouse.cursor_id].mask_bits;
 	for (y = 0;y < height;y++) {
 		for (x = 0;x < width;x++) {
-			if (*mask_data == BLACK)
+			if (*mask_data == (char)BLACK)
 				*screen_data = *mouse_data;
 			mouse_data++;
 			mask_data++;
