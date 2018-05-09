@@ -4,6 +4,7 @@
 
 ProcessManager* ProcessManager::m_processManager = nullptr;
 static int kernelStackIndex = 1;
+extern int g_stackPhysicalAddressPool;
 
 #define TASK_GENESIS_ID 1000
 
@@ -126,7 +127,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
 	*/
 	//스택을 생성하고 주소공간에 매핑한다.
-	void* stackVirtual = (void*)(KERNEL_STACK - PAGE_SIZE * kernelStackIndex++);
+	void* stackVirtual = (void*)(g_stackPhysicalAddressPool - PAGE_SIZE * kernelStackIndex++);
 
 	/* final initialization */
 	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE);
@@ -168,7 +169,7 @@ Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE l
 	pThread->m_startParam = param;
 
 	//스택을 생성하고 주소공간에 매핑한다.
-	void* stackVirtual = (void*)(KERNEL_STACK - PAGE_SIZE * kernelStackIndex++);
+	void* stackVirtual = (void*)(g_stackPhysicalAddressPool - PAGE_SIZE * kernelStackIndex++);
 	//void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_kernelStackIndex++);
 	//void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
 
@@ -207,15 +208,15 @@ Process* ProcessManager::CreateProcessFromMemory(const char* appName, LPTHREAD_S
 
 	Thread* pThread = CreateThread(pProcess, lpStartAddress, param);
 
-	M_Assert(pThread != nullptr, "MainThread is null.");
+	SKY_ASSERT(pThread != nullptr, "MainThread is null.");
 
 	bool result = pProcess->AddMainThread(pThread);
 
-	M_Assert(result == true, "AddMainThread Method Failed.");
+	SKY_ASSERT(result == true, "AddMainThread Method Failed.");
 
 	result = AddProcess(pProcess);
 
-	M_Assert(result == true, "AddProcess Method Failed.");
+	SKY_ASSERT(result == true, "AddProcess Method Failed.");
 
 #ifdef _SKY_DEBUG
 	SkyConsole::Print("Process Created. Process Id : %d\n", pProcess->GetProcessId());
@@ -257,13 +258,13 @@ Process* ProcessManager::CreateProcessFromFile(char* appName, void* param, UINT3
 
 	bool result = pProcess->AddMainThread(pThread);
 
-	M_Assert(result == true, "AddMainThread Method Failed.");
+	SKY_ASSERT(result == true, "AddMainThread Method Failed.");
 
 	kEnterCriticalSection();
 	result = AddProcess(pProcess);
 	kLeaveCriticalSection();
 
-	M_Assert(result == true, "AddProcess Method Failed.");
+	SKY_ASSERT(result == true, "AddProcess Method Failed.");
 
 #ifdef _SKY_DEBUG
 	SkyConsole::Print("Process Created. Process Id : %d\n", pProcess->GetProcessId());

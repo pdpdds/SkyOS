@@ -98,7 +98,7 @@ u32int kmalloc(u32int sz)
 static void expand(u32int new_size, heap_t *heap)
 {
     // Sanity check.
-	M_Assert(new_size > heap->end_address - heap->start_address, "new_size > heap->end_address - heap->start_address");
+	SKY_ASSERT(new_size > heap->end_address - heap->start_address, "new_size > heap->end_address - heap->start_address");
 
     // Get the nearest following page boundary.
     if ((new_size&0xFFFFF000) != 0)
@@ -108,7 +108,7 @@ static void expand(u32int new_size, heap_t *heap)
     }
 
     // Make sure we are not overreaching ourselves.
-	M_Assert(heap->start_address+new_size <= heap->max_address, "heap->start_address+new_size <= heap->max_address");
+	SKY_ASSERT(heap->start_address+new_size <= heap->max_address, "heap->start_address+new_size <= heap->max_address");
 
     // This should always be on a page boundary.
     u32int old_size = heap->end_address-heap->start_address;
@@ -128,7 +128,7 @@ static u32int contract(u32int new_size, heap_t *heap)
     // Sanity check.
 	char buf[256];
 	sprintf(buf, "0x%x 0x%x\n", new_size, heap->end_address - heap->start_address);
-	M_Assert(new_size < heap->end_address-heap->start_address, buf);
+	SKY_ASSERT(new_size < heap->end_address-heap->start_address, buf);
 
     // Get the nearest following page boundary.
     if (new_size&0x1000)
@@ -194,8 +194,8 @@ heap_t *create_kernel_heap(u32int start, u32int end_addr, u32int max, u8int supe
 	heap_t *heap = &kheap;
 
 	// All our assumptions are made on startAddress and endAddress being page-aligned.
-	M_Assert(start % 0x1000 == 0, "start % 0x1000 == 0");
-	M_Assert(end_addr % 0x1000 == 0, "end_addr % 0x1000 == 0");
+	SKY_ASSERT(start % 0x1000 == 0, "start % 0x1000 == 0");
+	SKY_ASSERT(end_addr % 0x1000 == 0, "end_addr % 0x1000 == 0");
 
 	// Initialise the index.
 	heap->index = place_ordered_array((void*)start, HEAP_INDEX_SIZE, &header_t_less_than);
@@ -231,8 +231,8 @@ heap_t *create_heap(u32int start, u32int end_addr, u32int max, u8int supervisor,
     heap_t *heap = (heap_t*)kmalloc(sizeof(heap_t));
 
     // All our assumptions are made on startAddress and endAddress being page-aligned.
-	M_Assert(start%0x1000 == 0, "start%0x1000 == 0");
-	M_Assert(end_addr%0x1000 == 0, "end_addr%0x1000");
+	SKY_ASSERT(start%0x1000 == 0, "start%0x1000 == 0");
+	SKY_ASSERT(end_addr%0x1000 == 0, "end_addr%0x1000");
 	
     // Initialise the index.
     heap->index = place_ordered_array( (void*)start, HEAP_INDEX_SIZE, &header_t_less_than);
@@ -404,8 +404,8 @@ void free(void *p, heap_t *heap)
     //ASSERT(header->magic == HEAP_MAGIC, "header->magic == HEAP_MAGIC");
     //ASSERT(footer->magic == HEAP_MAGIC, "footer->magic == HEAP_MAGIC");
 
-	M_Assert(header->magic == HEAP_MAGIC, "header->magic == HEAP_MAGIC");
-	M_Assert(footer->magic == HEAP_MAGIC, "footer->magic == HEAP_MAGIC");
+	SKY_ASSERT(header->magic == HEAP_MAGIC, "header->magic == HEAP_MAGIC");
+	SKY_ASSERT(footer->magic == HEAP_MAGIC, "footer->magic == HEAP_MAGIC");
 
     // Make us a hole.
     header->is_hole = 1;
@@ -451,7 +451,7 @@ void free(void *p, heap_t *heap)
             iterator++;
 
         // Make sure we actually found the item.
-		M_Assert(iterator < heap->index.size, "iterator < heap->index.size");
+		SKY_ASSERT(iterator < heap->index.size, "iterator < heap->index.size");
         // Remove it.
         remove_ordered_array(iterator, &heap->index);
 					

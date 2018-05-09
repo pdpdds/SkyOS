@@ -1,6 +1,6 @@
 #include "SkyOS.h"
 
-void __M_Assert(const char* expr_str, bool expr, const char* file, int line, const char* msg)
+void __SKY_ASSERT(const char* expr_str, bool expr, const char* file, int line, const char* msg)
 {
 	if (!expr)
 	{
@@ -217,7 +217,7 @@ HANDLE CreateThread(SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, L
 
 	bool result = cur->AddThread(newThread);
 
-	M_Assert(result == true, "CreateThread Faill");
+	SKY_ASSERT(result == true, "CreateThread Faill");
 
 	return (HANDLE)newThread;
 }

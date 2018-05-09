@@ -1,9 +1,4 @@
-﻿#include "PhysicalMemoryManager.h"
-#include "string.h"
-#include "memory.h"
-#include "SkyConsole.h"
-
-extern uint32_t g_freeMemoryStartAddress;
+﻿#include "SkyOS.h"
 
 namespace PhysicalMemoryManager
 {
@@ -19,15 +14,122 @@ namespace PhysicalMemoryManager
 
 	// memorySize : 전체 메모리의 크기(바이트 사이즈)
 	//bitmapAddr : 커널다음에 배치되는 비트맵 배열
-	//이 배열을 참조해서 해당 물리 메모리가 할당되었는지 사용중인지를 판단한다.
-	void Initialize(uint32_t memorySize, uint32_t bitmapAddr)
+	uint32_t g_totalMemorySize = 0;
+
+	uint32_t GetTotalMemory(multiboot_info* bootinfo)
+	{
+		uint64_t endAddress = 0;
+
+		uint32_t mmapEntryNum = bootinfo->mmap_length / sizeof(multiboot_memory_map_t);
+
+		multiboot_mmap_entry* mmapAddr = (multiboot_mmap_entry*)bootinfo->mmap_addr;
+
+#ifdef _SKY_DEBUG
+		SkyConsole::Print("Memory Map Entry Num : %d\n", mmapEntryNum);
+#endif
+
+		for (uint32_t i = 0; i < mmapEntryNum; i++)
+		{
+			uint64_t areaStart = (uint64_t)mmapAddr[i].baseAddressLower | ((uint64_t)mmapAddr[i].baseAddressHigher << 32);
+			uint64_t areaEnd = areaStart + ((uint64_t)mmapAddr[i].lengthLower | ((uint64_t)mmapAddr[i].lengthHigher << 32));
+
+			//SkyConsole::Print("0x%q 0x%q\n", areaStart, areaEnd);
+		
+			if (mmapAddr[i].type != 1)
+			{
+				continue;
+			}
+					
+			if (areaEnd > endAddress)
+				endAddress = areaEnd;
+		}
+
+		if (endAddress > 0xFFFFFFFF) {
+			endAddress = 0xFFFFFFFF;
+		}
+
+		for (;;);
+
+		return (uint32_t)endAddress;
+	}
+
+	uint32_t GetKernelEnd(multiboot_info* bootinfo)
+	{
+		uint64_t endAddress = 0;
+
+		for (uint32_t i = 0; i < bootinfo->mods_count; i++) {
+			Module* module = (Module*)(bootinfo->Modules + sizeof(module) * i);
+
+			uint32_t moduleStart = PAGE_ALIGN_DOWN((uint32_t)module->ModuleStart);
+			uint32_t moduleEnd = PAGE_ALIGN_UP((uint32_t)module->ModuleEnd);	
+
+			if (endAddress < moduleEnd) 
+			{
+				endAddress = moduleEnd;
+			}
+		}
+
+		return (uint32_t)endAddress;
+	}
+
+	uint32_t FindFreeMemory(multiboot_info* info, uint32_t start, int count) {
+		
+		uint64_t location = start;
+
+		while (location < 0xFFFFFFFF)
+		{
+
+			bool notWithinModule = true;
+			
+			for (int k = 0; k < count; k++)
+			{
+				uint32_t pos = location + k * PAGE_SIZE;
+
+				for (uint32_t i = 0; i < info->mods_count; i++) {
+					Module* module = (Module*)(info->Modules + sizeof(module) * i);
+
+					uint32_t moduleStart = PAGE_ALIGN_DOWN((uint32_t)module->ModuleStart);
+					uint32_t moduleEnd = PAGE_ALIGN_UP((uint32_t)module->ModuleEnd);
+
+					SkyConsole::Print("0x%x 0x%x\n", (uint32_t)moduleStart, (uint32_t)moduleEnd);
+
+					if (pos >= moduleStart && pos < moduleEnd) {
+						notWithinModule = false;
+						location = moduleEnd;
+						break;
+					}
+				}
+			}
+
+			if (notWithinModule) {		
+				return location;
+			}
+
+			location += PAGE_SIZE;
+		}
+
+		HaltSystem("could not find free memory chunk");
+		return 0;
+	}
+
+	void Initialize(multiboot_info* bootinfo)
 	{
 		SkyConsole::Print("Physical Memory Manager Init..\n");
+		g_totalMemorySize = GetTotalMemory(bootinfo);
 
 		m_usedBlocks = 0;
-		m_memorySize = memorySize;
+		m_memorySize = g_totalMemorySize;
 		m_maxBlocks = m_memorySize / PMM_BLOCK_SIZE;
-		m_pMemoryMap = (uint32_t*)bitmapAddr;
+
+		int pageCount = m_maxBlocks / PMM_BLOCKS_PER_BYTE / PAGE_SIZE;
+		if (pageCount == 0)
+			pageCount = 1;
+
+		m_pMemoryMap = (uint32_t*)GetKernelEnd(bootinfo);
+
+		SkyConsole::Print("Total Memory (%dMB)\n", g_totalMemorySize / 1048576);
+		SkyConsole::Print("BitMap Start Address(0x%x)\n", m_pMemoryMap);
+		SkyConsole::Print("BitMap Size(0x%x)\n", pageCount * PAGE_SIZE);		
 
 		//블럭들의 최대 수는 8의 배수로 맞추고 나머지는 버린다
 		//m_maxBlocks = m_maxBlocks - (m_maxBlocks % PMM_BLOCKS_PER_BYTE);
@@ -46,11 +148,11 @@ namespace PhysicalMemoryManager
 		//모든 메모리 블럭들이 사용중에 있다고 설정한다.	
 		unsigned char flag = 0xff;
 		memset((char*)m_pMemoryMap, flag, m_memoryMapSize);
-
-		SetAvailableMemory(g_freeMemoryStartAddress, memorySize);
+		SetAvailableMemory((uint32_t)m_pMemoryMap, m_memorySize);
 	}
 
 	uint32_t GetMemoryMapSize() { return m_memoryMapSize; }
+	uint32_t GetKernelEnd() { return (uint32_t)m_pMemoryMap; }
 
 	//8번째 메모리 블럭이 사용중임을 표시하기 위해 1로 세팅하려면 배열 첫번째 요소(4바이트) 바이트의 8번째 비트에 접근해야 한다
 	void SetBit(int bit)
@@ -138,7 +240,7 @@ namespace PhysicalMemoryManager
 		SetBit(frame);
 		//SkyConsole::Print("free frame : 0x%x\n", frame);
 
-		uint32_t addr = frame * PMM_BLOCK_SIZE + g_freeMemoryStartAddress;
+		uint32_t addr = frame * PMM_BLOCK_SIZE + (uint32_t)m_pMemoryMap;
 		m_usedBlocks++;
 
 		return (void*)addr;
@@ -173,7 +275,7 @@ namespace PhysicalMemoryManager
 		for (uint32_t i = 0; i < size; i++)
 			SetBit(frame + i);
 
-		uint32_t addr = frame * PMM_BLOCK_SIZE + g_freeMemoryStartAddress;
+		uint32_t addr = frame * PMM_BLOCK_SIZE + (uint32_t)m_pMemoryMap;
 		m_usedBlocks += size;
 
 		return (void*)addr;
@@ -181,7 +283,7 @@ namespace PhysicalMemoryManager
 
 	void FreeBlocks(void* p, size_t size) {
 
-		uint32_t addr = (uint32_t)p - g_freeMemoryStartAddress;
+		uint32_t addr = (uint32_t)p - (uint32_t)m_pMemoryMap;
 		int frame = addr / PMM_BLOCK_SIZE;
 
 		for (uint32_t i = 0; i < size; i++)

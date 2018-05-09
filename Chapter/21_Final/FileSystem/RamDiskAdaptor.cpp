@@ -2,6 +2,7 @@
 #include "SkyConsole.h"
 #include "MultiBoot.h"
 #include "SkyStruct.h"
+#include "PhysicalMemoryManager.h"
 
 RamDiskAdaptor::RamDiskAdaptor(char* deviceName, DWORD deviceID)
 	: FileSysAdaptor(deviceName, deviceID)
@@ -111,7 +112,7 @@ bool RamDiskAdaptor::InstallPackage()
 
 	//SkyConsole::Print("Package Install Start...\n");
 
-	PACKAGEHEADER* pstHeader = FindPackageSignature(KERNEL_LOAD_ADDRESS, KERNEL_END_ADDRESS);
+	PACKAGEHEADER* pstHeader = FindPackageSignature(KERNEL_LOAD_ADDRESS, PhysicalMemoryManager::GetKernelEnd());
 
 	if(pstHeader == nullptr)
 	{

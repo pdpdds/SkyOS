@@ -10,8 +10,6 @@ so we define it ourself */
         __asm _emit     (x) >> 16 & 0xff \
         __asm _emit     (x) >> 24 & 0xff
 
-#define KERNEL_STACK			0x00400000
-
 /*  This is the one of most important thing to be able to load a PE kernel
 with GRUB. Because PE header are in the begining of the file, code section
 will be shifted. The value used to shift the code section is the linker
@@ -23,8 +21,6 @@ so ALIGN value must be greater */
 Base adress from advanced linker option
 */
 #define KERNEL_LOAD_ADDRESS            0x100000
-#define KERNEL_END_ADDRESS             0x300000
-
 
 #define   HEADER_ADRESS         KERNEL_LOAD_ADDRESS+ALIGN
 
@@ -181,6 +177,7 @@ struct Module
 	unsigned int Reserved;
 };
 
+/*
 struct multiboot_mmap_entry
 {
 	uint32_t size;
@@ -189,7 +186,17 @@ struct multiboot_mmap_entry
 #define MULTIBOOT_MEMORY_AVAILABLE              1
 #define MULTIBOOT_MEMORY_RESERVED               2
 	uint32_t type;
+};*/
+
+struct multiboot_mmap_entry {
+	uint32_t size;
+	uint32_t baseAddressLower;
+	uint32_t baseAddressHigher;
+	uint32_t lengthLower;
+	uint32_t lengthHigher;
+	uint32_t type;
 };
+
 typedef struct multiboot_mmap_entry multiboot_memory_map_t;
 
 /* Drive Info structure.  */

@@ -232,6 +232,7 @@ namespace SkyConsole
 					}
 
 					case 'f':
+					{
 						double double_temp;
 						double_temp = va_arg(args, double);
 						char buffer2[128];
@@ -240,6 +241,27 @@ namespace SkyConsole
 						index += strlen(buffer);
 						i++;
 						break;
+					}
+					case 'Q':
+					{
+						__int64 int64_temp;
+						int64_temp = va_arg(args, __int64);
+						char buffer2[20];
+						_i64toa(int64_temp, buffer2, 10);
+						Write(buffer2);
+						i++;
+						break;
+					}
+					case 'q':
+					{
+						uint64_t int64_temp;
+						int64_temp = va_arg(args, uint64_t);
+						char buffer2[20];
+						_i64toa(int64_temp, buffer2, 16);
+						Write(buffer2);
+						i++;
+						break;
+					}
 
 					default:
 						va_end(args);
@@ -332,6 +354,28 @@ namespace SkyConsole
 							Write(buffer);
 							i++;
 							break;
+
+						case 'Q':
+						{
+							__int64 int64_temp;
+							int64_temp = va_arg(args, __int64);
+							char buffer2[20];
+							_i64toa(int64_temp, buffer2, 10);
+							Write(buffer2);
+							i++;
+							break;
+						}
+
+						case 'q':
+						{
+							uint64_t int64_temp;
+							int64_temp = va_arg(args, uint64_t);
+							char buffer2[20];
+							_i64toa(int64_temp, buffer2, 16);
+							Write(buffer2);
+							i++;
+							break;
+						}
 
 						default:
 							va_end(args);

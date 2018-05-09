@@ -588,4 +588,9 @@
       <Filter>GUI\SVGA</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <MASM Include="llshl.asm" />
+    <MASM Include="ullrem.asm" />
+    <MASM Include="ulldiv.asm" />
+  </ItemGroup>
 </Project>

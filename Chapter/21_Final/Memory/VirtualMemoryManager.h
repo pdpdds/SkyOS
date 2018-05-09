@@ -5,17 +5,8 @@
 #include "PageDirectoryEntry.h"
 #include "PageTableEntry.h"
 
-
-#define KERNEL_VIRTUAL_BASE_ADDRESS				0x00100000
-#define KERNEL_PHYSICAL_BASE_ADDRESS			0x00100000
-
 #define USER_VIRTUAL_STACK_ADDRESS				0x00F00000
-
-#define KERNEL_VIRTUAL_STACK_ADDRESS			0x00800000
-
-#define KERNEL_VIRTUAL_HEAP_ADDRESS				0x70000000
-
-
+#define KERNEL_VIRTUAL_HEAP_ADDRESS				0x80000000
 
 using namespace PageTableEntry;
 using namespace PageDirectoryEntry;

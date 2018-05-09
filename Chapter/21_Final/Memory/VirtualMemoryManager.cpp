@@ -6,7 +6,7 @@
 #include "MultiBoot.h"	
 #include "SkyAPI.h"
 
-#define MAX_PAGE_DIRECTORY_COUNT 10
+#define MAX_PAGE_DIRECTORY_COUNT 40
 PageDirectory* pageDirectoryPool[MAX_PAGE_DIRECTORY_COUNT];
 bool pageDirectoryAvailable[MAX_PAGE_DIRECTORY_COUNT];
 

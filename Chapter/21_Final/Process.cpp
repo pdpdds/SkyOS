@@ -56,7 +56,7 @@ Thread* Process::GetMainThread()
 
 void Process::SetPageDirectory(PageDirectory* pPageDirectory)
 {			
-	M_Assert(pPageDirectory != nullptr, "PageDirectory Is Null.");
+	SKY_ASSERT(pPageDirectory != nullptr, "PageDirectory Is Null.");
 
 	m_pPageDirectory = pPageDirectory;
 }

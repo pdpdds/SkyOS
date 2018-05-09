@@ -254,6 +254,11 @@
   <ItemGroup>
     <Text Include="GUI\svgagui\src\Readme.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <MASM Include="llshl.asm" />
+    <MASM Include="ulldiv.asm" />
+    <MASM Include="ullrem.asm" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}</ProjectGuid>
     <RootNamespace>Kernel</RootNamespace>
@@ -304,7 +309,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./CPlusPlus;./V8086;./GUI/Haribote;./GUI/Simple;./GUI;../../CommonLib/math;./lua;./gui/svgagui;./gui/svgagui/example</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;__LE__;OLD_ANSI;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__LE__;OLD_ANSI;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
       </StringPooling>
