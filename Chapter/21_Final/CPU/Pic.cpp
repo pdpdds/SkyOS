@@ -1,10 +1,5 @@
-
-#ifndef ARCH_X86
-#error "[pic.cpp for i86] requires i86 architecture. Define ARCH_X86"
-#endif
-
 #include <Hal.h>
-#include "pic.h"
+#include "PIC.h"
 
 
 //-----------------------------------------------

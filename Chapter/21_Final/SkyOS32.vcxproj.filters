@@ -305,13 +305,18 @@
     </ClCompile>
     <ClCompile Include="3c905b.cpp" />
     <ClCompile Include="nic.cpp" />
-    <ClCompile Include="bepci.cpp" />
     <ClCompile Include="SkySVGA.cpp" />
     <ClCompile Include="SkyConsoleTask.cpp" />
     <ClCompile Include="easyzlib.c" />
     <ClCompile Include="GUI\Simple\SkyGUIConsole.cpp">
       <Filter>GUI\SkyGUIConsole</Filter>
     </ClCompile>
+    <ClCompile Include="LoadDLL.cpp" />
+    <ClCompile Include="SkyModuleManager.cpp" />
+    <ClCompile Include="SkyLauncher.cpp" />
+    <ClCompile Include="SkyConsoleLauncher.cpp" />
+    <ClCompile Include="SkyGUILauncher.cpp" />
+    <ClCompile Include="SkyPCI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -515,7 +520,6 @@
     </ClInclude>
     <ClInclude Include="3c905b.h" />
     <ClInclude Include="nic.h" />
-    <ClInclude Include="bepci.h" />
     <ClInclude Include="SkyOS.h" />
     <ClInclude Include="SkySVGA.h" />
     <ClInclude Include="SkyStartOption.h" />
@@ -524,6 +528,12 @@
     <ClInclude Include="GUI\Simple\SkyGUIConsole.h">
       <Filter>GUI\SkyGUIConsole</Filter>
     </ClInclude>
+    <ClInclude Include="LoadDLL.h" />
+    <ClInclude Include="SkyModuleManager.h" />
+    <ClInclude Include="SkyLauncher.h" />
+    <ClInclude Include="SkyConsoleLauncher.h" />
+    <ClInclude Include="SkyGUILauncher.h" />
+    <ClInclude Include="SkyPCI.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

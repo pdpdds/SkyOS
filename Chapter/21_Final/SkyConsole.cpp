@@ -160,7 +160,6 @@ namespace SkyConsole
 			return;
 
 		if (g_heapInit == true && SkyGUISystem::GetInstance()->GUIEnable() == true)
-			//if (0)
 		{
 			va_list		args;
 			va_start(args, str);

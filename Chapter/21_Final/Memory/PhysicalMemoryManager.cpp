@@ -48,17 +48,16 @@ namespace PhysicalMemoryManager
 			endAddress = 0xFFFFFFFF;
 		}
 
-		for (;;);
-
 		return (uint32_t)endAddress;
 	}
 
 	uint32_t GetKernelEnd(multiboot_info* bootinfo)
 	{
 		uint64_t endAddress = 0;
-
-		for (uint32_t i = 0; i < bootinfo->mods_count; i++) {
-			Module* module = (Module*)(bootinfo->Modules + sizeof(module) * i);
+		uint32_t mods_count = bootinfo->mods_count;   /* Get the amount of modules available */
+		uint32_t mods_addr = (uint32_t)bootinfo->Modules;     /* And the starting address of the modules */
+		for (uint32_t i = 0; i < mods_count; i++) {
+			Module* module = (Module*)(mods_addr + (i * sizeof(Module)));     /* Loop through all modules */
 
 			uint32_t moduleStart = PAGE_ALIGN_DOWN((uint32_t)module->ModuleStart);
 			uint32_t moduleEnd = PAGE_ALIGN_UP((uint32_t)module->ModuleEnd);	
@@ -67,6 +66,8 @@ namespace PhysicalMemoryManager
 			{
 				endAddress = moduleEnd;
 			}
+
+			SkyConsole::Print("%x %x\n", moduleStart, moduleEnd);
 		}
 
 		return (uint32_t)endAddress;

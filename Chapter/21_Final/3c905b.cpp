@@ -1,6 +1,6 @@
 #include "3cdef.h"
 #include "windef.h"
-#include "bepci.h"
+#include "SkyPCI.h"
 #include "memory.h"
 #include "Hal.h"
 #include "SkyAPI.h"
@@ -9,7 +9,7 @@
 #include "VirtualMemoryManager.h"
 #include "SkyAPI.h"
 
-static UPDControlStt	ucb;
+static UPDControl	ucb;
 
 static void int_handler_3c905b();
 
@@ -74,7 +74,7 @@ static RegInfo3c905bStt ri_3c905b[] = {
 };
 
 // PCI Configuration register set.
-static PCIDeviceStt	pci_3c905b;
+static PCIDevice	pci_3c905b;
 
 // get 3c905b register window, offset, size
 static RegInfo3c905bStt *get_3c905b_reg_info( int nRegName )
@@ -226,7 +226,7 @@ int find_3c905b_nic()
 	
 	for( nI = 0; nI >= 0; nI++ )
 	{
-		nI = find_pci_device( nI, &pci_3c905b, class_code );
+		nI = FindPCIDevice( nI, &pci_3c905b, class_code );
 		if( nI > 0 )
 		{	// is it a 3COM905B ??
 			//display_pci_parameter( &pci_3c905b );
@@ -252,7 +252,7 @@ static int issue_3c905b_command( UINT16 wCommandValue )
 }
 
 // allocate upd blocks
-static int alloc_ucbs( UPDControlStt *pUCB )
+static int alloc_ucbs( UPDControl *pUCB )
 {
 	int nI, nJ;
 
@@ -263,7 +263,7 @@ static int alloc_ucbs( UPDControlStt *pUCB )
 	if( pUCB->pPage == NULL )
 		return( -1 );
 
-	pUCB->pUPD = (UPDStt*)( (DWORD)((DWORD)pUCB->pPage + 4095)&(DWORD)0xFFFFF000 );
+	pUCB->pUPD = (UPD*)( (DWORD)((DWORD)pUCB->pPage + 4095)&(DWORD)0xFFFFF000 );
 	pUCB->pFrag = (char*)( (DWORD)pUCB->pUPD + 4096 );
 
 	// set structure member fields
@@ -368,7 +368,7 @@ static void int_handler_3c905b()
 int dump_upds()
 {
 	int		nI;
-	UPDStt	*pU;
+	UPD	*pU;
 
 	for( nI = 0; nI < ucb.nTotalUPD; nI++ )
 	{

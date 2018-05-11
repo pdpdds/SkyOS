@@ -420,5 +420,3 @@ extern "C" void RequestPCIList()
 	else
 		SkyConsole::Print("Device not detected\n");
 }
-
-

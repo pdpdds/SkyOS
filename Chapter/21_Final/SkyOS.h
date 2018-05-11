@@ -44,3 +44,4 @@
 #include "SystemProfiler.h"
 #include "SkyGUISystem.h"
 #include "ConsoleManager.h"
+#include "SkyModuleManager.h"

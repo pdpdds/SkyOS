@@ -129,7 +129,7 @@ typedef struct {
 	FragStt		frag[ MAX_DN_FRAG ];
 	DWORD		dwZero1;
 	DWORD		dwZero2;
-} DPD1Stt;	
+} DPD1;	
 
 // type UPD	( it must be aligned by 8 bytes)
 typedef struct {
@@ -138,13 +138,13 @@ typedef struct {
 	FragStt		frag[ MAX_UP_FRAG ];	// 2*8 bytes
 	DWORD		dwZero1;
 	DWORD		dwZero2;
-} UPDStt;								// 16+16 bytes
+} UPD;								// 16+16 bytes
 
 // upd control struct
 typedef struct {
 	int		nTotalPage;		// total number of the allocated pages
 	void	*pPage;			// address of the allocated pages
 	int		nTotalUPD;		// total number of the upds
-	UPDStt	*pUPD;			// address of the upd array
+	UPD	*pUPD;			// address of the upd array
 	char	*pFrag;			// address of the fragment array
-} UPDControlStt;
+} UPDControl;

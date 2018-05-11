@@ -3,7 +3,7 @@
 
 #define MAX_PCI_DEVICE	16
 
-typedef struct PCICfgTag
+typedef struct tag_PCICfg
 {
 	UINT16  wVendorID;
 	UINT16	wDeviceID;
@@ -27,19 +27,19 @@ typedef struct PCICfgTag
 	UCHAR	byIntPin;
 	UCHAR	byMinGnt;
 	UCHAR	byMaxLat;
-}PCICfgTag, PCICfgStt;
+}PCICfg;
 
-typedef struct PCIDeviceTag
+typedef struct tag_PCIDevice
 {
-	PCICfgStt	cfg;
-}PCIDeviceTag, PCIDeviceStt;
+	PCICfg	cfg;
+}PCIDevice;
 
-typedef struct PCITag
+typedef struct tag_PCI
 {
 	int				nTotal;
-	PCIDeviceStt	ent[MAX_PCI_DEVICE];
-}PCITag, PCIStt;
+	PCIDevice	ent[MAX_PCI_DEVICE];
+}PCI;
 
-extern int scan_pci_devices();
-extern int find_pci_device( int nIndex, PCIDeviceStt *pPCI, UCHAR *pClass );
-extern void display_pci_parameter( PCIDeviceStt *pPci );
+int ScanPCIDevices();
+int FindPCIDevice( int nIndex, PCIDevice *pPCI, UCHAR *pClass );
+void DisplayPCIParameteter(PCIDevice *pPci );

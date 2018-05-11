@@ -27,7 +27,39 @@
 #ifndef __MEMORY_MODULE_HEADER
 #define __MEMORY_MODULE_HEADER
 
-#include <windows.h>
+#include "windef.h"
+#include "PEImage.h"
+
+#define MEM_COMMIT 0x00001000
+#define MEM_RESET_UNDO 0x1000000
+#define MEM_RESET 0x00080000
+#define MEM_RESERVE 0x00002000
+
+#define MEM_DECOMMIT 0x4000
+#define MEM_RELEASE 0x8000
+
+#define PAGE_TARGETS_NO_UPDATE 0x40000000
+
+#define PAGE_TARGETS_INVALID 0x40000000
+
+#define PAGE_WRITECOPY 0x08
+
+#define PAGE_READWRITE 0x04
+
+#define PAGE_READONLY 0x02
+
+#define PAGE_NOACCESS 0x01
+
+#define PAGE_EXECUTE_WRITECOPY 0x80
+
+#define  PAGE_EXECUTE_READWRITE 0x40
+
+#define PAGE_EXECUTE_READ 0x20
+
+#define PAGE_EXECUTE 0x10
+
+typedef HANDLE HINSTANCE;
+typedef HINSTANCE HMODULE;
 
 typedef void *HMEMORYMODULE;
 
@@ -35,12 +67,14 @@ typedef void *HMEMORYRSRC;
 
 typedef void *HCUSTOMMODULE;
 
+typedef void *FARPROC;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef LPVOID (*CustomAllocFunc)(LPVOID, SIZE_T, DWORD, DWORD, void*);
-typedef BOOL (*CustomFreeFunc)(LPVOID, SIZE_T, DWORD, void*);
+typedef bool (*CustomFreeFunc)(LPVOID, SIZE_T, DWORD, void*);
 typedef HCUSTOMMODULE (*CustomLoadLibraryFunc)(LPCSTR, void *);
 typedef FARPROC (*CustomGetProcAddressFunc)(HCUSTOMMODULE, LPCSTR, void *);
 typedef void (*CustomFreeLibraryFunc)(HCUSTOMMODULE, void *);
@@ -135,7 +169,7 @@ LPVOID MemoryDefaultAlloc(LPVOID, SIZE_T, DWORD, DWORD, void *);
 *
 * This is the default as used by MemoryLoadLibrary.
 */
-BOOL MemoryDefaultFree(LPVOID, SIZE_T, DWORD, void *);
+bool MemoryDefaultFree(LPVOID, SIZE_T, DWORD, void *);
 
 /**
  * Default implementation of CustomLoadLibraryFunc that calls LoadLibraryA

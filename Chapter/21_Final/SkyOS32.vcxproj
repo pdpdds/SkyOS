@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3c905b.cpp" />
-    <ClCompile Include="bepci.cpp" />
+    <ClCompile Include="SkyPCI.cpp" />
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="ConsoleIOListener.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
@@ -86,6 +86,7 @@
     <ClCompile Include="KeyBoard\KeyBoard.cpp" />
     <ClCompile Include="KeyBoard\KeyboardController.cpp" />
     <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="LoadDLL.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="LUA\lapi.c" />
     <ClCompile Include="LUA\lauxlib.c" />
@@ -123,7 +124,11 @@
     <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="SkyAPI.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
+    <ClCompile Include="SkyConsoleLauncher.cpp" />
     <ClCompile Include="SkyConsoleTask.cpp" />
+    <ClCompile Include="SkyGUILauncher.cpp" />
+    <ClCompile Include="SkyLauncher.cpp" />
+    <ClCompile Include="SkyModuleManager.cpp" />
     <ClCompile Include="SkyRenderer32.cpp" />
     <ClCompile Include="SkyRenderer8.cpp" />
     <ClCompile Include="SkySheetController32.cpp" />
@@ -143,7 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3c905b.h" />
-    <ClInclude Include="bepci.h" />
+    <ClInclude Include="SkyPCI.h" />
     <ClInclude Include="commandMacros.h" />
     <ClInclude Include="commands.h" />
     <ClInclude Include="commandTable.h" />
@@ -205,6 +210,7 @@
     <ClInclude Include="KeyBoard\KeyboardController.h" />
     <ClInclude Include="KeyBoard\KeyBoardIO.h" />
     <ClInclude Include="kmain.h" />
+    <ClInclude Include="LoadDLL.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="Memory\PageDirectoryEntry.h" />
     <ClInclude Include="Memory\PageTableEntry.h" />
@@ -220,7 +226,11 @@
     <ClInclude Include="Scheduler.h" />
     <ClInclude Include="SkyAPI.h" />
     <ClInclude Include="SkyConsole.h" />
+    <ClInclude Include="SkyConsoleLauncher.h" />
     <ClInclude Include="SkyConsoleTask.h" />
+    <ClInclude Include="SkyGUILauncher.h" />
+    <ClInclude Include="SkyLauncher.h" />
+    <ClInclude Include="SkyModuleManager.h" />
     <ClInclude Include="SkyOS.h" />
     <ClInclude Include="SkyRenderer32.h" />
     <ClInclude Include="SkyRenderer8.h" />
@@ -309,7 +319,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./CPlusPlus;./V8086;./GUI/Haribote;./GUI/Simple;./GUI;../../CommonLib/math;./lua;./gui/svgagui;./gui/svgagui/example</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>__LE__;OLD_ANSI;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__LE__;OLD_ANSI;;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
       </StringPooling>

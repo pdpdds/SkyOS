@@ -1,6 +1,7 @@
 #include "SkyOS.h"
+#include "SkyRenderer.h"
 
-extern bool systemOn;
+bool systemOn = false;
 
 void NativeConsole()
 {
@@ -70,6 +71,35 @@ DWORD WINAPI WatchDogProc(LPVOID parameter)
 
 			if (m_bShowTSWatchdogClock)
 				*addr = status[pos];
+
+			first = GetTickCount();
+		}
+		kEnterCriticalSection();
+		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
+		kLeaveCriticalSection();
+	}
+
+	return 0;
+}
+
+DWORD WINAPI GUIWatchDogProc(LPVOID parameter)
+{
+	Process* pProcess = (Process*)parameter;
+	int pos = 0;
+	int colorStatus[] = { 0x00FF0000, 0x0000FF00, 0x0000FF};
+	int first = GetTickCount();
+
+	while (1)
+	{
+
+		int second = GetTickCount();
+		if (second - first >= TIMEOUT_PER_SECOND)
+		{
+			if (++pos > 2)
+				pos = 0;
+
+			if (m_bShowTSWatchdogClock)
+				SkyGUIConsole::FillRect(1004, 0, 20, 20, colorStatus[pos], 1024, 768, 32);
 
 			first = GetTickCount();
 		}

@@ -1,18 +1,19 @@
-#include "bepci.h"
+#include "SkyPCI.h"
 #include "windef.h"
 #include "memory.h"
 #include "Hal.h"
 #include "SkyAPI.h"
 #include "sprintf.h"
 
-static PCIStt	pci;
+PCI	pci;
 
-typedef struct {
+typedef struct tag_PCIDeviceName
+{
 	UCHAR	c[3];
 	char	*pName;
-} PCIDeviceNameStt;
+} PCIDeviceName;
 
-static PCIDeviceNameStt	pci_name[] = {
+static PCIDeviceName	pci_name[] = {
 	{ { 0   ,   0,    1 }, "SCSI Controller"			},
 	{ { 0xFF,   1,    1 }, "IDE Controller"				},
 	{ { 0	,   0,    2	}, "Ethernet Controller"		},
@@ -33,7 +34,7 @@ static PCIDeviceNameStt	pci_name[] = {
 };
 
 // display the pci device's configuration area.
-void display_pci_parameter( PCIDeviceStt *pPci )
+void DisplayPCIParameteter( PCIDevice *pPci )
 {
     kdbg_printf( "UINT16  wVendorID        : %X\n", pPci->cfg.wVendorID );
     kdbg_printf( "UINT16  wDeviceID        : %X\n", pPci->cfg.wDeviceID );
@@ -67,7 +68,7 @@ void display_pci_parameter( PCIDeviceStt *pPci )
 }
 
 // find pci device with class codes
-int find_pci_device( int nIndex, PCIDeviceStt *pPCI, UCHAR *pClass )
+int FindPCIDevice( int nIndex, PCIDevice *pPCI, UCHAR *pClass )
 {
 	int nI;
 
@@ -75,7 +76,7 @@ int find_pci_device( int nIndex, PCIDeviceStt *pPCI, UCHAR *pClass )
 	{
 		if( memcmp( pci.ent[nI].cfg.class_code, pClass, 3 ) == 0 )
 		{
-			memcpy( pPCI, &pci.ent[nI], sizeof( PCIDeviceStt ) );
+			memcpy( pPCI, &pci.ent[nI], sizeof( PCIDevice ) );
 			return( nI );	// found~
 		}
 	}
@@ -83,7 +84,7 @@ int find_pci_device( int nIndex, PCIDeviceStt *pPCI, UCHAR *pClass )
 	return( -1 );			// not found!
 }
 
-static char *get_pci_name( PCICfgStt *pCfg )
+static char *get_pci_name( PCICfg *pCfg )
 {
 	int nI;
 
@@ -96,7 +97,7 @@ static char *get_pci_name( PCICfgStt *pCfg )
 	return( NULL );
 }
 
-static int display_pci_info( PCIStt *pPCI )
+static int display_pci_info( PCI *pPCI )
 {
 	int		nI;
 	char	*pS, szT[128];
@@ -139,12 +140,12 @@ static int read_pci_port_dword( int nBus, int nDevFn, int nIndex, DWORD *pDword 
 	return( 0 );
 }
 
-static int read_pci_config_data( PCICfgStt *pCfg, int nBus, int nDevFn )
+static int read_pci_config_data( PCICfg *pCfg, int nBus, int nDevFn )
 {
 	int		nI;
 	DWORD	*pX;
 
-	memset( pCfg, 0, sizeof( PCICfgStt ) );
+	memset( pCfg, 0, sizeof( PCICfg ) );
 	   	
 	pX = (DWORD*)pCfg;
 	for( nI = 0; nI < 16; nI++ )
@@ -162,7 +163,7 @@ static int read_pci_config_data( PCICfgStt *pCfg, int nBus, int nDevFn )
 	return( 0 );
 }	
 
-int scan_pci_devices()
+int ScanPCIDevices()
 {
 	UCHAR			c[3];
 	int				nI, nR, nBus, nDevFn;

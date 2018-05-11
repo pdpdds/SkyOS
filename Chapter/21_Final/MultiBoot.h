@@ -171,8 +171,8 @@ struct ROMConfigurationTable
 
 struct Module
 {
-	void *ModuleStart;
-	void *ModuleEnd;
+	uint32_t ModuleStart;
+	uint32_t ModuleEnd;
 	char *Name;
 	unsigned int Reserved;
 };

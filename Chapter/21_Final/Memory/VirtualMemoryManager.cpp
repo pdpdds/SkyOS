@@ -6,9 +6,9 @@
 #include "MultiBoot.h"	
 #include "SkyAPI.h"
 
-#define MAX_PAGE_DIRECTORY_COUNT 40
-PageDirectory* pageDirectoryPool[MAX_PAGE_DIRECTORY_COUNT];
-bool pageDirectoryAvailable[MAX_PAGE_DIRECTORY_COUNT];
+
+PageDirectory* g_pageDirectoryPool[MAX_PAGE_DIRECTORY_COUNT];
+bool g_pageDirectoryAvailable[MAX_PAGE_DIRECTORY_COUNT];
 
 namespace VirtualMemoryManager
 {
@@ -106,9 +106,9 @@ namespace VirtualMemoryManager
 		for (int index = 0; index < MAX_PAGE_DIRECTORY_COUNT; index++)
 		{
 
-			if (pageDirectoryPool[index] == dir)
+			if (g_pageDirectoryPool[index] == dir)
 			{
-				pageDirectoryAvailable[index] = true;
+				g_pageDirectoryAvailable[index] = true;
 				break;
 			}
 		}
@@ -229,19 +229,19 @@ namespace VirtualMemoryManager
 		for (; index < MAX_PAGE_DIRECTORY_COUNT; index++)
 		{
 		
-			if (pageDirectoryAvailable[index] == true)
+			if (g_pageDirectoryAvailable[index] == true)
 				break;
 		}
 
 		if (index == MAX_PAGE_DIRECTORY_COUNT)
 			return nullptr;
 
-		PageDirectory* dir = pageDirectoryPool[index];
+		PageDirectory* dir = g_pageDirectoryPool[index];
 	
 		if (dir == NULL)
 			return nullptr;
 
-		pageDirectoryAvailable[index] = false;
+		g_pageDirectoryAvailable[index] = false;
 		memset(dir, 0, sizeof(PageDirectory));
 
 		uint32_t frame = 0x00000000;
@@ -298,8 +298,8 @@ namespace VirtualMemoryManager
 
 		for (int i = 0; i < MAX_PAGE_DIRECTORY_COUNT; i++)
 		{
-			pageDirectoryPool[i] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
-			pageDirectoryAvailable[i] = true;
+			g_pageDirectoryPool[i] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+			g_pageDirectoryAvailable[i] = true;
 		}
 
 		PageDirectory* dir = CreateCommonPageDirectory();

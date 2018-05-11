@@ -58,7 +58,7 @@ bool SkyGUIConsole::Initialize(void* pVideoRamPtr, int width, int height, int bp
 	else if (buffertype == MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT)
 		renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, 8, 64, (char)charColor, (unsigned char*)("MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT"));
 
-	return false;
+	return true;
 }
 
 bool SkyGUIConsole::Run()
@@ -171,6 +171,9 @@ void SkyGUIConsole::Update(unsigned long *buf)
 
 bool SkyGUIConsole::Print(char* pMsg)
 {
+	if (renderer == nullptr)
+		return false;
+
 	unsigned char charColor = 0xff;
 	renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, xPos, yPos, (char)charColor, (unsigned char*)pMsg);
 	if (strlen(pMsg) > 0 && (pMsg[strlen(pMsg) - 1] == '\n'))

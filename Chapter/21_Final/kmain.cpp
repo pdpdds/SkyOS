@@ -1,9 +1,7 @@
 ﻿#include "kmain.h"
 #include "SkyTest.h"
-
-#include "PCI.h"
-#include "bepci.h"
-#include "nic.h"
+#include "SkyGUILauncher.h"
+#include "SkyConsoleLauncher.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -51,37 +49,66 @@ _declspec(naked) void multiboot_entry(void)
 	}
 }
 
-bool systemOn = false;
-bool g_heapInit = false;
-
-extern PageDirectory* pageDirectoryPool[10];
-int g_stackPhysicalAddressPool = 0;
-
-void HardwareInitialize();
+void InitContext(multiboot_info* bootinfo);
+void InitHardware();
 bool InitMemoryManager(multiboot_info* bootinfo);
-void ConstructFileSystem(multiboot_info* info);
-void StartConsoleSystem();
-void StartGUISystem();
-
-void JumpToNewKernelEntry(int entryPoint, unsigned int procStack);
+bool TestMemoryModule(const char* moduleName);
 
 void kmain(unsigned long magic, unsigned long addr)
 {
-	InitializeConstructors();		
-
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
+	SkyLauncher* pSystemLauncher = nullptr;
 
-	SkyConsole::Initialize();
-	
-	//헥사를 표시할 때 %X는 integer, %x는 unsigned integer의 헥사값을 표시한다.	
-	SkyConsole::Print("*** Sky OS Console System Init ***\n");
-
-	SkyConsole::Print("GRUB Information\n");
-	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
+	InitContext(pBootInfo);
 	
 	kEnterCriticalSection();
 
-	HardwareInitialize();
+	InitHardware();
+	InitMemoryManager(pBootInfo);
+
+	Scheduler::GetInstance();
+	
+	SkyModuleManager::GetInstance()->Initialize(pBootInfo);
+	StorageManager::GetInstance()->Initilaize(pBootInfo);
+
+#if SKY_CONSOLE_MODE == 0
+	SkyGUISystem::GetInstance()->Initialize(pBootInfo);
+#endif
+
+	SystemProfiler::GetInstance()->Initialize();
+	
+	PrintCurrentTime();
+	TestMemoryModule("SAMPLE_DLL");
+	
+	kLeaveCriticalSection();
+	
+#if SKY_CONSOLE_MODE == 0	
+	pSystemLauncher = new SkyGUILauncher();
+#else
+	pSystemLauncher = new SkyConsoleLauncher();
+#endif
+	pSystemLauncher->Launch();
+
+	for (;;);	
+}
+
+void InitContext(multiboot_info* pBootInfo)
+{
+	InitializeConstructors();
+	SkyConsole::Initialize();
+	//헥사를 표시할 때 %X는 integer, %x는 unsigned integer의 헥사값을 표시한다.	
+	SkyConsole::Print("*** Sky OS Console System Init ***\n");
+	SkyConsole::Print("GRUB Information\n");
+	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
+}
+
+void InitHardware()
+{
+	GDTInitialize();
+	IDTInitialize(0x8);
+	PICInitialize(0x20, 0x28);
+	PITInitialize();
+
 	SkyConsole::Print("Hardware Init Complete\n");
 
 	SetInterruptVector();
@@ -100,242 +127,65 @@ void kmain(unsigned long magic, unsigned long addr)
 		EnableFPU();
 		SkyConsole::Print("FPU Init..\n");
 	}
+}
 
+bool InitMemoryManager(multiboot_info* pBootInfo)
+{
 	//물리/가상 메모리 매니저를 초기화한다.
-	//설정 시스템 메모리는 128MB
-	InitMemoryManager(pBootInfo);
-
+	//기본 설정 시스템 메모리는 128MB
 	SkyConsole::Print("Memory Manager Init Complete\n");
 
-	int heapFrameCount = 256 * 10 * 5; //프레임수 12800개, 52MB
-	unsigned int requiredHeapSize = heapFrameCount * PAGE_SIZE;
-
-	//요구되는 힙의 크기가 자유공간보다 크다면 그 크기를 자유공간 크기로 맞춘다음 반으로 줄인다.
-	//if (requiredHeapSize > g_freeMemorySize)
-	//{
-		//requiredHeapSize = g_freeMemorySize;
-		//heapFrameCount = requiredHeapSize / PAGE_SIZE / 2;
-	//}
-
-	HeapManager::InitKernelHeap(heapFrameCount);
-	SkyConsole::Print("Heap %dMB Allocated\n", requiredHeapSize / 1048576);	
-
-	g_heapInit = true;
-
-#if SKY_CONSOLE_MODE == 0
-	SkyGUISystem::GetInstance()->Initialize(pBootInfo);
-#else
-	InitKeyboard();
-	SkyConsole::Print("Keyboard Init..\n");
-#endif
-
-	UINT16 pciDevices = InitPCIDevices();
-	SkyConsole::Print("%d device(s) found\n", pciDevices);	
-	
-	ConstructFileSystem(pBootInfo);
-
-	kLeaveCriticalSection();
-
-	GlobalSate state;
-	state._HeapLoadAddress = KERNEL_VIRTUAL_HEAP_ADDRESS;
-	state._heapSize = HeapManager::GetHeapSize();
-	state._kernelLoadAddress = KERNEL_LOAD_ADDRESS;
-	state._kernelSize = PhysicalMemoryManager::GetKernelEnd() - KERNEL_LOAD_ADDRESS;
-
-	g_stackPhysicalAddressPool = PAGE_ALIGN_UP(PhysicalMemoryManager::GetKernelEnd() + PhysicalMemoryManager::GetMemoryMapSize() + 1048576);
-	state._stackPhysicalPoolAddress = g_stackPhysicalAddressPool;
-	state._pciDevices = pciDevices;
-	state._pageDirectoryPoolAddress = (DWORD)&(pageDirectoryPool[0]);
-
-	SystemProfiler::GetInstance()->SetGlobalState(state);
-	
-	scan_pci_devices();
-	//init_nic();	
-	TestLua();
-
-	SYSTEMTIME time;
-	GetLocalTime(&time);
-	char buffer[256];
-	sprintf(buffer, "Current Time : %d/%d/%d %d:%d:%d\n", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
-	SkyConsole::Print("%s", buffer);
-
-	ProcessManager::GetInstance();
-	Scheduler::GetInstance();
-	
-#if SKY_CONSOLE_MODE == 0	
-	StartGUISystem();
-#else
-	StartConsoleSystem();
-#endif
-	
-	for (;;);	
-}
-
-void HardwareInitialize()
-{
-	GDTInitialize();
-	IDTInitialize(0x8);
-	PICInitialize(0x20, 0x28);
-	PITInitialize();
-}
-
-
-bool InitMemoryManager(multiboot_info* bootinfo)
-{
 	PhysicalMemoryManager::EnablePaging(false);
 
 	//물리 메모리 매니저 초기화
-	PhysicalMemoryManager::Initialize(bootinfo);
+	PhysicalMemoryManager::Initialize(pBootInfo);
 	//PhysicalMemoryManager::Dump();
 
 	//가상 메모리 매니저 초기화	
 	VirtualMemoryManager::Initialize();
 	//PhysicalMemoryManager::Dump();
 
+	int heapFrameCount = 256 * 10 * 5; //프레임수 12800개, 52MB
+	unsigned int requiredHeapSize = heapFrameCount * PAGE_SIZE;
+
+	//요구되는 힙의 크기가 자유공간보다 크다면 그 크기를 자유공간 크기로 맞춘다음 반으로 줄인다.
+	uint32_t memorySize = PhysicalMemoryManager::GetMemorySize();
+	if (requiredHeapSize > memorySize)
+	{
+		requiredHeapSize = memorySize / 2;
+		heapFrameCount = requiredHeapSize / PAGE_SIZE / 2;
+	}
+
+	HeapManager::InitKernelHeap(heapFrameCount);
+	SkyConsole::Print("Heap %dMB Allocated\n", requiredHeapSize / 1048576);
+
 	return true;
 }
 
-void ConstructFileSystem(multiboot_info* info)
-{	
-//IDE 하드 디스크
-	FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
-	
-	pHDDAdaptor->Initialize();
-
-	if (pHDDAdaptor->GetCount() > 0)
-	{
-		StorageManager::GetInstance()->RegisterFileSystem(pHDDAdaptor, 'C');
-		StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
-		
-		//TestHardDisk();			
-		//TestLua();
-	}
-	else
-	{
-		delete pHDDAdaptor;		
-	}
-			
-//램 디스크
-	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');
-	if (pRamDiskAdaptor->Initialize() == true)
-	{
-		StorageManager::GetInstance()->RegisterFileSystem(pRamDiskAdaptor, 'K');
-		StorageManager::GetInstance()->SetCurrentFileSystemByID('K');		
-
-		((RamDiskAdaptor*)pRamDiskAdaptor)->InstallPackage();
-	}
-	else
-	{
-		delete pRamDiskAdaptor;
-	}
-
-//플로피 디스크
-	/*FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
-	if (pFloppyDiskAdaptor->Initialize() == true)
-	{
-		StorageManager::GetInstance()->RegisterFileSystem(pFloppyDiskAdaptor, 'A');
-		StorageManager::GetInstance()->SetCurrentFileSystemByID('A');
-		
-	}
-	else
-	{
-		delete pFloppyDiskAdaptor;
-	}*/	
-
-	StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
-	SkyConsole::Print("K drive Selected\n");
-
-	drive_info* driveInfo = info->drives_addr;
-
-	for (uint32_t i = 0; i < info->drives_length; i++)
-	{
-		int driveNum = driveInfo[i].drive_number;
-
-		if (driveNum != 0)
-			SkyConsole::Print("%d drive Detected\n", driveNum);
-	}
-}
-
-void StartConsoleSystem()
+bool TestMemoryModule(const char* moduleName)
 {
-	kEnterCriticalSection();
+	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory(moduleName);
 
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL, PROCESS_KERNEL);
-
-	if (pProcess == nullptr)
-		HaltSystem("Console Creation Fail!!");
-
-	ProcessManager::GetInstance()->CreateProcessFromMemory("WatchDog", WatchDogProc, NULL, PROCESS_KERNEL);
-	ProcessManager::GetInstance()->CreateProcessFromMemory("ProcessRemover", ProcessRemoverProc, NULL, PROCESS_KERNEL);
-	
-	SkyConsole::Print("Init Console....\n");
-
-	Thread* pThread = pProcess->GetMainThread();
-
-	if (pThread == nullptr)
-		HaltSystem("Console Creation Fail!!");
-
-	pThread->m_taskState = TASK_STATE_RUNNING;
-
-	int entryPoint = (int)pThread->frame.eip;
-	unsigned int procStack = pThread->frame.esp;
-
-	kLeaveCriticalSection();
-
-	SkyConsole::Print("ConsoleSystem : entryPoint : (0x%x)\n", entryPoint);
-	SkyConsole::Print("ConsoleSystem : procStack : (0x%x)\n", procStack);
-
-	ProcessManager::GetInstance()->SetCurrentTask(pThread);
-	
-	JumpToNewKernelEntry(entryPoint, procStack);
-}
-
-void StartGUISystem()
-{
-	kEnterCriticalSection();
-
-	Process* pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("GUISystem", SystemGUIProc, NULL, PROCESS_KERNEL);
-
-	if (pProcess == nullptr)
-		HaltSystem("GUI System Creation Fail!!");
-	
-	ProcessManager::GetInstance()->CreateProcessFromMemory("ProcessRemover", ProcessRemoverProc, NULL, PROCESS_KERNEL);
-
-	SkyConsole::Print("Init GUI System....\n");
-
-	Thread* pThread = pProcess->GetMainThread();
-
-	pThread->m_taskState = TASK_STATE_RUNNING;
-
-	int entryPoint = (int)pThread->frame.eip;
-	unsigned int procStack = pThread->frame.esp;
-
-	kLeaveCriticalSection();
-
-	SkyConsole::Print("GUI System : entryPoint : (0x%x)\n", entryPoint);
-	SkyConsole::Print("GUI System : procStack : (0x%x)\n", procStack);
-
-	ProcessManager::GetInstance()->SetCurrentTask(pThread);
-
-	JumpToNewKernelEntry(entryPoint, procStack);
-}
-
-void JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
-{
-	__asm
+	if (hwnd == nullptr)
 	{
-		MOV     AX, 0x10;
-		MOV     DS, AX
-		MOV     ES, AX
-		MOV     FS, AX
-		MOV     GS, AX
-			
-		MOV     ESP, procStack
-		PUSH	0x10;
-		PUSH    0x200; EFLAGS
-		PUSH    0x08; CS
-		PUSH    entryPoint; EIP
-
-		IRETD
+		HaltSystem("Memory Module Load Fail!!");
 	}
+
+	PGetDLLInterface GetDLLInterface = (PGetDLLInterface)SkyModuleManager::GetInstance()->GetModuleFunction((MODULE_HANDLE)(hwnd), "GetDLLInterface");
+
+	if (!GetDLLInterface)
+	{
+		HaltSystem("Memory Module Load Fail!!");
+	}
+
+	const DLLInterface* dll_interface = GetDLLInterface();
+	
+	int sum = dll_interface->AddNumbers(5, 6);
+
+	SkyConsole::Print("AddNumbers(5, 6): %d\n", sum);
+
+	if (false == SkyModuleManager::GetInstance()->UnloadModule((MODULE_HANDLE)(hwnd)))
+		HaltSystem("UnloadDLL() failed!\n");
+
+	return true;
 }

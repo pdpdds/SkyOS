@@ -6,7 +6,7 @@
 #include "PageTableEntry.h"
 
 #define USER_VIRTUAL_STACK_ADDRESS				0x00F00000
-#define KERNEL_VIRTUAL_HEAP_ADDRESS				0x80000000
+#define KERNEL_VIRTUAL_HEAP_ADDRESS				0x10000000
 
 using namespace PageTableEntry;
 using namespace PageDirectoryEntry;
@@ -31,6 +31,8 @@ using namespace PageDirectoryEntry;
 #define PAGE_DIRECTORY_INDEX(x) (((x) >> 22) & 0x3ff)
 #define PAGE_TABLE_INDEX(x) (((x) >> 12) & 0x3ff)
 #define PAGE_GET_PHYSICAL_ADDRESS(x) (*x & ~0xfff)
+
+#define MAX_PAGE_DIRECTORY_COUNT 40
 
 typedef struct tag_PageTable 
 {

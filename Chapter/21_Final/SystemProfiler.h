@@ -38,6 +38,8 @@ public:
 		return m_pSystemProfiler;
 	}
 
+	bool Initialize();
+
 	void PrintMemoryState();
 	void PrintGlobalState();
 	void SetGlobalState(GlobalSate& state) { m_state = state; }

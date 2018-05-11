@@ -1,6 +1,10 @@
 #include "SkyOS.h"
+#include "PCI.h"
+#include "SkyPCI.h"
 
 SystemProfiler* SystemProfiler::m_pSystemProfiler = nullptr;
+extern PageDirectory* g_pageDirectoryPool[MAX_PAGE_DIRECTORY_COUNT];
+int g_stackPhysicalAddressPool = 0;
 
 SystemProfiler::SystemProfiler()
 {
@@ -8,6 +12,29 @@ SystemProfiler::SystemProfiler()
 
 SystemProfiler::~SystemProfiler()
 {
+}
+
+bool SystemProfiler::Initialize()
+{
+	UINT16 pciDevices = InitPCIDevices();
+	SkyConsole::Print("%d device(s) found\n", pciDevices);
+
+	ScanPCIDevices();
+
+	GlobalSate state;
+	state._HeapLoadAddress = KERNEL_VIRTUAL_HEAP_ADDRESS;
+	state._heapSize = HeapManager::GetHeapSize();
+	state._kernelLoadAddress = KERNEL_LOAD_ADDRESS;
+	state._kernelSize = PhysicalMemoryManager::GetKernelEnd() - KERNEL_LOAD_ADDRESS;
+
+	g_stackPhysicalAddressPool = PAGE_ALIGN_UP(PhysicalMemoryManager::GetKernelEnd() + PhysicalMemoryManager::GetMemoryMapSize() + 1048576);
+	state._stackPhysicalPoolAddress = g_stackPhysicalAddressPool;
+	state._pciDevices = pciDevices;
+	state._pageDirectoryPoolAddress = (DWORD)&(g_pageDirectoryPool[0]);
+
+	SystemProfiler::GetInstance()->SetGlobalState(state);
+
+	return true;
 }
 
 void SystemProfiler::PrintMemoryState()

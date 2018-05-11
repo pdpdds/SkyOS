@@ -1,6 +1,4 @@
-#include "StorageManager.h"
-#include "SkyConsole.h"
-#include "SkyStruct.h"
+#include "SkyOS.h"
 
 StorageManager* StorageManager::m_pStorageManager = nullptr;
 
@@ -16,6 +14,7 @@ StorageManager::StorageManager()
 
 	g_stdOut = new FILE;
 	g_stdIn = new FILE;
+	g_stdErr = new FILE;
 	strcpy(g_stdOut->_name, "STDOUT");
 	strcpy(g_stdIn->_name, "STDIN");
 	strcpy(g_stdErr->_name, "STDERR");
@@ -166,4 +165,72 @@ bool StorageManager::CloseFile(PFILE file)
 		return false;
 
 	return m_pCurrentFileSystem->Close(file);
+}
+
+bool StorageManager::Initilaize(multiboot_info* info)
+{
+	return ConstructFileSystem(info);
+}
+
+bool StorageManager::ConstructFileSystem(multiboot_info* info)
+{
+	//IDE 하드 디스크
+	FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
+
+	pHDDAdaptor->Initialize();
+
+	if (pHDDAdaptor->GetCount() > 0)
+	{
+		StorageManager::GetInstance()->RegisterFileSystem(pHDDAdaptor, 'C');
+		StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
+
+		//TestHardDisk();
+	}
+	else
+	{
+		delete pHDDAdaptor;
+	}
+
+	//램 디스크
+	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');
+	if (pRamDiskAdaptor->Initialize() == true)
+	{
+		StorageManager::GetInstance()->RegisterFileSystem(pRamDiskAdaptor, 'K');
+		StorageManager::GetInstance()->SetCurrentFileSystemByID('K');
+
+		((RamDiskAdaptor*)pRamDiskAdaptor)->InstallPackage();
+	}
+	else
+	{
+		delete pRamDiskAdaptor;
+	}
+
+	//플로피 디스크
+	/*FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
+	if (pFloppyDiskAdaptor->Initialize() == true)
+	{
+		StorageManager::GetInstance()->RegisterFileSystem(pFloppyDiskAdaptor, 'A');
+		StorageManager::GetInstance()->SetCurrentFileSystemByID('A');
+
+	}
+	else
+	{
+		delete pFloppyDiskAdaptor;
+	}*/
+
+
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
+	SkyConsole::Print("K drive Selected\n");
+
+	drive_info* driveInfo = info->drives_addr;
+
+	for (uint32_t i = 0; i < info->drives_length; i++)
+	{
+		int driveNum = driveInfo[i].drive_number;
+
+		if (driveNum != 0)
+			SkyConsole::Print("%d drive Detected\n", driveNum);
+	}
+
+	return true;
 }

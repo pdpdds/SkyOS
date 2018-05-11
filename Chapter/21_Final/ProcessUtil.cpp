@@ -1,12 +1,4 @@
-﻿#include <string.h>
-#include "PhysicalMemoryManager.h"
-#include "PEImage.h"
-#include "VirtualMemoryManager.h"
-#include "ProcessUtil.h"
-#include "SkyConsole.h"
-#include "ProcessManager.h"
-#include "defines.h"
-#include "pit.h"
+﻿#include "SkyOS.h"
 
 //32비트 PE파일 이미지 유효성 검사
 bool ValidatePEImage(void* image) 
@@ -53,3 +45,11 @@ bool ValidatePEImage(void* image)
 	return true;
 }
 
+void PrintCurrentTime()
+{
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+	char buffer[256];
+	sprintf(buffer, "Current Time : %d/%d/%d %d:%d:%d\n", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+	SkyConsole::Print("%s", buffer);
+}

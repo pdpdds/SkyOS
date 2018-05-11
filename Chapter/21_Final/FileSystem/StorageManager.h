@@ -1,5 +1,6 @@
 #pragma once
 #include "FileSysAdaptor.h"
+#include "MultiBoot.h"
 
 //저장장치는 최대 26개
 #define STORAGE_DEVICE_MAX 26
@@ -17,6 +18,8 @@ public:
 		return m_pStorageManager;
 	}
 
+	bool Initilaize(multiboot_info* info);
+
 //인터페이스
 	bool RegisterFileSystem(FileSysAdaptor* fsys, DWORD deviceID);
 	bool UnregisterFileSystem(FileSysAdaptor* fsys);
@@ -30,6 +33,9 @@ public:
 	int ReadFile(PFILE file, unsigned char* Buffer, unsigned int size, int count);
 	int WriteFile(PFILE file, unsigned char* Buffer, unsigned int size, int count);
 	bool CloseFile(PFILE file);
+
+protected:
+	bool ConstructFileSystem(multiboot_info* info);
 
 private:
 	StorageManager();
