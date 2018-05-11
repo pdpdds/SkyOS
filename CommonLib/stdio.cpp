@@ -6,6 +6,7 @@
 #include "sprintf.h"
 #include "ffmt.h"
 #include "memory.h"
+#include "stdint.h"
 
 /*int vsprintf(char *buffer, char *format, va_list argptr)
 {
@@ -23,84 +24,114 @@ int vsprintf(char *str, const char *format, va_list ap) {
 	if (!format)
 		return 0;
 
-	size_t loc=0;
+	size_t loc = 0;
 	size_t i;
 
-	for (i=0 ; i<=strlen(format);i++, loc++) {
-
-		switch (format[i]) {
-
-			case '%':
-
-				switch (format[i+1]) {
-
-					/*** characters ***/
-					case 'c': {
-						char c = va_arg (ap, char);
-						str[loc] = c;
-						i++;
-						break;
-					}
-
-					/*** integers ***/
-					case 'd':
-					case 'I':
-					case 'i': {
-						int c = va_arg (ap, int);
-						char s[32]={0};
-						itoa_s (c, 10, s);
-						strcpy (&str[loc], s);
-						loc+= strlen(s) - 1;
-						i++;		// go to next character
-						break;
-					}
-
-					/*** display in hex ***/
-					case 'X':{
-						int c = va_arg (ap, int);
-						char s[32]={0};
-						itoa_s (c,16,s);
-						strcpy (&str[loc], s);
-						i++;		// go to next character
-						loc+=strlen(s) - 1;
-						break;
-					}
-					case 'x': {
-						unsigned int c = va_arg(ap, unsigned int);
-						char s[32] = { 0 };
-						itoa_s(c, 16, s);
-						strcpy(&str[loc], s);
-						i++;		// go to next character
-						loc += strlen(s) - 1;
-						break;
-					}
-
-					/*** strings ***/
-					case 's': {
-						int c = (int&) va_arg (ap, char);
-						char s[32]={0};
-						strcpy (s,(const char*)c);						
-						strcpy (&str[loc], s);
-						i++;		// go to next character
-						loc+=strlen(s) - 1;
-						break;
-					}
-
-					case 'f':
-						double double_temp;
-						double_temp = va_arg (ap, double);
-						char buffer[512];
-						ftoa_fixed(buffer, double_temp);
-						strcpy(&str[loc], buffer);
-						i++;
-						loc += strlen(buffer) - 1;
-						break;
-				}
+	for (i = 0; i <= strlen(format); i++, loc++)
+	{
+		switch (format[i]) 
+		{
+		case '%':
+			switch (format[i + 1]) 
+			{
+				/*** characters ***/
+			case 'c': 
+			{
+				char c = va_arg(ap, char);
+				str[loc] = c;
+				i++;
 				break;
+			}
 
-			default:
-				str[loc] = format[i];
+					  /*** integers ***/
+			case 'd':
+			case 'I':
+			case 'i': 
+			{
+				int c = va_arg(ap, int);
+				char s[32] = { 0 };
+				itoa_s(c, 10, s);
+				strcpy(&str[loc], s);
+				loc += strlen(s) - 1;
+				i++;		// go to next character
 				break;
+			}
+
+					  /*** display in hex ***/
+			case 'X':
+			{
+				int c = va_arg(ap, int);
+				char s[32] = { 0 };
+				itoa_s(c, 16, s);
+				strcpy(&str[loc], s);
+				i++;		// go to next character
+				loc += strlen(s) - 1;
+				break;
+			}
+			case 'x': 
+			{
+				unsigned int c = va_arg(ap, unsigned int);
+				char s[32] = { 0 };
+				itoa_s(c, 16, s);
+				strcpy(&str[loc], s);
+				i++;		// go to next character
+				loc += strlen(s) - 1;
+				break;
+			}
+					  /*** strings ***/
+			case 's':
+			{
+				int c = (int&)va_arg(ap, char);
+				char s[32] = { 0 };
+				strcpy(s, (const char*)c);
+				strcpy(&str[loc], s);
+				i++;		// go to next character
+				loc += strlen(s) - 1;
+				break;
+			}
+
+			case 'f':
+			{						
+				double double_temp;
+				double_temp = va_arg(ap, double);
+				char buffer[512];
+				ftoa_fixed(buffer, double_temp);
+				strcpy(&str[loc], buffer);
+				i++;
+				loc += strlen(buffer) - 1;
+				break;
+			}
+	
+			case 'Q':
+			{
+				__int64 int64_temp;
+				int64_temp = va_arg(ap, __int64);
+				char buffer[20];
+				_i64toa(int64_temp, buffer, 10);
+				strcpy(&str[loc], buffer);
+				i++;
+				loc += strlen(buffer) - 1;
+				break;
+			}
+			
+			case 'q':
+			{
+				uint64_t int64_temp;
+				int64_temp = va_arg(ap, uint64_t);
+				char buffer[20];
+				_i64toa(int64_temp, buffer, 16);
+				strcpy(&str[loc], buffer);
+				i++;
+				loc += strlen(buffer) - 1;
+				break;
+			}
+			
+		}
+		break;
+
+		default:
+			str[loc] = format[i];
+			break;
 		}
 	}
 
@@ -128,15 +159,17 @@ strtol(const char* nptr, char** endptr, int base)
 	if (c == '-') {
 		neg = 1;
 		c = *s++;
-	} else if (c == '+')
+	}
+	else if (c == '+')
 		c = *s++;
 	if ((base == 0 || base == 16) &&
-	    c == '0' && (*s == 'x' || *s == 'X')) {
+		c == '0' && (*s == 'x' || *s == 'X')) {
 		c = s[1];
 		s += 2;
 		base = 16;
-	} else if ((base == 0 || base == 2) &&
-	    c == '0' && (*s == 'b' || *s == 'B')) {
+	}
+	else if ((base == 0 || base == 2) &&
+		c == '0' && (*s == 'b' || *s == 'B')) {
 		c = s[1];
 		s += 2;
 		base = 2;
@@ -183,8 +216,9 @@ strtol(const char* nptr, char** endptr, int base)
 	}
 	if (any < 0) {
 		acc = neg ? LONG_MIN : LONG_MAX;
-//		errno = ERANGE;
-	} else if (neg)
+		//		errno = ERANGE;
+	}
+	else if (neg)
 		acc = -acc;
 	if (endptr != 0)
 		*endptr = (char *)(any ? s - 1 : nptr);
@@ -210,15 +244,17 @@ strtoul(const char* nptr, char** endptr, int base)
 	if (c == '-') {
 		neg = 1;
 		c = *s++;
-	} else if (c == '+')
+	}
+	else if (c == '+')
 		c = *s++;
 	if ((base == 0 || base == 16) &&
-	    c == '0' && (*s == 'x' || *s == 'X')) {
+		c == '0' && (*s == 'x' || *s == 'X')) {
 		c = s[1];
 		s += 2;
 		base = 16;
-	} else if ((base == 0 || base == 2) &&
-	    c == '0' && (*s == 'b' || *s == 'B')) {
+	}
+	else if ((base == 0 || base == 2) &&
+		c == '0' && (*s == 'b' || *s == 'B')) {
 		c = s[1];
 		s += 2;
 		base = 2;
@@ -246,8 +282,9 @@ strtoul(const char* nptr, char** endptr, int base)
 	}
 	if (any < 0) {
 		acc = ULONG_MAX;
-//		errno = ERANGE;
-	} else if (neg)
+		//		errno = ERANGE;
+	}
+	else if (neg)
 		acc = -acc;
 	if (endptr != 0)
 		*endptr = (char *)(any ? s - 1 : nptr);
@@ -256,9 +293,9 @@ strtoul(const char* nptr, char** endptr, int base)
 
 
 //! convert string to int
-int atoi ( const char * str ) {
+int atoi(const char * str) {
 
-	return (int) strtol ( str, 0, 10 );
+	return (int)strtol(str, 0, 10);
 }
 
 double atof(char *p)

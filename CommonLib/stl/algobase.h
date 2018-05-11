@@ -497,7 +497,6 @@ inline void construct(T1* p, const T2& value) {
 	T2 sads = value;
 	int j = sizeof(T2);
 	memcpy(p, &sads, j);
-	//SkyConsole::Print("dfdfg 0x%x\n", i);
     //new (p) T1(value);
 }
 

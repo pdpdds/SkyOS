@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <va_list.h>
 #include <stdio.h>
+#include "memory.h"
 
 int sprintf(char *s, const char *format, ...)
 {
@@ -59,4 +60,46 @@ void itoa_s(unsigned int i, unsigned base, char* buf) {
 	if (base > 16) return;
 
 	itoa(i, base, buf);
+}
+
+
+char* _i64toa(long long value, char *str, int radix)    
+{
+	unsigned long long val;
+	int negative;
+	char buffer[65];
+	char *pos;
+	int digit;
+
+	if (value < 0 && radix == 10) {
+		negative = 1;
+		val = -value;
+
+	}
+	else {
+		negative = 0;
+		val = value;
+
+	} /* if */
+	pos = &buffer[64];
+	*pos = '\0';
+	do {
+		digit = val % radix;
+		val = val / radix;
+		if (digit < 10) {
+			*--pos = '0' + digit;
+
+		}
+		else {
+			*--pos = 'a' + digit - 10;
+
+		} /* if */
+
+	} while (val != 0L);
+	if (negative) {
+		*--pos = '-';
+
+	} /* if */
+	memcpy(str, pos, &buffer[64] - pos + 1);
+	return str;
 }

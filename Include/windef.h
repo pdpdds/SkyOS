@@ -40,6 +40,8 @@
   typedef unsigned long UINT32;
   typedef unsigned int UINT;
   typedef unsigned long DWORD;
+  typedef DWORD *LPDWORD;
+  typedef DWORD *PDWORD;
   typedef int              ptrdiff_t;
 typedef unsigned long  ulong;			//32 bit unsigined integer
 typedef unsigned int   uint;			//32 bit unsigined integer
