@@ -58,3 +58,12 @@ bool SkyGUISystem::Print(char* pMsg)
 
 	return result;
 }
+
+bool SkyGUISystem::Clear()
+{
+	bool result = false;
+	if (m_pWindow)
+		result = m_pWindow->Clear();
+
+	return result;
+}

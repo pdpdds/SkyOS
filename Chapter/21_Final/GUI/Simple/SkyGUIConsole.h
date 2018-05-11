@@ -9,10 +9,10 @@ public:
 
 	bool Initialize(void* pVideoRamPtr, int width, int height, int bpp, uint8_t buffertype);
 	bool Run();
-	bool Print(char* pMsg);
+	bool Print(char* pMsg);	
+	VOID GetNewLine();
 
-
-	void Clear();
+	bool Clear();
 	ULONG GetBPP();	
 	void Update(unsigned long *buf);	
 	void PutPixel(ULONG x, ULONG y, ULONG col);
@@ -29,5 +29,9 @@ private:
 	int m_width;
 	int m_height;
 	int m_bpp;
+
+	SkyRenderer* m_pRenderer;
+	int m_yPos;
+	int m_xPos;
 
 };

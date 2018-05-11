@@ -50,8 +50,8 @@ void SystemProfiler::PrintMemoryState()
 	SkyConsole::Print("Total Block Count %d\n", PhysicalMemoryManager::GetTotalBlockCount());
 	SkyConsole::Print("Free Block Count %d\n", PhysicalMemoryManager::GetFreeBlockCount());
 
-	SkyConsole::Print("\nHeap Size : %d(MB)\n", heapSize / MEGA_BYTES);
-	SkyConsole::Print("\nUsed Heap Size : %d(Bytes)\n", usedHeapSize);
+	SkyConsole::Print("Heap Size : %d(MB)\n", heapSize / MEGA_BYTES);
+	SkyConsole::Print("Used Heap Size : %d(Bytes)\n", usedHeapSize);
 }
 
 void SystemProfiler::PrintGlobalState()

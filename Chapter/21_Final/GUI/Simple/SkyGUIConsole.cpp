@@ -9,13 +9,19 @@
 
 #define COLOR(r,g,b) ((r<<16) | (g<<8) | b)
 #define WHITE COLOR(255,255,255)
+#define BLACK COLOR(0,0,0)
 #define DARKGRAY COLOR(154,154,154)
 
 extern char skyFontData[4096];
 ULONG* SkyGUIConsole::m_pVideoRamPtr = nullptr;
 
+#define PIVOT_X 8
+#define PIVOT_Y 16
+
 SkyGUIConsole::SkyGUIConsole()
 {
+	m_yPos = PIVOT_Y;
+	m_xPos = PIVOT_X;
 }
 
 
@@ -23,13 +29,13 @@ SkyGUIConsole::~SkyGUIConsole()
 {
 }
 
-SkyRenderer* renderer;
-static int yPos = 80;
-static int xPos = 8;
-
 bool SkyGUIConsole::Initialize(void* pVideoRamPtr, int width, int height, int bpp, uint8_t buffertype)
 {	
-	renderer = new SkyRenderer32();
+	kEnterCriticalSection();
+	InitKeyboard();	
+	kLeaveCriticalSection();
+
+	m_pRenderer = new SkyRenderer32();
 	SkyGUI::LoadFontFromMemory();
 		
 	m_pVideoRamPtr = (ULONG*)pVideoRamPtr;
@@ -40,23 +46,28 @@ bool SkyGUIConsole::Initialize(void* pVideoRamPtr, int width, int height, int bp
 	unsigned char buf[512];
 	sprintf((char*)buf, "XRes : %d", width);
 	unsigned char charColor = 0xff;
-	renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, xPos, 0, (char)charColor, buf);
+	m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, buf);
+	GetNewLine();
 
 	sprintf((char*)buf, "YRes : %d", height);
-	renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, xPos, 16, (char)charColor, buf);
+	m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, buf);
+	GetNewLine();
 
 	sprintf((char*)buf, "BitsPerPixel : %d", bpp);
-	renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, xPos, 32, (char)charColor, buf);
+	m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, buf);
+	GetNewLine();
 
 	sprintf((char*)buf, "Ram Virtual Address : %x", (uint32_t)pVideoRamPtr);
-	renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, xPos, 48, (char)charColor, buf);
+	m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, buf);
+	GetNewLine();
 
 	if(buffertype == MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED)
-		renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, 8, 64, (char)charColor, (unsigned char*)("MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED"));
+		m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, (unsigned char*)("MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED"));
 	else if (buffertype == MULTIBOOT_FRAMEBUFFER_TYPE_RGB)
-		renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, 8, 64, (char)charColor, (unsigned char*)("MULTIBOOT_FRAMEBUFFER_TYPE_RGB"));
+		m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, (unsigned char*)("MULTIBOOT_FRAMEBUFFER_TYPE_RGB"));
 	else if (buffertype == MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT)
-		renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, 8, 64, (char)charColor, (unsigned char*)("MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT"));
+		m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, (unsigned char*)("MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT"));
+	GetNewLine();
 
 	return true;
 }
@@ -66,24 +77,72 @@ bool SkyGUIConsole::Run()
 	Thread* pThread = ProcessManager::GetInstance()->GetCurrentTask();
 	Process* pProcess = pThread->m_pParent;
 
+	ConsoleManager manager;
+
+	int charWidth = (1024 / 8) - 15;
+	char* commandBuffer = new char[charWidth];
+
 	while (1)
+	{
+		SkyConsole::Print("Command> ");		
+		memset(commandBuffer, 0, charWidth);
+		//SkyConsole::Print("commandBuffer Address : 0x%x\n", &commandBuffer);	
+
+		SkyConsole::GetCommandForGUI(commandBuffer, charWidth);
+		SkyConsole::Print("\n");
+
+		if (manager.RunCommand(commandBuffer) == true)
+			break;
+	}
+
+	/*while (1)
 	{
 		kEnterCriticalSection();
 		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
 		kLeaveCriticalSection();
-	}
+	}*/
 
 	return false;
 }
 
-void SkyGUIConsole::Clear()
+VOID SkyGUIConsole::GetNewLine()
+{
+	int x, y;
+	ULONG *buf = m_pVideoRamPtr;	
+	int bxsize = m_width;
+	if ((m_yPos + PIVOT_Y + 16) < m_height) {
+		m_yPos += 16; /* 다음 행에 */
+	}
+	else
+	{
+		/* 스크롤 */
+		for (y = PIVOT_Y; y < (m_height - 16 - PIVOT_Y); y++) {
+			for (x = PIVOT_X; x < m_width; x++) {
+				buf[x + y * bxsize] = buf[x + (y + 16) * bxsize];
+			}
+		}
+		for (y = m_height - 16 - PIVOT_Y; y < (m_height - PIVOT_Y); y++) {
+			for (x = PIVOT_X; x < m_width; x++) {
+				buf[x + y * bxsize] = 0x00000000;
+			}
+		}
+	}
+
+	m_xPos = PIVOT_X;
+}
+bool SkyGUIConsole::Clear()
 {
 	int i;
 	int j;
 
-	for (i = 0; i < (int)1024; i++)
-		for (j = 0; j < (int)768; j++)
-			m_pVideoRamPtr[j * 1024 + i] = WHITE;
+	for (i = 0; i < (int)m_width; i++)
+		for (j = 0; j < (int)m_height; j++)
+			m_pVideoRamPtr[j * m_width + i] = BLACK;
+
+	m_xPos = PIVOT_X;
+	m_yPos = PIVOT_Y;
+
+	return true;
 }
 
 ULONG SkyGUIConsole::GetBPP() {
@@ -171,21 +230,40 @@ void SkyGUIConsole::Update(unsigned long *buf)
 
 bool SkyGUIConsole::Print(char* pMsg)
 {
-	if (renderer == nullptr)
+	if (m_pRenderer == nullptr)
 		return false;
 
-	unsigned char charColor = 0xff;
-	renderer->PutFonts_ASC((char*)m_pVideoRamPtr, 1024, xPos, yPos, (char)charColor, (unsigned char*)pMsg);
-	if (strlen(pMsg) > 0 && (pMsg[strlen(pMsg) - 1] == '\n'))
+	//backspace
+	if (strlen(pMsg) == 1 && pMsg[0] == 0x08) 
 	{
-		yPos += 16;
-		xPos = 8;
-	}
-	else
-	{
-		xPos += strlen(pMsg) * 8;
+		if (m_xPos > 9 * 8)
+		{
+			FillRect(m_xPos, m_yPos, 8, 16, 0x00, m_width, m_height, m_bpp);
+			m_xPos -= 1 * 8;
+			FillRect(m_xPos, m_yPos, 8, 16, 0x00, m_width, m_height, m_bpp);
+			FillRect(m_xPos, m_yPos + 12, 8, 4, WHITE, m_width, m_height, m_bpp);
+		}
+		
+		return true;
 	}
 
+	unsigned char charColor = 0xff;
+	FillRect(m_xPos, m_yPos, 8, 16, 0x00, m_width, m_height, m_bpp);
+	
+	unsigned char *s = (unsigned char*)pMsg;
+	for (; *s != 0x00; s++)
+	{
+		if (*s == '\n')
+		{
+			GetNewLine();
+			continue;
+		}
+
+		m_pRenderer->PutFont((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, skyFontData + *s * 16);
+		m_xPos += 8;
+	}	
+	
+	FillRect(m_xPos, m_yPos + 12, 8, 4, WHITE, m_width, m_height, m_bpp);	
 	
 	return true;
 }

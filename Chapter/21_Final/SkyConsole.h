@@ -54,6 +54,7 @@ namespace SkyConsole
 	void SetTextColor(ConsoleColor col);
 
 	void GetCommand(char* commandBuffer, int bufSize);
+	void GetCommandForGUI(char* commandBuffer, int bufSize);
 	//KEYCODE	GetChar(); 
 	char	GetChar();
 }

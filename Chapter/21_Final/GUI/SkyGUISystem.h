@@ -31,6 +31,7 @@ public:
 	bool Initialize(multiboot_info* pBootInfo);
 	bool Run();
 	bool Print(char* pMsg);
+	bool Clear();
 
 	static SkyGUISystem* GetInstance()
 	{

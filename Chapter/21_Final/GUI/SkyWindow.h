@@ -10,6 +10,7 @@ public:
 
 	bool Initialize(void* _pVideoRamPtr, int _width, int _height, int _bpp, uint8_t buffertype);
 	bool Run();
+	bool Clear();
 	bool Print(char* pMsg);
 
 
@@ -32,6 +33,12 @@ template <typename T>
 bool SkyWindow<T>::Print(char* pMsg)
 {
 	return m_guiSys.Print(pMsg);
+}
+
+template <typename T>
+bool SkyWindow<T>::Clear()
+{
+	return m_guiSys.Clear();
 }
 
 
