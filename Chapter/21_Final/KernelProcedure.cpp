@@ -1,5 +1,6 @@
 #include "SkyOS.h"
 #include "SkyRenderer.h"
+#include "nic.h"
 
 bool systemOn = false;
 
@@ -29,6 +30,8 @@ DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 
 	systemOn = true;
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
+
+	//init_nic();
 
 	NativeConsole();
 

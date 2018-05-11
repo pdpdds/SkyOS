@@ -8,6 +8,7 @@
 #include "kheap.h"
 #include "VirtualMemoryManager.h"
 #include "SkyAPI.h"
+#include "SkyConsole.h"
 
 static UPDControl	ucb;
 
@@ -118,8 +119,10 @@ static void write_3c905b_register( int nRegName, DWORD dwValue )
 	// write port
 	if( pR->nSize == 1 )
 		OutPortByte( dwPort, dwValue );
-	else if( pR->nSize == 2 )
-		OutPortDWord( dwPort, dwValue );
+	else if (pR->nSize == 2)
+	{
+		OutPortDWord(dwPort, dwValue);
+	}
 	else
 		OutPortDWord( dwPort, dwValue );
 }
@@ -143,13 +146,20 @@ static DWORD read_3c905b_register( int nRegName )
 		select_register_window_3c905b( pR->nWindow );
 
 	// read port
-	if( pR->nSize == 1 )
-		dwX = InPortByte( dwPort);
-	else if( pR->nSize == 2 )
-		dwX = InPortWord( dwPort);
+	if (pR->nSize == 1)
+	{
+		dwX = InPortByte(dwPort);
+	}
+	else if (pR->nSize == 2)
+	{
+	
+		dwX = InPortWord((USHORT)dwPort);
+		//SkyConsole::Print("%d Port 0x%x\n", pR->nSize, dwPort);
+	}
 	else
-		dwX = InPortDWord( dwPort);
-
+	{
+		dwX = InPortDWord(dwPort);
+	}
 	return( dwX );
 }
 
@@ -170,31 +180,30 @@ static int wait_command_processing()
 }
 
 // read eeprom data
-static DWORD read_eeprom_data( int nOffset )
+static DWORD read_eeprom_data(int nOffset)
 {
 	int		nI;
 	DWORD	dwX;
 
 	// check the busy bit in the EepromCommand Register
-	for( nI = 0; nI < 65000; nI++ )
+	for (nI = 0; nI < 65000; nI++)
 	{
-		dwX = read_3c905b_register( RN_EepromCommand );
-		if( ( dwX & (DWORD)0x8000 ) == 0 )
+		dwX = read_3c905b_register(RN_EepromCommand);
+		if ((dwX & (DWORD)0x8000) == 0)
 			break;	// Not busy!
 	}
-	
+
 	// send read command to the EepromCommand register
-	dwX =  (DWORD)nOffset;	// Mac word Offset
+	dwX = (DWORD)nOffset;	// Mac word Offset
 	dwX += 0x80;			// Read Command
-	write_3c905b_register( RN_EepromCommand, dwX );
-
+	write_3c905b_register(RN_EepromCommand, dwX);
+	
 	// wait (162us)... (do not omit this!!)
-	ksleep( 5 );
-
+	msleep(1000);
 	// Read Eeprom Data
-	dwX = read_3c905b_register( RN_EepromData );
-
-	return( dwX );
+	dwX = read_3c905b_register(RN_EepromData);
+	
+	return(dwX);
 }
 
 // find 6 byte mac address
@@ -203,9 +212,10 @@ int get_3c905b_mac_address( UINT16 *pMac )
 	DWORD dwX; 
 
 	memset( pMac, 0, 6 );
-
+	
 	dwX = read_eeprom_data( 0x00 );
 	pMac[0] = (UINT16)dwX;
+	
 	dwX = read_eeprom_data( 0x01 );
 	pMac[1] = (UINT16)dwX;
 	dwX = read_eeprom_data( 0x02 );
@@ -229,7 +239,7 @@ int find_3c905b_nic()
 		nI = FindPCIDevice( nI, &pci_3c905b, class_code );
 		if( nI > 0 )
 		{	// is it a 3COM905B ??
-			//display_pci_parameter( &pci_3c905b );
+			DisplayPCIParameteter( &pci_3c905b );
 			break;
 		}
 	}

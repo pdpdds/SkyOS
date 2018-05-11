@@ -3,6 +3,7 @@
 #include "SkyConsole.h"
 
 extern void SwitchTask(int tick, registers_t& regs);
+extern void SendEOI();
 
 volatile uint32_t _pitTicks = 0;
 int g_esp = 0;
@@ -14,6 +15,26 @@ void ISRHandler(registers_t regs)
 {
 	SwitchTask(_pitTicks, regs);
 }
+/*
+__declspec(naked) void kDefaultInterruptHandler()
+{
+	_asm {
+		PUSHAD
+		PUSHFD
+		CLI
+	}
+
+	_pitTicks++;
+
+	SendEOI();
+
+	_asm
+	{
+		POPFD
+		POPAD
+		IRETD
+	}
+}*/
 
 //타이머 인터럽트 핸들러
 __declspec(naked) void InterruptPITHandler() 
@@ -111,28 +132,13 @@ void PITInitialize()
 	setvect(32, InterruptPITHandler);
 }
 
-uint32_t SetPITTickCount(uint32_t i) {
-
-	uint32_t ret = _pitTicks;
-	_pitTicks = i;
-	return ret;
-}
-
-
-//! returns current tick count
-uint32_t GetPITTickCount() {
-
-	return _pitTicks;
-}
-
 unsigned int GetTickCount()
 {
 	return _pitTicks;
 }
 
-void _cdecl msleep(int ms)
+void msleep(int ms)
 {
-
 	unsigned int ticks = ms + GetTickCount();
 	while (ticks > GetTickCount())
 		;

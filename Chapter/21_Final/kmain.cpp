@@ -5,6 +5,15 @@
 
 _declspec(naked) void multiboot_entry(void)
 {
+#ifdef SKY_EMULATOR
+	__asm
+	{
+		MOV EAX, 0
+		PUSH EAX;
+		PUSH EAX;
+		CALL    kmain
+	}
+#else
 	__asm {
 		align 4
 
@@ -47,6 +56,7 @@ _declspec(naked) void multiboot_entry(void)
 	halt:
 		jmp halt;
 	}
+#endif
 }
 
 void InitContext(multiboot_info* bootinfo);
@@ -79,13 +89,13 @@ void kmain(unsigned long magic, unsigned long addr)
 	
 	PrintCurrentTime();
 	TestMemoryModule("SAMPLE_DLL");
-	
+
 	kLeaveCriticalSection();
 	
 #if SKY_CONSOLE_MODE == 0	
 	pSystemLauncher = new SkyGUILauncher();
 #else
-	pSystemLauncher = new SkyConsoleLauncher();
+	pSystemLauncher = new SkyConsoleLauncher();	
 #endif
 	pSystemLauncher->Launch();
 

@@ -62,12 +62,9 @@
 extern void SendPITCommand(uint8_t cmd);
 extern void SendPITData(uint16_t data, uint8_t counter);
 
-extern uint32_t SetPITTickCount(uint32_t i);
-extern uint32_t GetPITTickCount();
-
 void PITInitialize();
 
 unsigned int GetTickCount();
-void _cdecl msleep(int ms);
+void msleep(int ms);
 
 extern void StartPITCounter(uint32_t freq, uint8_t counter, uint8_t mode);
