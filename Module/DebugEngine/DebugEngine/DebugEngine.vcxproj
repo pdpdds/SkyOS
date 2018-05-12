@@ -99,7 +99,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalOptions>/Oy %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../../../CommonLib/stl;../../../CommonLib;../../../include;../TestEngine</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../CommonLib/stl;../../../CommonLib;../../../include;../../Include</AdditionalIncludeDirectories>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
     </ClCompile>
     <Link>

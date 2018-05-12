@@ -24,9 +24,6 @@
     <ClInclude Include="targetver.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SkyFileInterface.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -35,7 +32,7 @@
     <ClCompile Include="TestEngine.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SkyFileInterface.cpp">
+    <ClCompile Include="SkyWin32FileInterface.cpp">
       <Filter>헤더 파일</Filter>
     </ClCompile>
   </ItemGroup>
