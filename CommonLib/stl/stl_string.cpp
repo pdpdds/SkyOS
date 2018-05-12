@@ -333,6 +333,11 @@ namespace std
 		return append(ch);
 	}
 
+	string operator + (string lhs, const char* rhs)
+	{
+		return lhs.concat(rhs);
+	}
+	
 	string operator + (const string &lhs, const char* &rhs)
 	{
 		return lhs.concat(rhs);

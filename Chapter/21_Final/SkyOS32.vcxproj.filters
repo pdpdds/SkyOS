@@ -317,6 +317,7 @@
     <ClCompile Include="SkyConsoleLauncher.cpp" />
     <ClCompile Include="SkyGUILauncher.cpp" />
     <ClCompile Include="SkyPCI.cpp" />
+    <ClCompile Include="SkyDebugger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -534,6 +535,7 @@
     <ClInclude Include="SkyConsoleLauncher.h" />
     <ClInclude Include="SkyGUILauncher.h" />
     <ClInclude Include="SkyPCI.h" />
+    <ClInclude Include="SkyDebugger.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

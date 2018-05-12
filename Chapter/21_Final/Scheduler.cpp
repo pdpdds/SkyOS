@@ -130,6 +130,8 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 
 				mov ecx, [entryPoint]
 				mov esp, procStack
+				xor ebp, ebp
+				push ebp
 				mov ebx, [startParam]
 			}
 			
@@ -142,7 +144,7 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 				mov     gs, ax			
 
 				push    ebx;
-				push    0x10;
+				push    0; //EBP
 				push    0x200; EFLAGS
 				push    0x08; CS
 				push    ecx; EIP

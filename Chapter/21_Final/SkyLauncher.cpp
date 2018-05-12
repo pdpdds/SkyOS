@@ -40,16 +40,16 @@ void SkyLauncher::JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
 	{
 		MOV     AX, 0x10;
 		MOV     DS, AX
-			MOV     ES, AX
-			MOV     FS, AX
-			MOV     GS, AX
+		MOV     ES, AX
+		MOV     FS, AX
+		MOV     GS, AX
 
-			MOV     ESP, procStack
-			PUSH	0x10;
+		MOV     ESP, procStack
+		PUSH	0; //parameter
+		PUSH	0; //EBP
 		PUSH    0x200; EFLAGS
-			PUSH    0x08; CS
-			PUSH    entryPoint; EIP
-
-			IRETD
+		PUSH    0x08; CS
+		PUSH    entryPoint; EIP		
+		IRETD
 	}
 }

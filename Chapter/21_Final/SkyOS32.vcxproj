@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3c905b.cpp" />
+    <ClCompile Include="SkyDebugger.cpp" />
     <ClCompile Include="SkyPCI.cpp" />
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="ConsoleIOListener.cpp" />
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3c905b.h" />
+    <ClInclude Include="SkyDebugger.h" />
     <ClInclude Include="SkyPCI.h" />
     <ClInclude Include="commandMacros.h" />
     <ClInclude Include="commands.h" />
@@ -327,7 +329,7 @@
       <StructMemberAlignment>1Byte</StructMemberAlignment>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <AssemblerOutput />
+      <AssemblerOutput>AssemblyAndMachineCode</AssemblerOutput>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CallingConvention>Cdecl</CallingConvention>
@@ -371,7 +373,8 @@
       </LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
-      <Command />
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

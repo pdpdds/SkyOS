@@ -161,7 +161,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>./;../include;./stl;./math</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>FLOATINGPT;__STDC__;ARCH_X86;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;FLOATINGPT;__STDC__;ARCH_X86;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>false</StringPooling>
       <ExceptionHandling />

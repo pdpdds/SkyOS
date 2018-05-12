@@ -7,6 +7,7 @@
 #include "SystemProfiler.h"
 #include "Process.h"
 #include "Thread.h"
+#include "SkyDebugger.h"
 
 long CmdCls(char *theCommand)
 {
@@ -115,3 +116,12 @@ long cmdPCI(char *theCommand)
 
 	return false;
 }
+
+long cmdCallStack(char *theCommand)
+{
+	SkyDebugger::GetInstance()->TraceStack();
+
+	return false;
+}
+
+

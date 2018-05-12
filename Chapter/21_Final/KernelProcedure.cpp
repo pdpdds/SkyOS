@@ -24,6 +24,15 @@ void NativeConsole()
 	}
 }
 
+__declspec(naked) void ProcInit()
+{
+	__asm
+	{		
+		xor ebp, ebp; Set %ebp to NULL
+		ret
+	}
+}
+
 DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 {
 	SkyConsole::Print("Console Mode Start!!\n");
@@ -42,11 +51,23 @@ DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 
 DWORD WINAPI SystemGUIProc(LPVOID parameter)
 {
+	unsigned int* ebp = (unsigned int*)&parameter - 1;
+	SkyConsole::Print("start ebp : %x\n", *ebp);	
+	SkyConsole::Print("parameter : %x\n", parameter);
+
+	//ProcInit();
 	systemOn = true;
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
 	SkyGUISystem::GetInstance()->Run();
+
+	return 0;
+}
+
+DWORD WINAPI SystemGUIProc2(LPVOID parameter)
+{
 	
+
 	return 0;
 }
 

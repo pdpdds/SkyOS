@@ -86,6 +86,8 @@ typedef          char  s8int;
   typedef int WPARAM;
   typedef int LPARAM;
 	  
+  typedef HANDLE HINSTANCE;
+  typedef HINSTANCE HMODULE;
 
   /* 32 bit data types*/
   typedef long INT32;

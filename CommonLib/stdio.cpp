@@ -8,6 +8,8 @@
 #include "memory.h"
 #include "stdint.h"
 
+
+
 /*int vsprintf(char *buffer, char *format, va_list argptr)
 {
 	int nR;
@@ -137,7 +139,7 @@ int vsprintf(char *str, const char *format, va_list ap) {
 
 	return i;
 }
-
+#ifndef WIN32
 //! converts a string to a long
 long
 strtol(const char* nptr, char** endptr, int base)
@@ -663,3 +665,4 @@ int sscanf(const char * buf, const char * fmt, ...)
 	va_end(args);
 	return i;
 }
+#endif

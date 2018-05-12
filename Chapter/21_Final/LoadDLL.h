@@ -32,8 +32,7 @@
 
 #define PAGE_EXECUTE 0x10
 
-typedef HANDLE HINSTANCE;
-typedef HINSTANCE HMODULE;
+
 
 typedef void *FARPROC;
 

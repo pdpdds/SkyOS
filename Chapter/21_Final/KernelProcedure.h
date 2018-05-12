@@ -7,6 +7,7 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter);
 
 
 DWORD WINAPI SystemGUIProc(LPVOID parameter);
+DWORD WINAPI SystemGUIProc2(LPVOID parameter);
 DWORD WINAPI ConsoleGUIProc(LPVOID parameter);
 DWORD WINAPI ConsoleDebugGUIProc(LPVOID parameter);
 DWORD WINAPI GUIWatchDogProc(LPVOID parameter);

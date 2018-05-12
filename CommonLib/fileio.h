@@ -27,24 +27,26 @@ typedef struct _FILE {
 extern "C" {
 #endif
 
-extern size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
-extern FILE *fopen(const char *filename, const char *mode);
-extern size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
-extern int fclose(FILE *stream);
-extern int feof(FILE *stream);
-extern int ferror(FILE *stream);
-extern int fflush(FILE *stream);
-extern FILE *freopen(const char *filename, const char *mode, FILE *stream);
-extern int fseek(FILE *stream, long int offset, int whence);
-extern long int ftell(FILE *stream);
-extern int fgetc(FILE * stream);
-extern char* fgets(char *dst, int max, FILE *fp);
-int fscanf(FILE *fp, const char *fmt, ...);
-extern char*	strerr(int errnum);
-//extern FILE*	stderr;
-extern int fprintf(FILE * stream, const char * format, ...);
-char *	strerror(int errnum);
+	extern size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
+	extern FILE *fopen(const char *filename, const char *mode);
+	extern size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
+	extern int fclose(FILE *stream);
+	extern int feof(FILE *stream);
+	extern int ferror(FILE *stream);
+	extern int fflush(FILE *stream);
+	extern FILE *freopen(const char *filename, const char *mode, FILE *stream);
+	extern int fseek(FILE *stream, long int offset, int whence);
+	extern long int ftell(FILE *stream);
+	extern int fgetc(FILE * stream);
+	extern char* fgets(char *dst, int max, FILE *fp);
+	int fscanf(FILE *fp, const char *fmt, ...);
+	extern char*	strerr(int errnum);
+	//extern FILE*	stderr;
+	extern int fprintf(FILE * stream, const char * format, ...);
+	char *	strerror(int errnum);
 
 #ifdef  __cplusplus
 }
 #endif
+
+
