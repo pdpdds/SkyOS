@@ -7,82 +7,59 @@
 #include "MapFile.h"
 #include "MapFileSymbol.h"
 #include "Undecorate.h"
-#include "SkyFileInterface.h"
+#include "SkyMockInterface.h"
 
 extern SKY_FILE_Interface g_FileInterface;
+extern SKY_ALLOC_Interface g_allocInterface;
+extern SKY_Print_Interface g_printInterface;
+
+typedef void (*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
+typedef I_MapFileReader*(*PGetDebugEngineDLL)();
+
+
+void* GetModuleFunction(HINSTANCE handle, const char* func_name)
+{
+	return (void*)GetProcAddress(handle, func_name);
+}
 
 int main()
 {
-	BOOL freeResult;
 	HINSTANCE dllHandle = NULL;
-
-	//Load the dll and keep the handle to it
-	//dllHandle = LoadLibrary("DebugEngine.dll");
+	
+	dllHandle = LoadLibrary("DebugEngine.dll");
 	char* fileName = "SkyOS32.map";
-	MapFileReader* pReader = new MapFileReader(g_FileInterface);
+	
+	PSetSkyMockInterface SetSkyMockInterface = (PSetSkyMockInterface)GetModuleFunction(dllHandle, "SetSkyMockInterface");
+	PGetDebugEngineDLL GetDebugEngineDLLInterface = (PGetDebugEngineDLL)GetModuleFunction(dllHandle, "GetDebugEngineDLL");
 
-	if (pReader->readFile(fileName))
+	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
+	
+	if (!GetDebugEngineDLLInterface)
 	{
-		MapFileSymbol	*symbol = NULL;
-		int				n, i;
-
-		// do symbol query
-
-		n = pReader->getNumPublicSymbols();
-		std::string m_symbol = "GetCurrentTask";
-		for (i = 0; i < n; i++)
-		{
-			MapFileSymbol	*sym;
-			char nameDec[MAX_PATH];
-			char nameUnDec[MAX_PATH];
-
-			// get symbol name and undecorate to get simple name with no params or types
-
-			sym = pReader->getPublicSymbol(i);
-			sym->getName(nameDec);
-			simpleUndecorateCPP(nameDec, nameUnDec);
-
-			// compare to value user typed, we compare both decorated and undecorated names
-
-			int	r;
-
-			
-				r = (m_symbol.compare(nameUnDec) == 0 ||
-					m_symbol.compare(nameDec) == 0);
-			
-			
-			if (r)
-			{
-				// found it
-
-				symbol = sym;
-				break;
-			}
-		}
-
-
-
-
-		int				result;
-		int				lineNumber = 0;
-		char		l_module[MAX_PATH];
-		char		l_function[MAX_PATH];
-		DWORD			l_resultAddress;
-
-		pReader->setLoadAddress(pReader->getPreferredLoadAddress());
-		result = pReader->getAddressInfo(symbol->getRVABase(),
-			l_module, fileName, lineNumber, l_function, l_resultAddress);
-		if (result)
-		{
-			// setup line number
-
-			char	temp[100];
-
-			sprintf(temp, "%d", lineNumber);
-			printf(temp);
-		}
-
-		pReader->getPreferredLoadAddress();
+		printf("GetDebugEngineDLL Aquired failed!\n");
+		return 0;
 	}
+
+	I_MapFileReader* pMapReader = GetDebugEngineDLLInterface();
+
+	if(pMapReader == nullptr)
+	{
+		printf("MapReader Creation Fail!\n");
+		return 0;
+	}
+
+	pMapReader->readFile(fileName);
+	pMapReader->setLoadAddress(0x100000);
+
+	int lineNumber = 0;
+	DWORD resultAddress = 0;
+	char function[256];
+	char moduleName[256];
+	char fileName2[256];
+
+	int result = pMapReader->getAddressInfo(0x00100df0,
+		moduleName, fileName2, lineNumber, function, resultAddress);
+	
+	return 0;
 }
 

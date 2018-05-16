@@ -1,6 +1,6 @@
 #ifndef _MAP_FILE_SYMBOL_H
 #define _MAP_FILE_SYMBOL_H
-#ifndef WIN32
+#ifdef SKYOS32
 #include "windef.h"
 #include "stl_string.h"
 #include "string.h"

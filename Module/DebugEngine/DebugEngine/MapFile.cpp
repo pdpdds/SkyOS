@@ -59,15 +59,10 @@
 #include "ctype.h"
 #include <stdio.h>
 
-void printf(const char* str, ...)
-{
-
-}
-
-SKY_FILE_Interface MapFileReader::m_fileInterface;
+extern SkyMockInterface g_mockInterface;
 
 #define LINE_LENGTH 1024		// should be more than enough
-#define DEFAULT_VERBOSE FALSE	// set to TRUE for debugging
+#define DEFAULT_VERBOSE TRUE	// set to TRUE for debugging
 
 #if _UNICODE
 #define tcs_fopen _wfopen
@@ -92,8 +87,6 @@ MapFileReader::MapFileReader(SKY_FILE_Interface fileInterface, char	*fileName)
 	preferredLoadAddress = NULL;
 	actualLoadAddress = NULL;
 
-	m_fileInterface = fileInterface;
-
 	readFile(fileName);
 }
 
@@ -103,7 +96,7 @@ MapFileReader::MapFileReader(SKY_FILE_Interface fileInterface, char	*fileName)
 //.RETURN.CODES.........................
 //--------------------------------------
 
-MapFileReader::MapFileReader(SKY_FILE_Interface fileInterface)
+MapFileReader::MapFileReader()
 {
 	verbose = DEFAULT_VERBOSE;
 
@@ -112,7 +105,6 @@ MapFileReader::MapFileReader(SKY_FILE_Interface fileInterface)
 	preferredLoadAddress = NULL;
 	actualLoadAddress = NULL;
 
-	m_fileInterface = fileInterface;
 }
 
 //-NAME---------------------------------
@@ -741,19 +733,21 @@ int MapFileReader::getSymbolInfo(DWORD		offset,
 
 int MapFileReader::readFile(char	*fileName)
 {
+
 	FILE	*fp;
 	int		r = TRUE;
 	
 	// open the map file
-	
-	fp = m_fileInterface.sky_fopen(fileName, "r");
+	fp = g_mockInterface.g_fileInterface.sky_fopen(fileName, "r");
 	if (fp != NULL)
 	{
+		
+		
 		r = readDLLName(fp);
-
+		
 		if (r)
 			r = readTimeStamp(fp);
-
+		
 		if (r)
 			r = readPreferredLoadAddress(fp);
 
@@ -768,7 +762,7 @@ int MapFileReader::readFile(char	*fileName)
 
 		// from here, we may get the remaining data in any order...
 		// so we'll need to rewrite this code to handle that possibility
-
+		
 		while(r)
 		{
 			char	line[LINE_LENGTH];
@@ -805,19 +799,21 @@ int MapFileReader::readFile(char	*fileName)
 		if (verbose)
 		{
 			if (r)
-				printf("Parsing C and C++ decorated names complete\n");
+				g_mockInterface.g_printInterface.sky_printf("Parsing C and C++ decorated names complete\n");
 			else
-				printf("Parsing C and C++ decorated names failed\n");
+				g_mockInterface.g_printInterface.sky_printf("Parsing C and C++ decorated names failed\n");
 		}
-		m_fileInterface.sky_fclose(fp);
+		g_mockInterface.g_fileInterface.sky_fclose(fp);
 	}
 	else
 	{
 		if (verbose)
-			printf("Failed to open map file %s\n", fileName);
+			g_mockInterface.g_printInterface.sky_printf("Failed to open map file %s\n", fileName);
 
 		r = FALSE;
 	}
+
+	g_mockInterface.g_printInterface.sky_printf("success to open map file %s\n", fileName);
 
 	return r;
 }
@@ -962,23 +958,24 @@ char *MapFileReader::getNonBlankLine(FILE	*fp,
 								      char	*line,
 								      int	len)
 {
-	char	*p;
+	char	*p = nullptr;
 
 	// get next line that isn't blank and get the first word on it
-
+	
 	do 
 	{
-		p = m_fileInterface.sky_fgets(line, (len - 1), fp);
+		p = g_mockInterface.g_fileInterface.sky_fgets(line, (len - 1), fp);
+
 		if (p == NULL)
 		{
 			// check if at end of file, if not, then we must be at a \n character
 
-			if (m_fileInterface.sky_feof(fp) != 0)
+			if (g_mockInterface.g_fileInterface.sky_feof(fp) != 0)
 				break;				// end of file
 
 			// move past the \n character
 
-			m_fileInterface.sky_fseek(fp, 1, SEEK_CUR);
+			g_mockInterface.g_fileInterface.sky_fseek(fp, 1, SEEK_CUR);
 		}
 	} while(p == NULL || isBlankLine(p));
 
@@ -1096,7 +1093,7 @@ int MapFileReader::readSectionInformation(FILE	*fp)
 
 	while(TRUE)
 	{
-		p = m_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
+		p = g_mockInterface.g_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
 		if (p == NULL)
 			return FALSE;
 
@@ -1156,7 +1153,7 @@ int MapFileReader::readPublicSymbols(FILE	*fp)
 	// then step past a blank line and then read all symbols (some exported, some imported)
 
 	if (verbose)
-		printf("Searching for start of C and C++ exported names\n");
+		g_mockInterface.g_printInterface.sky_printf("Searching for start of C and C++ exported names\n");
 
 	p = getNonBlankLine(fp, line, LINE_LENGTH);
 	if (p == NULL)
@@ -1188,7 +1185,7 @@ int MapFileReader::readPublicSymbols(FILE	*fp)
 
 	// line matched, move to next line
 
-	p = m_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
+	p = g_mockInterface.g_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
 	if (p == NULL)
 		return FALSE;
 
@@ -1255,11 +1252,11 @@ int MapFileReader::readSymbols(FILE	*fp,
 	// from a dll, a lib or an object file inside a dll or lib it is imported
 
 	if (verbose)
-		printf("Parsing C and C++ export names\n");
+		g_mockInterface.g_printInterface.sky_printf("Parsing C and C++ export names\n");
 
 	while(TRUE)
 	{
-		p = m_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
+		p = g_mockInterface.g_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
 		if (p == NULL)
 			return TRUE;
 
@@ -1451,7 +1448,7 @@ int	MapFileReader::readFixups(FILE	*fp)
 		if (!r)
 			return FALSE;
 
-		p = m_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
+		p = g_mockInterface.g_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
 		if (p == NULL)
 			return TRUE;	// running out of document is same as a blank line
 	}
@@ -1567,7 +1564,7 @@ int MapFileReader::readLineNumbers(char	*p,
 
 		// get next line
 
-		p = m_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
+		p = g_mockInterface.g_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
 		if (p == NULL)
 			return TRUE;	// running out of document is same as blank line
 	}
@@ -1664,7 +1661,7 @@ int MapFileReader::readExports(char	*p,
 
 		// get next line
 
-		p = m_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
+		p = g_mockInterface.g_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
 		if (p == NULL)
 			return TRUE;	// running out is the same as a blank line
 	}
@@ -1690,7 +1687,7 @@ int MapFileReader::readStaticSymbols(FILE	*fp)
 	// then step past a blank line and then read all symbols (some exported, some imported)
 
 	if (verbose)
-		printf("Searching for start of C and C++ exported names\n");
+		g_mockInterface.g_printInterface.sky_printf("Searching for start of C and C++ exported names\n");
 
 	p = getNonBlankLine(fp, line, LINE_LENGTH);
 	if (p == NULL)
@@ -1724,7 +1721,7 @@ int MapFileReader::readStaticSymbols(char	*p,
 
 	// line matched, move to next line, which may be zero length (in which case fgets will return NULL)
 
-	p = m_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
+	p = g_mockInterface.g_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
 	if (p == NULL)
 		return FALSE;
 

@@ -1,6 +1,6 @@
 #ifndef _UNDECORATE_H
 #define _UNDECORATE_H
-#ifndef WIN32
+#ifdef SKYOS32
 #include "windef.h"
 #include "stl_string.h"
 #endif

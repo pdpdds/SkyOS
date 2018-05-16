@@ -56,9 +56,6 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ServiceFunc.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="MapFile.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -87,6 +84,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Undecorate.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceFunc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

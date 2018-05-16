@@ -1,18 +1,18 @@
 #ifndef _MAP_FILE_READER_H
 #define _MAP_FILE_READER_H
 
-#ifdef WIN32
-#include <string>
-#include <vector>
-#else
+#ifdef SKYOS32
 #include "windef.h"
 #include "stl_string.h"
 #include "fileio.h"
 #include "vector.h"
+#elif WIN32
+#include <string>
+#include <vector>
 #endif
 
-#include "SkyFileInterface.h"
-
+#include "SkyMockInterface.h"
+#include "I_MapFileReader.h"
 //----------------------------------------
 // Copyright (c) 2001 Object Media Limited
 // (Un-Published Material)
@@ -65,7 +65,7 @@
 #ifdef MAPFILEDLL_EXPORTS
 #define MAPFILEDLL_API __declspec(dllexport)
 #else
-#define MAPFILEDLL_API __declspec(dllimport)
+#define MAPFILEDLL_API __declspec(dllimport) 
 #endif
 #endif
 
@@ -77,12 +77,12 @@ class MapFileLineNumberFile;
 class MapFileAddress;
 class MapFileFixup;
 
-class MapFileReader
+class MapFileReader : public I_MapFileReader
 {
 public:
 	MAPFILEDLL_API MapFileReader(SKY_FILE_Interface fileInterface, char	*fileName);
 
-	MAPFILEDLL_API MapFileReader(SKY_FILE_Interface fileInterface);
+	MAPFILEDLL_API MapFileReader();
 
 	MAPFILEDLL_API ~MapFileReader();
 
@@ -104,12 +104,12 @@ public:
 	// caution! this version requires that you've set the load
 	//          address using setLoadAddress()
 
-	MAPFILEDLL_API int getAddressInfo(DWORD	address,
+	virtual MAPFILEDLL_API int getAddressInfo(DWORD	address,
 							        	char* module,
 		char* fileName,
 									  int		&lineNumber,
 		char* function,
-									  DWORD		&resultAddress);
+									  DWORD		&resultAddress) override;
 
 	MAPFILEDLL_API int getSymbolInfo(DWORD		offset, 
 		std::string	&symbolName,
@@ -120,9 +120,9 @@ public:
 		std::string	&function,
 									 DWORD		&resultAddress);
 
-	MAPFILEDLL_API void setLoadAddress(DWORD	loadAddress);
+	virtual MAPFILEDLL_API void setLoadAddress(DWORD	loadAddress) override;
 
-	MAPFILEDLL_API int readFile(char	*fileName);
+	virtual MAPFILEDLL_API int readFile(char	*fileName) override;
 
 	MAPFILEDLL_API void getTimeStamp(std::string	&s)
 	{
@@ -347,7 +347,6 @@ private:
 	std::vector<MapFileFixup *>		fixups;				// array of MapFileFixup objects
 
 	DWORD			actualLoadAddress;	// for those occasions when you know this value, NULL otherwise
-	static SKY_FILE_Interface m_fileInterface;
 };
 
 #endif

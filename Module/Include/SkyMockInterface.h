@@ -2,6 +2,7 @@
 #ifdef WIN32
 #include <stdio.h>
 #else
+#include "windef.h"
 #include "fileio.h"
 #endif
 
@@ -20,3 +21,22 @@ typedef struct SKY_FILE_Interface
 	int (*sky_fgetc)(FILE * stream);
 	char* (*sky_fgets)(char *dst, int max, FILE *fp);
 } SKY_FILE_Interface;
+
+typedef struct SKY_ALLOC_Interface
+{
+	unsigned int (*sky_kmalloc)(unsigned int sz);
+	void (*sky_kfree)(void* p);
+} SKY_ALLOC_Interface;
+
+typedef struct SKY_Print_Interface
+{	
+	void(*sky_printf)(const char* str, ...);
+} SKY_Print_Interface;
+
+class SkyMockInterface
+{
+public:
+	SKY_ALLOC_Interface g_allocInterface;
+	SKY_FILE_Interface g_fileInterface;
+	SKY_Print_Interface g_printInterface;
+};
