@@ -19,16 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cstd.cpp" />
-    <ClCompile Include="ctype.cpp" />
+    <ClCompile Include="ctype.c" />
     <ClCompile Include="ffmt.cpp" />
     <ClCompile Include="GDT.cpp" />
-    <ClCompile Include="kmain.cpp" />
-    <ClCompile Include="memory.cpp" />
-    <ClCompile Include="SkyConsole.cpp" />
-    <ClCompile Include="sprintf.cpp" />
-    <ClCompile Include="stdio.cpp" />
-    <ClCompile Include="string.cpp" />
+    <ClCompile Include="kmain.c" />
+    <ClCompile Include="memory.c" />
+    <ClCompile Include="sprintf.c" />
+    <ClCompile Include="stdio.c" />
+    <ClCompile Include="string.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctype.h" />
@@ -36,7 +34,6 @@
     <ClInclude Include="GDT.h" />
     <ClInclude Include="kmain.h" />
     <ClInclude Include="memory.h" />
-    <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="sprintf.h" />
     <ClInclude Include="stdio.h" />
     <ClInclude Include="string.h" />

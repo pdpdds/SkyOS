@@ -76,7 +76,7 @@ int vsprintf(char *str, const char *format, va_list ap) {
 
 					/*** strings ***/
 					case 's': {
-						int c = (int&) va_arg (ap, char);
+						int c = (int) va_arg (ap, char);
 						char s[32]={0};
 						strcpy (s,(const char*)c);						
 						strcpy (&str[loc], s);
@@ -86,14 +86,16 @@ int vsprintf(char *str, const char *format, va_list ap) {
 					}
 
 					case 'f':
+					{
 						double double_temp;
-						double_temp = va_arg (ap, double);
+						double_temp = va_arg(ap, double);
 						char buffer[512];
 						ftoa_fixed(buffer, double_temp);
 						strcpy(&str[loc], buffer);
 						i++;
 						loc += strlen(buffer) - 1;
 						break;
+					}
 				}
 				break;
 

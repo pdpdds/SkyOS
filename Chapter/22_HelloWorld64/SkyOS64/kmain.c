@@ -1,9 +1,8 @@
 ﻿#include "kmain.h"
 #include "GDT.h"
 
-extern "C" void main64();
-extern "C" void gdt64();
-extern void __cdecl InitializeConstructors();
+//extern "C" void main64();
+//extern "C" void gdt64();
 
 #pragma pack(push, 1)
 typedef struct _Charactor_Struct
@@ -53,11 +52,11 @@ void kmain64()
 	//InitializeConstructors();
 	//for (;;);
 
-	for (int i = 0; i < 5000000; i++)
+	/*for (int i = 0; i < 5000000; i++)
 	{
 		if (*(int*)(i * 4) == 0x12345678)
 			for (;;);
-	}
+	}*/
 
 	*((ushort*)0xB8000) = (afff | (ushort)(((uchar)((0 << 4) | (15 & 0xF)) ) << 8));
 	*((ushort*)0xB8002) = ('A' | (ushort)(((uchar)((0 << 4) | (15 & 0xF))) << 8));

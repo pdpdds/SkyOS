@@ -5,7 +5,7 @@
 //! warning C4706: assignment within conditional expression
 #pragma warning (disable:4706)
 
-extern "C" int _fltused = 0x9875;
+int _fltused = 0x9875;
 
 //! compare two strings
 int strcmp (const char* str1, const char* str2) {
@@ -488,7 +488,7 @@ double strtod(const char *string, char **endPtr)
 							*/
 
 	p = string;
-	while (IsSpace(UCHAR(*p))) {
+	while (IsSpace(*p)) {
 		p += 1;
 	}
 	if (*p == '-') {
@@ -591,11 +591,11 @@ double strtod(const char *string, char **endPtr)
 			}
 			expSign = FALSE;
 		}
-		if (!IsDigit(UCHAR(*p))) {
+		if (!IsDigit(*p)) {
 			p = pExp;
 			goto done;
 		}
-		while (IsSpace(UCHAR(*p))) {
+		while (IsSpace(*p)) {
 			exp = exp * 10 + (*p - '0');
 			p += 1;
 		}
