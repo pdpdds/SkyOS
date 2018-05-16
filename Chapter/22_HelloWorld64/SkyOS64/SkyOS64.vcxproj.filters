@@ -6,9 +6,9 @@
     <ClCompile Include="kmain.c" />
     <ClCompile Include="sprintf.c" />
     <ClCompile Include="memory.c" />
-    <ClCompile Include="ctype.c" />
     <ClCompile Include="string.c" />
     <ClCompile Include="stdio.c" />
+    <ClCompile Include="ctype.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />

@@ -49,7 +49,7 @@ void kmain64()
 {
 	//InitializeGDTWithTSS();
 	//gdt64();
-	//InitializeConstructors();
+	InitializeConstructors();
 	//for (;;);
 
 	/*for (int i = 0; i < 5000000; i++)
