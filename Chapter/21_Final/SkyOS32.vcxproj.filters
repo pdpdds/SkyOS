@@ -318,6 +318,8 @@
     <ClCompile Include="SkyGUILauncher.cpp" />
     <ClCompile Include="SkyPCI.cpp" />
     <ClCompile Include="SkyDebugger.cpp" />
+    <ClCompile Include="SkyAllocInterface.cpp" />
+    <ClCompile Include="MemoryResourceAdaptor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -536,6 +538,8 @@
     <ClInclude Include="SkyGUILauncher.h" />
     <ClInclude Include="SkyPCI.h" />
     <ClInclude Include="SkyDebugger.h" />
+    <ClInclude Include="..\..\Module\Include\SkyFileInterface.h" />
+    <ClInclude Include="MemoryResourceAdaptor.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
@@ -599,10 +603,5 @@
     <Text Include="GUI\svgagui\src\Readme.txt">
       <Filter>GUI\SVGA</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <MASM Include="llshl.asm" />
-    <MASM Include="ullrem.asm" />
-    <MASM Include="ulldiv.asm" />
   </ItemGroup>
 </Project>

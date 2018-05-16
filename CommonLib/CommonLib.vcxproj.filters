@@ -265,4 +265,9 @@
     <ClCompile Include="vsprintf.c" />
     <ClCompile Include="ffmt.c" />
   </ItemGroup>
+  <ItemGroup>
+    <MASM Include="llshl.asm" />
+    <MASM Include="ulldiv.asm" />
+    <MASM Include="ullrem.asm" />
+  </ItemGroup>
 </Project>

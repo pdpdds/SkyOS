@@ -100,6 +100,11 @@ int HDDAdaptor::Read(PFILE file, unsigned char* buffer, unsigned int size, int c
 {	
 	int readCnt = FATReadFile(file->_id, size * count, buffer);
 	//SkyConsole::Print("HDDAdaptor::Read : %d\n", readCnt);
+	if (readCnt < (int)(size * count))
+		file->_eof = 1;
+
+	file->_position += readCnt;
+
 	return readCnt;
 }
 
@@ -126,7 +131,8 @@ PFILE HDDAdaptor::Open(const char* fileName, const char *mode)
 	file->_deviceID = 'C';
 	strcpy(file->_name, fileName);
 	file->_id = handle;
-
+	file->_eof = 0;
+	file->_position = 0;
 	return file;
 }
 

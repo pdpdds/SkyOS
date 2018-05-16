@@ -6,6 +6,7 @@
 #include "ctrycatch.h"
 #include "algobase.h"
 #include "SkyConsole.h"
+#include "SkyMockInterface.h"
 
 #define DLL_PROCESS_ATTACH 1
 #define DLL_PROCESS_DETACH 0
@@ -434,7 +435,7 @@ static ELoadDLLResult LoadDLL_CallDLLEntryPoint(LOAD_DLL_CONTEXT* ctx, int flags
 
 		SkyConsole::Print("dll main : %x\n", ctx->dll_main);
 		
-		if (!ctx->dll_main(ctx->image_base, DLL_PROCESS_ATTACH, NULL))
+		if (!ctx->dll_main(ctx->image_base, DLL_PROCESS_ATTACH, NULL/*(LPVOID)&g_AllocInterface*/))
 		{
 			
 			return ELoadDLLResult_DllMainCallError;
@@ -479,7 +480,7 @@ ELoadDLLResult LoadDLL(LOAD_DLL_READPROC read_proc, void* read_proc_param, int f
 				if (res != ELoadDLLResult_OK)
 					return res;
 				
-				res = LoadDLL_PerformRelocation(&ctx);
+				//res = LoadDLL_PerformRelocation(&ctx);
 				PerformBaseRelocation(&ctx, 0);
 				/*if (res != ELoadDLLResult_OK)
 					return res;*/

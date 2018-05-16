@@ -10,7 +10,6 @@
 #include "PIT.h"
 
 extern "C" void ModeSwitchAndJumpKernel64();
-extern "C" void start();
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -84,14 +83,12 @@ void EnablePaging(bool state)
 void kmain(unsigned long magic, unsigned long addr)
 {
 	SkyConsole::Initialize();
-	InitializePageTable();	
+	//InitializePageTable();	
 	
 //	SkyConsole::Initialize();
 	//GDTInitialize();
 //	HardwareInitialize();
 //	EnablePaging(false);
-	start();
-	for (;;);
 	/*SkyConsole::Initialize();
 
 	SkyConsole::Print("32Bit Kernel Entered..\n");
@@ -160,11 +157,11 @@ void kmain(unsigned long magic, unsigned long addr)
 								}
 					}
 					
-					//GDTInitialize();
-					//InitializePageTable();
+					GDTInitialize();
+					InitializePageTable();
 
 					//PAGE64();
-					for (;;);
+					//for (;;);
 					
 					EnterKernel64((void*)kernelEntry, nullptr, module);
 

@@ -64,6 +64,8 @@ extern "C" {
 
 	typedef struct LOAD_DLL_INFO
 	{
+		char		moduleName[256];
+		int			refCount;
 		size_t		size;
 		int			flags;
 		DWORD_PTR	image_base;

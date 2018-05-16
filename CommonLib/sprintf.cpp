@@ -62,7 +62,7 @@ void itoa_s(unsigned int i, unsigned base, char* buf) {
 	itoa(i, base, buf);
 }
 
-#ifndef  WIN32
+#ifndef  SKYOS_WIN32
 char* _i64toa(long long value, char *str, int radix)
 {
 	unsigned long long val;

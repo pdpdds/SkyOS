@@ -20,17 +20,17 @@ bool SkyModuleManager::Initialize(multiboot_info* pBootInfo)
 	return true;
 }
 
-Module* SkyModuleManager::FindModule(multiboot_info* bootinfo, const char* moduleName)
+Module* SkyModuleManager::FindModule( const char* moduleName)
 {
-	uint32_t mb_flags = bootinfo->flags;
+	uint32_t mb_flags = m_pMultibootInfo->flags;
 	if (mb_flags & MULTIBOOT_INFO_MODS)
 	{
-		uint32_t mods_count = bootinfo->mods_count;   
-		uint32_t mods_addr = (uint32_t)bootinfo->Modules;     
+		uint32_t mods_count = m_pMultibootInfo->mods_count;
+		uint32_t mods_addr = (uint32_t)m_pMultibootInfo->Modules;
 
 		for (uint32_t mod = 0; mod < mods_count; mod++)
 		{
-			Module* module = (Module*)(mods_addr + (mod * sizeof(Module)));    
+			Module* module = (Module*)(mods_addr + (mod * sizeof(Module)));
 
 			const char* module_string = (const char*)module->Name;
 
@@ -46,25 +46,57 @@ Module* SkyModuleManager::FindModule(multiboot_info* bootinfo, const char* modul
 	return nullptr;
 }
 
+LOAD_DLL_INFO* SkyModuleManager::FindLoadedModule(const char* dll_path)
+{
+	auto iter = m_moduleList.begin();
+
+	for (; iter != m_moduleList.end(); iter++)
+	{
+		if (strcmp((*iter)->moduleName, dll_path) == 0)
+			return (*iter);
+	}
+
+	return nullptr;
+}
+
 MODULE_HANDLE SkyModuleManager::LoadModuleFromFile(const char* dll_path)
 {
-	LOAD_DLL_INFO* p = new LOAD_DLL_INFO;
+	LOAD_DLL_INFO *p = FindLoadedModule(dll_path);
+	if (p)
+	{
+		p->refCount++;
+		return p;
+	}
+
+	p = new LOAD_DLL_INFO;
+	strcpy(p->moduleName, dll_path);
+	p->refCount = 1;
+
 	DWORD res = LoadDLLFromFileName(dll_path, 0, p);
 	if (res != ELoadDLLResult_OK)
 	{
 		delete p;
 		return NULL;
 	}
+
+	m_moduleList.push_back(p);
 	return p;
 }
 
 MODULE_HANDLE SkyModuleManager::LoadModuleFromMemory(const char* moduleName)
 {
-	Module* pModule = FindModule(m_pMultibootInfo, moduleName);
+	LOAD_DLL_INFO *p = FindLoadedModule(moduleName);
+	if (p)
+	{
+		p->refCount++;
+		return p;
+	}
+
+	Module* pModule = FindModule(moduleName);
 
 	if (pModule == nullptr)
 		return nullptr;
-		
+
 	SkyConsole::Print("Found %s\n", pModule->Name);
 
 	if (false == ValidatePEImage((void*)pModule->ModuleStart))
@@ -73,7 +105,10 @@ MODULE_HANDLE SkyModuleManager::LoadModuleFromMemory(const char* moduleName)
 		return nullptr;
 	}
 
-	LOAD_DLL_INFO* p = new LOAD_DLL_INFO;
+	p = new LOAD_DLL_INFO;
+	strcpy(p->moduleName, moduleName);
+	p->refCount = 1;
+
 	DWORD res = LoadDLLFromMemory((void*)pModule->ModuleStart, ((size_t)(pModule->ModuleEnd) - (size_t)pModule->ModuleStart), 0, p);
 	if (res != ELoadDLLResult_OK)
 	{
@@ -82,12 +117,36 @@ MODULE_HANDLE SkyModuleManager::LoadModuleFromMemory(const char* moduleName)
 	}
 
 	SkyConsole::Print("%s Module Loaded\n", moduleName);
-
+	m_moduleList.push_back(p);
 	return p;
 }
 
 bool SkyModuleManager::UnloadModule(MODULE_HANDLE handle)
 {
+	bool findModule = false;
+	auto iter = m_moduleList.begin();
+
+	for (; iter != m_moduleList.end(); iter++)
+	{
+		if ((*iter) == handle)
+		{
+			findModule = true;
+			break;
+		}
+	}
+
+	if (findModule == false)
+	{
+		SkyConsole::Print("Module UnloadModule Fail!!\n");
+		return false;
+	}
+	
+	if (handle->refCount > 1)
+	{
+		handle->refCount--;
+		return true;
+	}
+
 	bool res = FALSE != UnloadDLL(handle);
 	delete handle;
 	return res;

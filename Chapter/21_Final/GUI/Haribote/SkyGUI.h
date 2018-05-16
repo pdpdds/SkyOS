@@ -61,6 +61,7 @@ public:
 	void RegisterIOListener(int processID, ConsoleIOListener* listener);
 	SkyRenderer* GetRenderer() { return m_pRenderer; }
 	SkySheet* FindSheetByID(int processId);
+	void FillRect8(int x, int y, int w, int h, char col, int actualX, int actualY);
 
 	static bool LoadFontFromMemory();
 

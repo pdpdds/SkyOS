@@ -1,6 +1,7 @@
 #include "SkyOS.h"
 #include "SkyRenderer.h"
 #include "nic.h"
+#include "SkyGUISystem.h"
 
 bool systemOn = false;
 
@@ -64,13 +65,6 @@ DWORD WINAPI SystemGUIProc(LPVOID parameter)
 	return 0;
 }
 
-DWORD WINAPI SystemGUIProc2(LPVOID parameter)
-{
-	
-
-	return 0;
-}
-
 #define TS_WATCHDOG_CLOCK_POS		(0xb8000+(80-1)*2)
 #define TIMEOUT_PER_SECOND		50
 static bool m_bShowTSWatchdogClock = true;
@@ -106,16 +100,27 @@ DWORD WINAPI WatchDogProc(LPVOID parameter)
 	return 0;
 }
 
+void SampleFillRect(ULONG* lfb, int x, int y, int w, int h, int col)
+{
+	for (int k = 0; k < h; k++)
+		for (int j = 0; j < w; j++)
+		{
+			int index = ((j + x) + (k + y) * 1024);
+			lfb[index] = col;
+		}
+}
+
 DWORD WINAPI GUIWatchDogProc(LPVOID parameter)
 {
 	Process* pProcess = (Process*)parameter;
 	int pos = 0;
 	int colorStatus[] = { 0x00FF0000, 0x0000FF00, 0x0000FF};
 	int first = GetTickCount();
+	
+	ULONG* lfb = (ULONG*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr;
 
 	while (1)
 	{
-
 		int second = GetTickCount();
 		if (second - first >= TIMEOUT_PER_SECOND)
 		{
@@ -123,13 +128,14 @@ DWORD WINAPI GUIWatchDogProc(LPVOID parameter)
 				pos = 0;
 
 			if (m_bShowTSWatchdogClock)
-				SkyGUIConsole::FillRect(1004, 0, 20, 20, colorStatus[pos], 1024, 768, 32);
-
+			{
+				SampleFillRect(lfb, 1004, 0, 20, 20, colorStatus[pos]);
+			}
+				
 			first = GetTickCount();
 		}
-		kEnterCriticalSection();
-		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
-		kLeaveCriticalSection();
+		
+		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());		
 	}
 
 	return 0;

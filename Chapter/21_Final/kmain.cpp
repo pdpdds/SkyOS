@@ -2,6 +2,7 @@
 #include "SkyTest.h"
 #include "SkyGUILauncher.h"
 #include "SkyConsoleLauncher.h"
+#include "SkyDebugger.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -90,6 +91,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	PrintCurrentTime();
 	TestMemoryModule("SAMPLE_DLL");
 
+	SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
+	
 	kLeaveCriticalSection();
 	
 #if SKY_CONSOLE_MODE == 0	
@@ -104,7 +107,7 @@ void kmain(unsigned long magic, unsigned long addr)
 
 void InitContext(multiboot_info* pBootInfo)
 {
-	InitializeConstructors();
+	//InitializeConstructors();
 	SkyConsole::Initialize();
 	//헥사를 표시할 때 %X는 integer, %x는 unsigned integer의 헥사값을 표시한다.	
 	SkyConsole::Print("*** Sky OS Console System Init ***\n");
@@ -193,7 +196,7 @@ bool TestMemoryModule(const char* moduleName)
 	int sum = dll_interface->AddNumbers(5, 6);
 
 	SkyConsole::Print("AddNumbers(5, 6): %d\n", sum);
-
+	
 	if (false == SkyModuleManager::GetInstance()->UnloadModule((MODULE_HANDLE)(hwnd)))
 		HaltSystem("UnloadDLL() failed!\n");
 

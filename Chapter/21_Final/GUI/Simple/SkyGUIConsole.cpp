@@ -5,8 +5,6 @@
 #include "SkyRenderer32.h"
 #include "SkyGUI.h"
 
-#define RGB16_565(r,g,b) ((b&31) | ((g&63) << 5 | ((r&31) << 11)))
-
 #define COLOR(r,g,b) ((r<<16) | (g<<8) | b)
 #define WHITE COLOR(255,255,255)
 #define BLACK COLOR(0,0,0)
@@ -17,6 +15,9 @@ ULONG* SkyGUIConsole::m_pVideoRamPtr = nullptr;
 
 #define PIVOT_X 8
 #define PIVOT_Y 16
+#define CHAR_WIDTH 8
+#define CHAR_HEIGHT 16
+#define CHAR_COLOR 0xff
 
 SkyGUIConsole::SkyGUIConsole()
 {
@@ -32,9 +33,9 @@ SkyGUIConsole::~SkyGUIConsole()
 bool SkyGUIConsole::Initialize(void* pVideoRamPtr, int width, int height, int bpp, uint8_t buffertype)
 {	
 	kEnterCriticalSection();
-	InitKeyboard();	
+	InitKeyboard();		
 	kLeaveCriticalSection();
-
+	
 	m_pRenderer = new SkyRenderer32();
 	SkyGUI::LoadFontFromMemory();
 		
@@ -77,30 +78,24 @@ bool SkyGUIConsole::Run()
 	Thread* pThread = ProcessManager::GetInstance()->GetCurrentTask();
 	Process* pProcess = pThread->m_pParent;
 
+	ProcessManager::GetInstance()->CreateProcessFromMemory("GUIWatchDog", GUIWatchDogProc, NULL, PROCESS_KERNEL);
+
 	ConsoleManager manager;
 
-	int charWidth = (1024 / 8) - 15;
-	char* commandBuffer = new char[charWidth];
+	int bufferLen = (m_width / CHAR_WIDTH) - 15;
+	char* commandBuffer = new char[bufferLen];
 
 	while (1)
 	{
 		SkyConsole::Print("Command> ");		
-		memset(commandBuffer, 0, charWidth);
-		//SkyConsole::Print("commandBuffer Address : 0x%x\n", &commandBuffer);	
+		memset(commandBuffer, 0, bufferLen);		
 
-		SkyConsole::GetCommandForGUI(commandBuffer, charWidth);
+		SkyConsole::GetCommandForGUI(commandBuffer, bufferLen);
 		SkyConsole::Print("\n");
 
 		if (manager.RunCommand(commandBuffer) == true)
 			break;
 	}
-
-	/*while (1)
-	{
-		kEnterCriticalSection();
-		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
-		kLeaveCriticalSection();
-	}*/
 
 	return false;
 }
@@ -110,19 +105,24 @@ VOID SkyGUIConsole::GetNewLine()
 	int x, y;
 	ULONG *buf = m_pVideoRamPtr;	
 	int bxsize = m_width;
-	if ((m_yPos + PIVOT_Y + 16) < m_height) {
-		m_yPos += 16; /* 다음 행에 */
+	if ((m_yPos + PIVOT_Y + CHAR_HEIGHT) < m_height) 
+	{
+		m_yPos += CHAR_HEIGHT; //커서를 다음행으로 옮긴다.
 	}
 	else
 	{
-		/* 스크롤 */
-		for (y = PIVOT_Y; y < (m_height - 16 - PIVOT_Y); y++) {
-			for (x = PIVOT_X; x < m_width; x++) {
-				buf[x + y * bxsize] = buf[x + (y + 16) * bxsize];
+		//화면을 스크롤한다.
+		for (y = PIVOT_Y; y < (m_height - CHAR_HEIGHT - PIVOT_Y); y++)
+		{
+			for (x = PIVOT_X; x < m_width; x++) 
+			{
+				buf[x + y * bxsize] = buf[x + (y + CHAR_HEIGHT) * bxsize];
 			}
 		}
-		for (y = m_height - 16 - PIVOT_Y; y < (m_height - PIVOT_Y); y++) {
-			for (x = PIVOT_X; x < m_width; x++) {
+		for (y = m_height - CHAR_HEIGHT - PIVOT_Y; y < (m_height - PIVOT_Y); y++) 
+		{
+			for (x = PIVOT_X; x < m_width; x++) 
+			{
 				buf[x + y * bxsize] = 0x00000000;
 			}
 		}
@@ -132,33 +132,22 @@ VOID SkyGUIConsole::GetNewLine()
 }
 bool SkyGUIConsole::Clear()
 {
-	int i;
-	int j;
-
-	for (i = 0; i < (int)m_width; i++)
-		for (j = 0; j < (int)m_height; j++)
-			m_pVideoRamPtr[j * m_width + i] = BLACK;
-
 	m_xPos = PIVOT_X;
 	m_yPos = PIVOT_Y;
+
+	memset(m_pVideoRamPtr, BLACK, (m_width * m_height) * sizeof(ULONG));
 
 	return true;
 }
 
-ULONG SkyGUIConsole::GetBPP() {
+ULONG SkyGUIConsole::GetBPP()
+{
 	return m_bpp;
 }
 
-void SkyGUIConsole::PutPixel(ULONG x, ULONG y, ULONG col) {
+void SkyGUIConsole::PutPixel(ULONG x, ULONG y, ULONG col) 
+{
 	m_pVideoRamPtr[(y * m_width) + x] = col;
-}
-
-void SkyGUIConsole::ppo(ULONG *buffer, ULONG i, unsigned char r, unsigned char g, unsigned char b) {
-	buffer[i] = (r << 16) | (g << 8) | b;
-}
-
-void SkyGUIConsole::pp(ULONG i, unsigned char r, unsigned char g, unsigned char b) {
-	m_pVideoRamPtr[i] = (r << 16) | (g << 8) | b;
 }
 
 ULONG SkyGUIConsole::GetPixel(ULONG i) {
@@ -169,50 +158,15 @@ void SkyGUIConsole::PutPixel(ULONG i, ULONG col) {
 	m_pVideoRamPtr[i] = col;
 }
 
-void SkyGUIConsole::FillRect(int x, int y, int w, int h, int col, int actualX, int actualY, int actualByte) {
-
-	if (actualByte == 24)
-	{
-
-		char* lfb = (char*)m_pVideoRamPtr;
-
-
-		for (int k = 0; k < h; k++)
-			for (int j = 0; j < w; j++)
-			{
-				int index = ((j + x) + (k + y) * actualX) * 3;
-				lfb[index] = (char)(col >> 0);
-				index++;
-				lfb[index] = (char)(col >> 8);
-				index++;
-				lfb[index] = (char)(col >> 16);
-			}
-	}
-	if (actualByte == 32)
-	{
-		unsigned* lfb = (unsigned*)0xFD000000;
-		for (int k = 0; k < h; k++)
-			for (int j = 0; j < w; j++)
-			{				
-				int index = ((j + x) + (k + y) * actualX);
-				lfb[index] = col;
-			}
-	}
-}
-
-void SkyGUIConsole::FillRect8(int x, int y, int w, int h, char col, int actualX, int actualY)
+void SkyGUIConsole::FillRect(int x, int y, int w, int h, int col) 
 {
-
-	char* lfb = (char*)0xFD000000;
-
+	unsigned* lfb = (unsigned*)m_pVideoRamPtr;
 	for (int k = 0; k < h; k++)
 		for (int j = 0; j < w; j++)
 		{
-			int index = ((j + x) + (k + y) * actualX);
+			int index = ((j + x) + (k + y) * m_width);
 			lfb[index] = col;
-			index++;
 		}
-
 }
 
 void SkyGUIConsole::Update(unsigned long *buf) 
@@ -225,7 +179,6 @@ void SkyGUIConsole::Update(unsigned long *buf)
 		p++;
 		p2++;
 	}
-
 }
 
 bool SkyGUIConsole::Print(char* pMsg)
@@ -233,22 +186,22 @@ bool SkyGUIConsole::Print(char* pMsg)
 	if (m_pRenderer == nullptr)
 		return false;
 
-	//backspace
+	//백스페이스
 	if (strlen(pMsg) == 1 && pMsg[0] == 0x08) 
 	{
 		if (m_xPos > 9 * 8)
 		{
-			FillRect(m_xPos, m_yPos, 8, 16, 0x00, m_width, m_height, m_bpp);
+			FillRect(m_xPos, m_yPos, CHAR_WIDTH, CHAR_HEIGHT, 0x00);
 			m_xPos -= 1 * 8;
-			FillRect(m_xPos, m_yPos, 8, 16, 0x00, m_width, m_height, m_bpp);
-			FillRect(m_xPos, m_yPos + 12, 8, 4, WHITE, m_width, m_height, m_bpp);
+			FillRect(m_xPos, m_yPos, CHAR_WIDTH, CHAR_HEIGHT, 0x00);
+
+			PutCursor();
 		}
 		
 		return true;
 	}
 
-	unsigned char charColor = 0xff;
-	FillRect(m_xPos, m_yPos, 8, 16, 0x00, m_width, m_height, m_bpp);
+	FillRect(m_xPos, m_yPos, CHAR_WIDTH, CHAR_HEIGHT, 0x00);
 	
 	unsigned char *s = (unsigned char*)pMsg;
 	for (; *s != 0x00; s++)
@@ -259,11 +212,20 @@ bool SkyGUIConsole::Print(char* pMsg)
 			continue;
 		}
 
-		m_pRenderer->PutFont((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, skyFontData + *s * 16);
-		m_xPos += 8;
+		m_pRenderer->PutFont((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, CHAR_COLOR, skyFontData + *s * 16);
+		m_xPos += CHAR_WIDTH;
 	}	
 	
-	FillRect(m_xPos, m_yPos + 12, 8, 4, WHITE, m_width, m_height, m_bpp);	
+	PutCursor();
 	
 	return true;
+}
+
+void SkyGUIConsole::PutCursor()
+{
+	FillRect(m_xPos, m_yPos + (CHAR_HEIGHT - 4), CHAR_WIDTH, 4, WHITE);
+}
+
+void SkyGUIConsole::PutPixel(ULONG i, unsigned char r, unsigned char g, unsigned char b) {
+	m_pVideoRamPtr[i] = (r << 16) | (g << 8) | b;
 }

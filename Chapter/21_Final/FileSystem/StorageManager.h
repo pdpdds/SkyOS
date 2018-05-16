@@ -1,6 +1,10 @@
 #pragma once
 #include "FileSysAdaptor.h"
 #include "MultiBoot.h"
+#include "HDDAdaptor.h"
+#include "MemoryResourceAdaptor.h"
+#include "RamDiskAdaptor.h"
+#include "FloppyDiskAdaptor.h"
 
 //저장장치는 최대 26개
 #define STORAGE_DEVICE_MAX 26

@@ -5,6 +5,7 @@
 #include "ctype.h"
 #include "string.h"
 #include "stdio.h"
+#include "SkyConsole.h"
 
 FILE *fopen(const char *filename, const char *mode)
 {
@@ -28,23 +29,36 @@ int fclose(FILE *stream)
 
 int feof(FILE *stream)
 {
+	if (stream->_eof != 0)
+		return stream->_eof;
+
 	return 0;
 }
 
 int fseek(FILE *stream, long int offset, int whence)
 {
+	if (SEEK_CUR == whence)
+	{
+		fgetc(stream);
+		return 1;
+	}
+
 	return 0;
 }
 
 long int ftell(FILE *stream)
 {
-	return 0;
+	return (long int)stream->_position;
 }
 
 int fgetc(FILE * stream)
 {
 	char buf[2];
-	return StorageManager::GetInstance()->ReadFile(stream, (unsigned char*)buf, 1, 1);
+	int readCount = StorageManager::GetInstance()->ReadFile(stream, (unsigned char*)buf, 1, 1);
+
+	if (readCount == 0)
+		return EOF;
+
 	return buf[0];
 }
 
@@ -57,15 +71,26 @@ char* fgets(char *dst, int max, FILE *fp)
 
 	for (p = dst, max--; max > 0; max--) {
 		if ((c = fgetc(fp)) == EOF)
+		{
 			break;
+		}
+
+		if (c == 0x0d) //carriage return
+		{				
+			continue;
+		}
+
 		*p++ = c;
-		if (c == '\n')
+		if (c == 0x0a) //new line
+		{
 			break;
+		}
 	}
 	*p = 0;
+	//SkyConsole::Print("token %s\n", dst);
 	if (p == dst || c == EOF)
 		return NULL;
-	return (p);
+	return (dst);
 }
 
 #define MAX_FLOAT_SIZE 320

@@ -113,6 +113,11 @@
     <ClCompile Include="widechar\wcstombs.c" />
     <ClCompile Include="widechar\wcwidth.c" />
   </ItemGroup>
+  <ItemGroup>
+    <MASM Include="llshl.asm" />
+    <MASM Include="ulldiv.asm" />
+    <MASM Include="ullrem.asm" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{83EE476C-AA21-4A23-9D6F-4FE675115B13}</ProjectGuid>
     <RootNamespace>Kernel</RootNamespace>
@@ -161,7 +166,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>./;../include;./stl;./math</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;FLOATINGPT;__STDC__;ARCH_X86;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FLOATINGPT;__STDC__;ARCH_X86;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>false</StringPooling>
       <ExceptionHandling />

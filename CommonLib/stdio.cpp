@@ -139,7 +139,7 @@ int vsprintf(char *str, const char *format, va_list ap) {
 
 	return i;
 }
-#ifndef WIN32
+#ifndef SKYOS_WIN32
 //! converts a string to a long
 long
 strtol(const char* nptr, char** endptr, int base)

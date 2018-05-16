@@ -305,7 +305,7 @@ bool SkyGUI::kGetMessage(LPSKY_MSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 	kEnterCriticalSection();
 	if (fifo32_status(&keycmd) > 0 && keycmd_wait < 0)
 	{
-		/* 키보드 컨트롤러에 보낼 데이터가 있으면, 보낸다 */
+		//키보드 컨트롤러에 보낼 데이터가 있으면 보낸다
 		keycmd_wait = fifo32_get(&keycmd);
 		kLeaveCriticalSection();
 		wait_KBC_sendready();
@@ -339,17 +339,8 @@ bool SkyGUI::kTranslateAccelerator(HWND hWnd, HANDLE hAccTable, LPSKY_MSG lpMsg)
 
 bool SkyGUI::Run()
 {	
-	kEnterCriticalSection();
-	bool result = CreateGUIDebugProcess();
-
-	if (result == true)
-	{
-		Print("Debug Console Started!!\n");
-	}
-
+	CreateGUIDebugProcess();
 	CreateGUIConsoleProcess(300, 4);
-
-	kLeaveCriticalSection();
 
 	SKY_MSG msg;
 	while (kGetMessage(&msg, nullptr, 0, 0))
@@ -480,8 +471,6 @@ void SkyGUI::ProcessKeyboard(int value)
 		wait_KBC_sendready();
 		OutPortByte(PORT_KEYDAT, keycmd_wait);
 	}
-
-
 }
 
 void SkyGUI::ProcessMouse(int value)
@@ -594,9 +583,10 @@ bool SkyGUI::SendToMessage(int processID, char* pMsg)
 
 void SkyGUI::CreateGUIConsoleProcess(int xPos, int yPos)
 {
+	kEnterCriticalSection();
+
 	Process* pProcess = nullptr;
 
-	kEnterCriticalSection();
 	pProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("GUIConsole", ConsoleGUIProc, this, PROCESS_KERNEL);
 	if (pProcess != nullptr)
 	{
@@ -615,6 +605,7 @@ void SkyGUI::CreateGUIConsoleProcess(int xPos, int yPos)
 
 bool SkyGUI::CreateGUIDebugProcess()
 {
+	kEnterCriticalSection();
 	Process* pProcess = nullptr;
 	bool result = false;
 	
@@ -635,6 +626,7 @@ bool SkyGUI::CreateGUIDebugProcess()
 		result = true;
 	}
 
+	kLeaveCriticalSection();
 
 	return result;
 }
@@ -652,6 +644,21 @@ SkySheet* SkyGUI::FindSheetByID(int processId)
 {
 	return m_mainSheet->FindSheetById(processId);
 }
+
+void SkyGUI::FillRect8(int x, int y, int w, int h, char col, int actualX, int actualY)
+{
+	char* lfb = (char*)m_pVideoRamPtr;
+
+	for (int k = 0; k < h; k++)
+		for (int j = 0; j < w; j++)
+		{
+			int index = ((j + x) + (k + y) * actualX);
+			lfb[index] = col;
+			index++;
+		}
+
+}
+
 
 
 
@@ -708,8 +715,8 @@ DWORD WINAPI ConsoleDebugGUIProc(LPVOID parameter)
 
 	cursor_c = COL8_FFFFFF;
 
-	if(sheet == 0 || pProcess == 0 || pThread == 0 || pGUI == 0)
-		SkyGUIConsole::FillRect8(100, 100, 100, 100, COL8_C6C6C6, 1024, 768);
+	//if(sheet == 0 || pProcess == 0 || pThread == 0 || pGUI == 0)
+		//SkyGUI::FillRect8(100, 100, 100, 100, COL8_C6C6C6, 1024, 768);
 
 	for (;;)
 	{

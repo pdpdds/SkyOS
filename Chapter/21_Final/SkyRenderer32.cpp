@@ -206,7 +206,7 @@ void SkyRenderer32::InitScreen(unsigned char *vram, int x, int y)
 
 						rgb888Buffer[i] = RGB888;
 					}
-					//unsigned* framebuffer = (unsigned*)(0xFD000000);
+					
 					for (int y = 0; y < jpeg->height; ++y)
 					{
 						for (int x = 0; x < jpeg->width; ++x)

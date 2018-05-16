@@ -239,6 +239,8 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 
 bool Scheduler::Yield(int processId)
 {
+	kEnterCriticalSection();
+
 	ProcessManager::TaskList* pTaskList = ProcessManager::GetInstance()->GetTaskList();
 	ProcessManager::TaskList::iterator iter = pTaskList->begin();
 
@@ -248,6 +250,8 @@ bool Scheduler::Yield(int processId)
 		if (pThread->m_pParent->GetProcessId() == processId)
 			pThread->m_waitingTime = 0;
 	}
+
+	kLeaveCriticalSection();
 
 	return true;
 	

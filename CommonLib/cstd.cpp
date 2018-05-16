@@ -7,11 +7,6 @@
 ==================================================.
 */
 
-// Very MSVC++ dependent. Will try to support different compiliers later.
-#ifndef _MSC_VER
-#error "MOS2 Kernel C++ Runtime requires Microsoft Visual C++ 2005 or later."
-#endif
-
 #include <stdint.h>
 
 /*
@@ -57,15 +52,16 @@ static unsigned cur_atexitlist_entries = 0;
 	Initialize global initializaters (Global constructs, et al)
 ===========================
 */
-void __cdecl _initterm ( _PVFV * pfbegin,    _PVFV * pfend )
+static void __cdecl _initterm ( _PVFV * pfbegin,    _PVFV * pfend )
 {
 	// Go through each initializer
     while ( pfbegin < pfend )
     {
 	  // Execute the global initializer
-      if ( *pfbegin != 0 )
-            (**pfbegin) ();
-
+		if (*pfbegin != 0)
+		{
+			(**pfbegin) ();
+		}
 	    // Go to next initializer inside the initializer table
         ++pfbegin;
     }
@@ -76,6 +72,7 @@ void __cdecl _initterm ( _PVFV * pfbegin,    _PVFV * pfend )
 	Initialize the deinitializer function ptr table
 ===================================
 */
+char runtimeTempBuffer[5000];
 void __cdecl _atexit_init(void)
 {
     max_atexitlist_entries = 32;
@@ -84,7 +81,7 @@ void __cdecl _atexit_init(void)
 	// a base address that you will never use for now
  //   pf_atexitlist = (_PVFV *)0x500000;
 
-	pf_atexitlist = (_PVFV *)0x5000;
+	pf_atexitlist = (_PVFV *)runtimeTempBuffer;
 }
 
 /*
@@ -126,6 +123,8 @@ void _cdecl Exit () {
 ===================================
 	Executes all global dynamic initializers
 ===================================
+
+
 */
 void _cdecl InitializeConstructors()
 {

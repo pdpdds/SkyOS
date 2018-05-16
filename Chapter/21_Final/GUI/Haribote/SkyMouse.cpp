@@ -75,7 +75,7 @@ int DecodeMouseValue(MOUSE_DEC *mdec, unsigned char dat)
 		return 1;
 	}
 
-	SkyGUIConsole::FillRect8(100, 100, 100, 100, 8, 1024, 768);
+	//SkyGUI::FillRect8(100, 100, 100, 100, 8, 1024, 768);
 	return -1; /* 여기에 올 일은 없을 것 */
 }
 

@@ -35,7 +35,7 @@
 #define _CTYPE_DISABLE_MACROS
 #include "ctype.h"
 
-#ifndef WIN32
+#ifndef SKYOS_WIN32
 unsigned short _ctype[257] = {
 	0,                      // -1 EOF
 	_CONTROL,               // 00 (NUL)

@@ -124,4 +124,11 @@ long cmdCallStack(char *theCommand)
 	return false;
 }
 
+long cmdCallStack2(char *theCommand)
+{
+	SkyDebugger::GetInstance()->TraceStackWithSymbol();
+
+	return false;
+}
+
 

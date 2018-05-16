@@ -50,7 +50,14 @@ int RamDiskAdaptor::Read(PFILE file, unsigned char* buffer, unsigned int size, i
 	if (file == nullptr)
 		return false;
 
-	return kReadFile(buffer, size, count, (MFILE*)file->_id);
+	int readCount = kReadFile(buffer, size, count, (MFILE*)file->_id);
+
+	if (readCount < count)
+		file->_eof = 1;
+
+	file->_position += readCount;
+
+	return readCount * size;
 }
 
 bool RamDiskAdaptor::Close(PFILE file)
@@ -72,6 +79,8 @@ PFILE RamDiskAdaptor::Open(const char* fileName, const char *mode)
 		strcpy(file->_name, fileName);
 		file->_id = (DWORD)pMintFile;
 		file->_fileLength = pMintFile->stFileHandle.dwFileSize;
+		file->_eof = 0;
+		file->_position = 0;
 		return file;
 	}
 

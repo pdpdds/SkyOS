@@ -15,3 +15,4 @@ long CmdExec(char *theCommand);
 long cmdGUI(char *theCommand);
 long cmdPCI(char *theCommand);
 long cmdCallStack(char *theCommand);
+long cmdCallStack2(char *theCommand);

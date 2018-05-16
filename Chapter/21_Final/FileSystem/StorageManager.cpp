@@ -205,6 +205,17 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 		delete pRamDiskAdaptor;
 	}
 
+	//메모리 리소스 디스크
+	FileSysAdaptor* pMemoryResouceAdaptor = new MemoryResourceAdaptor("MemoryResouceDisk", 'L');
+	if (pMemoryResouceAdaptor->Initialize() == true)
+	{
+		StorageManager::GetInstance()->RegisterFileSystem(pMemoryResouceAdaptor, 'L');
+	}
+	else
+	{
+		delete pMemoryResouceAdaptor;
+	}
+
 	//플로피 디스크
 	/*FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
 	if (pFloppyDiskAdaptor->Initialize() == true)
