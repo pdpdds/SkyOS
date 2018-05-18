@@ -46,7 +46,7 @@ void InitializePageTables(int pml4EntryAddress)
 		// 최종 결과를 다시 4Kbyte로 나누어 32비트 이상의 어드레스를 계산함
 		SetPageEntryData(&(pstPDEntry[i]),
 			(i * (PAGE_DEFAULTSIZE >> 20)) >> 12, dwMappingAddress,
-			PAGE_FLAGS_DEFAULT | PAGE_FLAGS_PS, 0);
+			PAGE_FLAGS_G | PAGE_FLAGS_DEFAULT | PAGE_FLAGS_PS, 0);
 		dwMappingAddress += PAGE_DEFAULTSIZE;
 	}
 }

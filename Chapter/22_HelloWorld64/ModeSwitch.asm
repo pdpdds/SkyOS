@@ -1,23 +1,17 @@
 [BITS 32]      
 
-global _kSwitchAndExecute64bitKernel
+global _SwitchAndExecute64bitKernel
 
 SECTION .data       ; 텍스트 섹션이 되어야 하지만 편법으로 데이터섹션에 위치시킨다.
                     ; 텍스트 섹션으로 설정할 경우 어셈블리 오브젝트가 프로그램 앞단에 배치되는 걸 막을 방법이 없기 때문이다.
 
 ; IA-32e 모드로 전환하고 64비트 커널을 수행
 ;   PARAM: INT pmt4EntryAddress, INT kernelAddress, void* grubInfo
-_kSwitchAndExecute64bitKernel:
+_SwitchAndExecute64bitKernel:
 	push ebp        
     mov ebp, esp
-
-	push ecx
-    push edx
-	push edi
-
 	mov ebx, dword [ ebp + 8 ]  ; 파라미터 1(pmt4EntryAddress)
 	mov edx, dword [ ebp + 12 ]  ; 파라미터 2(kernelAddress)
-	mov edi, dword [ ebp + 16 ]  ; 파라미터 3(grubInfo)	
 	mov [kernelAddress], edx
 
 	lgdt [GDTR]
@@ -54,10 +48,10 @@ _kSwitchAndExecute64bitKernel:
     mov cr0, eax            ; NW 비트 = 0, CD 비트 = 0, PG 비트 = 1로 설정한 값을 다시 
                             ; CR0 컨트롤 레지스터에 저장
     
-    jmp 0x08:jmp_64k  ; CS 세그먼트 셀렉터를 IA-32e 모드용 코드 세그먼트 디스크립터로
-							; jmp_64k
+    jmp 0x08:jmp_64k  ; CS 세그먼트 셀렉터를 IA-32e 모드용 코드 세그먼트 디스크립터로							
 	jmp_64k:
-	mov	edi, [ebp + 16];
+	mov	ecx, [ ebp + 16 ];
+	dd(0);
 	mov	eax, [kernelAddress];
 	dd(0); 	
 	jmp	eax;

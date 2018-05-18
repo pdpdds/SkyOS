@@ -51,8 +51,7 @@ _declspec(naked) void multiboot_entry(void)
 	}
 }
 
-extern "C" void ModeSwitchAndJumpKernel64();
-extern "C" void kSwitchAndExecute64bitKernel(int pml4EntryAddress, int kernelEntry, int bootinfo);
+extern "C" void SwitchAndExecute64bitKernel(int pml4EntryAddress, int kernelEntry, int bootinfo);
 
 bool Is64BitSwitchPossible();
 Module* FindModule(multiboot_info_t* pInfo, const char* szFileName);
@@ -72,6 +71,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	char* szKernelName = "SKYOS64_SYS";
 
 	multiboot_info_t* mb_info = (multiboot_info_t*)addr;
+
 	Module* pModule = FindModule(mb_info, szKernelName);
 
 	if (pModule == nullptr)
@@ -100,7 +100,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	memcpy((void*)imageBase, (void*)pModule->ModuleStart, ((int)pModule->ModuleEnd - (int)pModule->ModuleStart));
 
 	InitializePageTables(pml4EntryAddress);
-	kSwitchAndExecute64bitKernel(pml4EntryAddress, kernelEntry, addr);
+	SwitchAndExecute64bitKernel(pml4EntryAddress, kernelEntry, addr);
 
 
 	for (;;);

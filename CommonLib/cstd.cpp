@@ -26,6 +26,12 @@ _PVFV __xc_a[] = { 0 };
 #pragma data_seg(".CRT$XCZ")
 _PVFV __xc_z[] = { 0 };
 
+#pragma data_seg(".CRT$XIA")
+_PVFV __xi_a[] = { 0 };
+
+#pragma data_seg(".CRT$XIZ")
+_PVFV __xi_z[] = { 0 };
+
 // Select the default data segment again (.data) for the rest of the unit
 #pragma data_seg()
 
