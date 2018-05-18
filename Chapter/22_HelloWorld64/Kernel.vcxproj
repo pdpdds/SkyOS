@@ -14,13 +14,8 @@
     <ClCompile Include="elf.cpp" />
     <ClCompile Include="elf32.cpp" />
     <ClCompile Include="elf64.cpp" />
-    <ClCompile Include="GDT.cpp" />
-    <ClCompile Include="Hal.cpp" />
-    <ClCompile Include="IDT.cpp" />
     <ClCompile Include="kmain.cpp" />
     <ClCompile Include="Page.cpp" />
-    <ClCompile Include="Pic.cpp" />
-    <ClCompile Include="PIT.cpp" />
     <ClCompile Include="ProcessUtil.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
   </ItemGroup>
@@ -28,15 +23,10 @@
     <ClInclude Include="elf.h" />
     <ClInclude Include="elf32.h" />
     <ClInclude Include="elf64.h" />
-    <ClInclude Include="GDT.h" />
-    <ClInclude Include="Hal.h" />
-    <ClInclude Include="IDT.h" />
     <ClInclude Include="kmain.h" />
     <ClInclude Include="MultiBoot.h" />
     <ClInclude Include="Page.h" />
     <ClInclude Include="PEImage.h" />
-    <ClInclude Include="Pic.h" />
-    <ClInclude Include="PIT.h" />
     <ClInclude Include="ProcessUtil.h" />
     <ClInclude Include="SkyConsole.h" />
   </ItemGroup>
@@ -45,6 +35,13 @@
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nasmw -f win32 modeswitch.asm</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">modeswitch.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="ModeSwitch2.asm">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nasmw -f win32 modeswitch2.asm</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">modeswitch2.obj</Outputs>
     </CustomBuild>
   </ItemGroup>
   <PropertyGroup Label="Globals">

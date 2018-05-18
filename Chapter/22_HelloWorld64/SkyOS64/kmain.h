@@ -6,4 +6,5 @@
 //#include "SkyConsole.h"
 
 //extern "C" void kmain64(unsigned long, unsigned long);
-void kmain64();
+extern "C" void kmain64();
+//void kmain64();

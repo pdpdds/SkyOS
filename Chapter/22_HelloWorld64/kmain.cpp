@@ -1,44 +1,49 @@
 ﻿#include "kmain.h"
-#include "gdt.h"
 #include "ProcessUtil.h"
 #include "PEImage.h"
 #include "memory.h"
 #include "Page.h"
-#include "GDT.h"
-#include "IDT.h"
-#include "PIC.h"
-#include "PIT.h"
-
-extern "C" void ModeSwitchAndJumpKernel64();
 
 _declspec(naked) void multiboot_entry(void)
 {
-	__asm {
+	__asm 
+	{
 		align 4
 
-		multiboot_header:
-		//멀티부트 헤더 사이즈 : 0X20
+	multiboot_header:
+		//멀티부트 헤더 사이즈 : 0X30
 		dd(MULTIBOOT_HEADER_MAGIC); magic number
-			dd(MULTIBOOT_HEADER_FLAGS); flags
-			dd(CHECKSUM); checksum
-			dd(HEADER_ADRESS); //헤더 주소 KERNEL_LOAD_ADDRESS+ALIGN(0x100064)
+
+#if SKY_CONSOLE_MODE == 0
+		dd(MULTIBOOT_HEADER_FLAGS_GUI); flags
+		dd(CHECKSUM_GUI); checksum
+#else
+		dd(MULTIBOOT_HEADER_FLAGS); flags
+		dd(CHECKSUM); checksum
+#endif		
+		dd(HEADER_ADRESS); //헤더 주소 KERNEL_LOAD_ADDRESS+ALIGN(0x100400)
 		dd(KERNEL_LOAD_ADDRESS); //커널이 로드된 가상주소 공간
 		dd(00); //사용되지 않음
 		dd(00); //사용되지 않음
-		dd(HEADER_ADRESS + 0x20); //커널 시작 주소 : 멀티부트 헤더 주소 + 0x20, kernel_entry
+		dd(HEADER_ADRESS + 0x30); //커널 시작 주소 : 멀티부트 헤더 주소 + 0x30, kernel_entry
+
+		dd(1);
+		dd(0);
+		dd(0);
+		dd(0)
 
 	kernel_entry:
-		mov     esp, KERNEL_STACK; //스택 설정
+		MOV     ESP, 0x40000; //스택 설정
 
-		push    0; //플래그 레지스터 초기화
-		popf
+		PUSH    0; //플래그 레지스터 초기화
+		POPF
 
-			//GRUB에 의해 담겨 있는 정보값을 스택에 푸쉬한다.
-			push    ebx; //멀티부트 구조체 포인터
-		push    eax; //매직 넘버
+		//GRUB에 의해 담겨 있는 정보값을 스택에 푸쉬한다.
+		PUSH    EBX; //멀티부트 구조체 포인터
+		PUSH    EAX; //매직 넘버
 
 		//위의 두 파라메터와 함께 kmain 함수를 호출한다.
-		call    kmain; //C++ 메인 함수 호출
+		CALL    kmain; //C++ 메인 함수 호출
 
 		//루프를 돈다. kmain이 리턴되지 않으면 아래 코드는 수행되지 않는다.
 	halt:
@@ -46,131 +51,84 @@ _declspec(naked) void multiboot_entry(void)
 	}
 }
 
-bool DetectionCPUID();
-bool IsLongModeCheckPossible();
-bool IsLongModePossible();
-uint32_t FindKernel64Entry(const char* filename, char* buffer);
-void EnterKernel64(void* entry, multiboot_info* info, Module* module);
-void EnterKernel64_3(void* entry, multiboot_info* info, Module* moudle);
-char* g_szKernelName = "SKYOS64_SYS";
+extern "C" void ModeSwitchAndJumpKernel64();
+extern "C" void kSwitchAndExecute64bitKernel(int pml4EntryAddress, int kernelEntry, int bootinfo);
 
-extern "C" void __writecr4(unsigned __int64 Data);
-extern "C"  unsigned long __readcr4(void);
-uint32_t kernelEntry;
-VOID HardwareInitialize();
-
-void EnablePaging(bool state)
-{
-#ifdef _MSC_VER
-	_asm
-	{
-		mov	eax, cr0
-		cmp[state], 1
-		je	enable
-		jmp disable
-		enable :
-		or eax, 0x80000000		//set bit 31
-			mov	cr0, eax
-			jmp done
-			disable :
-		and eax, 0x7FFFFFFF		//clear bit 31
-			mov	cr0, eax
-			done :
-	}
-#endif
-}
+bool Is64BitSwitchPossible();
+Module* FindModule(multiboot_info_t* pInfo, const char* szFileName);
+uint32_t FindKernel64Entry(const char* szFileName, char* buf, uint32_t& imageBase);
 
 void kmain(unsigned long magic, unsigned long addr)
 {
 	SkyConsole::Initialize();
-	//InitializePageTable();	
-	
-//	SkyConsole::Initialize();
-	//GDTInitialize();
-//	HardwareInitialize();
-//	EnablePaging(false);
-	/*SkyConsole::Initialize();
-
 	SkyConsole::Print("32Bit Kernel Entered..\n");
 
+	if (Is64BitSwitchPossible() == false)
+	{
+		SkyConsole::Print("Impossible 64bit Mode\n");
+		for (;;);
+	}
+
+	char* szKernelName = "SKYOS64_SYS";
+
+	multiboot_info_t* mb_info = (multiboot_info_t*)addr;
+	Module* pModule = FindModule(mb_info, szKernelName);
+
+	if (pModule == nullptr)
+	{
+		SkyConsole::Print(" %s Kernel Found Fail!!\n", szKernelName);
+		for (;;);
+	}
+	
+	//커널의 이미지 베이스 주소와 커널 엔트리를 찾는다.
+	uint32_t kernelEntry = 0;
+	uint32_t imageBase = 0;
+	kernelEntry = FindKernel64Entry(szKernelName, (char*)pModule->ModuleStart, imageBase);
+
+	if ( kernelEntry == 0 || imageBase == 0)
+	{
+		SkyConsole::Print("Invalid Kernel64 Address!!\n");
+		for (;;);
+	}
+
+	//커널 이미지 베이스와 로드된 모듈주소와는 공간이 어느정도 비어 있다고 가정한다.
+	//커널64의 이미지베이스 로드 주소는 0x200000이다.
+
+	int pml4EntryAddress = 0x160000;
+
+	//64커널 이미지 베이스 주소에 커널을 카피한다.
+	memcpy((void*)imageBase, (void*)pModule->ModuleStart, ((int)pModule->ModuleEnd - (int)pModule->ModuleStart));
+
+	InitializePageTables(pml4EntryAddress);
+	kSwitchAndExecute64bitKernel(pml4EntryAddress, kernelEntry, addr);
+
+
+	for (;;);
+
+}
+
+bool DetectionCPUID();
+bool IsLongModeCheckPossible();
+bool IsLongModePossible();
+
+bool Is64BitSwitchPossible()
+{
 	if (DetectionCPUID() == false)
-		return;
+		return false;
 
 	SkyConsole::Print("CPUID Detected..\n");
 
 	if (IsLongModeCheckPossible() == false)
-		return;
+		return false;
 
 	SkyConsole::Print("Long Mode Check Possible..\n");
 
 	if (IsLongModePossible() == false)
-		return;
+		return false;
 
 	SkyConsole::Print("Long Mode Possible..\n");
-	*/
-	const multiboot_info_t* mb_info = (multiboot_info_t*)addr;            /* Make pointer to multiboot_info_t struct */
-	uint32_t mb_flags = mb_info->flags;                  /* Get flags from mb_info */
 
-	void* kentry = nullptr;                                           /* Pointer to the kernel entry point */
-
-	if (mb_flags & MULTIBOOT_INFO_MODS)
-	{
-		uint32_t mods_count = mb_info->mods_count;   /* Get the amount of modules available */
-		uint32_t mods_addr = (uint32_t)mb_info->Modules;     /* And the starting address of the modules */
-
-		for (uint32_t mod = 0; mod < mods_count; mod++)
-		{
-			Module* module = (Module*)(mods_addr + (mod * sizeof(Module)));     /* Loop through all modules */
-
-			const char* module_string = (const char*)module->Name;
-			/* Here I check if module_string is equals to the one i assigned my kernel
-			you could skip this check if you had a way of determining the kernel module */
-
-			SkyConsole::Print("Module Name : %s\n", module_string);
-
-			if (strcmp(module_string, g_szKernelName) == 0)
-			{
-				SkyConsole::Print("64 Kernel Found. Name : %s\n", module_string);
-				SkyConsole::Print("Start : %x, End : %x\n", module->ModuleStart, module->ModuleEnd);
-
-				SkyConsole::Print("Calcalate 64 Entry Point\n", module_string);
-				kernelEntry = FindKernel64Entry(module_string, (char*)module->ModuleStart);
-
-				if (kernelEntry != 0)
-				{
-					SkyConsole::Print("SkyOS64 Entry Point 0x%x\n", kernelEntry);
-					SkyConsole::Print("Module Size %x\n", (int)module->ModuleEnd - (int)module->ModuleStart);
-					
-
-					int skyos64 = 0x00180000;
-					memcpy((void*)skyos64, (void*)module->ModuleStart, (int)module->ModuleEnd - (int)module->ModuleStart);
-					char* aaa = (char*)skyos64;
-
-					for (int i = 0; i < (int)module->ModuleEnd - (int)module->ModuleStart; i++)
-					{
-						if (aaa[i] == 'm')
-							if (aaa[i + 1] == 'a')
-								if (aaa[i + 2] == 'r')
-								{
-									SkyConsole::Print("detected\n");
-									break;
-								}
-					}
-					
-					GDTInitialize();
-					InitializePageTable();
-
-					//PAGE64();
-					//for (;;);
-					
-					EnterKernel64((void*)kernelEntry, nullptr, module);
-
-				}
-			}
-		}
-	}
-	for (;;);
-
+	return true;
 }
 
 
@@ -245,7 +203,35 @@ bool IsLongModePossible()
 	return result;
 }
 
-uint32_t FindKernel64Entry(const char* szFileName, char* buf)
+Module* FindModule(multiboot_info_t* pInfo, const char* szFileName)
+{	
+	uint32_t mb_flags = pInfo->flags;
+	void* kentry = nullptr;
+
+	if (mb_flags & MULTIBOOT_INFO_MODS)
+	{
+		uint32_t mods_count = pInfo->mods_count;
+		uint32_t mods_addr = (uint32_t)pInfo->Modules;
+
+		for (uint32_t mod = 0; mod < mods_count; mod++)
+		{
+			Module* module = (Module*)(mods_addr + (mod * sizeof(Module)));
+
+			const char* module_string = (const char*)module->Name;
+
+			SkyConsole::Print("Module Name : %s\n", module_string);
+
+			if (strcmp(module_string, szFileName) == 0)
+			{
+				return module;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+uint32_t FindKernel64Entry(const char* szFileName, char* buf, uint32_t& imageBase)
 {
 	if (!ValidatePEImage(buf)) {
 		SkyConsole::Print("Invalid PE Format!! %s\n", szFileName);
@@ -262,106 +248,6 @@ uint32_t FindKernel64Entry(const char* szFileName, char* buf)
 	SkyConsole::Print("sizeofcode 0x%x\n", ntHeaders->OptionalHeader.Magic);
 
 	uint32_t entryPoint = (uint32_t)ntHeaders->OptionalHeader.AddressOfEntryPoint + ntHeaders->OptionalHeader.ImageBase;
+	imageBase = ntHeaders->OptionalHeader.ImageBase;
 	return 	entryPoint;
-}
-
-void EnterKernel64(void* entry, multiboot_info* info, Module* module)
-{	
-	unsigned long regCR4 = __readcr4();
-	__asm or regCR4, 0x20
-	__writecr4(regCR4);
-	__asm
-	{
-		mov eax, 0x60000
-		mov cr3, eax
-
-		; IA_EFER 레지스터의 LME 비트를 활성화
-		mov ecx, 0xC0000080
-		rdmsr
-		or eax, 0x0100
-		wrmsr
-
-		; Write Table
-		mov eax, cr0
-		or eax, 0xE0000000
-		xor eax, 0x60000000
-		; NW(29) = 0, CD(30) = 0, PG(31) = 1
-		mov cr0, eax
-	}
-
-	int skyos64 = 0x00180000;
-	memcpy((void*)skyos64, (void*)module->ModuleStart, (int)module->ModuleEnd - (int)module->ModuleStart);
-	char* aaa = (char*)skyos64;
-
-	for (int i = 0; i < (int)module->ModuleEnd - (int)module->ModuleStart; i++)
-	{
-		if (aaa[i] == 'm')
-			if (aaa[i + 1] == 'a')
-				if (aaa[i + 2] == 'r')
-				{
-					SkyConsole::Print("detected\n");
-					break;
-				}
-	}
-	
-	ModeSwitchAndJumpKernel64();
-
-	__asm
-	{
-
-		\
-		; IA - 32e 세그먼트 설렉트 후 2MB 영역으로 점프
-		jmp cs:entry
-
-		; Not Entry
-		jmp $
-
-	}
-}
-
-void EnterKernel64_3(void* entry, multiboot_info* info, Module* module)
-{
-	SkyConsole::Print("sdffsd");
-	__asm
-	{
-		push	ebp
-		mov	ebp, esp; Set up the stack so the variables passed from the C code can be read
-
-		mov	esi, [ebp + 8]; This is the kernel entry point
-		mov[k_ptr], esi
-
-		mov	ax, 0x10; Reload data segment selectors
-		mov	ss, ax
-		mov	ds, ax
-		mov	es, ax
-		hlt
-
-		jmp	cs : jmp_k; Reload code selector by jumping to 64 - bit code
-		jmp_k :
-
-		mov	edi, [ebp + 12]; 1st argument of kernel_main(pointer to multiboot structure)
-			mov	eax, [k_ptr]; This is transformed to mov rax, [k_ptr] and uses the double word reserved below
-			dd(0); Trick the processor, contains high address of k_ptr; as higher half of the address to k_ptr
-
-			jmp	eax; This part is plain bad, tricking the processor is not the best thing to do here
-			k_ptr :
-		dd(0)
-	}
-
-}
-
-
-
-
-
-
-
-
-
-void HardwareInitialize()
-{
-	GDTInitialize();
-	IDTInitialize(0x8);
-	PICInitialize(0x20, 0x28);
-	InitializePIT();
 }

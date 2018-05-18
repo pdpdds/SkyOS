@@ -19,14 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ctype.c" />
+    <ClCompile Include="ctype.cpp" />
     <ClCompile Include="ffmt.cpp" />
     <ClCompile Include="GDT.cpp" />
-    <ClCompile Include="kmain.c" />
-    <ClCompile Include="memory.c" />
-    <ClCompile Include="sprintf.c" />
-    <ClCompile Include="stdio.c" />
-    <ClCompile Include="string.c" />
+    <ClCompile Include="initterm.cpp" />
+    <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="memory.cpp" />
+    <ClCompile Include="SampleClass.cpp" />
+    <ClCompile Include="sprintf.cpp" />
+    <ClCompile Include="stdio.cpp" />
+    <ClCompile Include="string.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctype.h" />
@@ -34,6 +36,7 @@
     <ClInclude Include="GDT.h" />
     <ClInclude Include="kmain.h" />
     <ClInclude Include="memory.h" />
+    <ClInclude Include="SampleClass.h" />
     <ClInclude Include="sprintf.h" />
     <ClInclude Include="stdio.h" />
     <ClInclude Include="string.h" />
@@ -152,7 +155,7 @@
       <FunctionOrder>@order.txt</FunctionOrder>
       <EntryPointSymbol>multiboot_entry</EntryPointSymbol>
       <NoEntryPoint>false</NoEntryPoint>
-      <BaseAddress>0x00100000</BaseAddress>
+      <BaseAddress>0x00200000</BaseAddress>
       <FixedBaseAddress>
       </FixedBaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -216,7 +219,7 @@
       </FunctionOrder>
       <EntryPointSymbol>main64</EntryPointSymbol>
       <NoEntryPoint>false</NoEntryPoint>
-      <BaseAddress>0x00180000</BaseAddress>
+      <BaseAddress>0x00200000</BaseAddress>
       <FixedBaseAddress>
       </FixedBaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>

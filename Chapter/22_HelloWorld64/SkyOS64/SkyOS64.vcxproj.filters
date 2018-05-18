@@ -3,12 +3,14 @@
   <ItemGroup>
     <ClCompile Include="GDT.cpp" />
     <ClCompile Include="ffmt.cpp" />
-    <ClCompile Include="kmain.c" />
-    <ClCompile Include="sprintf.c" />
-    <ClCompile Include="memory.c" />
-    <ClCompile Include="string.c" />
-    <ClCompile Include="stdio.c" />
-    <ClCompile Include="ctype.c" />
+    <ClCompile Include="initterm.cpp" />
+    <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="memory.cpp" />
+    <ClCompile Include="sprintf.cpp" />
+    <ClCompile Include="stdio.cpp" />
+    <ClCompile Include="string.cpp" />
+    <ClCompile Include="ctype.cpp" />
+    <ClCompile Include="SampleClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -19,6 +21,7 @@
     <ClInclude Include="ffmt.h" />
     <ClInclude Include="GDT.h" />
     <ClInclude Include="memory.h" />
+    <ClInclude Include="SampleClass.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="entry64.asm" />

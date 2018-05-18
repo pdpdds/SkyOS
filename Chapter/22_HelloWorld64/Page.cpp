@@ -1,56 +1,63 @@
 #include "Page.h"
 
-
-
-void InitializePageTable()
+/**
+ *	IA-32e ¸ðµå Ä¿³ÎÀ» À§ÇÑ ÆäÀÌÁö Å×ÀÌºí »ý¼º
+ */
+void InitializePageTables(int pml4EntryAddress)
 {
+	PML4TENTRY* pstPML4TEntry;
+	PDPTENTRY* pstPDPTEntry;
+	PDENTRY* pstPDEntry;
+	DWORD dwMappingAddress;
+	int i;
 
-	PML4ENTRY*	pml4entry  = (PML4ENTRY*) 0x60000;
-	PDPTENTRY*	pdptentry  = (PDPTENTRY*) 0x61000;
-	PDENTRY*	pdentry    = (PDENTRY*	) 0x62000;
-
-	//P = 1 Rw = 1
-	SetPageEntryData(&pml4entry[0], 0x00, 0x61000, PAGE_FLAG_DEFAULT, 0);
-
-	for(int i = 1; i< PAGE_MAX_ENTRY_COUNT; i++)
+	// PML4 Å×ÀÌºí »ý¼º
+	// Ã¹ ¹øÂ° ¿£Æ®¸® ¿Ü¿¡ ³ª¸ÓÁö´Â ¸ðµÎ 0À¸·Î ÃÊ±âÈ­
+	pstPML4TEntry = (PML4TENTRY*)pml4EntryAddress;
+	SetPageEntryData(&(pstPML4TEntry[0]), 0x00, (pml4EntryAddress + 0x1000), PAGE_FLAGS_DEFAULT,
+		0);
+	for (i = 1; i < PAGE_MAXENTRYCOUNT; i++)
 	{
-		SetPageEntryData(&pml4entry[i], 0,0,0,0);
-	}
-	//P = 1 Rw = 1
-	for(int i = 0; i < 64; i++)
-	{
-		SetPageEntryData(&pdptentry[i], 0, 0x62000 + i * PAGE_TABLE_SIZE,
-						 PAGE_FLAG_DEFAULT, 0);
+		SetPageEntryData(&(pstPML4TEntry[i]), 0, 0, 0, 0);
 	}
 
-	for(int i=64; i < PAGE_MAX_ENTRY_COUNT; i++)
+	// ÆäÀÌÁö µð·ºÅÍ¸® Æ÷ÀÎÅÍ Å×ÀÌºí »ý¼º
+	// ÇÏ³ªÀÇ PDPT·Î 512GByte±îÁö ¸ÅÇÎ °¡´ÉÇÏ¹Ç·Î ÇÏ³ª·Î ÃæºÐÇÔ
+	// 64°³ÀÇ ¿£Æ®¸®¸¦ ¼³Á¤ÇÏ¿© 64GByte±îÁö ¸ÅÇÎÇÔ
+	pstPDPTEntry = (PDPTENTRY*)(pml4EntryAddress + 0x1000);
+	for (i = 0; i < 64; i++)
 	{
-		SetPageEntryData(&pdptentry[i], 0, 0, 0, 0);
+		SetPageEntryData(&(pstPDPTEntry[i]), 0, (pml4EntryAddress + 0x2000) + (i * PAGE_TABLESIZE),
+			PAGE_FLAGS_DEFAULT, 0);
+	}
+	for (i = 64; i < PAGE_MAXENTRYCOUNT; i++)
+	{
+		SetPageEntryData(&(pstPDPTEntry[i]), 0, 0, 0, 0);
 	}
 
-	DWORD LowMapping = 0; 
-	
-	/*
-		'high' for Calculate out of 32bit area. using HighAddressArea 
-	*/
-	
-	for(int i=0; i<PAGE_MAX_ENTRY_COUNT * 64; i++)
+	// ÆäÀÌÁö µð·ºÅÍ¸® Å×ÀÌºí »ý¼º
+	// ÇÏ³ªÀÇ ÆäÀÌÁö µð·ºÅÍ¸®°¡ 1GByte±îÁö ¸ÅÇÎ °¡´É 
+	// ¿©À¯ÀÖ°Ô 64°³ÀÇ ÆäÀÌÁö µð·ºÅÍ¸®¸¦ »ý¼ºÇÏ¿© ÃÑ 64GB±îÁö Áö¿ø
+	pstPDEntry = (PDENTRY*)(pml4EntryAddress + 0x2000);
+	dwMappingAddress = 0;
+	for (i = 0; i < PAGE_MAXENTRYCOUNT * 64; i++)
 	{
-		//32ë¹„íŠ¸ì—ì„œ ìƒìœ„ ì–´ë“œë ˆìŠ¤ë¥¼ í‘œí˜„í•˜ê¸° ìœ„í•œ ì‰¬í”„íŠ¸ ì—°ì‚° í›„ ê³„ì‚°, ë° 
-		DWORD high = (i * (PAGE_DEFAULT_SIZE >> 20) ) >> 12;
-		SetPageEntryData(&pdentry[i], high, LowMapping, 
-						PAGE_FLAG_DEFAULT | PAGE_FLAG_PS, 0);				
-
-		LowMapping += PAGE_DEFAULT_SIZE;
+		// 32ºñÆ®·Î´Â »óÀ§ ¾îµå·¹½º¸¦ Ç¥ÇöÇÒ ¼ö ¾øÀ¸¹Ç·Î, Mbyte ´ÜÀ§·Î °è»êÇÑ ´ÙÀ½
+		// ÃÖÁ¾ °á°ú¸¦ ´Ù½Ã 4Kbyte·Î ³ª´©¾î 32ºñÆ® ÀÌ»óÀÇ ¾îµå·¹½º¸¦ °è»êÇÔ
+		SetPageEntryData(&(pstPDEntry[i]),
+			(i * (PAGE_DEFAULTSIZE >> 20)) >> 12, dwMappingAddress,
+			PAGE_FLAGS_DEFAULT | PAGE_FLAGS_PS, 0);
+		dwMappingAddress += PAGE_DEFAULTSIZE;
 	}
-	 
-
 }
 
-
-void SetPageEntryData(PTENTRY* pEntry, DWORD dwHighBaseAddress, DWORD dwLowBaseAddress,
-					  DWORD dwLowFlag, DWORD dwHighFlag)
+/**
+ *	ÆäÀÌÁö ¿£Æ®¸®¿¡ ±âÁØ ÁÖ¼Ò¿Í ¼Ó¼º ÇÃ·¡±×¸¦ ¼³Á¤
+ */
+void SetPageEntryData(PTENTRY* pstEntry, DWORD dwUpperBaseAddress,
+	DWORD dwLowerBaseAddress, DWORD dwLowerFlags, DWORD dwUpperFlags)
 {
-	pEntry->dwLowAddress  = dwLowBaseAddress  | dwLowFlag;
-	pEntry->dwHighAddress = (dwHighBaseAddress & 0xFF )| dwHighFlag;
+	pstEntry->dwAttributeAndLowerBaseAddress = dwLowerBaseAddress | dwLowerFlags;
+	pstEntry->dwUpperBaseAddressAndEXB = (dwUpperBaseAddress & 0xFF) |
+		dwUpperFlags;
 }

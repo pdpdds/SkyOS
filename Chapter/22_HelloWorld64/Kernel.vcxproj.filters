@@ -3,34 +3,25 @@
   <ItemGroup>
     <ClCompile Include="kmain.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
-    <ClCompile Include="GDT.cpp" />
     <ClCompile Include="ProcessUtil.cpp" />
-    <ClCompile Include="Page.cpp" />
-    <ClCompile Include="Hal.cpp" />
-    <ClCompile Include="IDT.cpp" />
-    <ClCompile Include="Pic.cpp" />
-    <ClCompile Include="PIT.cpp" />
     <ClCompile Include="elf64.cpp" />
     <ClCompile Include="elf32.cpp" />
     <ClCompile Include="elf.cpp" />
+    <ClCompile Include="Page.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="MultiBoot.h" />
-    <ClInclude Include="GDT.h" />
     <ClInclude Include="PEImage.h" />
     <ClInclude Include="ProcessUtil.h" />
     <ClInclude Include="Page.h" />
-    <ClInclude Include="Hal.h" />
-    <ClInclude Include="IDT.h" />
-    <ClInclude Include="Pic.h" />
-    <ClInclude Include="PIT.h" />
     <ClInclude Include="elf64.h" />
     <ClInclude Include="elf.h" />
     <ClInclude Include="elf32.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="modeswitch.asm" />
+    <CustomBuild Include="ModeSwitch2.asm" />
   </ItemGroup>
 </Project>
