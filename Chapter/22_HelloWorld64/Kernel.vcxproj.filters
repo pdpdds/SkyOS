@@ -21,7 +21,6 @@
     <ClInclude Include="elf32.h" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="modeswitch.asm" />
-    <CustomBuild Include="ModeSwitch2.asm" />
+    <CustomBuild Include="ModeSwitch.asm" />
   </ItemGroup>
 </Project>
