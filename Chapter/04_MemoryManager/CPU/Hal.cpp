@@ -95,39 +95,3 @@ void setvect(int intno, void(&vect) (), int flags) {
 	//! install interrupt handler! This overwrites prev interrupt descriptor
 	InstallInterrputHandler(intno, (uint16_t)(I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32 | flags), 0x8, vect);
 }
-
-DWORD kReadFLAGS()
-{
-	UINT flag = 0;
-	__asm
-	{
-		pushf; RFLAGS 레지스터를 스택에 저장
-		pop eax; 스택에 저장된 RFLAGS 레지스터를 RAX 레지스터에 저장하여		
-		mov [flag], eax
-	}
-
-	return flag;
-}
-
-bool kSetInterruptFlag(bool bEnableInterrupt)
-{
-	DWORD dwRFLAGS;
-
-	// 이전의 RFLAGS 레지스터 값을 읽은 뒤에 인터럽트 가능/불가 처리
-	dwRFLAGS = kReadFLAGS();
-	if (bEnableInterrupt == TRUE)
-	{
-		kLeaveCriticalSection(&g_criticalSection);
-	}
-	else
-	{
-		kEnterCriticalSection(&g_criticalSection);
-	}
-
-	// 이전 RFLAGS 레지스터의 IF 비트(비트 9)를 확인하여 이전의 인터럽트 상태를 반환
-	if (dwRFLAGS & 0x0200)
-	{
-		return TRUE;
-	}
-	return FALSE;
-}

@@ -2,6 +2,8 @@
 #include "SkyTest.h"
 #include "PhysicalMemoryManager.h"
 #include "VirtualMemoryManager.h"
+#include "Exception.h"
+#include "FPU.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -20,7 +22,7 @@ _declspec(naked) void multiboot_entry(void)
 		dd(HEADER_ADRESS + 0x20); //커널 시작 주소 : 멀티부트 헤더 주소 + 0x20, kernel_entry
 			
 		kernel_entry :
-		mov     esp, KERNEL_STACK; //스택 설정
+		mov     esp, 0x40000; //스택 설정
 
 		push    0; //플래그 레지스터 초기화
 		popf
@@ -55,7 +57,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	SkyConsole::Print("GRUB Information\n");
 	SkyConsole::Print("Boot Loader Name : %s\n", (char*)pBootInfo->boot_loader_name);
 
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 
 	HardwareInitialize();
 	SkyConsole::Print("Hardware Init Complete\n");
@@ -64,12 +66,22 @@ void kmain(unsigned long magic, unsigned long addr)
 	
 	SkyConsole::Print("Interrput Handler Init Complete\n");
 
+	if (false == InitFPU())
+	{
+		SkyConsole::Print("[Warning] Floating Pointer Unit Detection Fail\n");
+	}
+	else
+	{
+		EnableFPU();
+		SkyConsole::Print("FPU Init..\n");
+	}
+	
 //물리/가상 메모리 매니저를 초기화한다.
 	InitMemoryManager(pBootInfo);
 
 	SkyConsole::Print("Memory Manager Init Complete\n");
-
-	kLeaveCriticalSection(&g_criticalSection);
+	
+	kLeaveCriticalSection();
 
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);		
 
@@ -84,70 +96,21 @@ void HardwareInitialize()
 	InitializePIT();
 }
 
-uint32_t g_freeMemoryStartAddress = 0x00400000; //자유공간 시작주소 : 4MB
-
-uint32_t GetFreeSpaceMemory(multiboot_info* bootinfo)
+bool InitMemoryManager(multiboot_info* pBootInfo)
 {
-	uint32_t memorySize = 0;
-	uint32_t mmapEntryNum = bootinfo->mmap_length / sizeof(multiboot_memory_map_t);
+	//물리/가상 메모리 매니저를 초기화한다.
+	//기본 설정 시스템 메모리는 128MB
+	SkyConsole::Print("Memory Manager Init Complete\n");
 
-	uint32_t mmapAddr = bootinfo->mmap_addr;
-
-#ifdef _SKY_DEBUG
-	SkyConsole::Print("Memory Map Entry Num : %d\n", mmapEntryNum);
-#endif
-
-	for (uint32_t i = 0; i < mmapEntryNum; i++)
-	{
-		multiboot_memory_map_t* entry = (multiboot_memory_map_t*)mmapAddr;
-
-#ifdef _SKY_DEBUG
-		SkyConsole::Print("Memory Address : %x\n", entry->addr);
-		SkyConsole::Print("Memory Length : %x\n", entry->len);
-		SkyConsole::Print("Memory Type : %x\n", entry->type);
-		SkyConsole::Print("Entry Size : %d\n", entry->size);
-#endif
-
-		mmapAddr += sizeof(multiboot_memory_map_t);
-
-		if (entry->addr + entry->len < g_freeMemoryStartAddress)
-			continue;
-
-		if (memorySize > entry->len)
-			continue;
-
-		memorySize = entry->len;
-
-		if (entry->addr < g_freeMemoryStartAddress)
-			memorySize -= (g_freeMemoryStartAddress - entry->addr);
-		else
-			g_freeMemoryStartAddress = entry->addr;
-	}
-
-	memorySize -= (memorySize % 4096);
-
-	return memorySize;
-}
-
-bool InitMemoryManager(multiboot_info* bootinfo)
-{
 	PhysicalMemoryManager::EnablePaging(false);
 
-	uint32_t freeMemorySize = GetFreeSpaceMemory(bootinfo);
-
 	//물리 메모리 매니저 초기화
-	PhysicalMemoryManager::Initialize(freeMemorySize, g_freeMemoryStartAddress);
+	PhysicalMemoryManager::Initialize(pBootInfo);
 	//PhysicalMemoryManager::Dump();
-
-	PhysicalMemoryManager::SetAvailableMemory(g_freeMemoryStartAddress, freeMemorySize);
-	PhysicalMemoryManager::Dump();
-
+	
 	//가상 메모리 매니저 초기화	
 	VirtualMemoryManager::Initialize();
-	VirtualMemoryManager::Dump();
+	//PhysicalMemoryManager::Dump();
 
-	//SkyConsole::Print("KernelSize : %d Bytes\n", kernelSize);
-	SkyConsole::Print("FreeSpace MemorySize From 0x%x: 0x%x Bytes\n", g_freeMemoryStartAddress, freeMemorySize);
-	
 	return true;
 }

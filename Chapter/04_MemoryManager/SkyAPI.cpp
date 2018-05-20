@@ -23,42 +23,6 @@ void SKYAPI kInitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
 	lpCriticalSection->LockRecursionCount = 0;
 	lpCriticalSection->OwningThread = 0;
 }
-
-void SKYAPI kEnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
-{
-	if (lpCriticalSection->LockRecursionCount == 0)
-	{
-		_asm cli
-	}
-
-	lpCriticalSection->LockRecursionCount++;
-
-	//DWORD threadId = kGetCurrentThreadId();
-	//SKYASSERT((HANDLE)threadId == lpCriticalSection->OwningThread || lpCriticalSection->OwningThread == 0, "kEnterCriticalSection");
-
-	//if (lpCriticalSection->OwningThread == (HANDLE)threadId)
-	//{
-		//lpCriticalSection->LockRecursionCount++;
-	/*
-	else
-	{
-		lpCriticalSection->OwningThread = (HANDLE)threadId;
-		lpCriticalSection->LockRecursionCount = 1;
-	}*/
-}
-
-void SKYAPI kLeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
-{
-	//DWORD threadId = kGetCurrentThreadId();
-	//SKYASSERT((HANDLE)threadId == lpCriticalSection->OwningThread, "kLeaveCriticalSection");
-	lpCriticalSection->LockRecursionCount--;
-	//if (lpCriticalSection->LockRecursionCount == 0)
-	{
-	//	lpCriticalSection->OwningThread = 0;
-		_asm sti
-	}
-}
-
 /////////////////////////////////////////////////////////////////////////////
 //½º·¹µå
 /////////////////////////////////////////////////////////////////////////////

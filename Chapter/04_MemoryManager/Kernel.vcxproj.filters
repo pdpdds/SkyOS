@@ -34,6 +34,9 @@
     <ClCompile Include="Memory\PageTableEntry.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
+    <ClCompile Include="CPU\FPU.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -69,6 +72,9 @@
     </ClInclude>
     <ClInclude Include="Memory\PageTableEntry.h">
       <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\FPU.h">
+      <Filter>CPU</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

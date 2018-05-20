@@ -9,6 +9,9 @@
 
 #define PAGE_SIZE 4096
 
+#define PAGE_ALIGN_DOWN(value)				((value) & ~(PAGE_SIZE - 1))
+#define PAGE_ALIGN_UP(value)				(((value) & (PAGE_SIZE - 1)) ? (PAGE_ALIGN_DOWN((value)) + PAGE_SIZE) : (value))
+
 #define far
 #define near
 
@@ -39,5 +42,4 @@ typedef struct registers
 } registers_t;
 #pragma pack (pop)
 
-bool kSetInterruptFlag(bool bEnableInterrupt);
 extern void _cdecl msleep(int ms);
