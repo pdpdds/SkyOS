@@ -95,7 +95,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;../../CommonLib/stl;</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
