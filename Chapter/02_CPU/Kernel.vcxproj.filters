@@ -19,6 +19,9 @@
     <ClCompile Include="CPU\GDT.cpp">
       <Filter>CPU</Filter>
     </ClCompile>
+    <ClCompile Include="CPU\FPU.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -38,6 +41,9 @@
     </ClInclude>
     <ClInclude Include="SkyAPI.h" />
     <ClInclude Include="CPU\GDT.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\FPU.h">
       <Filter>CPU</Filter>
     </ClInclude>
   </ItemGroup>

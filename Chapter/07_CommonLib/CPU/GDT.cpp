@@ -1,8 +1,8 @@
 #include "gdt.h"
-#include <string.h>
+#include "string.h"
+#include "memory.h"
 #include "windef.h"
 #include "defines.h"
-#include "memory.h"
 
 #ifdef _MSC_VER
 #pragma pack (push, 1)
@@ -28,6 +28,7 @@ static struct gdt_descriptor	_gdt [MAX_DESCRIPTORS];
 
 //! gdtr data
 static struct gdtr				_gdtr;
+
 
 //! install gdtr
 static void InstallGDT () {

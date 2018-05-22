@@ -6,4 +6,6 @@ namespace HeapManager
 {
 	bool InitKernelHeap(int heapFrameCount);
 	bool MapHeapToAddressSpace(PageDirectory* curPageDirectory);
+	DWORD GetHeapSize();
+	DWORD GetUsedHeapSize();
 }

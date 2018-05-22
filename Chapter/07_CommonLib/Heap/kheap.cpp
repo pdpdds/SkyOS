@@ -10,13 +10,13 @@
 #include "Hal.h"
 #include "SkyConsole.h"
 #include "SkyAPI.h"
+#include "sprintf.h"
 
 // end is defined in the linker script.
 //extern u32int end;
 //u32int placement_address = (u32int)&end;
 heap_t kheap;
-
-#define ASSERT(a, b) if(a == false) SkyConsole::Print("Heap Error!! %s\n", b);
+DWORD g_usedHeapSize = 0;
 
 u32int kmalloc_int(u32int sz, int align, u32int *phys)
 {
@@ -26,10 +26,10 @@ u32int kmalloc_int(u32int sz, int align, u32int *phys)
 		//SkyConsole::Print("kmalloc_int 0x%x\n", kheap.start_address);
 		//SkyConsole::Print("kmalloc_int 0x%x\n", kheap.end_address);
 		
-        if (phys != 0)
+        /*if (phys != 0)
         {
-			phys = (u32int*)VirtualMemoryManager::GetPhysicalAddressFromVirtualAddress(VirtualMemoryManager::GetCurPageDirectory(), (uint32_t)addr);			
-        }
+			phys = (u32int*)VirtualMemoryManager::GetPhysicalAddressFromVirtualAddress(VirtualMemoryManager::GetKernelPageDirectory(), (uint32_t)addr);
+        }*/
 
         return (u32int)addr;
    
@@ -54,9 +54,9 @@ u32int kmalloc_int(u32int sz, int align, u32int *phys)
 
 void kfree(void *p)
 {
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
 	free(p, &kheap);
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 }
 
 u32int kmalloc_a(u32int sz)
@@ -74,18 +74,31 @@ u32int kmalloc_ap(u32int sz, u32int *phys)
     return kmalloc_int(sz, 1, phys);
 }
 
+u32int malloc(u32int sz)
+{
+	return kmalloc(sz);
+}
+
+u32int calloc(u32int count, u32int size)
+{
+	return count * size;
+}
+
 u32int kmalloc(u32int sz)
 {
-	kEnterCriticalSection(&g_criticalSection);
+	kEnterCriticalSection();
+	
+	g_usedHeapSize += sz + sizeof(footer_t) + sizeof(header_t);
+
 	u32int buffer = kmalloc_int(sz, 0, 0);
-	kLeaveCriticalSection(&g_criticalSection);
+	kLeaveCriticalSection();
 	return buffer;
 }
 
 static void expand(u32int new_size, heap_t *heap)
 {
     // Sanity check.
-    ASSERT(new_size > heap->end_address - heap->start_address, "new_size > heap->end_address - heap->start_address");
+	SKY_ASSERT(new_size > heap->end_address - heap->start_address, "new_size > heap->end_address - heap->start_address");
 
     // Get the nearest following page boundary.
     if ((new_size&0xFFFFF000) != 0)
@@ -95,7 +108,7 @@ static void expand(u32int new_size, heap_t *heap)
     }
 
     // Make sure we are not overreaching ourselves.
-    ASSERT(heap->start_address+new_size <= heap->max_address, "heap->start_address+new_size <= heap->max_address");
+	SKY_ASSERT(heap->start_address+new_size <= heap->max_address, "heap->start_address+new_size <= heap->max_address");
 
     // This should always be on a page boundary.
     u32int old_size = heap->end_address-heap->start_address;
@@ -111,9 +124,11 @@ static void expand(u32int new_size, heap_t *heap)
 }
 
 static u32int contract(u32int new_size, heap_t *heap)
-{
+{	
     // Sanity check.
-    ASSERT(new_size < heap->end_address-heap->start_address, "new_size < heap->end_address-heap->start_address");
+	char buf[256];
+	sprintf(buf, "0x%x 0x%x\n", new_size, heap->end_address - heap->start_address);
+	SKY_ASSERT(new_size < heap->end_address-heap->start_address, buf);
 
     // Get the nearest following page boundary.
     if (new_size&0x1000)
@@ -132,7 +147,7 @@ static u32int contract(u32int new_size, heap_t *heap)
     {
        // free_frame(get_page(heap->start_address+i, 0, kernel_directory));
         i -= 0x1000;
-    }
+    }	
 
     heap->end_address = heap->start_address + new_size;
     return new_size;
@@ -179,8 +194,8 @@ heap_t *create_kernel_heap(u32int start, u32int end_addr, u32int max, u8int supe
 	heap_t *heap = &kheap;
 
 	// All our assumptions are made on startAddress and endAddress being page-aligned.
-	ASSERT(start % 0x1000 == 0, "start % 0x1000 == 0");
-	ASSERT(end_addr % 0x1000 == 0, "end_addr % 0x1000 == 0");
+	SKY_ASSERT(start % 0x1000 == 0, "start % 0x1000 == 0");
+	SKY_ASSERT(end_addr % 0x1000 == 0, "end_addr % 0x1000 == 0");
 
 	// Initialise the index.
 	heap->index = place_ordered_array((void*)start, HEAP_INDEX_SIZE, &header_t_less_than);
@@ -216,8 +231,8 @@ heap_t *create_heap(u32int start, u32int end_addr, u32int max, u8int supervisor,
     heap_t *heap = (heap_t*)kmalloc(sizeof(heap_t));
 
     // All our assumptions are made on startAddress and endAddress being page-aligned.
-    ASSERT(start%0x1000 == 0, "start%0x1000 == 0");
-    ASSERT(end_addr%0x1000 == 0, "end_addr%0x1000");
+	SKY_ASSERT(start%0x1000 == 0, "start%0x1000 == 0");
+	SKY_ASSERT(end_addr%0x1000 == 0, "end_addr%0x1000");
 	
     // Initialise the index.
     heap->index = place_ordered_array( (void*)start, HEAP_INDEX_SIZE, &header_t_less_than);
@@ -383,15 +398,20 @@ void free(void *p, heap_t *heap)
     header_t *header = (header_t*) ( (u32int)p - sizeof(header_t) );
     footer_t *footer = (footer_t*) ( (u32int)header + header->size - sizeof(footer_t) );
 
+	g_usedHeapSize -= header->size;
+
     // Sanity checks.
-    ASSERT(header->magic == HEAP_MAGIC, "header->magic == HEAP_MAGIC");
-    ASSERT(footer->magic == HEAP_MAGIC, "footer->magic == HEAP_MAGIC");
+    //ASSERT(header->magic == HEAP_MAGIC, "header->magic == HEAP_MAGIC");
+    //ASSERT(footer->magic == HEAP_MAGIC, "footer->magic == HEAP_MAGIC");
+
+	SKY_ASSERT(header->magic == HEAP_MAGIC, "header->magic == HEAP_MAGIC");
+	SKY_ASSERT(footer->magic == HEAP_MAGIC, "footer->magic == HEAP_MAGIC");
 
     // Make us a hole.
     header->is_hole = 1;
 
     // Do we want to add this header into the 'free holes' index?
-    char do_add = 1;
+    char do_add = 1;	
 
     // Unify left
     // If the thing immediately to the left of us is a footer...
@@ -403,7 +423,7 @@ void free(void *p, heap_t *heap)
         header = test_footer->header;     // Rewrite our header with the new one.
         footer->header = header;          // Rewrite our footer to point to the new header.
         header->size += cache_size;       // Change the size.
-        do_add = 0;                       // Since this header is already in the index, we don't want to add it again.
+        do_add = 0;                       // Since this header is already in the index, we don't want to add it again.		
     }
 
     // Unify right
@@ -412,10 +432,18 @@ void free(void *p, heap_t *heap)
     if (test_header->magic == HEAP_MAGIC &&
         test_header->is_hole)
     {
+		//SkyConsole::Print("test_header : 0x%x\n", test_header);
+		//SkyConsole::Print("test_header_size : 0x%x\n", test_header->size);
         header->size += test_header->size; // Increase our size.
+
         test_footer = (footer_t*) ( (u32int)test_header + // Rewrite it's footer to point to our header.
                                     test_header->size - sizeof(footer_t) );
+		
         footer = test_footer;
+
+//20180419 Heap Bug Fix
+		footer->header = header;
+
         // Find and remove this header from the index.
         u32int iterator = 0;
         while ( (iterator < heap->index.size) &&
@@ -423,16 +451,21 @@ void free(void *p, heap_t *heap)
             iterator++;
 
         // Make sure we actually found the item.
-        ASSERT(iterator < heap->index.size, "iterator < heap->index.size");
+		SKY_ASSERT(iterator < heap->index.size, "iterator < heap->index.size");
         // Remove it.
         remove_ordered_array(iterator, &heap->index);
+					
+		//SkyConsole::Print("C : 0x%x  0x%x 0x%x 0x%x 0x%x\n", p, header, footer, heap->end_address, heap->start_address);
     }
-
+	
     // If the footer location is the end address, we can contract.
     if ( (u32int)footer+sizeof(footer_t) == heap->end_address)
-    {
+    {		
         u32int old_length = heap->end_address-heap->start_address;
-        u32int new_length = contract( (u32int)header - heap->start_address, heap);
+		u32int newSize = (u32int)footer - heap->start_address;
+
+        u32int new_length = contract(newSize, heap);
+		
         // Check how big we will be after resizing.
         if (header->size - (old_length-new_length) > 0)
         {
@@ -443,7 +476,7 @@ void free(void *p, heap_t *heap)
             footer->header = header;
         }
         else
-        {
+        {			
             // We will no longer exist :(. Remove us from the index.
             u32int iterator = 0;
             while ( (iterator < heap->index.size) &&
@@ -457,6 +490,5 @@ void free(void *p, heap_t *heap)
 
     // If required, add us to the index.
     if (do_add == 1)
-        insert_ordered_array((void*)header, &heap->index);
-
+        insert_ordered_array((void*)header, &heap->index);		
 }

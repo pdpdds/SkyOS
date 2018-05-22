@@ -2,7 +2,6 @@
 #include "string.h"
 #include "memory.h"
 #include "windef.h"
-
 #include "defines.h"
 
 #ifdef _MSC_VER
@@ -30,9 +29,6 @@ static struct gdt_descriptor	_gdt [MAX_DESCRIPTORS];
 //! gdtr data
 static struct gdtr				_gdtr;
 
-//============================================================================
-//    IMPLEMENTATION PRIVATE FUNCTIONS
-//============================================================================
 
 //! install gdtr
 static void InstallGDT () {

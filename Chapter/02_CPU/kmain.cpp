@@ -1,4 +1,5 @@
 ﻿#include "kmain.h"
+#include "FPU.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -36,6 +37,7 @@ _declspec(naked) void multiboot_entry(void)
 }
 
 void HardwareInitialize();
+void TestFPU();
 
 void kmain(unsigned long magic, unsigned long addr)
 {
@@ -48,6 +50,18 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	HardwareInitialize();
 	SkyConsole::Print("Hardware Init Complete\n");
+
+	if (false == InitFPU())
+	{
+		SkyConsole::Print("[Warning] Floating Pointer Unit Detection Fail\n");
+	}
+	else
+	{
+		EnableFPU();
+		SkyConsole::Print("FPU Init..\n");
+	}
+
+	TestFPU();
 
 	kLeaveCriticalSection(&g_criticalSection);
 
@@ -62,4 +76,13 @@ void HardwareInitialize()
 	IDTInitialize(0x8);
 	PICInitialize(0x20, 0x28);
 	InitializePIT();
+}
+
+void TestFPU()
+{
+	float sampleFloat = 0.3f;
+
+	sampleFloat *= 5.482f;
+
+	SkyConsole::Print("sample Float Value %f\n", sampleFloat);
 }

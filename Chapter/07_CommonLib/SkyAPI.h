@@ -4,23 +4,16 @@
 #include "Hal.h"
 #include "PIT.h"
 
-void SKYASSERT(bool result, const char* pMsg);
+#define ASSERT(a, b) if(a == false) SkyConsole::Print("Kernel Panic : %s\n", b); _asm hlt
 
-/////////////////////////////////////////////////////////////////////////////
-//동기화
-/////////////////////////////////////////////////////////////////////////////
-typedef struct _CRITICAL_SECTION {
-	
-	LONG LockRecursionCount;
-	HANDLE OwningThread;        // from the thread's ClientId->UniqueThread
-	      
-} CRITICAL_SECTION, *LPCRITICAL_SECTION;;
+#define SKY_ASSERT(Expr, Msg) \
+    __SKY_ASSERT(#Expr, Expr, __FILE__, __LINE__, Msg)
 
-extern CRITICAL_SECTION g_criticalSection;
+void __SKY_ASSERT(const char* expr_str, bool expr, const char* file, int line, const char* msg);
 
-void SKYAPI kEnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
-void SKYAPI kInitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
-void SKYAPI kLeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+
+#define kEnterCriticalSection()	__asm	PUSHFD	__asm CLI
+#define kLeaveCriticalSection()		__asm	POPFD
 
 /////////////////////////////////////////////////////////////////////////////
 //스레드

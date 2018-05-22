@@ -1,61 +1,16 @@
-#include "SkyAPI.h"
-#include "SkyConsole.h"
-#include "Hal.h"
-#include "string.h"
-#include "va_list.h"
-#include "stdarg.h"
-#include "sprintf.h"
+#include "SkyOS.h"
 
-
-CRITICAL_SECTION g_criticalSection;
-
-void SKYASSERT(bool result, const char* pMsg)
+void __SKY_ASSERT(const char* expr_str, bool expr, const char* file, int line, const char* msg)
 {
-	if (result == false)
+	if (!expr)
 	{
-		SkyConsole::Print("%s", pMsg);
-		_asm hlt
-	}
-}
+		//SkyConsole::Print("%s %s, %s %d\n", msg, expr_str, file, line);
+		//for (;;);
+		char buf[256];
+		sprintf(buf, "Assert failed: %s Expected: %s %s %d\n", msg, expr_str, file, line);
 
-void SKYAPI kInitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
-{
-	lpCriticalSection->LockRecursionCount = 0;
-	lpCriticalSection->OwningThread = 0;
-}
 
-void SKYAPI kEnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
-{
-	if (lpCriticalSection->LockRecursionCount == 0)
-	{
-		_asm cli
-	}
-
-	lpCriticalSection->LockRecursionCount++;
-
-	//DWORD threadId = kGetCurrentThreadId();
-	//SKYASSERT((HANDLE)threadId == lpCriticalSection->OwningThread || lpCriticalSection->OwningThread == 0, "kEnterCriticalSection");
-
-	//if (lpCriticalSection->OwningThread == (HANDLE)threadId)
-	//{
-		//lpCriticalSection->LockRecursionCount++;
-	/*
-	else
-	{
-		lpCriticalSection->OwningThread = (HANDLE)threadId;
-		lpCriticalSection->LockRecursionCount = 1;
-	}*/
-}
-
-void SKYAPI kLeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
-{
-	//DWORD threadId = kGetCurrentThreadId();
-	//SKYASSERT((HANDLE)threadId == lpCriticalSection->OwningThread, "kLeaveCriticalSection");
-	lpCriticalSection->LockRecursionCount--;
-	//if (lpCriticalSection->LockRecursionCount == 0)
-	{
-	//	lpCriticalSection->OwningThread = 0;
-		_asm sti
+		HaltSystem(buf);
 	}
 }
 

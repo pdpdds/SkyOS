@@ -157,7 +157,14 @@ using namespace std;
 
 void TestCommonLibrary()
 {
-	TestString();
+	//TestString();
+	TestMap();
+	//Testlist();
+	//TestJson();	
+	//TestVector();
+	//TestStack();
+	//TestDeque();
+	//TestQueue();
 }
 
 void TestQueue()
@@ -231,6 +238,8 @@ void TestMap()
 		SkyConsole::Print("%d  %d\n", (*it1).first, (*it1).second);
 		i++;
 	}
+
+	SkyConsole::Print("\n\n");
 
 	//cout << "ERASE BY KEY" << endl;
 	m10.erase(3);

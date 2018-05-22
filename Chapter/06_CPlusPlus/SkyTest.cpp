@@ -77,9 +77,9 @@ void TestCPlusPlus()
 {
 	//TestCPP14();
 	//TestPureFunctionCall();
-	TestHeapCorruption();
+	//TestHeapCorruption();
 	//TestHeapCorruption2();
-	//TestInheritance();
+	TestInheritance();
 }
 
 void TestCPP14()

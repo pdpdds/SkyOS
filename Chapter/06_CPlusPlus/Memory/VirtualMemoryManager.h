@@ -5,17 +5,8 @@
 #include "PageDirectoryEntry.h"
 #include "PageTableEntry.h"
 
-
-#define KERNEL_VIRTUAL_BASE_ADDRESS				0x00100000
-#define KERNEL_PHYSICAL_BASE_ADDRESS			0x00100000
-
 #define USER_VIRTUAL_STACK_ADDRESS				0x00F00000
-
-#define KERNEL_VIRTUAL_STACK_ADDRESS			0x00800000
-
-#define KERNEL_VIRTUAL_HEAP_ADDRESS				0x80000000
-#define KERNEL_VIRTUAL_PAGE_BASE_ADDRESS		0x70000000
-
+#define KERNEL_VIRTUAL_HEAP_ADDRESS				0x10000000
 
 using namespace PageTableEntry;
 using namespace PageDirectoryEntry;
@@ -40,6 +31,8 @@ using namespace PageDirectoryEntry;
 #define PAGE_DIRECTORY_INDEX(x) (((x) >> 22) & 0x3ff)
 #define PAGE_TABLE_INDEX(x) (((x) >> 12) & 0x3ff)
 #define PAGE_GET_PHYSICAL_ADDRESS(x) (*x & ~0xfff)
+
+#define MAX_PAGE_DIRECTORY_COUNT 40
 
 typedef struct tag_PageTable 
 {
@@ -69,12 +62,17 @@ namespace VirtualMemoryManager
 	void FreePage(PTE* e);
 
 	PageDirectory* CreateCommonPageDirectory();
+	void SetPageDirectory(PageDirectory* dir);
 
 	//페이지 디렉토리를 PDTR 레지스터에 세트한다
 	bool SetCurPageDirectory(PageDirectory* dir);
 
+	bool SetKernelPageDirectory(PageDirectory* dir);
+
 	//현재 페이지 디렉토리를 가져온다
 	PageDirectory* GetCurPageDirectory();
+
+	PageDirectory* GetKernelPageDirectory();
 
 	//캐쉬된 TLS 락 버퍼를 비운다.
 	void FlushTranslationLockBufferEntry(uint32_t addr);
@@ -102,9 +100,12 @@ namespace VirtualMemoryManager
 	//페이지 디렉토리에 매핑된 페이지 디렉토리를 해제한다
 	void UnmapPageTable(PageDirectory* dir, uint32_t virt);
 	void UnmapPhysicalAddress(PageDirectory* dir, uint32_t virt);
+	void FreePageDirectory(PageDirectory* dir);
 
 	//페이지 디렉토리를 생성한다. 즉 가상주소공간을 생성한다는 의미다
 	PageDirectory* CreatePageDirectory();
+
+	bool CreateVideoDMAVirtualAddress(PageDirectory* pd, uintptr_t virt, uintptr_t phys, uintptr_t end);
 
 	//Debug
 	void Dump();

@@ -4,9 +4,11 @@
 #include <string.h>
 #include "sprintf.h"
 
+
+extern void OutPortByte(ushort port, uchar value);
+
 namespace SkyConsole
 {
-
 	static ConsoleColor m_Color;
 	static ConsoleColor m_Text;
 	static ConsoleColor m_backGroundColor;
@@ -155,6 +157,7 @@ namespace SkyConsole
 		va_list		args;
 		va_start(args, str);
 		size_t i;
+
 		for (i = 0; i < strlen(str); i++) {
 
 			switch (str[i]) {
@@ -173,9 +176,9 @@ namespace SkyConsole
 
 						  /*** address of ***/
 				case 's': {
-					int c = (int&)va_arg(args, char);
+					const char * c = (const char *&)va_arg(args, char);
 					char str[256];
-					strcpy(str, (const char*)c);
+					strcpy(str, c);
 					Write(str);
 					i++;		// go to next character
 					break;
@@ -232,7 +235,21 @@ namespace SkyConsole
 
 	void MoveCursor(unsigned int  X, unsigned int  Y)
 	{
-		
+		if (X > m_ScreenWidth)
+			X = 0;
+		unsigned short Offset = (unsigned short)((Y*m_ScreenWidth) + (X - 1));
+
+		OutPortByte(m_VideoCardType, VGA_CRT_CURSOR_H_LOCATION);
+		OutPortByte(m_VideoCardType + 1, Offset >> 8);
+		OutPortByte(m_VideoCardType, VGA_CRT_CURSOR_L_LOCATION);
+		OutPortByte(m_VideoCardType + 1, (Offset << 8) >> 8);
+
+		if (X > 0)
+			m_xPos = X - 1;
+		else
+			m_xPos = 0;
+
+		m_yPos = Y;
 	}
 	/* Sets the Cursor Type
 		0 to 15 is possible value to pass
@@ -294,17 +311,5 @@ namespace SkyConsole
 		{
 			m_Color = (ConsoleColor)((m_backGroundColor << 4) | m_Text | 128);
 		}
-	}
-
-	char	GetChar()
-	{
-		
-		return 0;
-	}
-
-
-	void GetCommand(char* commandBuffer, int bufSize)
-	{
-		
 	}
 }

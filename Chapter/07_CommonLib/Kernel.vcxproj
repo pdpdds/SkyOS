@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CPU\FPU.cpp" />
     <ClCompile Include="CPU\GDT.cpp" />
     <ClCompile Include="CPU\Hal.cpp" />
     <ClCompile Include="CPU\IDT.cpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="Test\ZetPlane.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CPU\FPU.h" />
     <ClInclude Include="CPU\GDT.h" />
     <ClInclude Include="CPU\Hal.h" />
     <ClInclude Include="CPU\IDT.h" />

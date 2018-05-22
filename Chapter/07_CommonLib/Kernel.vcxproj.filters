@@ -50,6 +50,9 @@
       <Filter>Test</Filter>
     </ClCompile>
     <ClCompile Include="SysAPI.cpp" />
+    <ClCompile Include="CPU\FPU.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -107,6 +110,9 @@
     <ClInclude Include="SysAPI.h" />
     <ClInclude Include="Test\PureCallExtend.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\FPU.h">
+      <Filter>CPU</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
