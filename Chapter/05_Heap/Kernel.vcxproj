@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CPU\FPU.cpp" />
     <ClCompile Include="CPU\GDT.cpp" />
     <ClCompile Include="CPU\Hal.cpp" />
     <ClCompile Include="CPU\IDT.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="SkyTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CPU\FPU.h" />
     <ClInclude Include="CPU\GDT.h" />
     <ClInclude Include="CPU\Hal.h" />
     <ClInclude Include="CPU\IDT.h" />
@@ -49,12 +51,13 @@
     <ClInclude Include="MultiBoot.h" />
     <ClInclude Include="SkyAPI.h" />
     <ClInclude Include="SkyConsole.h" />
+    <ClInclude Include="SkyOS.h" />
     <ClInclude Include="SkyTest.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}</ProjectGuid>
     <RootNamespace>Kernel</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -99,7 +102,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;../../CommonLib/stl</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_HEAP_DEBUG;DEBUG;ARCH_X86;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>

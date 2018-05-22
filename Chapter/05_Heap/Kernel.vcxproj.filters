@@ -43,6 +43,9 @@
     <ClCompile Include="Heap\HeapManager.cpp">
       <Filter>Heap</Filter>
     </ClCompile>
+    <ClCompile Include="CPU\FPU.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kmain.h" />
@@ -87,6 +90,10 @@
     </ClInclude>
     <ClInclude Include="Heap\HeapManager.h">
       <Filter>Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyOS.h" />
+    <ClInclude Include="CPU\FPU.h">
+      <Filter>CPU</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

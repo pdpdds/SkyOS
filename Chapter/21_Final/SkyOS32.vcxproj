@@ -260,7 +260,6 @@
     <ClInclude Include="VESA.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Debug\kernel.sys" />
     <None Include="CPlusPlus\ctrycatch_exception_types.conf" />
     <None Include="GUI\svgagui\src\help" />
     <None Include="GUI\svgagui\src\like.ld" />

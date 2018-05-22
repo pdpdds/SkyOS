@@ -258,9 +258,7 @@ namespace VirtualMemoryManager
 
 			memset(identityPageTable, 0, sizeof(PageTable));
 			
-			//0-128MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
-
-		
+			//물리 주소를 가상 주소와 동일하게 매핑시킨다
 			for (int j = 0; j < PAGES_PER_TABLE; j++, frame += PAGE_SIZE, virt += PAGE_SIZE)
 			{
 				PTE page = 0;

@@ -3,9 +3,6 @@
 #include "windef.h"
 #include "ordered_array.h"
 
-#define KHEAP_START         0xC0000000
-#define KHEAP_INITIAL_SIZE  0x100000
-
 #define HEAP_INDEX_SIZE   0x20000
 #define HEAP_MAGIC        0x123890AB
 #define HEAP_MIN_SIZE     0x70000

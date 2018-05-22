@@ -106,11 +106,11 @@ bool InitMemoryManager(multiboot_info* pBootInfo)
 
 	//물리 메모리 매니저 초기화
 	PhysicalMemoryManager::Initialize(pBootInfo);
-	//PhysicalMemoryManager::Dump();
+	PhysicalMemoryManager::Dump();
 	
 	//가상 메모리 매니저 초기화	
 	VirtualMemoryManager::Initialize();
-	//PhysicalMemoryManager::Dump();
+	PhysicalMemoryManager::Dump();
 
 	return true;
 }

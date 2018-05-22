@@ -18,7 +18,6 @@ typedef struct _CRITICAL_SECTION {
 
 extern CRITICAL_SECTION g_criticalSection;
 
-void SKYAPI kEnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 #define kEnterCriticalSection()	__asm	PUSHFD	__asm CLI
 #define kLeaveCriticalSection()		__asm	POPFD
 

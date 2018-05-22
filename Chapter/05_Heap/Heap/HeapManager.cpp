@@ -4,6 +4,9 @@
 
 using namespace VirtualMemoryManager;
 
+bool g_heapInit = false;
+extern DWORD g_usedHeapSize;
+
 namespace HeapManager
 {
 	int m_heapFrameCount = 0;
@@ -11,9 +14,13 @@ namespace HeapManager
 	//Physical Heap Address
 	void* m_pKernelHeapPhysicalMemory = 0;
 
+	DWORD GetHeapSize() { return m_heapFrameCount * PAGE_SIZE; }
+
+	DWORD GetUsedHeapSize() { return g_usedHeapSize; }
+
 	bool InitKernelHeap(int heapFrameCount)
 	{
-		PageDirectory* curPageDirectory = GetCurPageDirectory();
+		PageDirectory* curPageDirectory = GetKernelPageDirectory();
 
 		//힙의 가상주소
 		void* pVirtualHeap = (void*)(KERNEL_VIRTUAL_HEAP_ADDRESS);
@@ -52,6 +59,7 @@ namespace HeapManager
 		//힙에 할당된 가상 주소 영역을 사용해서 힙 자료구조를 생성한다. 
 		create_kernel_heap((u32int)pVirtualHeap, (uint32_t)virtualEndAddress, (uint32_t)virtualEndAddress, 0, 0);
 
+		g_heapInit = true;
 		return true;
 	}
 

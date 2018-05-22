@@ -6,9 +6,15 @@
 #include "MultiBoot.h"	
 #include "SkyAPI.h"
 
+
+PageDirectory* g_pageDirectoryPool[MAX_PAGE_DIRECTORY_COUNT];
+bool g_pageDirectoryAvailable[MAX_PAGE_DIRECTORY_COUNT];
+
 namespace VirtualMemoryManager
 {
 	//! current directory table
+
+	PageDirectory*		_kernel_directory = 0;
 	PageDirectory*		_cur_directory = 0;	
 
 	//가상 주소와 매핑된 실제 물리 주소를 얻어낸다.
@@ -41,7 +47,7 @@ namespace VirtualMemoryManager
 	//가상주소를 물리 주소에 매핑
 	void MapPhysicalAddressToVirtualAddresss(PageDirectory* dir, uint32_t virt, uint32_t phys, uint32_t flags)
 	{
-		kEnterCriticalSection(&g_criticalSection);
+		kEnterCriticalSection();
 		PhysicalMemoryManager::EnablePaging(false);
 		PDE* pageDir = dir->m_entries;				
 
@@ -56,7 +62,37 @@ namespace VirtualMemoryManager
 		pageTable[virt << 10 >> 10 >> 12] = phys | flags;
 
 		PhysicalMemoryManager::EnablePaging(true);
-		kLeaveCriticalSection(&g_criticalSection);
+		kLeaveCriticalSection();
+	}
+
+	void FreePageDirectory(PageDirectory* dir)
+	{
+		PhysicalMemoryManager::EnablePaging(false);
+		PDE* pageDir = dir->m_entries;
+		for (int i = 0; i < PAGES_PER_DIRECTORY; i++)
+		{
+			PDE& pde = pageDir[i];
+
+			if (pde != 0)
+			{
+				/* get mapped frame */
+				void* frame = (void*)(pageDir[i] & 0x7FFFF000);
+				PhysicalMemoryManager::FreeBlock(frame);
+				pde = 0;
+			}
+		}
+
+		for (int index = 0; index < MAX_PAGE_DIRECTORY_COUNT; index++)
+		{
+
+			if (g_pageDirectoryPool[index] == dir)
+			{
+				g_pageDirectoryAvailable[index] = true;
+				break;
+			}
+		}
+
+		PhysicalMemoryManager::EnablePaging(true);
 	}
 
 	void UnmapPageTable(PageDirectory* dir, uint32_t virt)
@@ -163,15 +199,28 @@ namespace VirtualMemoryManager
 
 	PageDirectory* CreateCommonPageDirectory()
 	{
+				
 		//페이지 디렉토리 생성. 가상주소 공간 
 		//4GB를 표현하기 위해서 페이지 디렉토리는 하나면 충분하다.
 		//페이지 디렉토리는 1024개의 페이지테이블을 가진다
-		//1024 * 1024(페이지 테이블 엔트리의 개수) * 4K(프레임의 크기) = 4G
-		PageDirectory* dir = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+		//1024 * 1024(페이지 테이블 엔트리의 개수) * 4K(프레임의 크기) = 4G		
+		int index = 0;
+		for (; index < MAX_PAGE_DIRECTORY_COUNT; index++)
+		{
+		
+			if (g_pageDirectoryAvailable[index] == true)
+				break;
+		}
 
+		if (index == MAX_PAGE_DIRECTORY_COUNT)
+			return nullptr;
+
+		PageDirectory* dir = g_pageDirectoryPool[index];
+	
 		if (dir == NULL)
 			return nullptr;
 
+		g_pageDirectoryAvailable[index] = false;
 		memset(dir, 0, sizeof(PageDirectory));
 
 		uint32_t frame = 0x00000000;
@@ -188,9 +237,7 @@ namespace VirtualMemoryManager
 
 			memset(identityPageTable, 0, sizeof(PageTable));
 			
-			//0-128MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
-
-		
+			//물리 주소를 가상 주소와 동일하게 매핑시킨다
 			for (int j = 0; j < PAGES_PER_TABLE; j++, frame += PAGE_SIZE, virt += PAGE_SIZE)
 			{
 				PTE page = 0;
@@ -213,9 +260,24 @@ namespace VirtualMemoryManager
 		return dir;
 	}	
 
+	void SetPageDirectory(PageDirectory* dir)
+	{
+		_asm
+		{
+			mov	eax, [dir]
+			mov	cr3, eax		// PDBR is cr3 register in i86
+		}
+	}
+
 	bool Initialize()
 	{
 		SkyConsole::Print("Virtual Memory Manager Init..\n");
+
+		for (int i = 0; i < MAX_PAGE_DIRECTORY_COUNT; i++)
+		{
+			g_pageDirectoryPool[i] = (PageDirectory*)PhysicalMemoryManager::AllocBlock();
+			g_pageDirectoryAvailable[i] = true;
+		}
 
 		PageDirectory* dir = CreateCommonPageDirectory();
 
@@ -223,20 +285,32 @@ namespace VirtualMemoryManager
 			return false;
 
 		//페이지 디렉토리를 PDBR 레지스터에 로드한다
-		if (false == SetCurPageDirectory(dir))
-			return false;
+		SetCurPageDirectory(dir);
+		SetKernelPageDirectory(dir);
 
-		_asm
-		{
-			mov	eax, [dir]
-			mov	cr3, eax		// PDBR is cr3 register in i86
-		}
+		SetPageDirectory(dir);
 
 		//페이징 기능을 다시 활성화시킨다
 		PhysicalMemoryManager::EnablePaging(true);
 		
 		return true;
 	}
+
+	bool SetKernelPageDirectory(PageDirectory* dir)
+	{
+		if (dir == NULL)
+			return false;
+
+		_kernel_directory = dir;
+
+		return true;
+	}
+
+	PageDirectory* GetKernelPageDirectory()
+	{
+		return _kernel_directory;
+	}
+
 
 
 	bool SetCurPageDirectory(PageDirectory* dir)
@@ -264,6 +338,17 @@ namespace VirtualMemoryManager
 		}
 #endif
 	}	
+
+	bool CreateVideoDMAVirtualAddress(PageDirectory* pd, uintptr_t virt, uintptr_t phys, uintptr_t end)
+	{
+		//void* memory = PhysicalMemoryManager::AllocBlocks((end - start)/ PAGE_SIZE);
+		for (int i = 0; virt <= end; virt += 0x1000, phys += 0x1000, i++)
+		{
+			MapPhysicalAddressToVirtualAddresss(pd, (uint32_t)virt, (uint32_t)phys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
+		}
+
+		return true;
+	}
 
 	void Dump()
 	{

@@ -580,9 +580,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Debug\kernel.sys">
-      <Filter>Heap</Filter>
-    </None>
     <None Include="CPlusPlus\ctrycatch_exception_types.conf">
       <Filter>CPlusPlus</Filter>
     </None>
