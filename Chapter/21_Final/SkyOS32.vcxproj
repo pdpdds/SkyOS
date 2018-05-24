@@ -105,7 +105,6 @@
     <ClCompile Include="Heap\HeapManager.cpp" />
     <ClCompile Include="Heap\kheap.cpp" />
     <ClCompile Include="Heap\ordered_array.cpp" />
-    <ClCompile Include="InitKernel.cpp" />
     <ClCompile Include="KernelProcedure.cpp" />
     <ClCompile Include="KeyBoard\KeyBoard.cpp" />
     <ClCompile Include="KeyBoard\KeyboardController.cpp" />
@@ -234,7 +233,6 @@
     <ClInclude Include="Heap\HeapManager.h" />
     <ClInclude Include="Heap\kheap.h" />
     <ClInclude Include="Heap\ordered_array.h" />
-    <ClInclude Include="InitKernel.h" />
     <ClInclude Include="KernelProcedure.h" />
     <ClInclude Include="KeyBoard\KeyBoard.h" />
     <ClInclude Include="KeyBoard\KeyboardController.h" />

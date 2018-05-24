@@ -16,7 +16,6 @@
 #include "SkyConsole.h"
 #include "PEImage.h"
 #include "SkyAPI.h"
-#include "InitKernel.h"
 #include "GDT.h"
 #include "IDT.h"
 #include "PIC.h"

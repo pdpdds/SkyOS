@@ -334,7 +334,6 @@
     <ClCompile Include="ThirdParty\easyzlib\easyzlib.c">
       <Filter>ThirdParty\easyzlib</Filter>
     </ClCompile>
-    <ClCompile Include="InitKernel.cpp" />
     <ClCompile Include="KernelProcedure.cpp" />
     <ClCompile Include="kmain.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
@@ -697,7 +696,6 @@
     <ClInclude Include="ThirdParty\easyzlib\easyzlib.h">
       <Filter>ThirdParty\easyzlib</Filter>
     </ClInclude>
-    <ClInclude Include="InitKernel.h" />
     <ClInclude Include="KernelProcedure.h" />
     <ClInclude Include="kmain.h" />
     <ClInclude Include="MultiBoot.h" />
