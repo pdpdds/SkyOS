@@ -347,7 +347,6 @@
     <ClCompile Include="SkyConsoleLauncher.cpp" />
     <ClCompile Include="SkyGUILauncher.cpp" />
     <ClCompile Include="SkyLauncher.cpp" />
-    <ClCompile Include="SkyTest.cpp" />
     <ClCompile Include="GUI\JPEG.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
@@ -395,6 +394,9 @@
     </ClCompile>
     <ClCompile Include="KeyBoard\KeyboardController.cpp">
       <Filter>Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\SkyTest.cpp">
+      <Filter>Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -711,7 +713,6 @@
     <ClInclude Include="SkyLauncher.h" />
     <ClInclude Include="SkyOS.h" />
     <ClInclude Include="SkyStartOption.h" />
-    <ClInclude Include="SkyTest.h" />
     <ClInclude Include="GUI\JPEG.h">
       <Filter>GUI</Filter>
     </ClInclude>
@@ -765,6 +766,9 @@
     </ClInclude>
     <ClInclude Include="KeyBoard\KeyBoardIO.h">
       <Filter>Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\SkyTest.h">
+      <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

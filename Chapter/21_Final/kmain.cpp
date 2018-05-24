@@ -89,8 +89,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	SystemProfiler::GetInstance()->Initialize();
 	
 	PrintCurrentTime();
-	TestMemoryModule("SAMPLE_DLL");
-
+	
 	SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
 	
 	kLeaveCriticalSection();
@@ -171,34 +170,6 @@ bool InitMemoryManager(multiboot_info* pBootInfo)
 
 	HeapManager::InitKernelHeap(heapFrameCount);
 	SkyConsole::Print("Heap %dMB Allocated\n", requiredHeapSize / 1048576);
-
-	return true;
-}
-
-bool TestMemoryModule(const char* moduleName)
-{
-	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory(moduleName);
-
-	if (hwnd == nullptr)
-	{
-		HaltSystem("Memory Module Load Fail!!");
-	}
-
-	PGetDLLInterface GetDLLInterface = (PGetDLLInterface)SkyModuleManager::GetInstance()->GetModuleFunction((MODULE_HANDLE)(hwnd), "GetDLLInterface");
-
-	if (!GetDLLInterface)
-	{
-		HaltSystem("Memory Module Load Fail!!");
-	}
-
-	const DLLInterface* dll_interface = GetDLLInterface();
-	
-	int sum = dll_interface->AddNumbers(5, 6);
-
-	SkyConsole::Print("AddNumbers(5, 6): %d\n", sum);
-	
-	if (false == SkyModuleManager::GetInstance()->UnloadModule((MODULE_HANDLE)(hwnd)))
-		HaltSystem("UnloadDLL() failed!\n");
 
 	return true;
 }

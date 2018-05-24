@@ -12,3 +12,4 @@ void TestTryCatch();
 void TestNullPointer();
 void TestLua();
 void TestEasyZLib();
+void TestMemoryModule();

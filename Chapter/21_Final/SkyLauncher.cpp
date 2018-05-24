@@ -45,7 +45,7 @@ void SkyLauncher::JumpToNewKernelEntry(int entryPoint, unsigned int procStack)
 		MOV     GS, AX
 
 		MOV     ESP, procStack
-		PUSH	0; //parameter
+		PUSH	0; //파라메터
 		PUSH	0; //EBP
 		PUSH    0x200; EFLAGS
 		PUSH    0x08; CS

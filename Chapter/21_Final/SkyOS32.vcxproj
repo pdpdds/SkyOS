@@ -118,8 +118,8 @@
     <ClCompile Include="SkyConsoleLauncher.cpp" />
     <ClCompile Include="SkyGUILauncher.cpp" />
     <ClCompile Include="SkyLauncher.cpp" />
-    <ClCompile Include="SkyTest.cpp" />
     <ClCompile Include="Test\Plane.cpp" />
+    <ClCompile Include="Test\SkyTest.cpp" />
     <ClCompile Include="Test\ZetPlane.cpp" />
     <ClCompile Include="ThirdParty\easyzlib\easyzlib.c" />
     <ClCompile Include="ThirdParty\LUA\lapi.c" />
@@ -251,9 +251,9 @@
     <ClInclude Include="SkyLauncher.h" />
     <ClInclude Include="SkyOS.h" />
     <ClInclude Include="SkyStartOption.h" />
-    <ClInclude Include="SkyTest.h" />
     <ClInclude Include="Test\Plane.h" />
     <ClInclude Include="Test\PureCallExtend.h" />
+    <ClInclude Include="Test\SkyTest.h" />
     <ClInclude Include="Test\TestInteger.h" />
     <ClInclude Include="Test\ZetPlane.h" />
     <ClInclude Include="ThirdParty\easyzlib\easyzlib.h" />

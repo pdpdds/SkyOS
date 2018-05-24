@@ -451,3 +451,31 @@ void TestEasyZLib()
 {
 
 }
+
+bool TestMemoryModule(const char* moduleName)
+{
+	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory(moduleName);
+
+	if (hwnd == nullptr)
+	{
+		HaltSystem("Memory Module Load Fail!!");
+	}
+
+	PGetDLLInterface GetDLLInterface = (PGetDLLInterface)SkyModuleManager::GetInstance()->GetModuleFunction((MODULE_HANDLE)(hwnd), "GetDLLInterface");
+
+	if (!GetDLLInterface)
+	{
+		HaltSystem("Memory Module Load Fail!!");
+	}
+
+	const DLLInterface* dll_interface = GetDLLInterface();
+
+	int sum = dll_interface->AddNumbers(5, 6);
+
+	SkyConsole::Print("AddNumbers(5, 6): %d\n", sum);
+
+	if (false == SkyModuleManager::GetInstance()->UnloadModule((MODULE_HANDLE)(hwnd)))
+		HaltSystem("UnloadDLL() failed!\n");
+
+	return true;
+}
