@@ -446,3 +446,8 @@ void TestNullPointer()
 	ZetPlane* pPlane = 0;
 	pPlane->IsRotate();
 }
+
+void TestEasyZLib()
+{
+
+}

@@ -177,16 +177,9 @@ struct Module
 	unsigned int Reserved;
 };
 
-/*
-struct multiboot_mmap_entry
-{
-	uint32_t size;
-	uint64_t addr;
-	uint64_t len;
+
 #define MULTIBOOT_MEMORY_AVAILABLE              1
 #define MULTIBOOT_MEMORY_RESERVED               2
-	uint32_t type;
-};*/
 
 struct multiboot_mmap_entry {
 	uint32_t size;
@@ -289,56 +282,6 @@ struct VbeModeInfo
 
 	unsigned int FrameBuffer;
 };
-
-/*struct VbeModeInfo
-{
-	UINT16 ModeAttributes;
-	char WinAAttributes;
-	char WinBAttributes;
-	UINT16 WinGranularity;
-	UINT16 WinSize;
-	UINT16 WinASegment;
-	UINT16 WinBSegment;
-	UINT32 WinFuncPtr;
-	short BytesPerScanLine;
-	short XRes;
-	short YRes;
-	char XCharSize;
-	char YCharSize;
-	char NumberOfPlanes;
-	char BitsPerPixel;
-	char NumberOfBanks;
-	char MemoryModel;
-	char BankSize;
-	char NumberOfImagePages;
-	char res1;
-	char RedMaskSize;
-	char RedFieldPosition;
-	char GreenMaskSize;
-	char GreenFieldPosition;
-	char BlueMaskSize;
-	char BlueFieldPosition;
-	char RsvedMaskSize;
-	char RsvedFieldPosition;
-	char DirectColorModeInfo; 
-
-	UINT32 PhysBasePtr;
-	UINT32 OffScreenMemOffset;
-	short OffScreenMemSize;
-	//VBE 2.1
-	short LinbytesPerScanLine;
-	char BankNumberOfImagePages;
-	char LinNumberOfImagePages;
-	char LinRedMaskSize;
-	char LinRedFieldPosition;
-	char LingreenMaskSize;
-	char LinGreenFieldPosition;
-	char LinBlueMaskSize;
-	char LinBlueFieldPosition;
-	char LinRsvdMaskSize;
-	char LinRsvdFieldPosition;
-	char res2[194];
-}*/
 
 typedef struct {
 	uint16_t	Offset;

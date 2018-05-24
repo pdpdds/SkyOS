@@ -11,3 +11,4 @@ void TestFPU();
 void TestTryCatch();
 void TestNullPointer();
 void TestLua();
+void TestEasyZLib();
