@@ -32,10 +32,10 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 
 	//파일에서 512바이트를 읽고 유효한 PE 파일인지 검증한다.
 	int readCnt = StorageManager::GetInstance()->ReadFile(file, buf, 1, 512);
-	//SkyConsole::Print("Read Count %s\n", buf);
 	if (0 == readCnt)
 		return nullptr;
 
+	//유효하지 않은 PE파일이면 파일 핸들을 닫고 종료한다.
 	if (!ValidatePEImage(buf))
 	{
 		SkyConsole::Print("Invalid PE Format!! %s\n", pProcess->m_processName);
@@ -68,13 +68,16 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 	SkyConsole::Print("Process ImageBase : 0x%X\n", ntHeaders->OptionalHeader.ImageBase);
 //#endif	
 	
+
+//파일로부터 읽은 데이터 페이지 수 계산
 	int pageRest = 0;
 
 	if ((pThread->m_imageSize % 4096) > 0)
 		pageRest = 1;
 
 	pProcess->m_dwPageCount = (pThread->m_imageSize / 4096) + pageRest;
-	
+
+	//파일을 메모리에 할당하는데 필요한 물리 메모리 할당
 	unsigned char* physicalMemory = (unsigned char*)PhysicalMemoryManager::AllocBlocks(pProcess->m_dwPageCount);
 
 //물리주소를 가상주소로 매핑한다
@@ -114,23 +117,12 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 
 		readCnt = StorageManager::GetInstance()->ReadFile(file, memory + 512 * i, 512, 1);
 	}
-
-	//StorageManager::GetInstance()->CloseFile(file);	
 	
 	//스택을 생성하고 주소공간에 매핑한다.
-	/*void* stackVirtual = (void*)(USER_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_stackIndex++);
-	void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
+	void* stackAddress = (void*)(g_stackPhysicalAddressPool - PAGE_SIZE * 10 * kernelStackIndex++);
 
-	SkyConsole::Print("Virtual Stack : %x\n", stackVirtual);
-	SkyConsole::Print("Physical Stack : %x\n", stackPhys);
-
-	VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
-	*/
-	//스택을 생성하고 주소공간에 매핑한다.
-	void* stackVirtual = (void*)(g_stackPhysicalAddressPool - PAGE_SIZE * 10 * kernelStackIndex++);
-
-	/* final initialization */
-	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE * 10);
+	//스레드에 ESP, EBP 설정
+	pThread->m_initialStack = (void*)((uint32_t)stackAddress + PAGE_SIZE * 10);
 	pThread->frame.esp = (uint32_t)pThread->m_initialStack;
 	pThread->frame.ebp = pThread->frame.esp;
 
@@ -154,39 +146,34 @@ Thread* ProcessManager::CreateThread(Process* pProcess, FILE* file, LPVOID param
 
 Thread* ProcessManager::CreateThread(Process* pProcess, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID param)
 {
+	//스레드 객체를 생성하고 변수를 초기화한다.
 	Thread* pThread = new Thread();
-	pThread->m_pParent = pProcess;
-	pThread->SetThreadId(m_nextThreadId++);
-	pThread->m_dwPriority = 1;
-	pThread->m_taskState = TASK_STATE_INIT;
-	pThread->m_waitingTime = TASK_RUNNING_TIME;
-	pThread->m_stackLimit = PAGE_SIZE;
+	pThread->m_pParent = pProcess; // 부모 프로세스
+	pThread->SetThreadId(m_nextThreadId++); //스레드 아이디 설정
+	pThread->m_dwPriority = 1; //우선순위
+	pThread->m_taskState = TASK_STATE_INIT; //태스크 상태
+	pThread->m_waitingTime = TASK_RUNNING_TIME; //실행시간
+	pThread->m_stackLimit = STACK_SIZE; //스택 크기
 	pThread->m_imageBase = 0;
 	pThread->m_imageSize = 0;
 	memset(&pThread->frame, 0, sizeof(trapFrame));
-	pThread->frame.eip = (uint32_t)lpStartAddress;
-	pThread->frame.flags = 0x200;
-	pThread->m_startParam = param;
+	pThread->frame.eip = (uint32_t)lpStartAddress; //EIP
+	pThread->frame.flags = 0x200; //플래그
+	pThread->m_startParam = param; //파라메터
 
 	//스택을 생성하고 주소공간에 매핑한다.
-	void* stackVirtual = (void*)(g_stackPhysicalAddressPool - PAGE_SIZE * 10 * kernelStackIndex++);
-	//void* stackVirtual = (void*)(KERNEL_VIRTUAL_STACK_ADDRESS + PAGE_SIZE * pProcess->m_kernelStackIndex++);
-	//void* stackPhys = (void*)PhysicalMemoryManager::AllocBlock();
+	void* stackAddress = (void*)(g_stackPhysicalAddressPool - PAGE_SIZE * 10 * kernelStackIndex++);	
 
 #ifdef _DEBUG
-	SkyConsole::Print("Virtual Stack : %x\n", stackVirtual);
-	//SkyConsole::Print("Physical Stack : %x\n", stackPhys);
-#endif
+	SkyConsole::Print("Stack : %x\n", stackAddress);	
+#endif	
 
-	//SkyConsole::Print("Virtual Stack : %x\n", stackVirtual);
+	//ESP
+	pThread->m_initialStack = (void*)((uint32_t)stackAddress + STACK_SIZE);
+	pThread->frame.esp = (uint32_t)pThread->m_initialStack; //ESP
+	pThread->frame.ebp = pThread->frame.esp; //EBP
 
-	/* map user process stack space */
-	//VirtualMemoryManager::MapPhysicalAddressToVirtualAddresss(pProcess->GetPageDirectory(), (uint32_t)stackVirtual, (uint32_t)stackPhys, I86_PTE_PRESENT | I86_PTE_WRITABLE);
-
-	pThread->m_initialStack = (void*)((uint32_t)stackVirtual + PAGE_SIZE * 10);
-	pThread->frame.esp = (uint32_t)pThread->m_initialStack;
-	pThread->frame.ebp = pThread->frame.esp;
-
+	//태스크 리스트에 스레드를 추가한다.
 	m_taskList->push_back(pThread);
 
 	return pThread;

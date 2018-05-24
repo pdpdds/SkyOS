@@ -41,42 +41,46 @@ __declspec(naked) void InterruptPITHandler()
 {	
 	_asm
 	{
+		//모든 레지스터를 스택에 넣는다.
 		PUSHFD
 		cli
 		pushad;
-
 		push ds
-			push es
-			push fs
-			push gs
+		push es
+		push fs
+		push gs
 
-			mov ax, 0x10; load the kernel data segment descriptor
-			mov ds, ax
-			mov es, ax
-			mov fs, ax
-			mov gs, ax
+		mov ax, 0x10; 커널 데이터 세그먼트 셀렉터 선택
+		mov ds, ax
+		mov es, ax
+		mov fs, ax
+		mov gs, ax
 
-			mov eax, esp
-			mov g_esp, eax
+		mov eax, esp; 현재 ESP값을 저장한다.
+		mov g_esp, eax
 	}
+
 	_pitTicks++;
 
 	_asm
 	{
-		call ISRHandler
+		call ISRHandler; 타이머 인터럽트를 처리한다.
 	}
 
 	__asm
 	{
-		cmp g_pageDirectory, 0
+		cmp g_pageDirectory, 0;페이지 디렉토리 값이 0이면 정상적으로 인터럽트를 완료
 		jz pass
 
+		//페이지 디렉토리값이 설정되어 있다면 
+		//스택 포인터와 페이지 디렉토리를 변경해서 컨택스트 스위칭을 수행한다.
 		mov eax, g_esp
 		mov esp, eax
 
 		mov	eax, [g_pageDirectory]
-		mov	cr3, eax		// PDBR is cr3 register in i86
-
+		mov	cr3, eax; CR3(PDBR) 레지스터에 페이지 디렉토리값 변경
+	pass:
+		//스택에 넣었던 레지스터 값들을 복원하고 원래 수행하던 코드로 리턴한다
 		pop gs
 		pop fs
 		pop es
@@ -85,21 +89,9 @@ __declspec(naked) void InterruptPITHandler()
 		popad;
 
 		mov al, 0x20
-			out 0x20, al
-			POPFD
-			iretd;
-
-	pass:
-		pop gs
-			pop fs
-			pop es
-			pop ds
-
-			popad;
-		mov al, 0x20
-			out 0x20, al
-			POPFD
-			iretd;
+		out 0x20, al
+		POPFD
+		iretd;
 	}
 }
 
