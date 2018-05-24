@@ -82,6 +82,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	SkyModuleManager::GetInstance()->Initialize(pBootInfo);
 	StorageManager::GetInstance()->Initilaize(pBootInfo);
 
+	//GUI 시스템의초기화 코드위치를 여기에 둔 것은 
+	//로그를 출력하기 위해서다.
 #if SKY_CONSOLE_MODE == 0
 	SkyGUISystem::GetInstance()->Initialize(pBootInfo);
 #endif

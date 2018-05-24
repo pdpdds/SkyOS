@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleSystem\commands.cpp" />
-    <ClCompile Include="ConsoleSystem\ConsoleIOListener.cpp" />
     <ClCompile Include="ConsoleSystem\ConsoleManager.cpp" />
     <ClCompile Include="Core\Exception.cpp" />
     <ClCompile Include="Core\KernelProcessLoader.cpp" />
@@ -59,6 +58,7 @@
     <ClCompile Include="FileSystem\RAMDisk.cpp" />
     <ClCompile Include="FileSystem\RamDiskAdaptor.cpp" />
     <ClCompile Include="FileSystem\StorageManager.cpp" />
+    <ClCompile Include="GUI\Haribote\ConsoleIOListener.cpp" />
     <ClCompile Include="GUI\Haribote\fifo.cpp" />
     <ClCompile Include="GUI\Haribote\SkyConsoleTask.cpp" />
     <ClCompile Include="GUI\Haribote\SkyGUI.cpp" />
@@ -153,7 +153,6 @@
     <ClInclude Include="ConsoleSystem\commandMacros.h" />
     <ClInclude Include="ConsoleSystem\commands.h" />
     <ClInclude Include="ConsoleSystem\commandTable.h" />
-    <ClInclude Include="ConsoleSystem\ConsoleIOListener.h" />
     <ClInclude Include="ConsoleSystem\ConsoleManager.h" />
     <ClInclude Include="Core\Exception.h" />
     <ClInclude Include="Core\KernelProcessLoader.h" />
@@ -206,6 +205,7 @@
     <ClInclude Include="FileSystem\RAMDisk.h" />
     <ClInclude Include="FileSystem\RamDiskAdaptor.h" />
     <ClInclude Include="FileSystem\StorageManager.h" />
+    <ClInclude Include="GUI\Haribote\ConsoleIOListener.h" />
     <ClInclude Include="GUI\Haribote\fifo.h" />
     <ClInclude Include="GUI\Haribote\FontData.h" />
     <ClInclude Include="GUI\Haribote\SkyConsoleTask.h" />

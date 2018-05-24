@@ -4,6 +4,7 @@
 #include "SkyConsole.h"
 #include "SkyRenderer32.h"
 #include "SkyGUI.h"
+#include "KeyboardController.h"
 
 #define COLOR(r,g,b) ((r<<16) | (g<<8) | b)
 #define WHITE COLOR(255,255,255)
@@ -33,7 +34,7 @@ SkyGUIConsole::~SkyGUIConsole()
 bool SkyGUIConsole::Initialize(void* pVideoRamPtr, int width, int height, int bpp, uint8_t buffertype)
 {	
 	kEnterCriticalSection();
-	InitKeyboard();		
+	KeyboardController::SetupInterrupts();
 	kLeaveCriticalSection();
 	
 	m_pRenderer = new SkyRenderer32();

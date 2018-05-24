@@ -259,12 +259,6 @@
     <ClCompile Include="ConsoleSystem\commands.cpp">
       <Filter>ConsoleSystem</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleSystem\ConsoleIOListener.cpp">
-      <Filter>ConsoleSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsoleSystem\ConsoleManager.cpp">
-      <Filter>ConsoleSystem</Filter>
-    </ClCompile>
     <ClCompile Include="ThirdParty\LUA\lapi.c">
       <Filter>ThirdParty\Lua</Filter>
     </ClCompile>
@@ -397,6 +391,12 @@
     </ClCompile>
     <ClCompile Include="Test\SkyTest.cpp">
       <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleSystem\ConsoleManager.cpp">
+      <Filter>ConsoleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Haribote\ConsoleIOListener.cpp">
+      <Filter>GUI\SkyGUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -631,12 +631,6 @@
     <ClInclude Include="ConsoleSystem\commandTable.h">
       <Filter>ConsoleSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleSystem\ConsoleIOListener.h">
-      <Filter>ConsoleSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsoleSystem\ConsoleManager.h">
-      <Filter>ConsoleSystem</Filter>
-    </ClInclude>
     <ClInclude Include="ThirdParty\LUA\lapi.h">
       <Filter>ThirdParty\Lua</Filter>
     </ClInclude>
@@ -769,6 +763,12 @@
     </ClInclude>
     <ClInclude Include="Test\SkyTest.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleSystem\ConsoleManager.h">
+      <Filter>ConsoleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Haribote\ConsoleIOListener.h">
+      <Filter>GUI\SkyGUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

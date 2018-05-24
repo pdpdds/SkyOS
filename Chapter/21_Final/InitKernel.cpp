@@ -28,11 +28,3 @@ void SetInterruptVector()
 	setvect(33, (void(__cdecl &)(void))InterrputDefaultHandler);
 	setvect(38, (void(__cdecl &)(void))InterrputDefaultHandler);
 }
-
-bool InitKeyboard()
-{
-
-	KeyboardController::SetupInterrupts();
-
-	return true;
-}

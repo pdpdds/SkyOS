@@ -7,7 +7,7 @@
 #include "Exception.h"
 #include "Process.h"
 #include "Thread.h"
-#include "InitKernel.h"
+#include "KeyboardController.h"
 
 SkyConsoleLauncher::SkyConsoleLauncher()
 {
@@ -21,7 +21,7 @@ SkyConsoleLauncher::~SkyConsoleLauncher()
 void SkyConsoleLauncher::Launch()
 {
 //콘솔용 키보드 초기화
-	InitKeyboard();
+	KeyboardController::SetupInterrupts();
 	SkyConsole::Print("Keyboard Init..\n");
 
 	Process* pMainProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("ConsoleSystem", SystemConsoleProc, NULL, PROCESS_KERNEL);
