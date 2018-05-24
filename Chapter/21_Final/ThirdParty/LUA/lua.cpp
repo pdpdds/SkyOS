@@ -15,7 +15,7 @@
 
 int mainaa (int argc, char *argv[])
 {
-  int i;
+  int i = 0;
   lua_open();
   lua_pushstring("> "); lua_setglobal("_PROMPT");
   lua_userinit();
