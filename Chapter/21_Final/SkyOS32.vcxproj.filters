@@ -378,6 +378,18 @@
     <ClCompile Include="GUI\SkySVGA.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\vesa.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\MemoryResourceAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="v8086\RMEFunc.cpp">
+      <Filter>V8086</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Haribote\SkyConsoleTask.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\Hal.h">
@@ -726,6 +738,18 @@
     </ClInclude>
     <ClInclude Include="GUI\SkySVGA.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\VESA.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\MemoryResourceAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="v8086\RMEFunc.h">
+      <Filter>V8086</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Haribote\SkyConsoleTask.h">
+      <Filter>GUI\SkyGUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
