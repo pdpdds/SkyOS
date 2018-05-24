@@ -28,7 +28,7 @@ Base adress from advanced linker option
 #define MULTIBOOT_BOOTLOADER_MAGIC      0x2BADB002
 #define MULTIBOOT_HEADER_FLAGS         0x00010003 
 #define MULTIBOOT_HEADER_FLAGS_GUI         0x00010007 
-#define STACK_SIZE              0x4000    
+#define STACK_SIZE 4096 * 10 //40K  
 #define CHECKSUM            -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
 #define CHECKSUM_GUI            -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS_GUI)
 
