@@ -107,6 +107,8 @@
     <ClCompile Include="Heap\ordered_array.cpp" />
     <ClCompile Include="InitKernel.cpp" />
     <ClCompile Include="KernelProcedure.cpp" />
+    <ClCompile Include="KeyBoard\KeyBoard.cpp" />
+    <ClCompile Include="KeyBoard\KeyboardController.cpp" />
     <ClCompile Include="kmain.cpp" />
     <ClCompile Include="Memory\PageDirectoryEntry.cpp" />
     <ClCompile Include="Memory\PageTableEntry.cpp" />
@@ -234,6 +236,9 @@
     <ClInclude Include="Heap\ordered_array.h" />
     <ClInclude Include="InitKernel.h" />
     <ClInclude Include="KernelProcedure.h" />
+    <ClInclude Include="KeyBoard\KeyBoard.h" />
+    <ClInclude Include="KeyBoard\KeyboardController.h" />
+    <ClInclude Include="KeyBoard\KeyBoardIO.h" />
     <ClInclude Include="kmain.h" />
     <ClInclude Include="Memory\PageDirectoryEntry.h" />
     <ClInclude Include="Memory\PageTableEntry.h" />

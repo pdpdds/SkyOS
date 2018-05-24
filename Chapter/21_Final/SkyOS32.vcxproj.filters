@@ -390,6 +390,12 @@
     <ClCompile Include="GUI\Haribote\SkyConsoleTask.cpp">
       <Filter>GUI\SkyGUI</Filter>
     </ClCompile>
+    <ClCompile Include="KeyBoard\KeyBoard.cpp">
+      <Filter>Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyBoard\KeyboardController.cpp">
+      <Filter>Keyboard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\Hal.h">
@@ -751,6 +757,15 @@
     <ClInclude Include="GUI\Haribote\SkyConsoleTask.h">
       <Filter>GUI\SkyGUI</Filter>
     </ClInclude>
+    <ClInclude Include="KeyBoard\KeyBoard.h">
+      <Filter>Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyBoard\KeyboardController.h">
+      <Filter>Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyBoard\KeyBoardIO.h">
+      <Filter>Keyboard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
@@ -803,6 +818,9 @@
     </Filter>
     <Filter Include="Device">
       <UniqueIdentifier>{8865b718-1b4d-4bc9-b164-2cb561b2f769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Keyboard">
+      <UniqueIdentifier>{392160cc-c877-4a4c-8214-b49f8b4323f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
