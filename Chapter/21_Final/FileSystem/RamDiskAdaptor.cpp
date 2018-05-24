@@ -75,7 +75,7 @@ PFILE RamDiskAdaptor::Open(const char* fileName, const char *mode)
 	if (pMintFile)
 	{
 		PFILE file = new FILE;
-		file->_deviceID = 'C';
+		file->_deviceID = 'K';
 		strcpy(file->_name, fileName);
 		file->_id = (DWORD)pMintFile;
 		file->_fileLength = pMintFile->stFileHandle.dwFileSize;
@@ -97,8 +97,7 @@ size_t RamDiskAdaptor::Write(PFILE file, unsigned char* buffer, unsigned int siz
 
 PACKAGEHEADER* RamDiskAdaptor::FindPackageSignature(UINT32 startAddress, UINT32 endAddress)
 {
-	// 디스크 이미지는 0x10000 어드레스에 로딩되므로 이를 기준으로
-	// 커널 섹터 수만큼 떨어진 곳에 패키지 헤더가 있음
+	
 	PACKAGEHEADER* pstHeader = nullptr;
 	
 	for (UINT32 addr = startAddress; addr < endAddress; addr += 512)
@@ -113,31 +112,29 @@ PACKAGEHEADER* RamDiskAdaptor::FindPackageSignature(UINT32 startAddress, UINT32 
 	return nullptr;
 }
 
+//패키지 데이터를 파싱해서 모든 파일 데이터를 램디스크로 복사
 bool RamDiskAdaptor::InstallPackage()
 {	
 	FILE* fp;
 	PACKAGEITEM* pstItem = nullptr;
 	UINT32 dwDataAddress = 0;
 
-	//SkyConsole::Print("Package Install Start...\n");
-
+	//패키지 시그너쳐를 찾는다. 시그너쳐 : "SKYOS32PACKAGE "
 	PACKAGEHEADER* pstHeader = FindPackageSignature(KERNEL_LOAD_ADDRESS, PhysicalMemoryManager::GetKernelEnd());
 
 	if(pstHeader == nullptr)
-	{
-		//SkyConsole::Print("Package Signature Fail\n");
+	{		
 		return false;
 	}	
-	//--------------------------------------------------------------------------
-	// 패키지 내의 모든 파일을 찾아서 램 디스크에 복사
-	//--------------------------------------------------------------------------
-	// 패키지 데이터가 시작하는 어드레스
-	dwDataAddress = (UINT32)(((char*)pstHeader) + sizeof(PackageHeaderStruct));		
-	// 패키지 헤더의 첫 번째 파일 데이터
-	pstItem = (PACKAGEITEM*)dwDataAddress;
+
+	// 패키지 데이터 포인터
+	dwDataAddress = (UINT32)(((char*)pstHeader) + pstHeader->dwHeaderSize);
+	// 패키지아이템 구조체 포인터
+	pstItem = (PACKAGEITEM*)(((char*)pstHeader) + sizeof(PACKAGEHEADER));
 	
+	DWORD dwItemCount = (pstHeader->dwHeaderSize - sizeof(PACKAGEHEADER)) / sizeof(PACKAGEITEM);
 	// 패키지에 포함된 모든 파일을 찾아서 복사
-	for (DWORD i = 0; i < pstHeader->dwHeaderSize / sizeof(PACKAGEITEM); i++)
+	for (DWORD i = 0; i <  dwItemCount; i++)
 	{
 		SkyConsole::Print("[%d] file: %s, size: %d Byte\n", i + 1, pstItem[i].vcFileName, (int)(pstItem[i].dwFileLength));
 
@@ -149,17 +146,15 @@ bool RamDiskAdaptor::InstallPackage()
 			return false;
 		}
 		
-		dwDataAddress += sizeof(PACKAGEITEM);
-		// 패키지 데이터 부분에 포함된 파일 내용을 램 디스크로 복사
+		// 파일 내용을 램 디스크로 복사
 		if (fwrite((BYTE*)dwDataAddress, 1, pstItem[i].dwFileLength, fp) != pstItem[i].dwFileLength)
 		{
 			SkyConsole::Print("Ram Disk Write Fail\n");
 
-			// 파일을 닫고 파일 시스템 캐시를 내보냄
 			fclose(fp);
 
 			return false;
-		}		
+		}
 
 		// 파일을 닫음        
 		fclose(fp);

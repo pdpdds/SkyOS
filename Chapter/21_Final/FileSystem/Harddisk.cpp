@@ -1,145 +1,29 @@
-#include "HardDisk.h"
-#include "windef.h"
-#include "kheap.h"
-#include "SkyConsole.h"
-#include "Hal.h"
-#include "string.h"
-#include "memory.h"
-#include "sprintf.h"
-#include "SysInfo.h"
+#include "SkyOS.h"
 
-/*---IDE Controller's Compability mode Base Registers and Interrupts ---*/
-const BYTE IDE_MAX_CONTROLLER = 4;
-const UINT16 IDE_Con_IOBases[IDE_MAX_CONTROLLER][2] =
-{
-	{ 0x1F0, 0x3F6 },
-	{ 0x170, 0x376 },
-	{ 0x1E8, 0x3EE },
-	{ 0x168, 0x36E }
-};
-const UINT16 IDE_Con_IRQs[IDE_MAX_CONTROLLER][3] =
-{
-	{ 14, 0, 0 },
-	{ 15, 0, 0 },
-	{ 11, 12, 9 },
-	{ 10, 12, 9 }
-};
-
-
-/* ---------- Command Block Registers Offset From Base ------------------*/
-const BYTE IDE_CB_DATA = 0;       /* Read & Write */
-const BYTE IDE_CB_ERROR = 1;	/* Read only    */
-const BYTE IDE_CB_FEATURES = 1;	/* Write only   */
-const BYTE IDE_CB_STATUS = 7;     /* Read only    */
-const BYTE IDE_CB_COMMAND = 7;    /* Write only   */
-
-
-const BYTE IDE_CB_SECTOR_COUNT = 2;
-
-const BYTE IDE_CB_SECTOR = 3;
-const BYTE IDE_CB_CYLINDER_LOW = 4;
-const BYTE IDE_CB_CYLINDER_HIGH = 5;
-const BYTE IDE_CB_DEVICE_HEAD = 6;
-
-const BYTE IDE_CB_LBA_0_7 = 3;
-const BYTE IDE_CB_LBA_8_15 = 4;
-const BYTE IDE_CB_LBA_16_23 = 5;
-const BYTE IDE_CB_LBA_24_27 = 6;
-
-/* ---------- Control Block Registers Constants ------------------*/
-BYTE IDE_CON_BSY = 7;
-BYTE IDE_CON_DRDY = 6;
-BYTE IDE_CON_DF = 5;
-BYTE IDE_CON_DSC = 4;
-BYTE IDE_CON_DRQ = 3;
-BYTE IDE_CON_CORR = 2;
-BYTE IDE_CON_IDX = 1;
-BYTE IDE_CON_ERR = 0;
-
-
-/* ---------- Control Block Registers Offset From Base ------------*/
-const BYTE IDE_CON_ALTERNATE_STATUS = 2;
-const BYTE IDE_CON_DEVICE_CONTROL = 2;
-
-/*-------------     ATA - 2  Command's OpCodes  -------------------*/
-const BYTE IDE_COM_ACKNOWLEDGE_MEDIA_CHANGE = 0xDB;
-const BYTE IDE_COM_POST_BOOT = 0xDC;
-const BYTE IDE_COM_PRE_BOOT = 0xDD;
-
-/*const BYTE IDE_COM_CHECK_POWER_MODE=98hE5h */
-
-const BYTE IDE_COM_DOOR_LOCK = 0xDE;
-const BYTE IDE_COM_DOOR_UNLOCK = 0xDF;
-const BYTE IDE_COM_DOWNLOAD_MICROCODE = 0x92;
-const BYTE IDE_COM_EXECUTE_DEVICE_DIAGNOSTIC = 0x90;
-const BYTE IDE_COM_FORMAT_TRACK = 0x50;
-const BYTE IDE_COM_IDENTIFY_DEVICE = 0xEC;
-
-/*const BYTE IDE_COM_IDLE=97hE3h
-const BYTE IDE_COM_IDLE_IMMEDIATE=0x95hE1h */
-
-const BYTE IDE_COM_INITIALIZE_DEVICE_PARAMETERS = 0x91;
-const BYTE IDE_COM_MEDIA_EJECT = 0xED;
-const BYTE IDE_COM_NOP = 0x0;
-const BYTE IDE_COM_READ_BUFFER = 0xE4;
-const BYTE IDE_COM_READ_DMA_W_RETRY = 0xC8;
-const BYTE IDE_COM_READ_DMA = 0xC9;
-const BYTE IDE_COM_READ_LONG_W_RETRY = 0x22;
-const BYTE IDE_COM_READ_LONG = 0x23;
-const BYTE IDE_COM_READ_MULTIPLE = 0xC4;
-const BYTE IDE_COM_READ_SECTORS_W_RETRY = 0x20;
-const BYTE IDE_COM_READ_SECTORS = 0x21;
-const BYTE IDE_COM_READ_VERIFY_SECTORS_W_RETRY = 0x40;
-const BYTE IDE_COM_READ_VERIFY_SECTORS = 0x41;
-const BYTE IDE_COM_RECALIBRATE = 0x10;
-const BYTE IDE_COM_SEEK = 0x70;
-const BYTE IDE_COM_SET_FEATURES = 0xEF;
-const BYTE IDE_COM_SET_MULTIPLE_MODE = 0xC6;
-
-/*const BYTE IDE_COM_SimpleSleep=99hE6h
-const BYTE IDE_COM_STANDBY=96hE2h
-const BYTE IDE_COM_STANDBY_IMMEDIATE=94hE0h */
-
-const BYTE IDE_COM_WRITE_BUFFER = 0xE8;
-const BYTE IDE_COM_WRITE_DMA_W_RETRY = 0xCA;
-const BYTE IDE_COM_WRITE_DMA = 0xCB;
-const BYTE IDE_COM_WRITE_LONG_W_RETRY = 0x32;
-const BYTE IDE_COM_WRITE_LONG = 0x33;
-const BYTE IDE_COM_WRITE_MULTIPLE = 0xC5;
-const BYTE IDE_COM_WRITE_SAME = 0xE9;
-const BYTE IDE_COM_WRITE_SECTORS_W_RETRY = 0x30;
-const BYTE IDE_COM_WRITE_SECTORS = 0x31;
-const BYTE IDE_COM_WRITE_VERIFY = 0x3C;
-
+extern void SendEOI();
 
 __declspec(naked) void _HDDInterruptHandler() {
 
-	_asm {
-		cli
-		pushad
+	//레지스터를 저장하고 인터럽트를 끈다.
+	_asm
+	{
+		PUSHAD
+		PUSHFD
+		CLI
 	}
 
-	_asm {
-		mov al, 0x20
-		out 0x20, al
-		popad
-		sti
-		iretd
+	SendEOI();
+
+	// 레지스터를 복원하고 원래 수행하던 곳으로 돌아간다.
+	_asm
+	{
+		POPFD
+		POPAD
+		IRETD
 	}
 }
-/*
-   -----------------------------------------------------------
-   The following structure is used to filled during the initialization of
-   [HardDiskHandler]. It is stored in the Collection and accessed using the
-   index of Collection. During detection of a harddisk if one fails then it
-   is replaced by the next harddisk.
-   The Count of this collection returns the total detected harddisks.
-   -----------------------------------------------------------
-   */
 
-//---------------------------------------------------------------------
-//              This function returns the number harddisks founded
-//---------------------------------------------------------------------
+//발견된 하드디스크 개수를 리턴한다.
 BYTE HardDiskHandler::GetTotalDevices()
 {
 	return (BYTE)HDDs.Count();
@@ -147,9 +31,9 @@ BYTE HardDiskHandler::GetTotalDevices()
 //---------------------------------------------------------------------
 //        This function returns the description of the last error
 //---------------------------------------------------------------------
-char * HardDiskHandler::GetLastError(BYTE ErrorCode)
+char * HardDiskHandler::GetLastError(BYTE errorCode)
 {
-	switch (ErrorCode)
+	switch (errorCode)
 	{
 	case HDD_NO_ERROR:
 		return "No Error";
@@ -165,112 +49,75 @@ char * HardDiskHandler::GetLastError(BYTE ErrorCode)
 		return "Undefined Error";
 	}
 }
-/* This function returns the Error Register value*/
-BYTE ReadErrorRegister(BYTE DeviceController)
+
+//디바이스에 에러가 발생했을 경우 에러 레지스터의 값을 읽어들인다.
+BYTE ReadErrorRegister(BYTE deviceController)
 {
-	BYTE Status = InPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_STATUS);
+	BYTE Status = InPortByte(IDE_Con_IOBases[deviceController][0] + IDE_CB_STATUS);
 	if ((Status & 0x80) == 0 && (Status & 0x1)) //busy bit=0 and err bit=1
 	{
-		Status = InPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_ERROR);
+		Status = InPortByte(IDE_Con_IOBases[deviceController][0] + IDE_CB_ERROR);
 		return Status;
 	}
 	else
 		return 0;
 }
-/*
-   -----------------------------------------------------------
-   This function checks whether the given device ready for data transfer or receive
-   Input :
-   DeviceController - Index number of Device to test  ( 0 to IDE_MAX_CONTROLLER )
-   Wait UpTo ms - Optional Time in milli second to check for the busy status
-   Output :
-   Returns 'TRUE' if the device is ready else 'FALSE'
-   -----------------------------------------------------------
-   */
-#include "pit.h"
-BOOLEAN IsDeviceDataReady(int DeviceController, DWORD WaitUpToms = 0, BOOLEAN CheckDataRequest = TRUE)
+
+//디바이스가 데이터를 전송하거나 받을 수 있는 준비가 되었는지 확인한다.
+//deviceController : 테스트할 디바이스 컨트롤러의 인덱스 번호
+//디바이스가 데이터관련 처리를 할 수 있는 준비가 되었으면 TRUE를 그렇지 않으면 FALSE를 리턴한다.
+BOOLEAN IsDeviceDataReady(int deviceController, DWORD waitUpToms = 0, BOOLEAN checkDataRequest = TRUE)
 {
 	UINT32 Time1, Time2;
 	Time1 = GetTickCount();
 	do
 	{
-		UINT16 PortID = IDE_Con_IOBases[DeviceController][0] + IDE_CB_STATUS;
+		UINT16 PortID = IDE_Con_IOBases[deviceController][0] + IDE_CB_STATUS;
 		BYTE Status = InPortByte(PortID);
 		if ((Status & 0x80) == 0) //Checking BSY bit, because DRDY bit is valid only when BSY is zero
 		{
 			if (Status & 0x40) //checking DRDY is set
-				if (CheckDataRequest) // if DataRequest is also needed
+				if (checkDataRequest) // if DataRequest is also needed
 				{
 					if (Status & 0x8) // DRQ bit set
-					{						
+					{
 						return TRUE;
 					}
 				}
 				else
-				{					
+				{
 					return TRUE;
 				}
 		}
 		Time2 = GetTickCount();
-	} while ((Time2 - Time1) < WaitUpToms);
+	} while ((Time2 - Time1) < waitUpToms);
 
 	return FALSE;
 }
-/*
-  ---------------------------------------------------------
-  This function checks whether the given device controlller is busy or not.
-  Input :
-  DeviceController - Device Number ( 0 to IDE_MAX_CONTROLLER )
-  Wait UpTo ms - Optional Time in milli second to check for the busy status
-  Output :
-  Returns 'TRUE' if the device is busy else 'FALSE'
-  -----------------------------------------------------------
-  */
-#include "pit.h"
+
+//주어진 디바이스 컨트롤러를 사용할 수 있는지 없는지를 체크한다.
 BOOLEAN IsDeviceControllerBusy(int DeviceController, int WaitUpToms = 0)
 {
 	UINT32 Time1, Time2;
 	Time1 = GetTickCount();
-	do	{
-		
+	do {
+
 		UINT16 PortID = IDE_Con_IOBases[DeviceController][0] + IDE_CB_STATUS;
 		BYTE Status = InPortByte(PortID);
 		if ((Status & 0x80) == 0) //BSY bit 
 			return FALSE;
 		Time2 = GetTickCount();
 	} while ((Time2 - Time1) <= (UINT32)WaitUpToms);
-	
+
 	return TRUE;
 }
 
-/*
-This function performs a Software Reset on the devices attached. You may
-specifing only one or one portion of a hard disk but all harddisks and
-entire space is subjected to sofware reset and the status is posted in the
-Error Register.
-
-1) Set the SRST bit to 1, wait for 400ns
-2) Clear the SRST bit to 0
-3) Wait for BSY bit cleared in the Status Register upto 31 seconds
-4) Read the Error Register
-Input  :
-DeviceController Number
-Output :
-( Output == 0x1 )
-Device 0 passed, Device 1 passed or not present
-( Output == 0x0 || ( Output >=0x2 && Output <=0x7F ) )
-Device 0 failed, Device 1 passed or not present
-( Output == 0x81 )
-Device 0 passed, Device 1 failed
-( Output == 0x80 || ( Output >=0x82 && Output <=0xFF ) )
-Device 0 failed, Device 1 failed
-
-*/
+//부착된 디바이스를 소프트웨어 리셋한다.
 BYTE HardDiskHandler::DoSoftwareReset(UINT16 DeviceController)
 {
-	BYTE DeviceControl = 4; //Setting SRST bit in the control register ( 2nd bit  (bit count 3) )
+	BYTE DeviceControl = 4; //SRST bit 제어 레지스터의 SRST 비트 필드에 값을 설정
 	OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CON_DEVICE_CONTROL, DeviceControl);
-	DeviceControl = 0;      //Clearing the SRST bit in the control register ( 2nd bit)
+	DeviceControl = 0;      //제어 레지스터의 SRST 비트값 클리어
 	OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CON_DEVICE_CONTROL, DeviceControl);
 
 	return InPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_ERROR);
@@ -283,93 +130,92 @@ BOOLEAN HardDiskHandler::IsRemovableMedia(BYTE * DPF)
 {
 	return HDDs.Item((char *)DPF)->DeviceID[0] & 0x80;
 }
-/*
-	Loop all the device controllers available to the PC in Native Mode
-	1) Check for whether the device controller's IO Space for busy bit
-	if yes then the controller is not installed.
-	2) Issue EXECUTE DEVICE DIAGNOSTIC Command
-	3) Wait up to 6 seconds for clearing busy bit
-	4) Read the Error Register
-	5) a) If bit 0 is set then Master  is installed
-	b) If bit 7 is set then Slave   is not installed
-	6) Set the appropriate bit in the DEV_HEAD register
-	7) Delay for 50ns
-	8) Issue Identify Device Command
-	9) Receive 512 bytes of data from the device.
 
-	*/
 HardDiskHandler::HardDiskHandler()
 {
-	//Initialize();
+
 }
+
+/*
+초기화 메소드 : 모든 디바이스 컨트롤러를 확인해서 이용할 수 있는지 체크한다.
+1) 디바이스 컨트롤러의 Busy 비트를 확인한다. 이 값이 설정되면 해당 디바이스 컨트롤러는 사용할 수 없다.
+2) 디바이스를 진단하는 커맨드를 보낸다.
+3) 특정시간 대기동안 Busy 비트가 클리어되면 디바이스 컨트롤러에 접근할 수 있다.
+4) 에러 레지스터를 읽는다.
+	a) 비트값이 0이면 마스터 디스크가 설치된 것을 의미
+	b) 비트값이 7이면 슬레이브 디스크 설치되지 않음
+5) DEV_HEAD 레지스터에 적당한 비트값을 설정한다.
+6) 50ns 정도 대기한다.
+7) 디바이스 커맨드를 보낸다.
+8) 디바이스로부터 512바이트 정보값을 받는다.
+*/
 void HardDiskHandler::Initialize()
 {
-	char strKey[3];
-	strKey[0] = 'H'; //HDD type ID
-	strKey[1] = '0';   //First HDD
-	strKey[2] = 0;   //Null Character
-	setvect(32+14,_HDDInterruptHandler);
-	setvect(32+15,_HDDInterruptHandler);
+	char strKey[3] = "H0"; //하드디스크 ID
+	
+	//아무런 역할을 하지 않는 하드디스크 핸들러이지만 정의를 해야 한다.
+	setvect(32 + 14, _HDDInterruptHandler);
+	setvect(32 + 15, _HDDInterruptHandler);
 
-	HDDs.Initialize();
-	//for (BYTE DeviceController = 0; DeviceController < IDE_MAX_CONTROLLER; DeviceController++)
-	for (int DeviceController = 0; DeviceController < 1; DeviceController++)
+	//Collection 구조체 발견한 하드디스크 정보 리스트를 관리한다.
+	HDDs.Initialize();	
+
+	//디바이스 컨트롤러를 통해 하드디스크를 찾는다.
+	for (int DeviceController = 0; DeviceController < IDE_CONTROLLER_NUM; DeviceController++)
 	{
-		DoSoftwareReset(DeviceController);
-		if (IsDeviceControllerBusy(DeviceController, 1000)) //if device controller is busy then skipping
-		{			
-			SkyConsole::Print("Controller Busy\n");
+		DoSoftwareReset(DeviceController); //소프트웨어 리셋
+		if (IsDeviceControllerBusy(DeviceController, 1000)) //디바이스 컨트롤러를 사용할 수 없으면 패스한다.
 			continue;
-		}
+		
+		//디바이스 진단 요청을 한다.
 		OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_COMMAND, IDE_COM_EXECUTE_DEVICE_DIAGNOSTIC);
-		if (IsDeviceControllerBusy(DeviceController, 1000))
-		{			
-			SkyConsole::Print("Controller busy after EXE\n");
-			continue;
-		}
-		
-		
-		BYTE Result = InPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_ERROR);
-		for (BYTE Device = 0; Device < 1; Device++)         // loop for master and slave disks
+				
+		BYTE result = InPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_ERROR);
+		for (BYTE device = 0; device < 1; device++)         //마스터와 슬레이브 디스크에 대해 루프를 돈다.
 		{
 			UINT16 DeviceID_Data[512], j;
-			//if (Device == 0 && !(Result & 1))
+			
+			//if (device == 0 && !(result & 1))
 				//continue;
-			if (Device == 1 && (Result & 0x80))
+
+			if (device == 1 && (result & 0x80))
 				continue;
-			if (Device == 1)
+
+			//디바이스 IO가 가능하다면
+			if (device == 1)
 				OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_DEVICE_HEAD, 0x10); //Setting 4th bit(count 5) to set device as 1
 			else
 				OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_DEVICE_HEAD, 0x0);
-			
+
 			//msleep(50);
-			
+
+			//디바이스 정보 요청
 			OutPortByte(IDE_Con_IOBases[DeviceController][0] + IDE_CB_COMMAND, IDE_COM_IDENTIFY_DEVICE);
-			if (!IsDeviceDataReady(DeviceController, 600, TRUE))
+			if (!IsDeviceDataReady(DeviceController, 600, TRUE)) //디바이스 정보가 채워질때까지 대기한다.
 			{
 				SkyConsole::Print("Data not ready %d\n", DeviceController);
 				continue;
-			}							
+			}
 
-			/*Reading 512 bytes of information from the Device*/
+			//디바이스로 부터 512바이트 정보를 읽어들인다.
 			for (j = 0; j < 256; j++)
 				DeviceID_Data[j] = InPortWord(IDE_Con_IOBases[DeviceController][0] + IDE_CB_DATA);
-			/* Creating new HDD node for the Collection HDDs */
 			
-			//struct __HDDInfo * newHDD;
-			__HDDInfo * newHDD=(__HDDInfo *)kmalloc(sizeof(__HDDInfo));
+			//HDD 노드 생성
+			HDDInfo * newHDD = (HDDInfo *)kmalloc(sizeof(HDDInfo));
 			if (newHDD == NULL)
 			{
 				SkyConsole::Print("HDD Initialize :: Allocation failed\n");
 				return;
 			}
-			
+
+			//HDD 노드에 디바이스 정보를 기록한다.
 			newHDD->IORegisterIdx = DeviceController;
 			memcpy(newHDD->DeviceID, DeviceID_Data, 512);
-			newHDD->DeviceNumber = Device;
+			newHDD->DeviceNumber = device;
 			newHDD->LastError = 0;
 
-			newHDD->BytesPerSector = 512; //-------------Modify Code
+			newHDD->BytesPerSector = 512; 
 
 			newHDD->CHSCylinderCount = DeviceID_Data[1];
 			newHDD->CHSHeadCount = DeviceID_Data[3];
@@ -378,153 +224,155 @@ void HardDiskHandler::Initialize()
 			if (DeviceID_Data[10] == 0)
 				strcpy(newHDD->SerialNumber, "N/A");
 			else
-			for (j = 0; j < 20; j += 2)
-			{
-				newHDD->SerialNumber[j] = DeviceID_Data[10 + (j / 2)] >> 8;
-				newHDD->SerialNumber[j + 1] = (DeviceID_Data[10 + (j / 2)] << 8) >> 8;
-			}
+				for (j = 0; j < 20; j += 2)
+				{
+					newHDD->SerialNumber[j] = DeviceID_Data[10 + (j / 2)] >> 8;
+					newHDD->SerialNumber[j + 1] = (DeviceID_Data[10 + (j / 2)] << 8) >> 8;
+				}
 			if (DeviceID_Data[23] == 0)
 				strcpy(newHDD->FirmwareRevision, "N/A");
 			else
-			for (j = 0; j < 8; j += 2)
-			{
-				newHDD->FirmwareRevision[j] = DeviceID_Data[23 + (j / 2)] >> 8;
-				newHDD->FirmwareRevision[j + 1] = (DeviceID_Data[23 + (j / 2)] << 8) >> 8;
-			}
-			
+				for (j = 0; j < 8; j += 2)
+				{
+					newHDD->FirmwareRevision[j] = DeviceID_Data[23 + (j / 2)] >> 8;
+					newHDD->FirmwareRevision[j + 1] = (DeviceID_Data[23 + (j / 2)] << 8) >> 8;
+				}
+
 			if (DeviceID_Data[27] == 0)
 				strcpy(newHDD->ModelNumber, "N/A");
 			else
-			for (j = 0; j < 20; j += 2)
-			{
-				newHDD->ModelNumber[j] = DeviceID_Data[27 + (j / 2)] >> 8;
-				newHDD->ModelNumber[j + 1] = (DeviceID_Data[27 + (j / 2)] << 8) >> 8;
-			}
+				for (j = 0; j < 20; j += 2)
+				{
+					newHDD->ModelNumber[j] = DeviceID_Data[27 + (j / 2)] >> 8;
+					newHDD->ModelNumber[j + 1] = (DeviceID_Data[27 + (j / 2)] << 8) >> 8;
+				}
 			newHDD->LBASupported = DeviceID_Data[49] & 0x200;
 			newHDD->DMASupported = DeviceID_Data[49] & 0x100;
-			
+
 			UINT32 LBASectors = DeviceID_Data[61];
 			LBASectors = LBASectors << 16;
-			LBASectors |= DeviceID_Data[60];
-			SkyConsole::Print("DeviceId : %x, %s\n", Device, newHDD->ModelNumber);
+			LBASectors |= DeviceID_Data[60];			
 			newHDD->LBACount = LBASectors;
 			HDDs.Add(newHDD, strKey);
-			strKey[1]++;
 
-			
+			SkyConsole::Print("DeviceId : %x, %s\n", device, newHDD->ModelNumber);
+			strKey[1]++; //새 하드디스크 노드를 위해 하드디스크 ID를 변경한다.
 		}
 	}
 }
+
 HardDiskHandler::~HardDiskHandler()
 {
 	HDDs.Clear();
 }
-__HDDInfo * HardDiskHandler::GetHDDInfo(BYTE * DPF)
+HDDInfo * HardDiskHandler::GetHDDInfo(BYTE * DPF)
 {
-		
-	__HDDInfo * getHDD, * retHDD=(__HDDInfo *)kmalloc(sizeof(__HDDInfo));
+
+	HDDInfo * getHDD, *retHDD = (HDDInfo *)kmalloc(sizeof(HDDInfo));
 	getHDD = HDDs.Item((char *)DPF);
 	if (getHDD == NULL)
 	{
-		LastError = HDD_NOT_FOUND;
+		m_lastError = HDD_NOT_FOUND;
 		return NULL;
 	}
-	memcpy(retHDD, getHDD, sizeof(__HDDInfo));
+	memcpy(retHDD, getHDD, sizeof(HDDInfo));
 	return retHDD;
 }
-/* ----------------------PIO functions -------------------------------------
-ReadSectors()
-1) Get the HDDInfo object
-2) Check whether Device is busy
-3) Set the DEVICE BIT
-4) Check whether the device ready accept Data commands
-5) Set Head, Track etc informations
-6) Issue READ command
-7) Check whether the device ready to transfer data
-8) Read the Data Register to get data
+/* 섹터로부터 데이터를 읽어들인다(CHS 모드)
+1) HDDInfo 객체값을 얻는다.
+2) 디바이스를 사용할 수 있는지 확인한다.
+3) 디바이스 비트를 설정한다.
+4) 디바이스가 데이터 커맨드를 받아들일 준비가 되었는지 확인한다.
+5) 헤드와 트랙, 기타값들을 설정한다.
+6) 읽기 커맨드를 보낸다.
+7) 디바이스가 데이터 전송을 할 수 있는 준비가 되었는지 확인한다.
+8) 데이터를 읽기 위해 데이터 레지스터를 읽는다.
 */
-BYTE HardDiskHandler::ReadSectors(BYTE * DPF, UINT16 StartCylinder, BYTE StartHead, BYTE StartSector, BYTE NoOfSectors, BYTE * Buffer, BOOLEAN WithRetry)
+BYTE HardDiskHandler::ReadSectors(BYTE * DPF, UINT16 StartCylinder, BYTE StartHead, BYTE StartSector, BYTE NoOfSectors, BYTE * buffer, BOOLEAN WithRetry)
 {
-	__HDDInfo * HDD;
+	HDDInfo * pHDDInfo;
 	BYTE DevHead, StartCylHigh = 0, StartCylLow = 0;
 
-	HDD = HDDs.Item((char *)DPF);
-	if (HDD == NULL)
+	//하드디스크 아이디로 부터 하드디스크정보를 얻어낸다.
+	pHDDInfo = HDDs.Item((char *)DPF);
+	if (pHDDInfo == NULL)
 	{
-		LastError = HDD_NOT_FOUND;
+		m_lastError = HDD_NOT_FOUND;
 		return HDD_NOT_FOUND;
 	}
 
-	if (HDD->DeviceNumber == 0)
+	if (pHDDInfo->DeviceNumber == 0)
 		DevHead = StartHead | 0xA0;
 	else
 		DevHead = StartHead | 0xB0;
 
-	if (IsDeviceControllerBusy(HDD->IORegisterIdx, 1 * 60))
+	//디바이스가 준비될때 까지 대기한다.
+	if (IsDeviceControllerBusy(pHDDInfo->IORegisterIdx, 1 * 60))
 	{
-		LastError = HDD_CONTROLLER_BUSY;
+		m_lastError = HDD_CONTROLLER_BUSY;
 		return HDD_CONTROLLER_BUSY;
 	}
 
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_DEVICE_HEAD, DevHead);
+	//디바이스가 데이터 커맨드를 받아들일 준비가 되었는지 확인한다.
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_DEVICE_HEAD, DevHead);
 
-	if (!IsDeviceDataReady(HDD->IORegisterIdx, 1 * 60, FALSE))
+	if (!IsDeviceDataReady(pHDDInfo->IORegisterIdx, 1 * 60, FALSE))
 	{
-		LastError = HDD_DATA_COMMAND_NOT_READY;
+		m_lastError = HDD_DATA_COMMAND_NOT_READY;
 		return HDD_DATA_COMMAND_NOT_READY;
 	}
 
 	StartCylHigh = StartCylinder >> 8;
 	StartCylLow = (StartCylinder << 8) >> 8;
 
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_CYLINDER_HIGH, StartCylHigh);
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_CYLINDER_LOW, StartCylLow);
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_SECTOR, StartSector);
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_SECTOR_COUNT, NoOfSectors);
+	//읽어들일 데이터의 위치를 지정한다. 실린더 위치, 섹터 시작위치, 읽어들일 섹터의 수
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_CYLINDER_HIGH, StartCylHigh);
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_CYLINDER_LOW, StartCylLow);
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_SECTOR, StartSector);
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_SECTOR_COUNT, NoOfSectors);
 
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_COMMAND, WithRetry ? IDE_COM_READ_SECTORS_W_RETRY : IDE_COM_READ_SECTORS);
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_COMMAND, WithRetry ? IDE_COM_READ_SECTORS_W_RETRY : IDE_COM_READ_SECTORS);
+
+	//요청한 섹터수만큼 데이터를 읽어들인다.
 	for (BYTE j = 0; j < NoOfSectors; j++)
 	{
-		if (!IsDeviceDataReady(HDD->IORegisterIdx, 1 * 60, TRUE))
+		//디바이스에 데이터가 준비되었는가?
+		if (!IsDeviceDataReady(pHDDInfo->IORegisterIdx, 1 * 60, TRUE))
 		{
-			LastError = HDD_DATA_NOT_READY;
+			m_lastError = HDD_DATA_NOT_READY;
 			return HDD_DATA_NOT_READY;
 		}
 
-		for (UINT16 i = 0; i < (HDD->BytesPerSector) / 2; i++)
+		// 이 루프틀 통해 섹터 크기인 512바이트를 버퍼에 기록할 수 있다.
+		for (UINT16 i = 0; i < (pHDDInfo->BytesPerSector) / 2; i++)
 		{
 			UINT16 w = 0;
 			BYTE l, h;
-			w = InPortWord(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_DATA);
+
+			//2바이트를 읽는다.
+			w = InPortWord(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_DATA);
 			l = (w << 8) >> 8;
 			h = w >> 8;
-			Buffer[(j * (HDD->BytesPerSector)) + (i * 2)] = l;
-			Buffer[(j * (HDD->BytesPerSector)) + (i * 2) + 1] = h;
+			
+			//2바이트를 쓴다.
+			buffer[(j * (pHDDInfo->BytesPerSector)) + (i * 2)] = l;
+			buffer[(j * (pHDDInfo->BytesPerSector)) + (i * 2) + 1] = h;
 		}
 	}
 	return HDD_NO_ERROR;
 }
 
-/* ----------------------PIO functions -------------------------------------
-ReadSectors()
-1) Get the HDDInfo object
-2) Check whether Device is busy
-3) Set the DEVICE BIT
-4) Check whether the device ready accept Data commands
-5) Set Head, Track etc informations
-6) Issue READ command
-7) Check whether the device ready to transfer data
-8) Read the Data Register to get data
-*/
+// 섹터로부터 데이터를 읽어들인다(LBA 모드)
+// 읽어들이는 루틴은 CHS 모드와 동일하다.
 BYTE HardDiskHandler::ReadSectors(BYTE * DPF, UINT32 StartLBASector, BYTE NoOfSectors, BYTE * Buffer, BOOLEAN WithRetry)
 {
-	__HDDInfo * HDD;
+	HDDInfo * HDD;
 	BYTE LBA0_7, LBA8_15, LBA16_23, LBA24_27;
 
 	HDD = HDDs.Item((char *)DPF);
 	if (HDD == NULL)
 	{
-		LastError = HDD_NOT_FOUND;
+		m_lastError = HDD_NOT_FOUND;
 		return HDD_NOT_FOUND;
 	}
 	LBA0_7 = (StartLBASector << 24) >> 24;
@@ -539,7 +387,7 @@ BYTE HardDiskHandler::ReadSectors(BYTE * DPF, UINT32 StartLBASector, BYTE NoOfSe
 
 	if (IsDeviceControllerBusy(HDD->IORegisterIdx, 1 * 60))
 	{
-		LastError = HDD_CONTROLLER_BUSY;
+		m_lastError = HDD_CONTROLLER_BUSY;
 		return HDD_CONTROLLER_BUSY;
 	}
 
@@ -547,7 +395,7 @@ BYTE HardDiskHandler::ReadSectors(BYTE * DPF, UINT32 StartLBASector, BYTE NoOfSe
 
 	if (!IsDeviceDataReady(HDD->IORegisterIdx, 1 * 60, FALSE))
 	{
-		LastError = HDD_DATA_COMMAND_NOT_READY;
+		m_lastError = HDD_DATA_COMMAND_NOT_READY;
 		return HDD_DATA_COMMAND_NOT_READY;
 	}
 
@@ -561,7 +409,7 @@ BYTE HardDiskHandler::ReadSectors(BYTE * DPF, UINT32 StartLBASector, BYTE NoOfSe
 	{
 		if (!IsDeviceDataReady(HDD->IORegisterIdx, 1 * 60, TRUE))
 		{
-			LastError = HDD_DATA_NOT_READY;
+			m_lastError = HDD_DATA_NOT_READY;
 			return HDD_DATA_NOT_READY;
 		}
 
@@ -580,139 +428,128 @@ BYTE HardDiskHandler::ReadSectors(BYTE * DPF, UINT32 StartLBASector, BYTE NoOfSe
 }
 
 
-/*WriteSectors()
-1) Get the HDDInfo object
-2) Check whether Device is busy
-3) Set the DEVICE BIT
-4) Check whether the device ready accept Data commands
-5) Set Head, Track etc informations
-6) Issue WRITE command
-7) Check whether the device ready to read data
-8) Write to the Data Register to send data
+/*섹터에 데이터를 쓴다.
+1) HDDInfo 객체를 얻어낸다.
+2) 디바이스를 사용할 수 있는지 체크한다.
+3) 디바이스 비트를 설정한다.
+4) 디바이스가 데이터 커맨드를 받아들일 수 있는지 체크한다.
+5) 헤드, 트랙, 기타 정보를 설정한다.
+6) 쓰기 커맨드를 전송한다.
+7) 디바이스가 데이터를 읽을 준비가 되었는지 체크한다.
+8) 데이터를 전송하기 위해 데이터 레지스터에 데이터를 기록한다.
 */
 BYTE HardDiskHandler::WriteSectors(BYTE * DPF, UINT16 StartCylinder, BYTE StartHead, BYTE dwStartLBASector, BYTE NoOfSectors, BYTE * lpBuffer, BOOLEAN WithRetry)
 {
-	__HDDInfo * HDD;
+	HDDInfo * pHDDInfo;
 	BYTE LBA0_7, LBA8_15, LBA16_23, LBA24_27;
 
-	HDD = HDDs.Item((char *)DPF);
-	if (HDD == NULL)
+	pHDDInfo = HDDs.Item((char *)DPF);
+	if (pHDDInfo == NULL)
 	{
-		LastError = HDD_NOT_FOUND;
+		m_lastError = HDD_NOT_FOUND;
 		return HDD_NOT_FOUND;
 	}
-	
+
 	LBA0_7 = (dwStartLBASector << 24) >> 24;
 	LBA8_15 = (dwStartLBASector << 16) >> 24;
 	LBA16_23 = (dwStartLBASector << 8) >> 24;
 	LBA24_27 = (dwStartLBASector << 4) >> 28;
 
-	if (HDD->DeviceNumber == 0)
+	if (pHDDInfo->DeviceNumber == 0)
 		LBA24_27 = LBA24_27 | 0xE0;
 	else
 		LBA24_27 = LBA24_27 | 0xF0;
 
-	if (IsDeviceControllerBusy(HDD->IORegisterIdx, 400))
-	{
-		//  DEBUG_PRINT_OBJECT1("Controller busy - [%d]",bDeviceNo );
+	if (IsDeviceControllerBusy(pHDDInfo->IORegisterIdx, 400))
+	{		
 		SetLastError(ERROR_BUSY);
 		return HDD_CONTROLLER_BUSY;
 	}
 
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_DEVICE_HEAD, LBA24_27);
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_DEVICE_HEAD, LBA24_27);
 
-	if (!IsDeviceDataReady(HDD->IORegisterIdx, 1000, FALSE))
-	{		
+	if (!IsDeviceDataReady(pHDDInfo->IORegisterIdx, 1000, FALSE))
+	{
 		SetLastError(ERROR_NOT_READY);
 		return HDD_DATA_COMMAND_NOT_READY;
 	}
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_LBA_16_23, LBA16_23);
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_LBA_8_15, LBA8_15);
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_LBA_0_7, LBA0_7);
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_SECTOR_COUNT, NoOfSectors);
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_LBA_16_23, LBA16_23);
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_LBA_8_15, LBA8_15);
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_LBA_0_7, LBA0_7);
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_SECTOR_COUNT, NoOfSectors);
 
-	OutPortByte(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_COMMAND, IDE_COM_WRITE_SECTORS_W_RETRY);
+	OutPortByte(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_COMMAND, IDE_COM_WRITE_SECTORS_W_RETRY);
 	for (UINT16 j = 0; j < NoOfSectors; j++)
 	{
-		if (!IsDeviceDataReady(HDD->IORegisterIdx, 1000, TRUE))
-		{			
+		if (!IsDeviceDataReady(pHDDInfo->IORegisterIdx, 1000, TRUE))
+		{
 			SetLastError(ERROR_NOT_READY);
 			return HDD_DATA_NOT_READY;
 		}
-		for (UINT16 i = 0; i<HDD->BytesPerSector / 2; i++)
+		for (UINT16 i = 0; i < pHDDInfo->BytesPerSector / 2; i++)
 		{
-			OutPortWord(IDE_Con_IOBases[HDD->IORegisterIdx][0] + IDE_CB_DATA, ((UINT16 *)lpBuffer)[(j * (HDD->BytesPerSector) / 2) + i]);
+			OutPortWord(IDE_Con_IOBases[pHDDInfo->IORegisterIdx][0] + IDE_CB_DATA, ((UINT16 *)lpBuffer)[(j * (pHDDInfo->BytesPerSector) / 2) + i]);
 		}
 	}
 
 	return HDD_NO_ERROR;
 }
 
-//----------------------GSH Functions implementation ----------------
 BYTE HardDiskHandler::GetNoOfDevices()
 {
 	return GetTotalDevices();
 }
-/*--------------------------------------------------------
- This function returns the specified devices parameters in the buffer
- Note :-  1) You must allocate memory for the Buffer before calling this function.
- 2) Allocated size must be atleast of the sizeof(_GSH_IO_Parameter)
- Input  :
- DPF - Path of the device , Buffer
- Output :
- Returns HDD_NO_ERROR on success
- */
 
-UINT16 HardDiskHandler::GetDeviceParameters(BYTE * DPF, BYTE * Buffer)
+//특정 디바이스의 파라메터 정보를 얻어낸다.
+UINT16 HardDiskHandler::GetDeviceParameters(BYTE * DPF, BYTE * pBuffer)
 {
-	struct _GSH_IO_Parameter DeviceInfo;
+	VFS_IO_PARAMETER deviceInfo;
 
-	__HDDInfo * getHDD;
+	HDDInfo * getHDD;
 	getHDD = this->HDDs.Item((char *)DPF);
 	if (getHDD == NULL)
 	{
-		this->LastError = HDD_NOT_FOUND;
+		this->m_lastError = HDD_NOT_FOUND;
 		return HDD_NOT_FOUND;
 	}
 
-	DeviceInfo.Cylinder = getHDD->CHSCylinderCount;
-	DeviceInfo.Head = getHDD->CHSHeadCount;
-	DeviceInfo.Sector = getHDD->CHSSectorCount;
-	DeviceInfo.LBASector = getHDD->LBACount;
-	memcpy(Buffer, &DeviceInfo, sizeof(DeviceInfo));
+	deviceInfo.Cylinder = getHDD->CHSCylinderCount;
+	deviceInfo.Head = getHDD->CHSHeadCount;
+	deviceInfo.Sector = getHDD->CHSSectorCount;
+	deviceInfo.LBASector = getHDD->LBACount;
+	memcpy(pBuffer, &deviceInfo, sizeof(VFS_IO_PARAMETER));
 
 	return HDD_NO_ERROR;
 }
-/* This function reset the given controller and returns the Diagnostic Code
-for detailed information see DoSoftwareReset().
-Output :
-on failure returns 0
-on success returns the diagnostic code returned by DoSoftwareReset()
-*/
+
+//주어진 디바이스 컨트롤러를 리셋하고 그 결과를 리턴한다.
+//디바이스 컨트롤러의 리셋은 DoSoftwareReset 메소드에서 수행한다.
 BYTE HardDiskHandler::Reset(BYTE * DPF)
 {
-	//struct _GSH_IO_Parameter DeviceInfo;
-
-	__HDDInfo * getHDD;
+	HDDInfo * getHDD;
 	getHDD = this->HDDs.Item((char *)DPF);
 	if (getHDD == NULL)
 	{
-		this->LastError = HDD_NOT_FOUND;
+		this->m_lastError = HDD_NOT_FOUND;
 		return 0;
 	}
 	return this->DoSoftwareReset(getHDD->IORegisterIdx);
 
 }
+
+//주소 모드 변경 CHS => LBA
 UINT32 HardDiskHandler::CHSToLBA(BYTE * DPF, UINT32 Cylinder, UINT32 Head, UINT32 Sector)
 {
-	__HDDInfo * getHDD;
+	HDDInfo * getHDD;
 	getHDD = this->HDDs.Item((char *)DPF);
 
 	return (Sector - 1) + (Head*getHDD->CHSSectorCount) + (Cylinder * (getHDD->CHSHeadCount + 1) * getHDD->CHSSectorCount);
 }
+
+//주소 모드 변경 LBA => CHS
 void HardDiskHandler::LBAToCHS(BYTE * DPF, UINT32 LBA, UINT32 * Cylinder, UINT32 * Head, UINT32 * Sector)
 {
-	__HDDInfo * getHDD;
+	HDDInfo * getHDD;
 	getHDD = this->HDDs.Item((char *)DPF);
 
 	*Sector = ((LBA % getHDD->CHSSectorCount) + 1);

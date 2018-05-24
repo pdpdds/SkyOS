@@ -2,6 +2,7 @@
 #include "SkyRenderer.h"
 #include "nic.h"
 #include "SkyGUISystem.h"
+#include "SkyTest.h"
 
 bool systemOn = false;
 
@@ -40,7 +41,7 @@ DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 
 	systemOn = true;
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
-
+	//TestHardDisk();
 	//init_nic();
 
 	NativeConsole();

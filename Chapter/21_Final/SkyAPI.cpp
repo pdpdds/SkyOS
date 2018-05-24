@@ -30,7 +30,7 @@ DWORD SKYAPI kGetCurrentThreadId()
 	return dwThreadId;
 }
 
-void GetLocalTime(LPSYSTEMTIME lpSystemTime)
+bool GetLocalTime(LPSYSTEMTIME lpSystemTime)
 {
 	/* Checking whether we can read the time now or not according to some documentation the MSB in Status A will remain 1 (invalid time) only a millisecond*/
 	int TimeOut;
@@ -39,7 +39,7 @@ void GetLocalTime(LPSYSTEMTIME lpSystemTime)
 	TimeOut = 1000;
 	while (InPortByte(RTC_VALUE_REG) & 0x80)
 		if (TimeOut < 0)
-			return;
+			return false;
 		else
 			TimeOut--;
 
@@ -71,7 +71,7 @@ void GetLocalTime(LPSYSTEMTIME lpSystemTime)
 	lpSystemTime->wMinute = (lpSystemTime->wMinute / 16) * 10 + (lpSystemTime->wMinute % 16);
 	lpSystemTime->wSecond = (lpSystemTime->wSecond / 16) * 10 + (lpSystemTime->wSecond % 16);
 
-	return;
+	return true;
 }
 /* Returns 1 on success and 0 on failue */
 BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime)

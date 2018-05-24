@@ -35,7 +35,7 @@
 #define KL3Rate 0x14
 #define KL4Rate 0x1F
 
-typedef struct Func_Key_tag	//Function key structure
+typedef struct Func_Key_tag	//펑션키, 함수 매핑
 {
 	bool enabled;
 	void (* func)();
@@ -48,10 +48,11 @@ private:
 	~KeyboardController();
 public:
 	static void HandleKeyboardInterrupt();
-	static char GetInput();		// Waits for a key to enter the buffer and returns it
+	static char GetInput();		////버퍼에 키보드 데이터가 들어올때까지 대기한다.
+	static void UpdateLeds(unsigned char led);	//키보드 LED를 업데이트한다.
+	static int KeyboardController::SpecialKey(unsigned char key);
 
 	static void FlushBuffers();
-	static void ResetComputer();
 	static void SetupInterrupts();
 	static void SetLEDs(bool scroll, bool num, bool caps);
 };

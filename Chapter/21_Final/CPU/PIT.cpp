@@ -15,7 +15,7 @@ void ISRHandler(registers_t regs)
 {
 	SwitchTask(_pitTicks, regs);
 }
-/*
+
 __declspec(naked) void kDefaultInterruptHandler()
 {
 	_asm {
@@ -34,7 +34,7 @@ __declspec(naked) void kDefaultInterruptHandler()
 		POPAD
 		IRETD
 	}
-}*/
+}
 
 //타이머 인터럽트 핸들러
 __declspec(naked) void InterruptPITHandler() 

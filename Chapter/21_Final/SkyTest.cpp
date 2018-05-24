@@ -373,22 +373,27 @@ void TestDeque()
 //하드디스크 테스트
 void TestHardDisk()
 {
-	FILE* pFile = fopen("MENU.LST", "rw");
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
+
+	FILE* pFile = fopen("1.lua", "rw");
 	
 	if (pFile != NULL)
 	{
 		SkyConsole::Print("Handle ID : %d\n", pFile->_id);
 
 		BYTE* buffer = new BYTE[512];
-		int ret = StorageManager::GetInstance()->ReadFile(pFile, buffer, 512, 1);
+		memset(buffer, 0, 512);
+		int ret = fread(buffer, 511, 1, pFile);
 
 		if (ret > 0)
 			SkyConsole::Print("%s\n", buffer);
 
-		StorageManager::GetInstance()->CloseFile(pFile);		
+		fclose(pFile);		
 
 		delete buffer;
 	}
+
+	for (;;);
 }
 
 //루아 테스트

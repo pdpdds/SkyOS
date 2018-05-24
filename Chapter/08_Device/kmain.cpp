@@ -17,9 +17,9 @@ _declspec(naked) void multiboot_entry(void)
 		multiboot_header:
 		//멀티부트 헤더 사이즈 : 0X20
 		dd(MULTIBOOT_HEADER_MAGIC); magic number
-			dd(MULTIBOOT_HEADER_FLAGS); flags
-			dd(CHECKSUM); checksum
-			dd(HEADER_ADRESS); //헤더 주소 KERNEL_LOAD_ADDRESS+ALIGN(0x100064)
+		dd(MULTIBOOT_HEADER_FLAGS); flags
+		dd(CHECKSUM); checksum
+		dd(HEADER_ADRESS); //헤더 주소 KERNEL_LOAD_ADDRESS+ALIGN(0x100064)
 		dd(KERNEL_LOAD_ADDRESS); //커널이 로드된 가상주소 공간
 		dd(00); //사용되지 않음
 		dd(00); //사용되지 않음
@@ -31,8 +31,8 @@ _declspec(naked) void multiboot_entry(void)
 		push    0; //플래그 레지스터 초기화
 		popf
 
-			//GRUB에 의해 담겨 있는 정보값을 스택에 푸쉬한다.
-			push    ebx; //멀티부트 구조체 포인터
+		//GRUB에 의해 담겨 있는 정보값을 스택에 푸쉬한다.
+		push    ebx; //멀티부트 구조체 포인터
 		push    eax; //매직 넘버
 
 		//위의 두 파라메터와 함께 kmain 함수를 호출한다.
@@ -94,7 +94,10 @@ void kmain(unsigned long magic, unsigned long addr)
 
 	SkyConsole::Print("Heap %dMB Allocated\n", requiredHeapSize / 1048576);
 
-	ConstructFileSystem();
+	//InitKeyboard();
+	SkyConsole::Print("Keyboard Init..\n");
+
+	TestHardDisk();
 
 	kLeaveCriticalSection(&g_criticalSection);
 
@@ -172,50 +175,4 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 	SkyConsole::Print("Free Memory Size(%dMB)\n", g_freeMemorySize / 1048576);
 
 	return true;
-}
-
-void ConstructFileSystem()
-{	
-//IDE 하드 디스크
-	FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
-	
-	pHDDAdaptor->Initialize();
-
-	if (pHDDAdaptor->GetCount() > 0)
-	{
-		StorageManager::GetInstance()->RegisterFileSystem(pHDDAdaptor, 'C');
-		StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
-		
-		//TestHardDisk();			
-	}
-	else
-	{
-		delete pHDDAdaptor;		
-	}
-			
-//램 디스크
-	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');
-	if (pRamDiskAdaptor->Initialize() == true)
-	{
-		StorageManager::GetInstance()->RegisterFileSystem(pRamDiskAdaptor, 'K');
-		StorageManager::GetInstance()->SetCurrentFileSystemByID('K');		
-
-		((RamDiskAdaptor*)pRamDiskAdaptor)->InstallPackage();
-	}
-	else
-	{
-		delete pRamDiskAdaptor;
-	}
-
-//플로피 디스크
-	FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
-	if (pFloppyDiskAdaptor->Initialize() == true)
-	{
-		StorageManager::GetInstance()->RegisterFileSystem(pFloppyDiskAdaptor, 'A');
-		StorageManager::GetInstance()->SetCurrentFileSystemByID('A');
-	}
-	else
-	{
-		delete pFloppyDiskAdaptor;
-	}				
 }

@@ -40,23 +40,23 @@ bool HDDAdaptor::Initialize()
 void HDDAdaptor::PrintHDDInfo()
 {
 	int TotHDD = g_pHDDHandler->GetTotalDevices();
-	__HDDInfo * HDDInfo;
+	HDDInfo* pHDDInfo;
 	BYTE Key[3] = { 'H','0',0
 	};
 
 	for (BYTE i = 0; i < TotHDD; i++)
 	{
-		HDDInfo = (struct __HDDInfo *)g_pHDDHandler->GetHDDInfo(Key);
-		if (HDDInfo != NULL)
+		pHDDInfo = (HDDInfo *)g_pHDDHandler->GetHDDInfo(Key);
+		if (pHDDInfo != NULL)
 		{
 			char buf[256];
 			int index = 0;
 			SkyConsole::Print("\n");
 
-			sprintf(buf, "%s Device ( %s ) :: ", HDDInfo->DeviceNumber ? "Slave " : "Master", Key);
+			sprintf(buf, "%s Device ( %s ) :: ", pHDDInfo->DeviceNumber ? "Slave " : "Master", Key);
 			index += strlen(buf);
 
-			if (HDDInfo->ModelNumber[0] == 0)
+			if (pHDDInfo->ModelNumber[0] == 0)
 			{
 				strcpy(buf + index, " N/A ");	
 				index += strlen(" N/A ");
@@ -65,7 +65,7 @@ void HDDAdaptor::PrintHDDInfo()
 			{
 				for (BYTE j = 0; j < 20; j++)
 				{
-					buf[index] = HDDInfo->ModelNumber[j];
+					buf[index] = pHDDInfo->ModelNumber[j];
 					index++;
 				}
 			}
@@ -73,7 +73,7 @@ void HDDAdaptor::PrintHDDInfo()
 			strcpy(buf + index, " - ");
 			index += strlen(" - ");
 			
-			if (HDDInfo->SerialNumber[0] == 0)
+			if (pHDDInfo->SerialNumber[0] == 0)
 			{
 				strcpy(buf + index, " N/A ");
 				index += strlen(" N/A ");
@@ -83,14 +83,14 @@ void HDDAdaptor::PrintHDDInfo()
 				
 				for (BYTE j = 0; j < 20; j++)
 				{
-					buf[index] = HDDInfo->SerialNumber[j];
+					buf[index] = pHDDInfo->SerialNumber[j];
 					index++;
 				}
 				buf[index] = 0;
 				SkyConsole::Print(buf);
 			}
 			SkyConsole::Print("\n");
-			SkyConsole::Print("Cylinders %d Heads %d Sectors %d. LBA Sectors %d\n", HDDInfo->CHSCylinderCount, HDDInfo->CHSHeadCount, HDDInfo->CHSSectorCount, HDDInfo->LBACount);
+			SkyConsole::Print("Cylinders %d Heads %d Sectors %d. LBA Sectors %d\n", pHDDInfo->CHSCylinderCount, pHDDInfo->CHSHeadCount, pHDDInfo->CHSSectorCount, pHDDInfo->LBACount);
 		}
 		Key[1]++;
 	}

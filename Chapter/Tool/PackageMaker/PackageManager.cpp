@@ -13,41 +13,35 @@
 #define BYTESOFSECTOR       512
 
 // 패키지의 시그너처
-#define PACKAGESIGNATURE    "MINT64OSPACKAGE "
+#define PACKAGESIGNATURE    "SKYOS32PACKAGE_ "
 
-// 파일 이름의 최대 길이, 커널의 FILESYSTEM_MAXFILENAMELENGTH와 같음
+// 파일 이름의 최대 길이
 #define MAXFILENAMELENGTH   24
-
 // DWORD 타입을 정의
 typedef unsigned long DWORD;
 
-
-// 자료 구조 정의
-// 1바이트로 정렬
 #pragma pack( push, 1 )
 
-// 패키지 헤더 내부의 각 파일 정보를 구성하는 자료구조
+
+
+// 패키지 내부에 파일 정보를 저장하기 위한 구조체
+// 파일 이름
+// 파일의 크기
 typedef struct PackageItemStruct
 {
-	// 파일 이름
 	char vcFileName[MAXFILENAMELENGTH];
-
-	// 파일의 크기
 	DWORD dwFileLength;
 } PACKAGEITEM;
 
 // 패키지 헤더 자료구조
 typedef struct PackageHeaderStruct
 {
-	// MINT64 OS의 패키지 파일을 나타내는 시그너처
 	char vcSignature[16];
+	DWORD dwHeaderSize;
 
-	// 패키지 헤더의 전체 크기
-	DWORD dwHeaderSize;	
 } PACKAGEHEADER;
 
 #pragma pack( pop )
-
 
 // 함수 선언
 int AdjustInSectorSize(int iFd, int iSourceSize);

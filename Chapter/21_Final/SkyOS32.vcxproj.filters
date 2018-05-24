@@ -540,6 +540,7 @@
     <ClInclude Include="SkyDebugger.h" />
     <ClInclude Include="..\..\Module\Include\SkyFileInterface.h" />
     <ClInclude Include="MemoryResourceAdaptor.h" />
+    <ClInclude Include="HardDiskIO.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Module\Include\SkyFileInterface.h" />
     <ClInclude Include="3c905b.h" />
+    <ClInclude Include="HardDiskIO.h" />
     <ClInclude Include="MemoryResourceAdaptor.h" />
     <ClInclude Include="SkyDebugger.h" />
     <ClInclude Include="SkyPCI.h" />

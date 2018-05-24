@@ -5,26 +5,30 @@
 
 static uint8_t	_CurrentDrive = 0;
 static volatile bool _floppyDiskIRQ = false;
-
+extern void SendEOI();
 
 //플로피 디스크 인터럽트 핸들러
 //플로피 디스크로부터 인터럽트가 발생했다는 것만 체크한다.
 __declspec(naked) void FloppyDiskHandler() 
 {
-	_asm {
-		pushad
-		cli
+	//레지스터를 저장하고 인터럽트를 끈다.
+	_asm
+	{
+		PUSHAD
+		PUSHFD
+		CLI
 	}
 
 	_floppyDiskIRQ = true;
-	//SkyConsole::Print("Floppy Interrupt\n");
 
-	_asm {
-		mov al, 0x20
-		out 0x20, al
-		popad
-		sti
-		iretd
+	SendEOI();
+
+	// 레지스터를 복원하고 원래 수행하던 곳으로 돌아간다.
+	_asm
+	{
+		POPFD
+		POPAD
+		IRETD
 	}
 }
 
@@ -46,7 +50,7 @@ namespace FloppyDisk
 
 		Reset();
 
-		//! set drive information
+		//드라이브 정보 설정
 		ConfigureDriveData(13, 1, 0xf, true);
 	}
 
@@ -69,16 +73,15 @@ namespace FloppyDisk
 		int head = 0, track = 0, sector = 1;
 		ConvertLBAToCHS(sectorLBA, head, track, sector);
 
-		//! turn motor on and seek to track
+		//모터를 켜고 트랙을 찾는다.
 		ControlMotor(true);
 		if (Seek((uint8_t)track, (uint8_t)head) != 0)
 			return 0;
 
-		//! read sector and turn motor off
+		// 섹터를 읽은후 모터를 끈다.
 		ReadSectorImpl((uint8_t)head, (uint8_t)track, (uint8_t)sector);
 		ControlMotor(false);
 
-		//! warning: this is a bit hackish
 		return (uint8_t*)DMA_BUFFER;
 	}
 
@@ -86,20 +89,18 @@ namespace FloppyDisk
 
 		uint32_t st0, cyl;
 
-//FDC Reset
+//FDC 리셋
 		DisableController();
 		EnableController();
 		WaitIrq();
 
-		//! send CHECK_INT/SENSE INTERRUPT command to all drives
+		// 모든 드라이브에 CHECK_INT/SENSE 인터럽트 커맨드를 전송한다.
 		for (int i = 0; i<4; i++)
 			CheckInterrput(st0, cyl);
 		
 		WriteCCR(0);
 
-		//! pass mechanical drive info. steprate=3ms, unload time=240ms, load time=16ms
-		ConfigureDriveData(3, 16, 240, true);
-		
+		ConfigureDriveData(3, 16, 240, true);		
 		CalibrateDisk(_CurrentDrive);
 	}
 
@@ -116,13 +117,11 @@ namespace FloppyDisk
 	//플로피 드라이브의 모터를 켜거나 끈다
 	void ControlMotor(bool b) 
 	{
-		//! sanity check: invalid drive
 		if (_CurrentDrive > 3)
 			return;
 
 		uint8_t motor = 0;
 
-		//! select the correct mask based on current drive
 		switch (_CurrentDrive) {
 
 		case 0:
@@ -139,13 +138,13 @@ namespace FloppyDisk
 			break;
 		}
 
-		//! turn on or off the motor of that drive
+		//드라이브의 모터를 켜거나 끈다.
 		if (b)
 			WriteDOR(uint8_t(_CurrentDrive | motor | FLPYDSK_DOR_MASK_RESET | FLPYDSK_DOR_MASK_DMA));
 		else
 			WriteDOR(FLPYDSK_DOR_MASK_RESET);
 
-		//! in all cases; wait a little bit for the motor to spin up/turn off
+		//모터가 꺼지거나 활성화될때까지 약간의 시간을 대기한다.
 		msleep(20);
 	}
 	
@@ -153,7 +152,6 @@ namespace FloppyDisk
 	{
 		uint8_t data = 0;
 
-		//! send command
 		SendCommand(FDC_CMD_SPECIFY);
 		data = ((stepr & 0xf) << 4) | (unloadt & 0xf);
 		SendCommand(data);
@@ -169,18 +167,17 @@ namespace FloppyDisk
 		if (drive >= 4)
 			return -2;
 
-		//! turn on the motor
+		//모터를 켠다.
 		ControlMotor(true);
 
 		for (int i = 0; i < 10; i++)
 		{
-			//! send command
 			SendCommand(FDC_CMD_CALIBRATE);
 			SendCommand(drive);
 			WaitIrq();
 			CheckInterrput(st0, cyl);
 
-			//! did we fine cylinder 0? if so, we are done
+			//실린더 0을 찾았으면 모터를 끄고 종료한다.
 			if (!cyl) {
 
 				ControlMotor(false);
@@ -317,8 +314,7 @@ namespace FloppyDisk
 
 	void WaitIrq() 
 	{
-		//__asm sti		
-
+	
 		while (_floppyDiskIRQ == false)
 			;
 

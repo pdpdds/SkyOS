@@ -29,7 +29,7 @@ typedef struct _CRITICAL_SECTION {
 /////////////////////////////////////////////////////////////////////////////
 DWORD SKYAPI kGetCurrentThreadId();
 
-void GetLocalTime(LPSYSTEMTIME lpSystemTime);
+bool GetLocalTime(LPSYSTEMTIME lpSystemTime);
 BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime);
 
 void printf(const char* str, ...);

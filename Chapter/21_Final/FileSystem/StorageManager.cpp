@@ -1,4 +1,5 @@
 #include "SkyOS.h"
+#include "SkyTest.h"
 
 StorageManager* StorageManager::m_pStorageManager = nullptr;
 
@@ -183,7 +184,7 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 	{
 		StorageManager::GetInstance()->RegisterFileSystem(pHDDAdaptor, 'C');
 		StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
-
+		
 		//TestHardDisk();
 	}
 	else
@@ -230,7 +231,7 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 	}*/
 
 
-	StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('K');
 	SkyConsole::Print("K drive Selected\n");
 
 	drive_info* driveInfo = info->drives_addr;

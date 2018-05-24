@@ -1,4 +1,4 @@
 #pragma once
 #include "SkyStruct.h"
 
-extern void GetLocalTime(LPSYSTEMTIME lpSystemTime);
+extern bool GetLocalTime(LPSYSTEMTIME lpSystemTime);

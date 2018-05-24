@@ -31,7 +31,6 @@ void SetInterruptVector()
 
 bool InitKeyboard()
 {
-	//KeyBoard::Install(33);
 
 	KeyboardController::SetupInterrupts();
 
