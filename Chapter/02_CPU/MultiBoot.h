@@ -10,8 +10,7 @@ so we define it ourself */
         __asm _emit     (x) >> 16 & 0xff \
         __asm _emit     (x) >> 24 & 0xff
 
-#define KERNEL_STACK			0x00400000
-#define FREE_MEMORY_SPACE_ADDRESS       0x00400000
+#define KERNEL_STACK			0x40000
 
 /*  This is the one of most important thing to be able to load a PE kernel
 with GRUB. Because PE header are in the begining of the file, code section
