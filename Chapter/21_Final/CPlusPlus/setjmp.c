@@ -43,29 +43,29 @@
 
 __declspec(naked) int setjmp(jmp_buf env) {
   __asm {
-    mov edx, 4[esp]          // Get jmp_buf pointer
-    mov eax, [esp]           // Save EIP
+    mov edx, 4[esp]          // jmp_buf 버퍼 포인터를 얻는다.
+    mov eax, [esp]           // 함수 복귀주소를 저장한다.
     mov OFS_EIP[edx], eax
-    mov OFS_EBP[edx], ebp    // Save EBP, EBX, EDI, ESI, and ESP
+    mov OFS_EBP[edx], ebp    // EBP, EBX, EDI, ESI, ESP 레지스터를 버퍼에 저장한다.
     mov OFS_EBX[edx], ebx
     mov OFS_EDI[edx], edi
     mov OFS_ESI[edx], esi
     mov OFS_ESP[edx], esp
-    xor eax, eax             // Return 0
+    xor eax, eax             
     ret
   }
 }
 
 __declspec(naked) void longjmp(jmp_buf env, int value) {
   __asm {
-    mov edx, 4[esp]          // Get jmp_buf pointer
-    mov eax, 8[esp]          // Get return value (eax)
+    mov edx, 4[esp]          // jmp_buf 버퍼 포인터를 얻는다.
+    mov eax, 8[esp]          // value값을 eax에 저장한다.
 
-    mov esp, OFS_ESP[edx]    // Switch to new stack position
-    mov ebx, OFS_EIP[edx]    // Get new EIP value and set as return address
+    mov esp, OFS_ESP[edx]    // ESP를 setjmp에서 저장했던 ESP값으로 변경한다.
+    mov ebx, OFS_EIP[edx]    // 새 복귀주소값을 얻어서 ESP에 저장한다.
     mov [esp], ebx
     
-    mov ebp, OFS_EBP[edx]    // Restore EBP, EBX, EDI, and ESI
+    mov ebp, OFS_EBP[edx]    //EBP, EBX, EDI, ESI 레지스터 값을 복원한다.
     mov ebx, OFS_EBX[edx]
     mov edi, OFS_EDI[edx]
     mov esi, OFS_ESI[edx]
