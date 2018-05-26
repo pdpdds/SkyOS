@@ -100,26 +100,8 @@
     <ClCompile Include="v8086\rme.cpp">
       <Filter>V8086</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Haribote\fifo.cpp">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\SkyGUISystem.cpp">
       <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Haribote\SkyGUI.cpp">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Haribote\SkyMouse.cpp">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Haribote\SkyRenderer.cpp">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Haribote\SkySheet.cpp">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Haribote\SkySheetController.cpp">
-      <Filter>GUI\SkyGUI</Filter>
     </ClCompile>
     <ClCompile Include="GUI\svgagui\src\_mouse.cpp">
       <Filter>GUI\SVGA</Filter>
@@ -379,9 +361,6 @@
     <ClCompile Include="v8086\RMEFunc.cpp">
       <Filter>V8086</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Haribote\SkyConsoleTask.cpp">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClCompile>
     <ClCompile Include="KeyBoard\KeyBoard.cpp">
       <Filter>Keyboard</Filter>
     </ClCompile>
@@ -394,7 +373,28 @@
     <ClCompile Include="ConsoleSystem\ConsoleManager.cpp">
       <Filter>ConsoleSystem</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Haribote\ConsoleIOListener.cpp">
+    <ClCompile Include="GUI\SkyGUI\ConsoleIOListener.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\fifo.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkyConsoleTask.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkyGUI.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkyMouse.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkyRenderer.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkySheet.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkySheetController.cpp">
       <Filter>GUI\SkyGUI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -513,32 +513,11 @@
     <ClInclude Include="v8086\rme.h">
       <Filter>V8086</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\Haribote\fifo.h">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Haribote\FontData.h">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClInclude>
     <ClInclude Include="GUI\SkyGUISystem.h">
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GUI\SkyWindow.h">
       <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Haribote\SkyGUI.h">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Haribote\SkyMouse.h">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Haribote\SkyRenderer.h">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Haribote\SkySheet.h">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Haribote\SkySheetController.h">
-      <Filter>GUI\SkyGUI</Filter>
     </ClInclude>
     <ClInclude Include="GUI\svgagui\src\_mouse.h">
       <Filter>GUI\SVGA</Filter>
@@ -747,9 +726,6 @@
     <ClInclude Include="v8086\RMEFunc.h">
       <Filter>V8086</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\Haribote\SkyConsoleTask.h">
-      <Filter>GUI\SkyGUI</Filter>
-    </ClInclude>
     <ClInclude Include="KeyBoard\KeyBoard.h">
       <Filter>Keyboard</Filter>
     </ClInclude>
@@ -765,7 +741,31 @@
     <ClInclude Include="ConsoleSystem\ConsoleManager.h">
       <Filter>ConsoleSystem</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\Haribote\ConsoleIOListener.h">
+    <ClInclude Include="GUI\SkyGUI\ConsoleIOListener.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\fifo.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\FontData.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkyConsoleTask.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkyGUI.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkyMouse.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkyRenderer.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkySheet.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkySheetController.h">
       <Filter>GUI\SkyGUI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -794,9 +794,6 @@
     <Filter Include="GUI">
       <UniqueIdentifier>{7822c9fb-2363-424a-9441-ee73cc8a5e76}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GUI\SkyGUI">
-      <UniqueIdentifier>{34b531b1-2a0c-4d70-9e0b-9224e35eeb31}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GUI\SVGA">
       <UniqueIdentifier>{80f91c2c-2488-4115-8a74-71b36f5b8144}</UniqueIdentifier>
     </Filter>
@@ -823,6 +820,9 @@
     </Filter>
     <Filter Include="Keyboard">
       <UniqueIdentifier>{392160cc-c877-4a4c-8214-b49f8b4323f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\SkyGUI">
+      <UniqueIdentifier>{038e56cf-3636-437f-b7f9-81cae7203789}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

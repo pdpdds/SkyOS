@@ -58,17 +58,17 @@
     <ClCompile Include="FileSystem\RAMDisk.cpp" />
     <ClCompile Include="FileSystem\RamDiskAdaptor.cpp" />
     <ClCompile Include="FileSystem\StorageManager.cpp" />
-    <ClCompile Include="GUI\Haribote\ConsoleIOListener.cpp" />
-    <ClCompile Include="GUI\Haribote\fifo.cpp" />
-    <ClCompile Include="GUI\Haribote\SkyConsoleTask.cpp" />
-    <ClCompile Include="GUI\Haribote\SkyGUI.cpp" />
-    <ClCompile Include="GUI\Haribote\SkyMouse.cpp" />
-    <ClCompile Include="GUI\Haribote\SkyRenderer.cpp" />
-    <ClCompile Include="GUI\Haribote\SkySheet.cpp" />
-    <ClCompile Include="GUI\Haribote\SkySheetController.cpp" />
     <ClCompile Include="GUI\JPEG.cpp" />
     <ClCompile Include="GUI\Simple\SkyGUIConsole.cpp" />
     <ClCompile Include="GUI\SkyGUISystem.cpp" />
+    <ClCompile Include="GUI\SkyGUI\ConsoleIOListener.cpp" />
+    <ClCompile Include="GUI\SkyGUI\fifo.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkyConsoleTask.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkyGUI.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkyMouse.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkyRenderer.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkySheet.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkySheetController.cpp" />
     <ClCompile Include="GUI\SkyRenderer32.cpp" />
     <ClCompile Include="GUI\SkyRenderer8.cpp" />
     <ClCompile Include="GUI\SkySheetController32.cpp" />
@@ -204,18 +204,18 @@
     <ClInclude Include="FileSystem\RAMDisk.h" />
     <ClInclude Include="FileSystem\RamDiskAdaptor.h" />
     <ClInclude Include="FileSystem\StorageManager.h" />
-    <ClInclude Include="GUI\Haribote\ConsoleIOListener.h" />
-    <ClInclude Include="GUI\Haribote\fifo.h" />
-    <ClInclude Include="GUI\Haribote\FontData.h" />
-    <ClInclude Include="GUI\Haribote\SkyConsoleTask.h" />
-    <ClInclude Include="GUI\Haribote\SkyGUI.h" />
-    <ClInclude Include="GUI\Haribote\SkyMouse.h" />
-    <ClInclude Include="GUI\Haribote\SkyRenderer.h" />
-    <ClInclude Include="GUI\Haribote\SkySheet.h" />
-    <ClInclude Include="GUI\Haribote\SkySheetController.h" />
     <ClInclude Include="GUI\JPEG.h" />
     <ClInclude Include="GUI\Simple\SkyGUIConsole.h" />
     <ClInclude Include="GUI\SkyGUISystem.h" />
+    <ClInclude Include="GUI\SkyGUI\ConsoleIOListener.h" />
+    <ClInclude Include="GUI\SkyGUI\fifo.h" />
+    <ClInclude Include="GUI\SkyGUI\FontData.h" />
+    <ClInclude Include="GUI\SkyGUI\SkyConsoleTask.h" />
+    <ClInclude Include="GUI\SkyGUI\SkyGUI.h" />
+    <ClInclude Include="GUI\SkyGUI\SkyMouse.h" />
+    <ClInclude Include="GUI\SkyGUI\SkyRenderer.h" />
+    <ClInclude Include="GUI\SkyGUI\SkySheet.h" />
+    <ClInclude Include="GUI\SkyGUI\SkySheetController.h" />
     <ClInclude Include="GUI\SkyRenderer32.h" />
     <ClInclude Include="GUI\SkyRenderer8.h" />
     <ClInclude Include="GUI\SkySheetController32.h" />
@@ -340,7 +340,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./ConsoleSystem;./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./CPlusPlus;./V8086;./GUI/Haribote;./GUI/Simple;./GUI;../../CommonLib/math;./thirdparty/lua;./gui/svgagui;./gui/svgagui/example;../../Module/Include;../../Module/DebugEngine/DebugEngine;./thirdparty/easyzlib;./Device;./Core</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./ConsoleSystem;./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./CPlusPlus;./V8086;./GUI/SkyGUI;./GUI/Simple;./GUI;../../CommonLib/math;./thirdparty/lua;./gui/svgagui;./gui/svgagui/example;../../Module/Include;../../Module/DebugEngine/DebugEngine;./thirdparty/easyzlib;./Device;./Core</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SKYOS32;__LE__;OLD_ANSI;;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>

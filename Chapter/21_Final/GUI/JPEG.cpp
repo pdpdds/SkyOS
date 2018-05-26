@@ -7,6 +7,7 @@
  * 2003/04/28 | added OSASK-GUI ( by H.Kawai ) 
  * 2003/05/12 | optimized DCT ( 20-bits fixed point, etc...) -> line 407-464 ( by I.Tak. )
  * 2009/11/21 | optimized to RGB565 ( by kkamagui )
+ * 2018/02/21 | SkyOS Port ( by darkx )
  */
 #include "JPEG.h"
 
@@ -280,13 +281,13 @@ bool kJPEGInit(JPEG *jpeg, BYTE* pbFileBuffer, DWORD dwFileSize)
     {
         if( jpeg->data_index > jpeg->data_size )
         {
-            return FALSE;
+            return false;
         }
         c = get_byte(jpeg);
 
         if( jpeg->data_index > jpeg->data_size )
         {
-            return FALSE;
+            return false;
         }
         c = get_byte(jpeg);
 
@@ -295,7 +296,7 @@ bool kJPEGInit(JPEG *jpeg, BYTE* pbFileBuffer, DWORD dwFileSize)
         case 0xD8:// printf("SOI\n");
             break;
         case 0xD9:// printf("EOI\n");
-            return FALSE;
+            return false;
             break;
         case 0xC0:
             jpeg_sof(jpeg);
@@ -311,13 +312,13 @@ bool kJPEGInit(JPEG *jpeg, BYTE* pbFileBuffer, DWORD dwFileSize)
             break;
         case 0xDA:
             jpeg_sos(jpeg);
-            return TRUE;
+            return true;
         default:
             jpeg_skip(jpeg);
             break;
         }
     }
-    return FALSE;
+    return false;
 }
 
 // MCU decode
@@ -633,7 +634,7 @@ bool kJPEGDecode(JPEG *jpeg,COLOR* pstOutputBuffer)
     
     // MCU 크기 계산
     if(jpeg_decode_init(jpeg))
-        return FALSE; // 오류
+        return false; // 오류
     
     h_unit = jpeg->width / jpeg->mcu_width;
     v_unit = jpeg->height/ jpeg->mcu_height;
@@ -668,5 +669,5 @@ bool kJPEGDecode(JPEG *jpeg,COLOR* pstOutputBuffer)
         }
     }
     
-    return TRUE;
+    return true;
 }
