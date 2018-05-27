@@ -3,6 +3,7 @@
 #include "nic.h"
 #include "SkyGUISystem.h"
 #include "SkyTest.h"
+#include "SkyDebugger.h"
 
 bool systemOn = false;
 
@@ -44,6 +45,11 @@ DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 	//TestHardDisk();
 	//init_nic();
 
+	multiboot_info* pBootInfo = SkyModuleManager::GetInstance()->GetMultiBootInfo();
+	StorageManager::GetInstance()->Initilaize(pBootInfo);
+	//SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
+
+
 	NativeConsole();
 
 	SkyConsole::Print("Bye!!");
@@ -56,6 +62,10 @@ DWORD WINAPI SystemGUIProc(LPVOID parameter)
 	unsigned int* ebp = (unsigned int*)&parameter - 1;
 	SkyConsole::Print("start ebp : %x\n", *ebp);	
 	SkyConsole::Print("parameter : %x\n", parameter);
+
+	multiboot_info* pBootInfo = SkyModuleManager::GetInstance()->GetMultiBootInfo();
+	StorageManager::GetInstance()->Initilaize(pBootInfo);
+	SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
 
 	//ProcInit();
 	systemOn = true;

@@ -80,8 +80,6 @@ void kmain(unsigned long magic, unsigned long addr)
 	
 	SkyModuleManager::GetInstance()->Initialize(pBootInfo);
 
-	StorageManager::GetInstance()->Initilaize(pBootInfo);
-
 	//GUI 시스템의초기화 코드위치를 여기에 둔 것은 
 	//로그를 출력하기 위해서다.
 #if SKY_CONSOLE_MODE == 0
@@ -91,8 +89,6 @@ void kmain(unsigned long magic, unsigned long addr)
 	SystemProfiler::GetInstance()->Initialize();
 	
 	PrintCurrentTime();
-	
-	//SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
 	
 	kLeaveCriticalSection();
 	

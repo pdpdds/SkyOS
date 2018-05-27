@@ -393,6 +393,7 @@ void TestStorage(const char* filename, char driveLetter)
 		delete buffer;
 	}
 
+	SkyConsole::Print("Test End\n");
 	for (;;);
 }
 
