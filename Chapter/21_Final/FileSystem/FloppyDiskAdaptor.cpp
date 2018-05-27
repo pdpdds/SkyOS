@@ -28,8 +28,9 @@ bool FloppyDiskAdaptor::Initialize()
 	m_fileSys.Close = fsysFatClose;
 
 	fsysFatMount();
-
+	
 	FloppyDisk::SetWorkingDrive(0);
+	
 	FloppyDisk::Install(38);
 
 	SkyConsole::Print("Floppy Disk Init Complete!!\n");

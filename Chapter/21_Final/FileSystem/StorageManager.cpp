@@ -182,23 +182,19 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 
 	if (pHDDAdaptor->GetCount() > 0)
 	{
-		StorageManager::GetInstance()->RegisterFileSystem(pHDDAdaptor, 'C');
-		StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
-		
-		//TestHardDisk();
+		StorageManager::GetInstance()->RegisterFileSystem(pHDDAdaptor, 'C');	
 	}
 	else
 	{
 		delete pHDDAdaptor;
 	}
-
+	
 	//램 디스크
 	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');
 	if (pRamDiskAdaptor->Initialize() == true)
 	{
 		StorageManager::GetInstance()->RegisterFileSystem(pRamDiskAdaptor, 'K');
 		StorageManager::GetInstance()->SetCurrentFileSystemByID('K');
-
 		((RamDiskAdaptor*)pRamDiskAdaptor)->InstallPackage();
 	}
 	else
@@ -216,25 +212,25 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 	{
 		delete pMemoryResouceAdaptor;
 	}
-
+	
 	//플로피 디스크
 	/*FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
 	if (pFloppyDiskAdaptor->Initialize() == true)
 	{
 		StorageManager::GetInstance()->RegisterFileSystem(pFloppyDiskAdaptor, 'A');
-		StorageManager::GetInstance()->SetCurrentFileSystemByID('A');
-
 	}
 	else
 	{
 		delete pFloppyDiskAdaptor;
 	}*/
 
+	TestStorage("sample.txt", 'K');
+
 
 	StorageManager::GetInstance()->SetCurrentFileSystemByID('K');
 	SkyConsole::Print("K drive Selected\n");
 
-	drive_info* driveInfo = info->drives_addr;
+	/*drive_info* driveInfo = info->drives_addr;
 
 	for (uint32_t i = 0; i < info->drives_length; i++)
 	{
@@ -242,7 +238,7 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 
 		if (driveNum != 0)
 			SkyConsole::Print("%d drive Detected\n", driveNum);
-	}
+	}*/
 
 	return true;
 }

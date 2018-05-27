@@ -63,7 +63,6 @@ _declspec(naked) void multiboot_entry(void)
 void InitContext(multiboot_info* bootinfo);
 void InitHardware();
 bool InitMemoryManager(multiboot_info* bootinfo);
-bool TestMemoryModule(const char* moduleName);
 
 void kmain(unsigned long magic, unsigned long addr)
 {
@@ -80,6 +79,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	Scheduler::GetInstance();
 	
 	SkyModuleManager::GetInstance()->Initialize(pBootInfo);
+
 	StorageManager::GetInstance()->Initilaize(pBootInfo);
 
 	//GUI 시스템의초기화 코드위치를 여기에 둔 것은 
@@ -92,7 +92,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	
 	PrintCurrentTime();
 	
-	SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
+	//SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
 	
 	kLeaveCriticalSection();
 	

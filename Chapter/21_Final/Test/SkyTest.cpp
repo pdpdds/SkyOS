@@ -370,12 +370,12 @@ void TestDeque()
 #include "luadebug.h"
 #include "lualib.h"
 
-//하드디스크 테스트
-void TestHardDisk()
+//저장장치 테스트
+void TestStorage(const char* filename, char driveLetter)
 {
-	StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
+	StorageManager::GetInstance()->SetCurrentFileSystemByID(driveLetter);
 
-	FILE* pFile = fopen("1.lua", "rw");
+	FILE* pFile = fopen(filename, "r");
 	
 	if (pFile != NULL)
 	{
@@ -386,7 +386,7 @@ void TestHardDisk()
 		int ret = fread(buffer, 511, 1, pFile);
 
 		if (ret > 0)
-			SkyConsole::Print("%s\n", buffer);
+			SkyConsole::Print("%s [%d]\n", buffer, ret);
 
 		fclose(pFile);		
 

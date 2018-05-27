@@ -1,1 +1,1 @@
-PackageManager.exe kernel.sys Background.jpg
+PackageManager.exe SKYOS32.EXE sample.txt

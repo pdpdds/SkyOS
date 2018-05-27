@@ -145,7 +145,7 @@ namespace FloppyDisk
 			WriteDOR(FLPYDSK_DOR_MASK_RESET);
 
 		//모터가 꺼지거나 활성화될때까지 약간의 시간을 대기한다.
-		msleep(20);
+		//msleep(20);
 	}
 	
 	void ConfigureDriveData(uint8_t stepr, uint8_t loadt, uint8_t unloadt, bool dma) 

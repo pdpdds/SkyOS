@@ -19,20 +19,24 @@ void ISRHandler(registers_t regs)
 __declspec(naked) void kDefaultInterruptHandler()
 {
 	_asm {
-		PUSHAD
-		PUSHFD
-		CLI
+		cli
+		pushad
+	}
+
+	if (_pitTicks - _lastTickCount >= 100)
+	{
+		_lastTickCount = _pitTicks;
+		SkyConsole::Print("Timer Count : %d\n", _pitTicks);
 	}
 
 	_pitTicks++;
 
-	SendEOI();
-
-	_asm
-	{
-		POPFD
-		POPAD
-		IRETD
+	_asm {
+		mov al, 0x20
+		out 0x20, al
+		popad
+		sti
+		iretd
 	}
 }
 

@@ -17,7 +17,7 @@ MemoryResourceAdaptor::~MemoryResourceAdaptor()
 
 bool MemoryResourceAdaptor::Initialize()
 {
-
+	SkyConsole::Print("Memory Resource Disk Init Complete\n");
 	return true;
 }
 

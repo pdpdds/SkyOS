@@ -52,12 +52,12 @@ int RamDiskAdaptor::Read(PFILE file, unsigned char* buffer, unsigned int size, i
 
 	int readCount = kReadFile(buffer, size, count, (MFILE*)file->_id);
 
-	if (readCount < count)
+	if (readCount < size * count)
 		file->_eof = 1;
 
 	file->_position += readCount;
 
-	return readCount * size;
+	return readCount;
 }
 
 bool RamDiskAdaptor::Close(PFILE file)

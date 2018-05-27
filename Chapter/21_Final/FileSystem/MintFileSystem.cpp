@@ -893,10 +893,9 @@ DWORD kReadFile( void* pvBuffer, DWORD dwSize, DWORD dwCount, MFILE* pstFile )
     }
     
     // 동기화
-	kLeaveCriticalSection();
-    
+	kLeaveCriticalSection();	
     // 읽은 레코드 수를 반환
-    return ( dwReadCount / dwSize );
+    return dwReadCount;
 }
 
 /**

@@ -6,10 +6,13 @@ void TestMap();
 void Testlist();
 void TestCommonLibrary();
 void TestString();
-void TestHardDisk();
+
+//저장장치
+void TestStorage(const char* filename, char driveLetter);
+
 void TestFPU();
 void TestTryCatch();
 void TestNullPointer();
 void TestLua();
 void TestEasyZLib();
-void TestMemoryModule();
+bool TestMemoryModule(const char* moduleName);
