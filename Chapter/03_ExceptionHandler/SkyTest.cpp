@@ -9,9 +9,9 @@ void TestInvalidOpcode();
 
 void TestInterrupt()
 {
-	//TestDivideByZero();
+	TestDivideByZero();
 	//TestBreakPoint();
-	TestInvalidOpcode();
+	//TestInvalidOpcode();
 }
 
 int _divider = 0;

@@ -5,7 +5,12 @@
 #include "sprintf.h"
 
 
-extern void OutPortByte(ushort port, uchar value);
+extern "C" int _outp(unsigned short, int);
+
+void OutPortByte(ushort port, uchar value)
+{
+	_outp(port, value);
+}
 
 namespace SkyConsole
 {
