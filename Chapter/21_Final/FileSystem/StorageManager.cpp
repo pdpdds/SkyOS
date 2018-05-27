@@ -168,6 +168,14 @@ bool StorageManager::CloseFile(PFILE file)
 	return m_pCurrentFileSystem->Close(file);
 }
 
+bool StorageManager::GetFileList()
+{
+	if (m_pCurrentFileSystem == nullptr)
+		return false;
+
+	return m_pCurrentFileSystem->GetFileList();
+}
+
 bool StorageManager::Initilaize(multiboot_info* info)
 {
 	return ConstructFileSystem(info);
@@ -224,11 +232,11 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 		delete pFloppyDiskAdaptor;
 	}*/
 
-	TestStorage("sample.txt", 'K');
+	//TestStorage("sample.txt", 'K');
 
 
-	StorageManager::GetInstance()->SetCurrentFileSystemByID('K');
-	SkyConsole::Print("K drive Selected\n");
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
+	SkyConsole::Print("L drive Selected\n");
 
 	/*drive_info* driveInfo = info->drives_addr;
 

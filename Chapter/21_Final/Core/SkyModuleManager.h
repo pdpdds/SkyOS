@@ -33,6 +33,7 @@ public:
 
 	LOAD_DLL_INFO* FindLoadedModule(const char* dll_path);
 	Module* FindModule(const char* moduleName);
+	void PrintMoudleList();
 	
 	bool UnloadModule(MODULE_HANDLE handle);
 	void* GetModuleFunction(MODULE_HANDLE handle, const char* func_name);

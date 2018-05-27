@@ -16,6 +16,8 @@ public:
 	virtual bool Initialize() = 0;
 	virtual int GetCount() = 0;
 
+	virtual bool GetFileList() { return false; }
+
 	char m_deviceName[MAXPATH];
 	DWORD m_deviceID;
 };

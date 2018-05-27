@@ -38,6 +38,8 @@ public:
 	int WriteFile(PFILE file, unsigned char* Buffer, unsigned int size, int count);
 	bool CloseFile(PFILE file);
 
+	bool GetFileList();
+
 protected:
 	bool ConstructFileSystem(multiboot_info* info);
 

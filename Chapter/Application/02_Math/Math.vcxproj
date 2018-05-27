@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C1C0AB99-8EA6-49E1-82B4-2D88862833C7}</ProjectGuid>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
     <ProjectName>Math</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,7 +71,10 @@
       <EntryPointSymbol>EntryPoint</EntryPointSymbol>
       <BaseAddress>0x04000000</BaseAddress>
       <FixedBaseAddress>false</FixedBaseAddress>
-      <AdditionalOptions>/ALIGN:512 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/safeseh:no
+/ALIGN:1024
+ /SUBSYSTEM:CONSOLE
+/NODEFAULTLIB:LIBC %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>../../debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

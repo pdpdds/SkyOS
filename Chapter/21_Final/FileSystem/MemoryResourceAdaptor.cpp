@@ -83,3 +83,9 @@ size_t MemoryResourceAdaptor::Write(PFILE file, unsigned char* buffer, unsigned 
 {
 	return 0;
 }
+
+bool MemoryResourceAdaptor::GetFileList()
+{
+	SkyModuleManager::GetInstance()->PrintMoudleList();
+	return true;
+}

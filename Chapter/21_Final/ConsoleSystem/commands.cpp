@@ -131,4 +131,11 @@ long cmdCallStack2(char *theCommand)
 	return false;
 }
 
+long cmdDir(char *theCommand)
+{
+	StorageManager::GetInstance()->GetFileList();
+
+	return false;
+}
+
 

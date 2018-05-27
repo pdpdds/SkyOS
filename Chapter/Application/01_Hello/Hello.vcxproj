@@ -69,7 +69,10 @@
       <EntryPointSymbol>EntryPoint</EntryPointSymbol>
       <BaseAddress>0x04000000</BaseAddress>
       <FixedBaseAddress>false</FixedBaseAddress>
-      <AdditionalOptions>/ALIGN:512 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/safeseh:no
+/ALIGN:1024
+ /SUBSYSTEM:CONSOLE
+/NODEFAULTLIB:LIBC %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>../../debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

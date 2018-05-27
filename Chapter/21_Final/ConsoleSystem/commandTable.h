@@ -17,6 +17,7 @@ START_COMMAND_TABLE
 	CMD_ENTRY("exec", true, CmdExec, "Execute File")
 	CMD_ENTRY("gui", false, cmdGUI, "Get Resolution Mode")	
 	CMD_ENTRY("pci", false, cmdPCI, "Get PCI List")
+	CMD_ENTRY("dir", false, cmdDir, "Get File List")
 	CMD_ENTRY("callstack", false, cmdCallStack, "Trace Call stack")
 	CMD_ENTRY("callstack2", false, cmdCallStack2, "Trace Call stack with symbol")
 END_COMMAND_TABLE

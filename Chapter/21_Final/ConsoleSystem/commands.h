@@ -14,5 +14,6 @@ long cmdGlobalState(char *theCommand);
 long CmdExec(char *theCommand);
 long cmdGUI(char *theCommand);
 long cmdPCI(char *theCommand);
+long cmdDir(char *theCommand);
 long cmdCallStack(char *theCommand);
 long cmdCallStack2(char *theCommand);

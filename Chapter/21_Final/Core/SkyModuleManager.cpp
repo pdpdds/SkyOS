@@ -20,6 +20,25 @@ bool SkyModuleManager::Initialize(multiboot_info* pBootInfo)
 	return true;
 }
 
+void SkyModuleManager::PrintMoudleList()
+{
+	uint32_t mb_flags = m_pMultibootInfo->flags;
+	if (mb_flags & MULTIBOOT_INFO_MODS)
+	{
+		uint32_t mods_count = m_pMultibootInfo->mods_count;
+		uint32_t mods_addr = (uint32_t)m_pMultibootInfo->Modules;
+
+		for (uint32_t mod = 0; mod < mods_count; mod++)
+		{
+			Module* module = (Module*)(mods_addr + (mod * sizeof(Module)));
+
+			const char* module_string = (const char*)module->Name;
+
+			SkyConsole::Print(" %s\n", module_string);			
+		}
+	}
+}
+
 Module* SkyModuleManager::FindModule( const char* moduleName)
 {
 	uint32_t mb_flags = m_pMultibootInfo->flags;
