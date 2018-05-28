@@ -4,6 +4,7 @@
 #include "ZetPlane.h"
 #include "jsmn.h"
 #include "ctrycatch.h"
+#include "easyzlib.h"
 //#include "hash_map.h"
 
 //인터럽트 핸들러 테스트
@@ -448,9 +449,38 @@ void TestNullPointer()
 	pPlane->IsRotate();
 }
 
+char easyTestBuffer[] = "Sky OS Compression Test!!";
 void TestEasyZLib()
 {
+	char* destBuffer = new char[256];
+	long destBufferLen = 256;
+	long nSrcLen = sizeof(easyTestBuffer);
 
+	char* decompressedBuffer = new char[256];
+	long decompressedLen = 256;
+
+	memset(destBuffer, 0, 256);
+	memset(decompressedBuffer, 0, 256);
+
+	SkyConsole::Print("text : %s\n", easyTestBuffer);
+	
+	//압축한다.
+	if (0 != ezcompress((unsigned char* )destBuffer, &destBufferLen, (const unsigned char* )easyTestBuffer, nSrcLen))
+	{
+		HaltSystem("easyzlib test fail!!");
+	}
+	SkyConsole::Print("Compressed : Src Size %d, Dest Size %d\n", nSrcLen, destBufferLen);
+
+	//압축을 해제한다. 
+	if (0 != ezuncompress((unsigned char*)decompressedBuffer, &decompressedLen, (const unsigned char*)destBuffer, destBufferLen))
+	{
+		HaltSystem("easyzlib test fail!!");
+	}
+	SkyConsole::Print("Decompressed : Src Size %d, Dest Size %d\n", destBufferLen, decompressedLen);
+	SkyConsole::Print("result : %s\n", decompressedBuffer);
+
+	delete destBuffer;
+	delete decompressedBuffer;
 }
 
 bool TestMemoryModule(const char* moduleName)

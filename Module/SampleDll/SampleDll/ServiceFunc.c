@@ -3,7 +3,7 @@
 int k = 10;
 int AddNumbers(int a, int b)
 {
-	return a + b + 10;
+	return a + b + k;
 }
 
 DLLInterface g_Interface =

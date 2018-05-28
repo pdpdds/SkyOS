@@ -89,6 +89,9 @@ void kmain(unsigned long magic, unsigned long addr)
 	SystemProfiler::GetInstance()->Initialize();
 	
 	PrintCurrentTime();
+
+	TestEasyZLib();
+	for (;;);
 	
 	kLeaveCriticalSection();
 	

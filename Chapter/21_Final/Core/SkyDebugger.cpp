@@ -8,6 +8,8 @@
 #include "MapFile.h"
 #include "StorageManager.h"
 #include "stdio.h"
+//메모리 할당
+#include "kheap.h"
 
 SkyDebugger* SkyDebugger::m_pDebugger = nullptr;
 
@@ -26,9 +28,6 @@ SKY_FILE_Interface g_FileInterface =
 	fgetc,
 	fgets,
 };
-
-//메모리 할당
-#include "kheap.h"
 
 u32int sky_kmalloc(u32int sz)
 {
@@ -152,20 +151,23 @@ void SkyDebugger::TraceStackWithSymbol(unsigned int maxFrames)
 	}
 }
 
+//디버그엔진 모듈을 로드한다.
 bool SkyDebugger::LoadSymbol(const char* moduleName)
 {
 	
+//디버그 모듈 엔진을 찾는다.
 	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory(moduleName);
 
 	if (hwnd == nullptr)
 	{
 		HaltSystem("Memory Module Load Fail!!");
 	}
-	
 
+//디버그 엔진 모듈로 부터 SetSkyMockInterface, GetDebugEngineDLL 함수를 얻어온다.
 	PSetSkyMockInterface SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "SetSkyMockInterface");
 	PGetDebugEngineDLL GetDebugEngineDLLInterface = (PGetDebugEngineDLL)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetDebugEngineDLL");
 
+//디버그 엔진에 플랫폼 종속적인 인터페이스를 넘긴다.
 	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
 
 	if (!GetDebugEngineDLLInterface)

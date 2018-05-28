@@ -313,9 +313,6 @@
     <ClCompile Include="ThirdParty\LUA\lzio.c">
       <Filter>ThirdParty\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="ThirdParty\easyzlib\easyzlib.c">
-      <Filter>ThirdParty\easyzlib</Filter>
-    </ClCompile>
     <ClCompile Include="KernelProcedure.cpp" />
     <ClCompile Include="kmain.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
@@ -396,6 +393,9 @@
     </ClCompile>
     <ClCompile Include="GUI\SkyGUI\SkySheetController.cpp">
       <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\easyzlib\easyzlib.c">
+      <Filter>ThirdParty\easyzlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

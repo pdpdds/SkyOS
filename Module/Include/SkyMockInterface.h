@@ -6,6 +6,7 @@
 #include "fileio.h"
 #endif
 
+//입출력 관련 인터페이스
 typedef struct SKY_FILE_Interface
 {
 	size_t (*sky_fread)(void *ptr, size_t size, size_t nmemb, FILE *stream);
@@ -22,17 +23,20 @@ typedef struct SKY_FILE_Interface
 	char* (*sky_fgets)(char *dst, int max, FILE *fp);
 } SKY_FILE_Interface;
 
+//메모리 할당관련 인터페이스
 typedef struct SKY_ALLOC_Interface
 {
 	unsigned int (*sky_kmalloc)(unsigned int sz);
 	void (*sky_kfree)(void* p);
 } SKY_ALLOC_Interface;
 
+//출력관련 인터페이스
 typedef struct SKY_Print_Interface
 {	
 	void(*sky_printf)(const char* str, ...);
 } SKY_Print_Interface;
 
+//DLL로 넘길 인터페이스 클래스
 class SkyMockInterface
 {
 public:
