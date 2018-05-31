@@ -20,7 +20,7 @@ public:
 	virtual ~ProcessManager();
 
 	typedef hash_map<int, Process*> ProcessList;
-	typedef std::list<Thread*> TaskList;
+	typedef list<Thread*> TaskList;
 		
 	ProcessList* GetProcessList() { return &m_processList;}
 	TaskList* GetTaskList() { return &m_taskList; }

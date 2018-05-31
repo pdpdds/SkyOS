@@ -90,8 +90,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	
 	PrintCurrentTime();
 
-	TestEasyZLib();
-	for (;;);
+	//TestEasyZLib();
+	//for (;;);
 	
 	kLeaveCriticalSection();
 	

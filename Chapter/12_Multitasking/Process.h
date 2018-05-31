@@ -3,6 +3,7 @@
 #include "SkyStruct.h"
 #include "VirtualMemoryManager.h"
 #include "kheap.h"
+#include "hash_map.h"
 
 #define PROC_INVALID_ID -1
 

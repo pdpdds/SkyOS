@@ -248,7 +248,7 @@ heap_t *create_heap(u32int start, u32int end_addr, u32int max, u8int supervisor,
     return heap;
 }
 
-void *alloc(u32int size, u8int page_align, heap_t *heap)
+void *memory_alloc(u32int size, u8int page_align, heap_t *heap)
 {
 
     // Make sure we take the size of header/footer into account.

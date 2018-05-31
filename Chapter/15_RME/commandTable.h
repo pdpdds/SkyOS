@@ -16,6 +16,8 @@ START_COMMAND_TABLE
 	CMD_ENTRY("globalstate", false, cmdGlobalState, "Get memory layout")
 	CMD_ENTRY("exec", true, CmdExec, "Execute File")
 	CMD_ENTRY("gui", false, cmdGUI, "Get Resolution Mode")	
+	CMD_ENTRY("guiconsole", false, cmdSwitchGUI, "Switch to GUI Console Mode")
 	CMD_ENTRY("pci", false, cmdPCI, "Get PCI List")
+
 END_COMMAND_TABLE
 

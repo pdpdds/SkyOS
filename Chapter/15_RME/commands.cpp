@@ -114,6 +114,13 @@ long cmdGUI(char *theCommand)
 	return false;
 }
 
+long cmdSwitchGUI(char *theCommand)
+{
+	SwitchGUIMode(1024, 768, 32);
+
+	return false;
+}
+
 long cmdPCI(char *theCommand)
 {
 	RequestPCIList();

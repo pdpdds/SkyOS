@@ -13,4 +13,5 @@ long cmdTaskCount(char *theCommand);
 long cmdGlobalState(char *theCommand);
 long CmdExec(char *theCommand);
 long cmdGUI(char *theCommand);
+long cmdSwitchGUI(char *theCommand);
 long cmdPCI(char *theCommand);

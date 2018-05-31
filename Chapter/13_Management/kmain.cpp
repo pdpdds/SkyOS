@@ -58,7 +58,6 @@ extern PageDirectory* pageDirectoryPool[10];
 
 void HardwareInitialize();
 bool InitMemoryManager(multiboot_info* bootinfo);
-void ConstructFileSystem();
 void StartConsoleSystem();
 void StartConsoleSystem2();
 void JumpToNewKernelEntry(int entryPoint, unsigned int procStack);
@@ -106,24 +105,12 @@ void kmain(unsigned long magic, unsigned long addr)
 	HeapManager::InitKernelHeap(heapFrameCount);
 
 	SkyConsole::Print("Heap %dMB Allocated\n", requiredHeapSize / 1048576);
-
-	if (false == InitFPU())
-	{
-		SkyConsole::Print("[Warning] Floating Pointer Unit Detection Fail\n");
-	}
-	else
-	{
-		EnableFPU();
-		SkyConsole::Print("FPU Init..\n");
-	}
-
+	
 	InitKeyboard();
 	SkyConsole::Print("Keyboard Init..\n");
 	
-	InstallTSS(5, 0x10, 0);
+	//InstallTSS(5, 0x10, 0);
 	
-	ConstructFileSystem();	
-
 	kLeaveCriticalSection();
 
 	ProcessManager::GetInstance();
@@ -138,7 +125,7 @@ void kmain(unsigned long magic, unsigned long addr)
 	state._pageDirectoryPoolAddress = (DWORD)&(pageDirectoryPool[0]);
 
 	SystemProfiler::GetInstance()->SetGlobalState(state);
-
+	
 	StartConsoleSystem2();
 	
 	for (;;);	
@@ -150,6 +137,16 @@ void HardwareInitialize()
 	IDTInitialize(0x8);
 	PICInitialize(0x20, 0x28);
 	InitializePIT();
+
+	if (false == InitFPU())
+	{
+		SkyConsole::Print("[Warning] Floating Pointer Unit Detection Fail\n");
+	}
+	else
+	{
+		EnableFPU();
+		SkyConsole::Print("FPU Init..\n");
+	}
 }
 
 uint32_t GetFreeSpaceMemory(multiboot_info* bootinfo)
@@ -213,52 +210,6 @@ bool InitMemoryManager(multiboot_info* bootinfo)
 	SkyConsole::Print("Free Memory Size(%dMB)\n", g_freeMemorySize / 1048576);
 
 	return true;
-}
-
-void ConstructFileSystem()
-{	
-//IDE 하드 디스크
-	/*FileSysAdaptor* pHDDAdaptor = new HDDAdaptor("HardDisk", 'C');
-	
-	pHDDAdaptor->Initialize();
-
-	if (pHDDAdaptor->GetCount() > 0)
-	{
-		StorageManager::GetInstance()->RegisterFileSystem(pHDDAdaptor, 'C');
-		StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
-		
-		//TestHardDisk();			
-	}
-	else
-	{
-		delete pHDDAdaptor;		
-	}*/
-			
-//램 디스크
-	FileSysAdaptor* pRamDiskAdaptor = new RamDiskAdaptor("RamDisk", 'K');
-	if (pRamDiskAdaptor->Initialize() == true)
-	{
-		StorageManager::GetInstance()->RegisterFileSystem(pRamDiskAdaptor, 'K');
-		StorageManager::GetInstance()->SetCurrentFileSystemByID('K');		
-
-		((RamDiskAdaptor*)pRamDiskAdaptor)->InstallPackage();
-	}
-	else
-	{
-		delete pRamDiskAdaptor;
-	}
-
-//플로피 디스크
-	FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
-	if (pFloppyDiskAdaptor->Initialize() == true)
-	{
-		StorageManager::GetInstance()->RegisterFileSystem(pFloppyDiskAdaptor, 'A');
-		StorageManager::GetInstance()->SetCurrentFileSystemByID('A');
-	}
-	else
-	{
-		delete pFloppyDiskAdaptor;
-	}				
 }
 
 void StartConsoleSystem()
