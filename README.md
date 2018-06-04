@@ -25,6 +25,7 @@ Feature
 -------
 
 GRUB을 통한 커널 로딩
+
 Visual Studio 2017로 커널 빌드
 C++ 언어 지원
 STL 사용가능
