@@ -11,6 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CPlusPlus\ctrycatch.h" />
+    <ClInclude Include="CPlusPlus\setjmp.h" />
+    <ClInclude Include="CPlusPlus\signal.h" />
+    <ClInclude Include="CPlusPlus\_mingw.h" />
     <ClInclude Include="ctype.h" />
     <ClInclude Include="ffmt.h" />
     <ClInclude Include="fileio.h" />
@@ -52,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="atob.c" />
+    <ClCompile Include="CPlusPlus\ctrycatch.cpp" />
+    <ClCompile Include="CPlusPlus\setjmp.c" />
     <ClCompile Include="cstd.cpp" />
     <ClCompile Include="ctype.cpp" />
     <ClCompile Include="ffmt.c" />
@@ -123,6 +129,9 @@
     <MASM Include="ulldiv.asm" />
     <MASM Include="ullrem.asm" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="CPlusPlus\ctrycatch_exception_types.conf" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{83EE476C-AA21-4A23-9D6F-4FE675115B13}</ProjectGuid>
     <RootNamespace>Kernel</RootNamespace>
@@ -170,7 +179,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./;../include;./stl;./math</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../include;./stl;./math;./CPlusPlus</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>FLOATINGPT;__STDC__;ARCH_X86;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>false</StringPooling>

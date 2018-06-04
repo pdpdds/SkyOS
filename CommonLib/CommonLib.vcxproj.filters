@@ -13,6 +13,9 @@
     <Filter Include="math">
       <UniqueIdentifier>{1c1becf8-6cd3-4c3c-afb7-a87290c9fbe4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CPlusPlus">
+      <UniqueIdentifier>{670e8554-f18c-4345-9128-ff0c45122430}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jsmn\jsmn.h">
@@ -107,6 +110,18 @@
       <Filter>math</Filter>
     </ClInclude>
     <ClInclude Include="ffmt.h" />
+    <ClInclude Include="CPlusPlus\_mingw.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\ctrycatch.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\setjmp.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\signal.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jsmn\jsmn.cpp">
@@ -279,10 +294,21 @@
     <ClCompile Include="math\k_cos.c">
       <Filter>math</Filter>
     </ClCompile>
+    <ClCompile Include="CPlusPlus\ctrycatch.cpp">
+      <Filter>CPlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlusPlus\setjmp.c">
+      <Filter>CPlusPlus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="llshl.asm" />
     <MASM Include="ulldiv.asm" />
     <MASM Include="ullrem.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CPlusPlus\ctrycatch_exception_types.conf">
+      <Filter>CPlusPlus</Filter>
+    </None>
   </ItemGroup>
 </Project>

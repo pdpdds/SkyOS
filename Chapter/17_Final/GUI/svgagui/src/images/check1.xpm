@@ -1,0 +1,21 @@
+/* XPM */
+static char * check1_xpm[] = {
+"14 14 4 1",
+" 	c none",
+".	c darkgrey",
+"X	c black",
+"o	c white",
+".............o",
+".XXXXXXXXXXXXo",
+".Xoooooooooo o",
+".Xoooooooooo o",
+".Xoooooooooo o",
+".Xoooooooooo o",
+".Xoooooooooo o",
+".Xoooooooooo o",
+".Xoooooooooo o",
+".Xoooooooooo o",
+".Xoooooooooo o",
+".Xoooooooooo o",
+".X           o",
+"oooooooooooooo"};
