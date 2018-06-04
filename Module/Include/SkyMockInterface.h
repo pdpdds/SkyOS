@@ -20,7 +20,7 @@ typedef struct SKY_FILE_Interface
 	int (*sky_fseek)(FILE *stream, long int offset, int whence);
 	long int (*sky_ftell)(FILE *stream);
 	int (*sky_fgetc)(FILE * stream);
-	char* (*sky_fgets)(char *dst, int max, FILE *fp);
+	char* (*sky_fgets)(char *dst, int max, FILE *fp);	
 } SKY_FILE_Interface;
 
 //메모리 할당관련 인터페이스
@@ -34,13 +34,15 @@ typedef struct SKY_ALLOC_Interface
 typedef struct SKY_Print_Interface
 {	
 	void(*sky_printf)(const char* str, ...);
+	FILE* sky_stdin;
+	FILE* sky_stdout;
+	FILE* sky_stderr;
 } SKY_Print_Interface;
 
 //DLL로 넘길 인터페이스 클래스
-class SkyMockInterface
+typedef struct SkyMockInterface
 {
-public:
 	SKY_ALLOC_Interface g_allocInterface;
 	SKY_FILE_Interface g_fileInterface;
 	SKY_Print_Interface g_printInterface;
-};
+}SkyMockInterface;
