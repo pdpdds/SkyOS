@@ -167,9 +167,6 @@
     <ClCompile Include="widechar\unicode.c">
       <Filter>wchar</Filter>
     </ClCompile>
-    <ClCompile Include="math\e_fmod.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
     <ClCompile Include="math\e_acos.c">
       <Filter>math</Filter>
     </ClCompile>
@@ -258,12 +255,30 @@
     <ClCompile Include="math\s_significand.c">
       <Filter>math</Filter>
     </ClCompile>
-    <ClCompile Include="math\s_tanh.c">
-      <Filter>math</Filter>
-    </ClCompile>
     <ClCompile Include="atob.c" />
     <ClCompile Include="vsprintf.c" />
     <ClCompile Include="ffmt.c" />
+    <ClCompile Include="math\s_tanh.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\s_sin.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\e_rem_pio2.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\e_fmod.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\k_rem_pio2.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\k_sin.c">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\k_cos.c">
+      <Filter>math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="llshl.asm" />

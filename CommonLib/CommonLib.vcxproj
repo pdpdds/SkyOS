@@ -61,9 +61,13 @@
     <ClCompile Include="math\e_asin.c" />
     <ClCompile Include="math\e_atan2.c" />
     <ClCompile Include="math\e_exp.c" />
-    <ClCompile Include="math\e_fmod.cpp" />
+    <ClCompile Include="math\e_fmod.c" />
     <ClCompile Include="math\e_log.c" />
     <ClCompile Include="math\e_log10.c" />
+    <ClCompile Include="math\e_rem_pio2.c" />
+    <ClCompile Include="math\k_cos.c" />
+    <ClCompile Include="math\k_rem_pio2.c" />
+    <ClCompile Include="math\k_sin.c" />
     <ClCompile Include="math\s_asinh.c" />
     <ClCompile Include="math\s_atan.c" />
     <ClCompile Include="math\s_cbrt.c" />
@@ -87,6 +91,7 @@
     <ClCompile Include="math\s_scalbn.c" />
     <ClCompile Include="math\s_signgam.c" />
     <ClCompile Include="math\s_significand.c" />
+    <ClCompile Include="math\s_sin.c" />
     <ClCompile Include="math\s_tanh.c" />
     <ClCompile Include="memory.cpp" />
     <ClCompile Include="sprintf.cpp" />

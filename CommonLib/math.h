@@ -20,6 +20,8 @@ struct ieee_double {
 #endif
 
 };
+
+
 #ifdef  __cplusplus
 extern "C" {
 #endif
@@ -33,7 +35,8 @@ extern "C" {
 	float pow(float x, int y);
 	long fact(int n); //factorial function
 	float fabs(float j);
-	double sin(float angle);
+	extern double sin(double x);
+	//double sin(float angle);
 	double cos(double x);
 	double tan(double x);
 	double sqrt(double a);

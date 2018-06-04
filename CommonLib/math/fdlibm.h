@@ -91,6 +91,11 @@ struct exception {
 /*
  * ANSI/POSIX
  */
+
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
 extern double acos __P((double));
 extern double asin __P((double));
 extern double atan __P((double));
@@ -214,3 +219,6 @@ extern double __kernel_sin __P((double,double,int));
 extern double __kernel_cos __P((double,double));
 extern double __kernel_tan __P((double,double,int));
 extern int    __kernel_rem_pio2 __P((double*,double*,int,int,int,const int*));
+#ifdef  __cplusplus
+}
+#endif

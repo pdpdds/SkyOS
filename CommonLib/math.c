@@ -50,7 +50,7 @@ int floor(float x)
 	}
 }*/
 
-double sin(float angle) 
+/*double sin(float angle) 
 {
 	int y = 0;
 	double radians;
@@ -60,7 +60,7 @@ double sin(float angle)
 
 	}
 	return ((pow(radians, y)) / fact(y));
-}
+}*/
 
 double cos(double x) {//USE BETWEEN -pi, pi
 	double sq_x = x*x, output = 1.0, qu_x = sq_x*sq_x;
