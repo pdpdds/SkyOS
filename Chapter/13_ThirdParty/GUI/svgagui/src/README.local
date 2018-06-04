@@ -1,0 +1,23 @@
+Internal functions for svgagui:
+
+BUTTON:
+- create_button
+	* create new image maps for the button in variable data.
+	  data[0] is the normal button, data[1] is the pressed button.
+- show_button
+	* copy image data of button to image of window and show window
+- add_button
+	* add new button to window.
+	* call create_button() to make the new button.
+
+SLIDER:
+- create_slider
+	* create new image map of the slider in variable data[0].
+- show_slider
+	* copy image data[0] of button to image of window and show window
+- add_slider
+	* add new slider to window.
+	* call create_slider() to make the new slider.
+- press_slider
+	* move slider until the left mousebutton is released.
+

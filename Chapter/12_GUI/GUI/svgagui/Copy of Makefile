@@ -1,0 +1,27 @@
+.EXPORT_ALL_VARIABLES:
+
+# Source directories:
+LIBDIR = -L.. -L/usr/X11/lib
+INCDIR = -I..
+LIBS = -lX11 -lsvgagui
+
+# Compilation:
+CFLAGS = -Wall -g -O3 -march=i586 -fomit-frame-pointer $(INCDIR)
+CC = gcc
+
+PROJECT = libsvgagui.a
+VERSION = 1.2
+DIRS = src example
+
+all:
+	for d in $(DIRS); do $(MAKE) -C $$d || exit 1; done;
+
+clean:
+	for d in $(DIRS); do $(MAKE) -C $$d clean || exit 1; done;
+	rm -f libsvgagui.a *~ *%
+
+tar:
+	rm -f *~ *%
+	cd src ; rm -f *~ *%
+	cd example ; rm -f *~ *% core
+	cd .. ; tar cfz svgagui-$(VERSION).tgz svgagui-$(VERSION)/*

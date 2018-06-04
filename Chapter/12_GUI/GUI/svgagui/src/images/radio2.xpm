@@ -1,0 +1,19 @@
+/* XPM */
+static char * radio2_xpm[] = {
+"12 12 4 1",
+" 	c none",
+".	c darkgrey",
+"X	c black",
+"o	c white",
+"    ....    ",
+"  ..XXXX..  ",
+" .XXooooXXo ",
+" .Xoooooo o ",
+".XoooXXooo o",
+".XooXXXXoo o",
+".XooXXXXoo o",
+".XoooXXooo o",
+" .Xoooooo o ",
+" .  oooo  o ",
+"  oo    oo  ",
+"    oooo    "};

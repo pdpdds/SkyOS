@@ -1,0 +1,853 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="CPU\Hal.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\IDT.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\Pic.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\PIT.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\GDT.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\PhysicalMemoryManager.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\VirtualMemoryManager.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\PageDirectoryEntry.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\PageTableEntry.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Heap\kheap.cpp">
+      <Filter>Heap</Filter>
+    </ClCompile>
+    <ClCompile Include="Heap\ordered_array.cpp">
+      <Filter>Heap</Filter>
+    </ClCompile>
+    <ClCompile Include="Heap\HeapManager.cpp">
+      <Filter>Heap</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Plane.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\ZetPlane.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\kfileio.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\Harddisk.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\ACEList.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\fat32.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\Partition.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\MintFileSystem.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\RAMDisk.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\HDDAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\ObjMan.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\RamDiskAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\StorageManager.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FAT12.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FloppyDisk.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FileSysAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FloppyDiskAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlusPlus\ctrycatch.cpp">
+      <Filter>CPlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlusPlus\setjmp.c">
+      <Filter>CPlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\FPU.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="v8086\rme.cpp">
+      <Filter>V8086</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUISystem.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\_mouse.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\browser.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\button.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\check.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\choice.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\dialog.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\filedialog.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\general.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\iconlist.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\image.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\info.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\input.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\listbox.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\number.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\object.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\progress.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\pulldown.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\screen.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\slider.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\svgalib.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\text.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\window.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\window_draw.cPP">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\window_thread.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\src\xlib.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\svgaguientry.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\example\color.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Simple\SkyGUIConsole.cpp">
+      <Filter>GUI\SkyGUIConsole</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\TSS.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Exception.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\KernelProcessLoader.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\LoadDLL.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Loader.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Process.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ProcessManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ProcessUtil.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Scheduler.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\SkyAPI.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\SkyDebugger.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\SkyModuleManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\SysAPI.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\SysInfo.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\SystemProfiler.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Thread.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\UserProcessLoader.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleSystem\commands.cpp">
+      <Filter>ConsoleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lapi.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lauxlib.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lbuffer.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lbuiltin.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\ldblib.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\ldo.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lfunc.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lgc.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\linit.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\liolib.cpp">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\llex.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lmathlib.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lmem.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lobject.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lparser.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lstate.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lstring.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lstrlib.cpp">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\ltable.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\ltm.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lua.cpp">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lundump.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lvm.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\LUA\lzio.c">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="KernelProcedure.cpp" />
+    <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="SkyConsole.cpp" />
+    <ClCompile Include="SkyConsoleLauncher.cpp" />
+    <ClCompile Include="SkyGUILauncher.cpp" />
+    <ClCompile Include="SkyLauncher.cpp" />
+    <ClCompile Include="GUI\JPEG.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyRenderer8.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyRenderer32.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkySheetController8.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkySheetController32.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\3c905b.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\nic.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\PCI.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\SkyPCI.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkySVGA.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\vesa.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\MemoryResourceAdaptor.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="v8086\RMEFunc.cpp">
+      <Filter>V8086</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyBoard\KeyBoard.cpp">
+      <Filter>Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyBoard\KeyboardController.cpp">
+      <Filter>Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\SkyTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleSystem\ConsoleManager.cpp">
+      <Filter>ConsoleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\ConsoleIOListener.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\fifo.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkyConsoleTask.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkyGUI.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkyMouse.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkyRenderer.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkySheet.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\SkyGUI\SkySheetController.cpp">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\easyzlib\easyzlib.c">
+      <Filter>ThirdParty\easyzlib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CPU\Hal.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\IDT.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\Pic.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\PIT.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\GDT.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\PhysicalMemoryManager.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\VirtualMemoryManager.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\PageDirectoryEntry.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\PageTableEntry.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap\kheap.h">
+      <Filter>Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap\ordered_array.h">
+      <Filter>Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap\HeapManager.h">
+      <Filter>Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Plane.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\TestInteger.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\ZetPlane.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\PureCallExtend.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\HardDisk.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\ACEList.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\fat32.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\Partition.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\MintFileSystem.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\RAMDisk.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\Collect.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\HDDAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\ObjMan.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\RamDiskAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\StorageManager.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FAT12.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FloppyDisk.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FloppyDiskIO.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FileSysAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FloppyDiskAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\_mingw.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\ctrycatch.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\setjmp.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlusPlus\signal.h">
+      <Filter>CPlusPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\FPU.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="v8086\rme.h">
+      <Filter>V8086</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUISystem.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyWindow.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\src\_mouse.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\src\bigfont.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\src\font.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\src\font2.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\src\local.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\svgagui.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\svgaguientry.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Simple\SkyGUIConsole.h">
+      <Filter>GUI\SkyGUIConsole</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\TSS.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Exception.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\KernelProcessLoader.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\LoadDLL.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Loader.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\PEImage.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Process.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ProcessManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ProcessUtil.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Scheduler.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SkyAPI.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SkyDebugger.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SkyModuleManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SysAPI.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SysError.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SysInfo.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SystemProfiler.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Thread.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\UserProcessLoader.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleSystem\commandMacros.h">
+      <Filter>ConsoleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleSystem\commands.h">
+      <Filter>ConsoleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleSystem\commandTable.h">
+      <Filter>ConsoleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lapi.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lauxlib.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lbuiltin.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\ldo.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lfunc.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lgc.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\llex.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lmem.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lobject.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lopcodes.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lparser.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lstate.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lstring.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\ltable.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\ltm.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lua.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\luadebug.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lualib.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lundump.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lvm.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\LUA\lzio.h">
+      <Filter>ThirdParty\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\easyzlib\easyzlib.h">
+      <Filter>ThirdParty\easyzlib</Filter>
+    </ClInclude>
+    <ClInclude Include="KernelProcedure.h" />
+    <ClInclude Include="kmain.h" />
+    <ClInclude Include="MultiBoot.h" />
+    <ClInclude Include="SkyConsole.h" />
+    <ClInclude Include="SkyConsoleLauncher.h" />
+    <ClInclude Include="SkyGUILauncher.h" />
+    <ClInclude Include="SkyLauncher.h" />
+    <ClInclude Include="SkyOS.h" />
+    <ClInclude Include="SkyStartOption.h" />
+    <ClInclude Include="GUI\JPEG.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyRenderer8.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyRenderer32.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkySheetController8.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkySheetController32.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\3c905b.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\3cdef.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\nic.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\PCI.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\SkyPCI.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkySVGA.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\VESA.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\MemoryResourceAdaptor.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="v8086\RMEFunc.h">
+      <Filter>V8086</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyBoard\KeyBoard.h">
+      <Filter>Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyBoard\KeyboardController.h">
+      <Filter>Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyBoard\KeyBoardIO.h">
+      <Filter>Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\SkyTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleSystem\ConsoleManager.h">
+      <Filter>ConsoleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\ConsoleIOListener.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\fifo.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\FontData.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkyConsoleTask.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkyGUI.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkyMouse.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkyRenderer.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkySheet.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\SkyGUI\SkySheetController.h">
+      <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CPU">
+      <UniqueIdentifier>{f90cc337-6617-45f5-ac76-08cfe2caa5a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{3ecdb3ef-d093-4961-af61-868ec3a1e9f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Heap">
+      <UniqueIdentifier>{640d957b-b9ef-4497-94a2-ffc23c8c1734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{506eb715-610c-4dae-8c11-f57a9696e441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FileSystem">
+      <UniqueIdentifier>{ce6fd751-bc89-48aa-bc30-d19a7ef1b762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CPlusPlus">
+      <UniqueIdentifier>{240e76cd-70d2-4123-ba5e-eec5ce2c056b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="V8086">
+      <UniqueIdentifier>{868fa3a9-5761-4cc8-9ece-5f33fcbc59e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{7822c9fb-2363-424a-9441-ee73cc8a5e76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\SVGA">
+      <UniqueIdentifier>{80f91c2c-2488-4115-8a74-71b36f5b8144}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\SkyGUIConsole">
+      <UniqueIdentifier>{b1600453-6a49-4b0c-acf7-a29e797046fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{ed89521a-a04d-4826-81ee-909009de1595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Lua">
+      <UniqueIdentifier>{08d06810-3e6b-4d5f-826a-70d6c92d6e22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\easyzlib">
+      <UniqueIdentifier>{8836ebd4-0c3b-432d-96af-277a768dea88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{592d1206-0af8-47a5-877a-333ef81963f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ConsoleSystem">
+      <UniqueIdentifier>{4e855d2b-92ad-439b-b58b-45e191c6b948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device">
+      <UniqueIdentifier>{8865b718-1b4d-4bc9-b164-2cb561b2f769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Keyboard">
+      <UniqueIdentifier>{392160cc-c877-4a4c-8214-b49f8b4323f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\SkyGUI">
+      <UniqueIdentifier>{038e56cf-3636-437f-b7f9-81cae7203789}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CPlusPlus\ctrycatch_exception_types.conf">
+      <Filter>CPlusPlus</Filter>
+    </None>
+    <None Include="GUI\svgagui\src\help">
+      <Filter>GUI\SVGA</Filter>
+    </None>
+    <None Include="GUI\svgagui\src\like.ld">
+      <Filter>GUI\SVGA</Filter>
+    </None>
+    <None Include="GUI\svgagui\src\Makefile">
+      <Filter>GUI\SVGA</Filter>
+    </None>
+    <None Include="GUI\svgagui\src\README.local">
+      <Filter>GUI\SVGA</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="GUI\svgagui\src\Readme.txt">
+      <Filter>GUI\SVGA</Filter>
+    </Text>
+    <Text Include="Device\3c905b.txt">
+      <Filter>Device</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

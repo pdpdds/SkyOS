@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="SkyConsole.cpp" />
+    <ClCompile Include="CPU\Hal.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\IDT.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\Pic.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\PIT.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyAPI.cpp" />
+    <ClCompile Include="CPU\GDT.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU\FPU.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="kmain.h" />
+    <ClInclude Include="SkyConsole.h" />
+    <ClInclude Include="MultiBoot.h" />
+    <ClInclude Include="CPU\Hal.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\IDT.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\Pic.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\PIT.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyAPI.h" />
+    <ClInclude Include="CPU\GDT.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU\FPU.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CPU">
+      <UniqueIdentifier>{f90cc337-6617-45f5-ac76-08cfe2caa5a1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

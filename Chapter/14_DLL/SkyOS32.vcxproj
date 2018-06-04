@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ConsoleSystem\commands.cpp" />
+    <ClCompile Include="ConsoleSystem\ConsoleManager.cpp" />
+    <ClCompile Include="Core\Exception.cpp" />
+    <ClCompile Include="Core\KernelProcessLoader.cpp" />
+    <ClCompile Include="Core\LoadDLL.cpp" />
+    <ClCompile Include="Core\Loader.cpp" />
+    <ClCompile Include="Core\Process.cpp" />
+    <ClCompile Include="Core\ProcessManager.cpp" />
+    <ClCompile Include="Core\ProcessUtil.cpp" />
+    <ClCompile Include="Core\Scheduler.cpp" />
+    <ClCompile Include="Core\SkyAPI.cpp" />
+    <ClCompile Include="Core\SkyDebugger.cpp" />
+    <ClCompile Include="Core\SkyModuleManager.cpp" />
+    <ClCompile Include="Core\SysAPI.cpp" />
+    <ClCompile Include="Core\SysInfo.cpp" />
+    <ClCompile Include="Core\SystemProfiler.cpp" />
+    <ClCompile Include="Core\Thread.cpp" />
+    <ClCompile Include="Core\UserProcessLoader.cpp" />
+    <ClCompile Include="CPU\TSS.cpp" />
+    <ClCompile Include="CPlusPlus\ctrycatch.cpp" />
+    <ClCompile Include="CPlusPlus\setjmp.c" />
+    <ClCompile Include="CPU\FPU.cpp" />
+    <ClCompile Include="CPU\GDT.cpp" />
+    <ClCompile Include="CPU\Hal.cpp" />
+    <ClCompile Include="CPU\IDT.cpp" />
+    <ClCompile Include="CPU\Pic.cpp" />
+    <ClCompile Include="CPU\PIT.cpp" />
+    <ClCompile Include="Device\3c905b.cpp" />
+    <ClCompile Include="Device\nic.cpp" />
+    <ClCompile Include="Device\PCI.cpp" />
+    <ClCompile Include="Device\SkyPCI.cpp" />
+    <ClCompile Include="FileSystem\ACEList.cpp" />
+    <ClCompile Include="FileSystem\FAT12.cpp" />
+    <ClCompile Include="FileSystem\fat32.cpp" />
+    <ClCompile Include="FileSystem\FileSysAdaptor.cpp" />
+    <ClCompile Include="FileSystem\FloppyDisk.cpp" />
+    <ClCompile Include="FileSystem\FloppyDiskAdaptor.cpp" />
+    <ClCompile Include="FileSystem\Harddisk.cpp" />
+    <ClCompile Include="FileSystem\HDDAdaptor.cpp" />
+    <ClCompile Include="FileSystem\kfileio.cpp" />
+    <ClCompile Include="FileSystem\MemoryResourceAdaptor.cpp" />
+    <ClCompile Include="FileSystem\MintFileSystem.cpp" />
+    <ClCompile Include="FileSystem\ObjMan.cpp" />
+    <ClCompile Include="FileSystem\Partition.cpp" />
+    <ClCompile Include="FileSystem\RAMDisk.cpp" />
+    <ClCompile Include="FileSystem\RamDiskAdaptor.cpp" />
+    <ClCompile Include="FileSystem\StorageManager.cpp" />
+    <ClCompile Include="GUI\JPEG.cpp" />
+    <ClCompile Include="GUI\Simple\SkyGUIConsole.cpp" />
+    <ClCompile Include="GUI\SkyGUISystem.cpp" />
+    <ClCompile Include="GUI\SkyGUI\ConsoleIOListener.cpp" />
+    <ClCompile Include="GUI\SkyGUI\fifo.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkyConsoleTask.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkyGUI.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkyMouse.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkyRenderer.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkySheet.cpp" />
+    <ClCompile Include="GUI\SkyGUI\SkySheetController.cpp" />
+    <ClCompile Include="GUI\SkyRenderer32.cpp" />
+    <ClCompile Include="GUI\SkyRenderer8.cpp" />
+    <ClCompile Include="GUI\SkySheetController32.cpp" />
+    <ClCompile Include="GUI\SkySheetController8.cpp" />
+    <ClCompile Include="GUI\SkySVGA.cpp" />
+    <ClCompile Include="GUI\svgagui\example\color.cpp" />
+    <ClCompile Include="GUI\svgagui\src\browser.cpp" />
+    <ClCompile Include="GUI\svgagui\src\button.cpp" />
+    <ClCompile Include="GUI\svgagui\src\check.cpp" />
+    <ClCompile Include="GUI\svgagui\src\choice.cpp" />
+    <ClCompile Include="GUI\svgagui\src\dialog.cpp" />
+    <ClCompile Include="GUI\svgagui\src\filedialog.cpp" />
+    <ClCompile Include="GUI\svgagui\src\general.cpp" />
+    <ClCompile Include="GUI\svgagui\src\iconlist.cpp" />
+    <ClCompile Include="GUI\svgagui\src\image.cpp" />
+    <ClCompile Include="GUI\svgagui\src\info.cpp" />
+    <ClCompile Include="GUI\svgagui\src\input.cpp" />
+    <ClCompile Include="GUI\svgagui\src\listbox.cpp" />
+    <ClCompile Include="GUI\svgagui\src\number.cpp" />
+    <ClCompile Include="GUI\svgagui\src\object.cpp" />
+    <ClCompile Include="GUI\svgagui\src\progress.cpp" />
+    <ClCompile Include="GUI\svgagui\src\pulldown.cpp" />
+    <ClCompile Include="GUI\svgagui\src\screen.cpp" />
+    <ClCompile Include="GUI\svgagui\src\slider.cpp" />
+    <ClCompile Include="GUI\svgagui\src\svgalib.cpp" />
+    <ClCompile Include="GUI\svgagui\src\text.cpp" />
+    <ClCompile Include="GUI\svgagui\src\window.cpp" />
+    <ClCompile Include="GUI\svgagui\src\window_draw.cPP" />
+    <ClCompile Include="GUI\svgagui\src\window_thread.cpp" />
+    <ClCompile Include="GUI\svgagui\src\xlib.cpp" />
+    <ClCompile Include="GUI\svgagui\src\_mouse.cpp" />
+    <ClCompile Include="GUI\svgagui\svgaguientry.cpp" />
+    <ClCompile Include="GUI\vesa.cpp" />
+    <ClCompile Include="Heap\HeapManager.cpp" />
+    <ClCompile Include="Heap\kheap.cpp" />
+    <ClCompile Include="Heap\ordered_array.cpp" />
+    <ClCompile Include="KernelProcedure.cpp" />
+    <ClCompile Include="KeyBoard\KeyBoard.cpp" />
+    <ClCompile Include="KeyBoard\KeyboardController.cpp" />
+    <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="Memory\PageDirectoryEntry.cpp" />
+    <ClCompile Include="Memory\PageTableEntry.cpp" />
+    <ClCompile Include="Memory\PhysicalMemoryManager.cpp" />
+    <ClCompile Include="Memory\VirtualMemoryManager.cpp" />
+    <ClCompile Include="SkyConsole.cpp" />
+    <ClCompile Include="SkyConsoleLauncher.cpp" />
+    <ClCompile Include="SkyGUILauncher.cpp" />
+    <ClCompile Include="SkyLauncher.cpp" />
+    <ClCompile Include="Test\Plane.cpp" />
+    <ClCompile Include="Test\SkyTest.cpp" />
+    <ClCompile Include="Test\ZetPlane.cpp" />
+    <ClCompile Include="ThirdParty\easyzlib\easyzlib.c" />
+    <ClCompile Include="ThirdParty\LUA\lapi.c" />
+    <ClCompile Include="ThirdParty\LUA\lauxlib.c" />
+    <ClCompile Include="ThirdParty\LUA\lbuffer.c" />
+    <ClCompile Include="ThirdParty\LUA\lbuiltin.c" />
+    <ClCompile Include="ThirdParty\LUA\ldblib.c" />
+    <ClCompile Include="ThirdParty\LUA\ldo.c" />
+    <ClCompile Include="ThirdParty\LUA\lfunc.c" />
+    <ClCompile Include="ThirdParty\LUA\lgc.c" />
+    <ClCompile Include="ThirdParty\LUA\linit.c" />
+    <ClCompile Include="ThirdParty\LUA\liolib.cpp" />
+    <ClCompile Include="ThirdParty\LUA\llex.c" />
+    <ClCompile Include="ThirdParty\LUA\lmathlib.c" />
+    <ClCompile Include="ThirdParty\LUA\lmem.c" />
+    <ClCompile Include="ThirdParty\LUA\lobject.c" />
+    <ClCompile Include="ThirdParty\LUA\lparser.c" />
+    <ClCompile Include="ThirdParty\LUA\lstate.c" />
+    <ClCompile Include="ThirdParty\LUA\lstring.c" />
+    <ClCompile Include="ThirdParty\LUA\lstrlib.cpp" />
+    <ClCompile Include="ThirdParty\LUA\ltable.c" />
+    <ClCompile Include="ThirdParty\LUA\ltm.c" />
+    <ClCompile Include="ThirdParty\LUA\lua.cpp" />
+    <ClCompile Include="ThirdParty\LUA\lundump.c" />
+    <ClCompile Include="ThirdParty\LUA\lvm.c" />
+    <ClCompile Include="ThirdParty\LUA\lzio.c" />
+    <ClCompile Include="v8086\rme.cpp" />
+    <ClCompile Include="v8086\RMEFunc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ConsoleSystem\commandMacros.h" />
+    <ClInclude Include="ConsoleSystem\commands.h" />
+    <ClInclude Include="ConsoleSystem\commandTable.h" />
+    <ClInclude Include="ConsoleSystem\ConsoleManager.h" />
+    <ClInclude Include="Core\Exception.h" />
+    <ClInclude Include="Core\KernelProcessLoader.h" />
+    <ClInclude Include="Core\LoadDLL.h" />
+    <ClInclude Include="Core\Loader.h" />
+    <ClInclude Include="Core\PEImage.h" />
+    <ClInclude Include="Core\Process.h" />
+    <ClInclude Include="Core\ProcessManager.h" />
+    <ClInclude Include="Core\ProcessUtil.h" />
+    <ClInclude Include="Core\Scheduler.h" />
+    <ClInclude Include="Core\SkyAPI.h" />
+    <ClInclude Include="Core\SkyDebugger.h" />
+    <ClInclude Include="Core\SkyModuleManager.h" />
+    <ClInclude Include="Core\SysAPI.h" />
+    <ClInclude Include="Core\SysError.h" />
+    <ClInclude Include="Core\SysInfo.h" />
+    <ClInclude Include="Core\SystemProfiler.h" />
+    <ClInclude Include="Core\Thread.h" />
+    <ClInclude Include="Core\UserProcessLoader.h" />
+    <ClInclude Include="CPU\TSS.h" />
+    <ClInclude Include="CPlusPlus\ctrycatch.h" />
+    <ClInclude Include="CPlusPlus\setjmp.h" />
+    <ClInclude Include="CPlusPlus\signal.h" />
+    <ClInclude Include="CPlusPlus\_mingw.h" />
+    <ClInclude Include="CPU\FPU.h" />
+    <ClInclude Include="CPU\GDT.h" />
+    <ClInclude Include="CPU\Hal.h" />
+    <ClInclude Include="CPU\IDT.h" />
+    <ClInclude Include="CPU\Pic.h" />
+    <ClInclude Include="CPU\PIT.h" />
+    <ClInclude Include="Device\3c905b.h" />
+    <ClInclude Include="Device\3cdef.h" />
+    <ClInclude Include="Device\nic.h" />
+    <ClInclude Include="Device\PCI.h" />
+    <ClInclude Include="Device\SkyPCI.h" />
+    <ClInclude Include="FileSystem\ACEList.h" />
+    <ClInclude Include="FileSystem\Collect.h" />
+    <ClInclude Include="FileSystem\FAT12.h" />
+    <ClInclude Include="FileSystem\fat32.h" />
+    <ClInclude Include="FileSystem\FileSysAdaptor.h" />
+    <ClInclude Include="FileSystem\FloppyDisk.h" />
+    <ClInclude Include="FileSystem\FloppyDiskAdaptor.h" />
+    <ClInclude Include="FileSystem\FloppyDiskIO.h" />
+    <ClInclude Include="FileSystem\HardDisk.h" />
+    <ClInclude Include="FileSystem\HDDAdaptor.h" />
+    <ClInclude Include="FileSystem\MemoryResourceAdaptor.h" />
+    <ClInclude Include="FileSystem\MintFileSystem.h" />
+    <ClInclude Include="FileSystem\ObjMan.h" />
+    <ClInclude Include="FileSystem\Partition.h" />
+    <ClInclude Include="FileSystem\RAMDisk.h" />
+    <ClInclude Include="FileSystem\RamDiskAdaptor.h" />
+    <ClInclude Include="FileSystem\StorageManager.h" />
+    <ClInclude Include="GUI\JPEG.h" />
+    <ClInclude Include="GUI\Simple\SkyGUIConsole.h" />
+    <ClInclude Include="GUI\SkyGUISystem.h" />
+    <ClInclude Include="GUI\SkyGUI\ConsoleIOListener.h" />
+    <ClInclude Include="GUI\SkyGUI\fifo.h" />
+    <ClInclude Include="GUI\SkyGUI\FontData.h" />
+    <ClInclude Include="GUI\SkyGUI\SkyConsoleTask.h" />
+    <ClInclude Include="GUI\SkyGUI\SkyGUI.h" />
+    <ClInclude Include="GUI\SkyGUI\SkyMouse.h" />
+    <ClInclude Include="GUI\SkyGUI\SkyRenderer.h" />
+    <ClInclude Include="GUI\SkyGUI\SkySheet.h" />
+    <ClInclude Include="GUI\SkyGUI\SkySheetController.h" />
+    <ClInclude Include="GUI\SkyRenderer32.h" />
+    <ClInclude Include="GUI\SkyRenderer8.h" />
+    <ClInclude Include="GUI\SkySheetController32.h" />
+    <ClInclude Include="GUI\SkySheetController8.h" />
+    <ClInclude Include="GUI\SkySVGA.h" />
+    <ClInclude Include="GUI\SkyWindow.h" />
+    <ClInclude Include="GUI\svgagui\src\bigfont.h" />
+    <ClInclude Include="GUI\svgagui\src\font.h" />
+    <ClInclude Include="GUI\svgagui\src\font2.h" />
+    <ClInclude Include="GUI\svgagui\src\local.h" />
+    <ClInclude Include="GUI\svgagui\src\_mouse.h" />
+    <ClInclude Include="GUI\svgagui\svgagui.h" />
+    <ClInclude Include="GUI\svgagui\svgaguientry.h" />
+    <ClInclude Include="GUI\VESA.h" />
+    <ClInclude Include="Heap\HeapManager.h" />
+    <ClInclude Include="Heap\kheap.h" />
+    <ClInclude Include="Heap\ordered_array.h" />
+    <ClInclude Include="KernelProcedure.h" />
+    <ClInclude Include="KeyBoard\KeyBoard.h" />
+    <ClInclude Include="KeyBoard\KeyboardController.h" />
+    <ClInclude Include="KeyBoard\KeyBoardIO.h" />
+    <ClInclude Include="kmain.h" />
+    <ClInclude Include="Memory\PageDirectoryEntry.h" />
+    <ClInclude Include="Memory\PageTableEntry.h" />
+    <ClInclude Include="Memory\PhysicalMemoryManager.h" />
+    <ClInclude Include="Memory\VirtualMemoryManager.h" />
+    <ClInclude Include="MultiBoot.h" />
+    <ClInclude Include="SkyConsole.h" />
+    <ClInclude Include="SkyConsoleLauncher.h" />
+    <ClInclude Include="SkyGUILauncher.h" />
+    <ClInclude Include="SkyLauncher.h" />
+    <ClInclude Include="SkyOS.h" />
+    <ClInclude Include="SkyStartOption.h" />
+    <ClInclude Include="Test\Plane.h" />
+    <ClInclude Include="Test\PureCallExtend.h" />
+    <ClInclude Include="Test\SkyTest.h" />
+    <ClInclude Include="Test\TestInteger.h" />
+    <ClInclude Include="Test\ZetPlane.h" />
+    <ClInclude Include="ThirdParty\easyzlib\easyzlib.h" />
+    <ClInclude Include="ThirdParty\LUA\lapi.h" />
+    <ClInclude Include="ThirdParty\LUA\lauxlib.h" />
+    <ClInclude Include="ThirdParty\LUA\lbuiltin.h" />
+    <ClInclude Include="ThirdParty\LUA\ldo.h" />
+    <ClInclude Include="ThirdParty\LUA\lfunc.h" />
+    <ClInclude Include="ThirdParty\LUA\lgc.h" />
+    <ClInclude Include="ThirdParty\LUA\llex.h" />
+    <ClInclude Include="ThirdParty\LUA\lmem.h" />
+    <ClInclude Include="ThirdParty\LUA\lobject.h" />
+    <ClInclude Include="ThirdParty\LUA\lopcodes.h" />
+    <ClInclude Include="ThirdParty\LUA\lparser.h" />
+    <ClInclude Include="ThirdParty\LUA\lstate.h" />
+    <ClInclude Include="ThirdParty\LUA\lstring.h" />
+    <ClInclude Include="ThirdParty\LUA\ltable.h" />
+    <ClInclude Include="ThirdParty\LUA\ltm.h" />
+    <ClInclude Include="ThirdParty\LUA\lua.h" />
+    <ClInclude Include="ThirdParty\LUA\luadebug.h" />
+    <ClInclude Include="ThirdParty\LUA\lualib.h" />
+    <ClInclude Include="ThirdParty\LUA\lundump.h" />
+    <ClInclude Include="ThirdParty\LUA\lvm.h" />
+    <ClInclude Include="ThirdParty\LUA\lzio.h" />
+    <ClInclude Include="v8086\rme.h" />
+    <ClInclude Include="v8086\RMEFunc.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CPlusPlus\ctrycatch_exception_types.conf" />
+    <None Include="GUI\svgagui\src\help" />
+    <None Include="GUI\svgagui\src\like.ld" />
+    <None Include="GUI\svgagui\src\Makefile" />
+    <None Include="GUI\svgagui\src\README.local" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Device\3c905b.txt" />
+    <Text Include="GUI\svgagui\src\Readme.txt" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}</ProjectGuid>
+    <RootNamespace>Kernel</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <ProjectName>SkyOS32</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)$(ProjectName)\Intermediate\</IntDir>
+    <ExtensionsToDeleteOnClean>*.exp *.obj%3b*.ilk%3b*.tlb%3b*.tli%3b*.tlh%3b*.tmp%3b*.rsp%3b*.pgc%3b*.pgd%3b$(TargetPath)</ExtensionsToDeleteOnClean>
+    <LinkIncremental>false</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetExt>.EXE</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/Oy %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>./ConsoleSystem;./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./CPlusPlus;./V8086;./GUI/SkyGUI;./GUI/Simple;./GUI;../../CommonLib/math;./thirdparty/lua;./gui/svgagui;./gui/svgagui/example;../../Module/Include;../../Module/DebugEngine/DebugEngine;./thirdparty/easyzlib;./Device;./Core</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SKYOS32;__LE__;OLD_ANSI;;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <StringPooling>
+      </StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CallingConvention>Cdecl</CallingConvention>
+      <DisableSpecificWarnings>4457;4189;4100;4702;4102;4244;4239;4333;4127;4554</DisableSpecificWarnings>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard>
+      </LanguageStandard>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Link>
+      <AdditionalOptions>/safeseh:no
+/ALIGN:1024
+ /SUBSYSTEM:CONSOLE
+/NODEFAULTLIB:LIBC %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>CommonLib.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <SubSystem>Console</SubSystem>
+      <Driver>NotSet</Driver>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FunctionOrder>@order.txt</FunctionOrder>
+      <EntryPointSymbol>multiboot_entry</EntryPointSymbol>
+      <NoEntryPoint>false</NoEntryPoint>
+      <BaseAddress>0x00100000</BaseAddress>
+      <FixedBaseAddress>
+      </FixedBaseAddress>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <FullProgramDatabaseFile>
+      </FullProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <DisableSpecificWarnings>4457</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ARCH_X86;</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  </ImportGroup>
+</Project>

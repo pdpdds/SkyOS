@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonLib", "..\CommonLib\CommonLib.vcxproj", "{83EE476C-AA21-4A23-9D6F-4FE675115B13}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkyOS32", "14_DLL\SkyOS32.vcxproj", "{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}"
+	ProjectSection(ProjectDependencies) = postProject
+		{83EE476C-AA21-4A23-9D6F-4FE675115B13} = {83EE476C-AA21-4A23-9D6F-4FE675115B13}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83EE476C-AA21-4A23-9D6F-4FE675115B13}.Debug|x86.ActiveCfg = Debug|Win32
+		{83EE476C-AA21-4A23-9D6F-4FE675115B13}.Debug|x86.Build.0 = Debug|Win32
+		{83EE476C-AA21-4A23-9D6F-4FE675115B13}.Release|x86.ActiveCfg = Release|Win32
+		{83EE476C-AA21-4A23-9D6F-4FE675115B13}.Release|x86.Build.0 = Release|Win32
+		{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}.Debug|x86.ActiveCfg = Debug|Win32
+		{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}.Debug|x86.Build.0 = Debug|Win32
+		{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}.Release|x86.ActiveCfg = Release|Win32
+		{3EEB4C94-0534-40F5-BBF1-01C0C0AC5658}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3A883608-C613-4311-8112-9AF2B1E31ED4}
+	EndGlobalSection
+EndGlobal
