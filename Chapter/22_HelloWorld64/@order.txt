@@ -1,2 +1,0 @@
-?multiboot_entry@@YAXXZ
-
