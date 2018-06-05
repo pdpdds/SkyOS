@@ -593,7 +593,9 @@ static int traversethread (global_State *g, lua_State *th) {
   lua_assert(g->gcstate == GCSatomic ||
              th->openupval == NULL || isintwups(th));
   for (; o < th->top; o++)  /* mark live elements in the stack */
-    markvalue(g, s2v(o));
+  {
+	  markvalue(g, s2v(o));
+  }
   if (g->gcstate == GCSatomic) {  /* final traversal? */
     StkId lim = th->stack + th->stacksize;  /* real end of stack */
     for (; o < lim; o++)  /* clear not-marked stack slice */

@@ -7,6 +7,8 @@
 
 SkyMockInterface g_mockInterface;
 
+int errno = 0;
+
 size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
 	return g_mockInterface.g_fileInterface.sky_fread(ptr, size, nmemb, stream);

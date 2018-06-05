@@ -16,7 +16,7 @@
 //#include <stdlib.h>
 #include <string.h>
 #include "memory.h"
-#include "kheap.h"
+#include "SkyInterface.h"
 /*
 ** This file uses only the official API of Lua.
 ** Any function declared here could be written as an application function.
@@ -671,12 +671,12 @@ static int skipBOM (LoadF *lf) {
   int c;
   lf->n = 0;
   do {
-    c = getc(lf->f);
+    c = fgetc(lf->f);
     if (c == EOF || c != *(const unsigned char *)p++) return c;
     lf->buff[lf->n++] = c;  /* to be read by the parser */
   } while (*p != '\0');
   lf->n = 0;  /* prefix matched; discard it */
-  return getc(lf->f);  /* return next character */
+  return fgetc(lf->f);  /* return next character */
 }
 
 
@@ -691,9 +691,9 @@ static int skipcomment (LoadF *lf, int *cp) {
   int c = *cp = skipBOM(lf);
   if (c == '#') {  /* first line is a comment (Unix exec. file)? */
     do {  /* skip first line */
-      c = getc(lf->f);
+      c = fgetc(lf->f);
     } while (c != EOF && c != '\n');
-    *cp = getc(lf->f);  /* skip end-of-line, if present */
+    *cp = fgetc(lf->f);  /* skip end-of-line, if present */
     return 1;  /* there was a comment */
   }
   else return 0;  /* no comment */
@@ -924,18 +924,25 @@ LUALIB_API const char *luaL_gsub (lua_State *L, const char *s, const char *p,
 }
 
 
-static void *l_alloc (void *ud, void *ptr, size_t osize, size_t nsize) {
-  (void)ud; (void)osize;  /* not used */
+static void *l_alloc(void *ud, void *ptr, size_t osize, size_t nsize) {
+	(void)ud; (void)osize;  /* not used */
 
-  kfree(ptr);
-  if (nsize == 0) 
-  {
-   
-    return NULL;
-  }
-  
-  ptr = (void*)kmalloc(nsize);
-  return ptr;
+	
+	if (nsize == 0)
+	{
+		kfree(ptr);
+		return NULL;
+	}
+	else
+	{
+		//20180604
+		void* ptr2 = (void*)kmalloc(nsize);
+
+		if(ptr != nullptr)
+			memcpy(ptr2, ptr, nsize);
+		return ptr2;
+	}
+		//return realloc(ptr, nsize);
 }
 
 

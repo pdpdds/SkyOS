@@ -22,14 +22,12 @@ extern "C" {
 	//extern FILE*	stderr;
 	int fprintf(FILE * stream, const char * format, ...);
 	char *	strerror(int errnum);
-	
-	extern SkyMockInterface g_mockInterface;
 
 #ifdef  __cplusplus
 }
 #endif
 
-
+extern SkyMockInterface g_mockInterface;
 #define kmalloc(a) g_mockInterface.g_allocInterface.sky_kmalloc(a)
 #define kfree(p) g_mockInterface.g_allocInterface.sky_kfree(p)
 

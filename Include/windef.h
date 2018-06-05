@@ -55,6 +55,9 @@ typedef          short s16int;
 typedef unsigned char  u8int;
 typedef          char  s8int;
 
+typedef long int __time_t;
+typedef __time_t time_t;
+
   #ifndef _SIZE_T_DEFINED
     typedef unsigned int size_t;
 	typedef unsigned int SIZE_T;

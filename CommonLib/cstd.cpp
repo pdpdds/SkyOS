@@ -226,6 +226,29 @@ uint64_t _declspec (naked) _aullshr () {
    }
 }
 
+__declspec(naked) void _dtol3()
+{
+	__asm
+	{
+	}
+}
+
+
+__declspec(naked) void _dtoui3()
+{
+	__asm
+	{
+	}
+}
+
+
+__declspec(naked) void _dtoul3()
+{
+	__asm
+	{
+	}
+}
+
 };
 
 // enable warning

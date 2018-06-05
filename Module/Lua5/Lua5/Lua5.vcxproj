@@ -89,7 +89,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>OLD_ANSI;SKYOS32;_CRT_SECURE_NO_WARNINGS ;MAPFILEDLL_EXPORTS;_X86_;_DEBUG;SampleDll_EXPORTS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SKYOS32;_CRT_SECURE_NO_WARNINGS ;MAPFILEDLL_EXPORTS;_X86_;_DEBUG;SampleDll_EXPORTS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>false</ExceptionHandling>
@@ -112,8 +112,8 @@
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <EntryPointSymbol>_DllMainCRTStartup</EntryPointSymbol>
-      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>CommonLib.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>CommonLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -212,6 +212,8 @@
     <ClInclude Include="luaconf.h" />
     <ClInclude Include="lualib.h" />
     <ClInclude Include="LuaModule.h" />
+    <ClInclude Include="LuaScript.h" />
+    <ClInclude Include="luatinker.h" />
     <ClInclude Include="lundump.h" />
     <ClInclude Include="lvm.h" />
     <ClInclude Include="lzio.h" />
@@ -225,7 +227,7 @@
     <ClCompile Include="lcode.cpp" />
     <ClCompile Include="lcorolib.cpp" />
     <ClCompile Include="lctype.cpp" />
-    <ClCompile Include="ldblib.c" />
+    <ClCompile Include="ldblib.cpp" />
     <ClCompile Include="ldebug.cpp" />
     <ClCompile Include="ldo.cpp" />
     <ClCompile Include="ldump.cpp" />
@@ -250,6 +252,8 @@
     <ClCompile Include="ltm.cpp" />
     <ClCompile Include="lua.cpp" />
     <ClCompile Include="LuaModule.cpp" />
+    <ClCompile Include="LuaScript.cpp" />
+    <ClCompile Include="luatinker.cpp" />
     <ClCompile Include="lundump.cpp" />
     <ClCompile Include="lutf8lib.cpp" />
     <ClCompile Include="lvm.cpp" />

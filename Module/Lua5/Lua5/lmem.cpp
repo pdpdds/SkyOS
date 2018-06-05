@@ -122,7 +122,7 @@ void luaM_free_ (lua_State *L, void *block, size_t osize) {
 ** generic allocation routine.
 */
 void *luaM_realloc_ (lua_State *L, void *block, size_t osize, size_t nsize) {
-  void *newblock;
+  void *newblock = nullptr;
   global_State *g = G(L);
   lua_assert((osize == 0) == (block == NULL));
   hardtest(L, osize, nsize);

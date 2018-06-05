@@ -18,7 +18,7 @@
 }*/
 
 //! writes formatted string to buffer
-int vsprintf(char *str, const char *format, va_list ap) {
+extern "C" int vsprintf(char *str, const char *format, va_list ap) {
 
 	if (!str)
 		return 0;
@@ -31,13 +31,13 @@ int vsprintf(char *str, const char *format, va_list ap) {
 
 	for (i = 0; i <= strlen(format); i++, loc++)
 	{
-		switch (format[i]) 
+		switch (format[i])
 		{
 		case '%':
-			switch (format[i + 1]) 
+			switch (format[i + 1])
 			{
 				/*** characters ***/
-			case 'c': 
+			case 'c':
 			{
 				char c = va_arg(ap, char);
 				str[loc] = c;
@@ -45,10 +45,10 @@ int vsprintf(char *str, const char *format, va_list ap) {
 				break;
 			}
 
-					  /*** integers ***/
+			/*** integers ***/
 			case 'd':
 			case 'I':
-			case 'i': 
+			case 'i':
 			{
 				int c = va_arg(ap, int);
 				char s[32] = { 0 };
@@ -59,7 +59,7 @@ int vsprintf(char *str, const char *format, va_list ap) {
 				break;
 			}
 
-					  /*** display in hex ***/
+			/*** display in hex ***/
 			case 'X':
 			{
 				int c = va_arg(ap, int);
@@ -70,7 +70,7 @@ int vsprintf(char *str, const char *format, va_list ap) {
 				loc += strlen(s) - 1;
 				break;
 			}
-			case 'x': 
+			case 'x':
 			{
 				unsigned int c = va_arg(ap, unsigned int);
 				char s[32] = { 0 };
@@ -80,7 +80,7 @@ int vsprintf(char *str, const char *format, va_list ap) {
 				loc += strlen(s) - 1;
 				break;
 			}
-					  /*** strings ***/
+			/*** strings ***/
 			case 's':
 			{
 				int c = (int&)va_arg(ap, char);
@@ -93,7 +93,7 @@ int vsprintf(char *str, const char *format, va_list ap) {
 			}
 
 			case 'f':
-			{						
+			{
 				double double_temp;
 				double_temp = va_arg(ap, double);
 				char buffer[512];
@@ -103,7 +103,7 @@ int vsprintf(char *str, const char *format, va_list ap) {
 				loc += strlen(buffer) - 1;
 				break;
 			}
-	
+
 			case 'Q':
 			{
 				__int64 int64_temp;
@@ -115,7 +115,7 @@ int vsprintf(char *str, const char *format, va_list ap) {
 				loc += strlen(buffer) - 1;
 				break;
 			}
-			
+
 			case 'q':
 			{
 				uint64_t int64_temp;
@@ -127,9 +127,25 @@ int vsprintf(char *str, const char *format, va_list ap) {
 				loc += strlen(buffer) - 1;
 				break;
 			}
-			
-		}
-		break;
+			case 'l':
+			{
+				if (format[i + 2] == 'd')
+				{
+					int c = (int&)va_arg(ap, char);
+					char s[32] = { 0 };
+					itoa_s(c, 10, s);
+					strcpy(&str[loc], s);
+					loc += strlen(s) - 1;
+					// go to next character
+					i++;
+				}
+				i++;
+				break;
+
+			}
+
+			}
+			break;
 
 		default:
 			str[loc] = format[i];
@@ -139,6 +155,7 @@ int vsprintf(char *str, const char *format, va_list ap) {
 
 	return i;
 }
+
 #ifndef SKYOS_WIN32
 //! converts a string to a long
 long

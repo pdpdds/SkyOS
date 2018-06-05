@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include "memory.h"
 
-int sprintf(char *s, const char *format, ...)
+#include "sprintf.h"
+#include "stdint.h"
+extern "C" int sprintf(char *s, const char *format, ...)
 {
 	va_list arg;
 	int ret;

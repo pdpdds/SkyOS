@@ -137,14 +137,14 @@ static time_t l_checktime (lua_State *L, int arg) {
 
 
 
-
+/*
 static int os_execute (lua_State *L) {
   const char *cmd = luaL_optstring(L, 1, NULL);
   int stat = system(cmd);
   if (cmd != NULL)
     return luaL_execresult(L, stat);
   else {
-    lua_pushboolean(L, stat);  /* true if there is a shell */
+    lua_pushboolean(L, stat);  
     return 1;
   }
 }
@@ -175,7 +175,7 @@ static int os_tmpname (lua_State *L) {
 
 
 static int os_getenv (lua_State *L) {
-  lua_pushstring(L, getenv(luaL_checkstring(L, 1)));  /* if NULL push nil */
+  lua_pushstring(L, getenv(luaL_checkstring(L, 1)));  
   return 1;
 }
 
@@ -183,7 +183,7 @@ static int os_getenv (lua_State *L) {
 static int os_clock (lua_State *L) {
   lua_pushnumber(L, ((lua_Number)clock())/(lua_Number)CLOCKS_PER_SEC);
   return 1;
-}
+}*/
 
 
 /*
@@ -279,39 +279,39 @@ static const char *checkoption (lua_State *L, const char *conv,
 /* maximum size for an individual 'strftime' item */
 #define SIZETIMEFMT	250
 
-
+/*
 static int os_date (lua_State *L) {
   size_t slen;
   const char *s = luaL_optlstring(L, 1, "%c", &slen);
   time_t t = luaL_opt(L, l_checktime, 2, time(NULL));
-  const char *se = s + slen;  /* 's' end */
+  const char *se = s + slen;  
   struct tm tmr, *stm;
-  if (*s == '!') {  /* UTC? */
+  if (*s == '!') {  
     stm = l_gmtime(&t, &tmr);
-    s++;  /* skip '!' */
+    s++;  
   }
   else
     stm = l_localtime(&t, &tmr);
-  if (stm == NULL)  /* invalid date? */
+  if (stm == NULL)  
     return luaL_error(L,
                  "time result cannot be represented in this installation");
   if (strcmp(s, "*t") == 0) {
-    lua_createtable(L, 0, 9);  /* 9 = number of fields */
+    lua_createtable(L, 0, 9); 
     setallfields(L, stm);
   }
   else {
-    char cc[4];  /* buffer for individual conversion specifiers */
+    char cc[4];  
     luaL_Buffer b;
     cc[0] = '%';
     luaL_buffinit(L, &b);
     while (s < se) {
-      if (*s != '%')  /* not a conversion specifier? */
+      if (*s != '%')  
         luaL_addchar(&b, *s++);
       else {
         size_t reslen;
         char *buff = luaL_prepbuffsize(&b, SIZETIMEFMT);
-        s++;  /* skip '%' */
-        s = checkoption(L, s, se - s, cc + 1);  /* copy specifier to 'cc' */
+        s++; 
+        s = checkoption(L, s, se - s, cc + 1); 
         reslen = strftime(buff, SIZETIMEFMT, cc, stm);
         luaL_addsize(&b, reslen);
       }
@@ -324,12 +324,12 @@ static int os_date (lua_State *L) {
 
 static int os_time (lua_State *L) {
   time_t t;
-  if (lua_isnoneornil(L, 1))  /* called without args? */
-    t = time(NULL);  /* get current time */
+  if (lua_isnoneornil(L, 1))  
+    t = time(NULL);  
   else {
     struct tm ts;
     luaL_checktype(L, 1, LUA_TTABLE);
-    lua_settop(L, 1);  /* make sure table is at the top */
+    lua_settop(L, 1);  
     ts.tm_sec = getfield(L, "sec", 0, 0);
     ts.tm_min = getfield(L, "min", 0, 0);
     ts.tm_hour = getfield(L, "hour", 12, 0);
@@ -338,7 +338,7 @@ static int os_time (lua_State *L) {
     ts.tm_year = getfield(L, "year", -1, 1900);
     ts.tm_isdst = getboolfield(L, "isdst");
     t = mktime(&ts);
-    setallfields(L, &ts);  /* update fields with normalized values */
+    setallfields(L, &ts);  
   }
   if (t != (time_t)(l_timet)t || t == (time_t)(-1))
     return luaL_error(L,
@@ -355,7 +355,6 @@ static int os_difftime (lua_State *L) {
   return 1;
 }
 
-/* }====================================================== */
 
 
 static int os_setlocale (lua_State *L) {
@@ -378,24 +377,24 @@ static int os_exit (lua_State *L) {
     status = (int)luaL_optinteger(L, 1, EXIT_SUCCESS);
   if (lua_toboolean(L, 2))
     lua_close(L);
-  if (L) exit(status);  /* 'if' to avoid warnings for unreachable 'return' */
+  if (L) exit(status);  
   return 0;
-}
+}*/
 
 
 static const luaL_Reg syslib[] = {
-  {"clock",     os_clock},
-  {"date",      os_date},
-  {"difftime",  os_difftime},
-  {"execute",   os_execute},
-  {"exit",      os_exit},
-  {"getenv",    os_getenv},
-  {"remove",    os_remove},
-  {"rename",    os_rename},
-  {"setlocale", os_setlocale},
-  {"time",      os_time},
-  {"tmpname",   os_tmpname},
-  {NULL, NULL}
+  //{"clock",     os_clock},
+  //{"date",      os_date},
+ // {"difftime",  os_difftime},
+ // {"execute",   os_execute},
+//  {"exit",      os_exit},
+//  {"getenv",    os_getenv},
+ // {"remove",    os_remove},
+  //{"rename",    os_rename},
+ // {"setlocale", os_setlocale},
+ // {"time",      os_time},
+ // {"tmpname",   os_tmpname},
+  {NULL, NULL},
 };
 
 /* }====================================================== */

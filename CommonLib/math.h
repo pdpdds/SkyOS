@@ -30,6 +30,7 @@ extern "C" {
 	extern double atan2(double y, double x);
 	extern double exp(double x);
 	extern double asin(double x);
+	extern double acos(double x);
 	double frexp(double value, int *eptr);
 	int abs(int j);
 	float pow(float x, int y);

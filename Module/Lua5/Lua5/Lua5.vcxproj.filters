@@ -45,9 +45,6 @@
     <ClCompile Include="lctype.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ldblib.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="ldebug.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -127,6 +124,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="lzio.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ldblib.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaScript.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="luatinker.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -220,6 +226,12 @@
     </ClInclude>
     <ClInclude Include="lzio.h">
       <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaScript.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="luatinker.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -90,7 +90,7 @@ static int l_checkmode (const char *mode) {
 #define l_lockfile(f)		flockfile(f)
 #define l_unlockfile(f)		funlockfile(f)
 #else
-#define l_getc(f)		getc(f)
+#define l_getc(f)		fgetc(f)
 #define l_lockfile(f)		((void)0)
 #define l_unlockfile(f)		((void)0)
 #endif
@@ -478,7 +478,7 @@ static int read_number (lua_State *L, FILE *f) {
 
 
 static int test_eof (lua_State *L, FILE *f) {
-  int c = getc(f);
+  int c = fgetc(f);
   //ungetc(c, f);  /* no-op when c == EOF */
   lua_pushliteral(L, "");
   return (c != EOF);

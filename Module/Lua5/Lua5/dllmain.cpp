@@ -7,7 +7,7 @@
 #pragma comment(lib, "libucrt.lib")
 #endif
 
-#pragma comment(linker, "/defaultlib:kernel32.lib")
+//#pragma comment(linker, "/defaultlib:kernel32.lib")
 
 #define DLL_PROCESS_ATTACH 1
 #define DLL_PROCESS_DETACH 0
