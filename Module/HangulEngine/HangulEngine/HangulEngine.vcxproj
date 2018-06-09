@@ -24,11 +24,11 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SampleDll</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
-    <ProjectName>Lua5</ProjectName>
+    <ProjectName>HangulEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -89,7 +89,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>LUA_BUILD_AS_DLL;SKYOS32;_CRT_SECURE_NO_WARNINGS ;MAPFILEDLL_EXPORTS;_X86_;_DEBUG;SampleDll_EXPORTS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SKY_DLL;SKYOS32;_CRT_SECURE_NO_WARNINGS ;MAPFILEDLL_EXPORTS;_X86_;_DEBUG;SampleDll_EXPORTS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>false</ExceptionHandling>
@@ -100,7 +100,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalOptions>/Oy %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../../../CommonLib/stl;../../../CommonLib;../../../include;../../Include;../../../CommonLib/CPlusPlus</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../CommonLib;../../../include;../../Include;./HanCode;.</AdditionalIncludeDirectories>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
       <OmitFramePointers>true</OmitFramePointers>
@@ -112,8 +112,8 @@
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <EntryPointSymbol>_DllMainCRTStartup</EntryPointSymbol>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>CommonLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>CommonLib.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -186,80 +186,76 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Include\I_LuaModule.h" />
-    <ClInclude Include="lapi.h" />
-    <ClInclude Include="lauxlib.h" />
-    <ClInclude Include="lcode.h" />
-    <ClInclude Include="lctype.h" />
-    <ClInclude Include="ldebug.h" />
-    <ClInclude Include="ldo.h" />
-    <ClInclude Include="lfunc.h" />
-    <ClInclude Include="lgc.h" />
-    <ClInclude Include="ljumptab.h" />
-    <ClInclude Include="llex.h" />
-    <ClInclude Include="llimits.h" />
-    <ClInclude Include="lmem.h" />
-    <ClInclude Include="lobject.h" />
-    <ClInclude Include="lopcodes.h" />
-    <ClInclude Include="lparser.h" />
-    <ClInclude Include="lprefix.h" />
-    <ClInclude Include="lstate.h" />
-    <ClInclude Include="lstring.h" />
-    <ClInclude Include="ltable.h" />
-    <ClInclude Include="ltests.h" />
-    <ClInclude Include="ltm.h" />
-    <ClInclude Include="lua.h" />
-    <ClInclude Include="luaconf.h" />
-    <ClInclude Include="lualib.h" />
-    <ClInclude Include="LuaModule.h" />
-    <ClInclude Include="LuaScript.h" />
-    <ClInclude Include="LuaScriptModule.h" />
-    <ClInclude Include="luatinker.h" />
-    <ClInclude Include="lundump.h" />
-    <ClInclude Include="lvm.h" />
-    <ClInclude Include="lzio.h" />
+    <ClInclude Include="bsearch.h" />
+    <ClInclude Include="CompleteHan.h" />
+    <ClInclude Include="CompleteKS.h" />
+    <ClInclude Include="CP949Table.h" />
+    <ClInclude Include="GetFileSize.h" />
+    <ClInclude Include="HanCode\EXTKEY.H" />
+    <ClInclude Include="HanCode\HANCODE.H" />
+    <ClInclude Include="HanCode\HANIN.H" />
+    <ClInclude Include="HanCode\HANTYPES.H" />
+    <ClInclude Include="HanCode\typedefs.h" />
+    <ClInclude Include="hanlib.h" />
+    <ClInclude Include="Johab.h" />
+    <ClInclude Include="KS2JohabTable.h" />
+    <ClInclude Include="LoadEngFont.h" />
+    <ClInclude Include="LoadHanFont.h" />
+    <ClInclude Include="LoadHanjaFont.h" />
+    <ClInclude Include="LoadSpcFont.h" />
     <ClInclude Include="SkyInterface.h" />
+    <ClInclude Include="Table10x4x4.h" />
+    <ClInclude Include="Table2x1x2.h" />
+    <ClInclude Include="Table6x2x1.h" />
+    <ClInclude Include="Table8x4x4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bsearch.c" />
+    <ClCompile Include="CompleteHan.c" />
+    <ClCompile Include="CompleteKS.c" />
+    <ClCompile Include="CP949Table.c" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="lapi.cpp" />
-    <ClCompile Include="lauxlib.cpp" />
-    <ClCompile Include="lbaselib.cpp" />
-    <ClCompile Include="lcode.cpp" />
-    <ClCompile Include="lcorolib.cpp" />
-    <ClCompile Include="lctype.cpp" />
-    <ClCompile Include="ldblib.cpp" />
-    <ClCompile Include="ldebug.cpp" />
-    <ClCompile Include="ldo.cpp" />
-    <ClCompile Include="ldump.cpp" />
-    <ClCompile Include="lfunc.cpp" />
-    <ClCompile Include="lgc.cpp" />
-    <ClCompile Include="linit.cpp" />
-    <ClCompile Include="liolib.cpp" />
-    <ClCompile Include="llex.cpp" />
-    <ClCompile Include="lmathlib.cpp" />
-    <ClCompile Include="lmem.cpp" />
-    <ClCompile Include="loadlib.cpp" />
-    <ClCompile Include="lobject.cpp" />
-    <ClCompile Include="lopcodes.cpp" />
-    <ClCompile Include="loslib.cpp" />
-    <ClCompile Include="lparser.cpp" />
-    <ClCompile Include="lstate.cpp" />
-    <ClCompile Include="lstring.cpp" />
-    <ClCompile Include="lstrlib.cpp" />
-    <ClCompile Include="ltable.cpp" />
-    <ClCompile Include="ltablib.cpp" />
-    <ClCompile Include="ltests.cpp" />
-    <ClCompile Include="ltm.cpp" />
-    <ClCompile Include="lua.cpp" />
-    <ClCompile Include="LuaModule.cpp" />
-    <ClCompile Include="LuaScript.cpp" />
-    <ClCompile Include="LuaScriptModule.cpp" />
-    <ClCompile Include="lundump.cpp" />
-    <ClCompile Include="lutf8lib.cpp" />
-    <ClCompile Include="lvm.cpp" />
-    <ClCompile Include="lzio.cpp" />
+    <ClCompile Include="GetFileSize.c" />
+    <ClCompile Include="HanCode\C_7BIT.C" />
+    <ClCompile Include="HanCode\C_7BITBL.C" />
+    <ClCompile Include="HanCode\C_CNVTCC.C" />
+    <ClCompile Include="HanCode\C_CNVTCS.C" />
+    <ClCompile Include="HanCode\C_CNVTHJ.C" />
+    <ClCompile Include="HanCode\C_CNVTS.C" />
+    <ClCompile Include="HanCode\C_CODE.C" />
+    <ClCompile Include="HanCode\C_COMMON.C" />
+    <ClCompile Include="HanCode\C_COMTBL.C" />
+    <ClCompile Include="HanCode\C_CP949.C" />
+    <ClCompile Include="HanCode\C_CP949TBL.C" />
+    <ClCompile Include="HanCode\C_DKBII.C" />
+    <ClCompile Include="HanCode\C_GETHJT.C" />
+    <ClCompile Include="HanCode\C_GOLDST.C" />
+    <ClCompile Include="HanCode\C_HJIDX.C" />
+    <ClCompile Include="HanCode\C_HJLIST.C" />
+    <ClCompile Include="HanCode\C_HJTBL.C" />
+    <ClCompile Include="HanCode\C_ISHJ.C" />
+    <ClCompile Include="HanCode\C_IYGKS.C" />
+    <ClCompile Include="HanCode\C_KS.C" />
+    <ClCompile Include="HanCode\C_KSSM.C" />
+    <ClCompile Include="HanCode\C_KSTBL.C" />
+    <ClCompile Include="HanCode\C_OLDKS.C" />
+    <ClCompile Include="HanCode\C_SAMSUN.C" />
+    <ClCompile Include="HanCode\C_SETHJ.C" />
+    <ClCompile Include="HanCode\C__COMBI.C" />
+    <ClCompile Include="HanCode\HOUTVAR.C" />
+    <ClCompile Include="HanCode\ISHAN1ST.C" />
+    <ClCompile Include="HanCode\ISHAN2ND.C" />
+    <ClCompile Include="Johab.c" />
+    <ClCompile Include="KS2JohabTable.c" />
+    <ClCompile Include="LoadEngFont.c" />
+    <ClCompile Include="LoadHanFont.c" />
+    <ClCompile Include="LoadHanjaFont.c" />
+    <ClCompile Include="LoadSpcFont.c" />
     <ClCompile Include="SkyInterface.cpp" />
+    <ClCompile Include="Table10x4x4.c" />
+    <ClCompile Include="Table2x1x2.c" />
+    <ClCompile Include="Table6x2x1.c" />
+    <ClCompile Include="Table8x4x4.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="HanCode">
+      <UniqueIdentifier>{25972315-dcc8-4778-9659-71fb1300edc7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CompleteHan.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CompleteKS.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CP949Table.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GetFileSize.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Johab.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="KS2JohabTable.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadEngFont.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadHanFont.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadHanjaFont.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadSpcFont.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Table2x1x2.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Table6x2x1.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Table8x4x4.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Table10x4x4.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyInterface.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\HOUTVAR.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\ISHAN1ST.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\ISHAN2ND.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_7BITBL.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C__COMBI.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_7BIT.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_CNVTCC.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_CNVTCS.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_CNVTHJ.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_CNVTS.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_CODE.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_COMMON.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_COMTBL.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_CP949.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_CP949TBL.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_DKBII.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_GETHJT.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_GOLDST.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_HJIDX.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_HJLIST.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_HJTBL.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_ISHJ.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_IYGKS.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_KS.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_KSSM.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_KSTBL.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_OLDKS.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_SAMSUN.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="HanCode\C_SETHJ.C">
+      <Filter>HanCode</Filter>
+    </ClCompile>
+    <ClCompile Include="bsearch.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CompleteHan.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CompleteKS.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CP949Table.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GetFileSize.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="hanlib.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Johab.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="KS2JohabTable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadEngFont.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadHanFont.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadHanjaFont.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadSpcFont.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Table2x1x2.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Table6x2x1.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Table8x4x4.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Table10x4x4.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyInterface.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HanCode\EXTKEY.H">
+      <Filter>HanCode</Filter>
+    </ClInclude>
+    <ClInclude Include="HanCode\HANCODE.H">
+      <Filter>HanCode</Filter>
+    </ClInclude>
+    <ClInclude Include="HanCode\HANIN.H">
+      <Filter>HanCode</Filter>
+    </ClInclude>
+    <ClInclude Include="HanCode\HANTYPES.H">
+      <Filter>HanCode</Filter>
+    </ClInclude>
+    <ClInclude Include="HanCode\typedefs.h">
+      <Filter>HanCode</Filter>
+    </ClInclude>
+    <ClInclude Include="bsearch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
