@@ -14,6 +14,9 @@ FILE* sky_fopen(const char *filename, const char *mode)
 
 size_t sky_fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
+	if (stream == nullptr)
+		return 0;
+
 	return fwrite(ptr, size, nmemb, stream);
 }
 int sky_fclose(FILE *stream)

@@ -20,6 +20,7 @@ namespace std
 		this->len = strlen(source);
 		// Allocate the internal cstring.
 		this->str = new char[this->len + 1];
+		memset(this->str, 0, this->len + 1);
 		// Copy over the data from source
 		strcpy(this->str, source);
 	}
@@ -31,7 +32,7 @@ namespace std
 
 		// Allocate the internal cstring.
 		this->str = new char[this->len + 1];
-
+		memset(this->str, 0, this->len + 1);
 		// Copy over the data from source.str
 		strcpy(this->str, source.str);
 	}
@@ -258,6 +259,7 @@ namespace std
 
 		// Return the part of the string that does not include the trailing matched
 		// characters.
+
 		return substr(0, end + 1);
 	}
 
@@ -306,6 +308,7 @@ namespace std
 		this->len = strlen(rhs);
 		// Allocate a new interal cstring.
 		this->str = new char[this->len + 1];
+		memset(this->str, 0, this->len + 1);
 		// Copy the data from rhs.
 		strcpy(this->str, rhs);
 

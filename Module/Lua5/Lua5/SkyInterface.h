@@ -27,7 +27,8 @@ extern "C" {
 }
 #endif
 
+#ifdef SKY_DLL
 extern SkyMockInterface g_mockInterface;
 #define kmalloc(a) g_mockInterface.g_allocInterface.sky_kmalloc(a)
 #define kfree(p) g_mockInterface.g_allocInterface.sky_kfree(p)
-
+#endif

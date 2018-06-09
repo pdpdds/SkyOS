@@ -153,7 +153,8 @@ static void * allocate(size_t n)
 static void deallocate(void *p, size_t n)
 {
 //20180418
-	kfree(p);
+	if(n > 0)
+		kfree(p);
     //free(p);
 }
 

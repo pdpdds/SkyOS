@@ -9,7 +9,11 @@
 #ifndef __LUATINKER_H__
 #define __LUATINKER_H__
 
+#ifndef WIN32
 #include "windef.h"
+#else
+#include <winnt.h>
+#endif
 
 
 #include "lua.h"

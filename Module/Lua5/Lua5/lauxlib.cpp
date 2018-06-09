@@ -17,6 +17,11 @@
 #include <string.h>
 #include "memory.h"
 #include "SkyInterface.h"
+
+#ifndef SKY_DLL
+#include "fileio.h"
+#endif
+
 /*
 ** This file uses only the official API of Lua.
 ** Any function declared here could be written as an application function.
@@ -925,21 +930,28 @@ LUALIB_API const char *luaL_gsub (lua_State *L, const char *s, const char *p,
 
 
 static void *l_alloc(void *ud, void *ptr, size_t osize, size_t nsize) {
-	(void)ud; (void)osize;  /* not used */
+	//(void)ud; (void)osize;  /* not used */
 
 	
 	if (nsize == 0)
 	{
-		kfree(ptr);
+		delete (ptr);
 		return NULL;
 	}
 	else
 	{
 		//20180604
-		void* ptr2 = (void*)kmalloc(nsize);
+		void* ptr2 = (void*) new char[nsize];
+		memset(ptr2, 0, nsize);
+		if (ptr != nullptr)
+		{
+			if(osize < nsize)
+				memcpy(ptr2, ptr, osize);
+			else
+				memcpy(ptr2, ptr, nsize);
 
-		if(ptr != nullptr)
-			memcpy(ptr2, ptr, nsize);
+			delete ptr;
+		}
 		return ptr2;
 	}
 		//return realloc(ptr, nsize);

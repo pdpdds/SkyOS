@@ -66,7 +66,7 @@ public:
 	MAPFILEDLL_API MapFileAddress(WORD	section,
 								  DWORD	address);
 
-	MAPFILEDLL_API MapFileAddress(std::string	s);
+	MAPFILEDLL_API MapFileAddress(const char *	s);
 
 	MAPFILEDLL_API ~MapFileAddress();
 

@@ -67,7 +67,7 @@ MapFileAddress::MapFileAddress(WORD		section,
 //.RETURN.CODES.........................
 //--------------------------------------
 
-MapFileAddress::MapFileAddress(std::string	s)
+MapFileAddress::MapFileAddress(const char *s)
 {
 	// string passed in is WORD:DWORD
 
@@ -75,7 +75,9 @@ MapFileAddress::MapFileAddress(std::string	s)
 	char		*p2 = NULL;
 
 	p1 = (const char *)s;
+	
 	sectionNumber = (WORD)strtoul(p1, &p2, 16);
+	
 	if (p2 != NULL)
 	{
 		// p2 should point at ':'

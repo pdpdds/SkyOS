@@ -5,9 +5,14 @@
 #include "ctype.h"
 #include "stdio.h"
 
+int errno = 0;
+
+#ifdef SKY_DLL
 SkyMockInterface g_mockInterface;
 
-int errno = 0;
+FILE* g_stdOut;
+FILE* g_stdIn;
+FILE* g_stdErr;
 
 size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
@@ -527,9 +532,9 @@ char *	strerror(int errnum)
 
 
 
-FILE* g_stdOut;
-FILE* g_stdIn;
-FILE* g_stdErr;
+FILE* g_skyStdOut;
+FILE* g_skyStdIn;
+FILE* g_skyStdErr;
 
 
 extern "C" __declspec(dllexport) void SetSkyMockInterface(SKY_ALLOC_Interface allocInterface, 
@@ -539,9 +544,9 @@ extern "C" __declspec(dllexport) void SetSkyMockInterface(SKY_ALLOC_Interface al
 	g_mockInterface.g_allocInterface = allocInterface;
 	g_mockInterface.g_fileInterface = fileInterface;
 	g_mockInterface.g_printInterface = printInterface;
-	g_stdOut = printInterface.sky_stdout;
-	g_stdIn = printInterface.sky_stdin;
-	g_stdErr = printInterface.sky_stderr;
+	g_skyStdOut = printInterface.sky_stdout;
+	g_skyStdIn = printInterface.sky_stdin;
+	g_skyStdErr = printInterface.sky_stderr;
 }
 
 
@@ -586,3 +591,4 @@ int __cdecl _purecall()
 {
 	return 0;
 }
+#endif

@@ -6,13 +6,17 @@
 //
 // please check Licence.txt file for licence and legal issues.
 
+#ifndef WIN32
 #include "string.h"
 #include "memory.h"
-
+#endif
+#include "stdafx.h"
 #include "luatinker.h"
 
 #if defined(_MSC_VER)
+#ifndef I64_FMT
 #define I64_FMT "I64"
+#endif
 #elif defined(__APPLE__)
 #define I64_FMT "q"
 #else

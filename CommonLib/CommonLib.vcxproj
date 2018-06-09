@@ -192,6 +192,7 @@
       <DebugInformationFormat />
       <CallingConvention>Cdecl</CallingConvention>
       <DisableSpecificWarnings>4146;4244;4310;4100;4702</DisableSpecificWarnings>
+      <UndefineAllPreprocessorDefinitions>true</UndefineAllPreprocessorDefinitions>
     </ClCompile>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>

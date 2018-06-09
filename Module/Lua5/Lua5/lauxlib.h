@@ -11,14 +11,18 @@
 
 #include <stddef.h>
 #include <stdio.h>
+#ifndef WIN32 
 #include "fileio.h"
+#endif
 #include "lua.h"
 
 extern	FILE* g_stdOut;
 extern	FILE* g_stdIn;
 
+#ifndef WIN32 
 #define stdin g_stdIn
 #define stdout g_stdOut
+#endif
 
 /* global table */
 #define	LUA_GNAME	"_G"

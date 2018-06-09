@@ -132,7 +132,7 @@
     <ClCompile Include="LuaScript.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="luatinker.cpp">
+    <ClCompile Include="LuaScriptModule.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -231,6 +231,9 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="luatinker.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaScriptModule.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1021,7 +1021,7 @@ int MapFileReader::readTimeStamp(FILE	*fp)
 	// now at start of timestamp string
 
 	timeStamp = p;
-	timeStamp.trimright();
+	//timeStamp = timeStamp.trimright();
 
 	return TRUE;
 }
@@ -1253,7 +1253,7 @@ int MapFileReader::readSymbols(FILE	*fp,
 
 	if (verbose)
 		g_mockInterface.g_printInterface.sky_printf("Parsing C and C++ export names\n");
-
+	
 	while(TRUE)
 	{
 		p = g_mockInterface.g_fileInterface.sky_fgets(line, (LINE_LENGTH - 1), fp);
@@ -1648,7 +1648,7 @@ int MapFileReader::readExports(char	*p,
 		
 		p = skipWhiteSpace(p);
 		wN2 = p;
-		wN2.trimright();
+		//wN2 = wN2.trimright();
 		
 		MapFileExport	*mfe;
 

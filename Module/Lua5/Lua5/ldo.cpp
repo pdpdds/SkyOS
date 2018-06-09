@@ -59,7 +59,7 @@
 #if defined(__cplusplus) && !defined(LUA_USE_LONGJMP)	/* { */
 
 /* C++ exceptions */
-//#define LUAI_THROW(L,c)		throw(c)
+//#define LUAI_THROW(L,c)		throw(c->b)
 #define LUAI_THROW(L,c)	for(;;);
 #define LUAI_TRY(L,c,a) \
 	try { a } catch(ArgumentException) { if ((c)->status == 0) (c)->status = -1; }
@@ -116,7 +116,10 @@ static void seterrorobj (lua_State *L, int errcode, StkId oldtop) {
 l_noret luaD_throw (lua_State *L, int errcode) {
   if (L->errorJmp) {  /* thread has an error handler? */
     L->errorJmp->status = errcode;  /* set status */
-    LUAI_THROW(L, L->errorJmp);  /* jump to it */
+    //LUAI_THROW(L, L->errorJmp);  /* jump to it */
+	
+	longjmp(CTRYCATCH_NAME(exception_env), 4);
+
   }
   else {  /* thread has no error handler */
     global_State *g = G(L);
@@ -146,9 +149,16 @@ int luaD_rawrunprotected (lua_State *L, Pfunc f, void *ud) {
   lj.status = LUA_OK;
   lj.previous = L->errorJmp;  /* chain new error handler */
   L->errorJmp = &lj;
-  LUAI_TRY(L, &lj,
-    (*f)(L, ud);
-  );
+ 
+  try { 
+	  (*f)(L, ud);
+  } catch(ArgumentException) 
+  { 
+	  if (lj.status == 0)
+		  lj.status = -1;
+  }
+
+
   L->errorJmp = lj.previous;  /* restore old error handler */
   L->nCcalls = oldnCcalls + L->nci;
   return lj.status;

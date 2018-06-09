@@ -30,6 +30,9 @@
     <ClInclude Include="..\..\Include\SkyMockInterface.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="luatinker.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -42,6 +45,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="SkyMockInterface.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="luatinker.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

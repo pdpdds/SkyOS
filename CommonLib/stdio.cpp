@@ -51,6 +51,14 @@ extern "C" int vsprintf(char *str, const char *format, va_list ap) {
 			case 'i':
 			{
 				int c = va_arg(ap, int);
+
+				if (c < 0)
+				{
+					str[loc] = '-';
+					loc++;
+					c = (-c);
+				}
+
 				char s[32] = { 0 };
 				itoa_s(c, 10, s);
 				strcpy(&str[loc], s);
@@ -61,9 +69,18 @@ extern "C" int vsprintf(char *str, const char *format, va_list ap) {
 
 			/*** display in hex ***/
 			case 'X':
+			case 'p':
 			{
 				int c = va_arg(ap, int);
 				char s[32] = { 0 };
+
+				if (c < 0)
+				{
+					str[loc] = '-';
+					loc++;
+					c = (-c);
+				}
+
 				itoa_s(c, 16, s);
 				strcpy(&str[loc], s);
 				i++;		// go to next character
@@ -71,6 +88,7 @@ extern "C" int vsprintf(char *str, const char *format, va_list ap) {
 				break;
 			}
 			case 'x':
+			
 			{
 				unsigned int c = va_arg(ap, unsigned int);
 				char s[32] = { 0 };
@@ -155,6 +173,147 @@ extern "C" int vsprintf(char *str, const char *format, va_list ap) {
 
 	return i;
 }
+
+extern "C" int vnsprintf(char *str, size_t size, const char *format, va_list ap) {
+
+	if (!str)
+		return 0;
+
+	if (!format)
+		return 0;
+
+	size_t loc = 0;
+	size_t i;
+
+	for (i = 0; i <= strlen(format); i++, loc++)
+	{
+		switch (format[i])
+		{
+		case '%':
+			switch (format[i + 1])
+			{
+				/*** characters ***/
+			case 'c':
+			{
+				char c = va_arg(ap, char);
+				str[loc] = c;
+				i++;
+				break;
+			}
+
+			/*** integers ***/
+			case 'd':
+			case 'I':
+			case 'i':
+			{
+				int c = va_arg(ap, int);
+				char s[32] = { 0 };
+				itoa_s(c, 10, s);
+				strcpy(&str[loc], s);
+				loc += strlen(s) - 1;
+				i++;		// go to next character
+				break;
+			}
+
+			/*** display in hex ***/
+			case 'X':
+			case 'p':
+			{
+				int c = va_arg(ap, int);
+				char s[32] = { 0 };
+				itoa_s(c, 16, s);
+				strcpy(&str[loc], s);
+				i++;		// go to next character
+				loc += strlen(s) - 1;
+				break;
+			}
+			case 'x':
+
+			{
+				unsigned int c = va_arg(ap, unsigned int);
+				char s[32] = { 0 };
+				itoa_s(c, 16, s);
+				strcpy(&str[loc], s);
+				i++;		// go to next character
+				loc += strlen(s) - 1;
+				break;
+			}
+			/*** strings ***/
+			case 's':
+			{
+				int c = (int&)va_arg(ap, char);
+				char s[32] = { 0 };
+				strcpy(s, (const char*)c);
+				strcpy(&str[loc], s);
+				i++;		// go to next character
+				loc += strlen(s) - 1;
+				break;
+			}
+
+			case 'f':
+			{
+				double double_temp;
+				double_temp = va_arg(ap, double);
+				char buffer[512];
+				ftoa_fixed(buffer, double_temp);
+				strcpy(&str[loc], buffer);
+				i++;
+				loc += strlen(buffer) - 1;
+				break;
+			}
+
+			case 'Q':
+			{
+				__int64 int64_temp;
+				int64_temp = va_arg(ap, __int64);
+				char buffer[20];
+				_i64toa(int64_temp, buffer, 10);
+				strcpy(&str[loc], buffer);
+				i++;
+				loc += strlen(buffer) - 1;
+				break;
+			}
+
+			case 'q':
+			{
+				uint64_t int64_temp;
+				int64_temp = va_arg(ap, uint64_t);
+				char buffer[20];
+				_i64toa(int64_temp, buffer, 16);
+				strcpy(&str[loc], buffer);
+				i++;
+				loc += strlen(buffer) - 1;
+				break;
+			}
+			case 'l':
+			{
+				if (format[i + 2] == 'd')
+				{
+					int c = (int&)va_arg(ap, char);
+					char s[32] = { 0 };
+					itoa_s(c, 10, s);
+					strcpy(&str[loc], s);
+					loc += strlen(s) - 1;
+					// go to next character
+					i++;
+				}
+				i++;
+				break;
+
+			}
+
+			}
+			break;
+
+		default:
+			str[loc] = format[i];
+			break;
+		}
+	}
+
+	return i;
+}
+
 
 #ifndef SKYOS_WIN32
 //! converts a string to a long

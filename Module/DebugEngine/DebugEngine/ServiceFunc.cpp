@@ -44,9 +44,6 @@ extern "C" __declspec(dllexport) I_MapFileReader* GetDebugEngineDLL()
 	return reader;
 }
 
-#define kmalloc(a) g_mockInterface.g_allocInterface.sky_kmalloc(a);
-#define kfree(p) g_mockInterface.g_allocInterface.sky_kfree(p);
-
 
 void *operator new(size_t size)
 {

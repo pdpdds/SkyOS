@@ -89,7 +89,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>SKYOS32;_CRT_SECURE_NO_WARNINGS ;MAPFILEDLL_EXPORTS;_X86_;_DEBUG;SampleDll_EXPORTS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SKY_DLL;LUA_BUILD_AS_DLL;SKYOS32;_CRT_SECURE_NO_WARNINGS ;MAPFILEDLL_EXPORTS;_X86_;_DEBUG;SampleDll_EXPORTS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>false</ExceptionHandling>
@@ -213,6 +213,7 @@
     <ClInclude Include="lualib.h" />
     <ClInclude Include="LuaModule.h" />
     <ClInclude Include="LuaScript.h" />
+    <ClInclude Include="LuaScriptModule.h" />
     <ClInclude Include="luatinker.h" />
     <ClInclude Include="lundump.h" />
     <ClInclude Include="lvm.h" />
@@ -253,7 +254,7 @@
     <ClCompile Include="lua.cpp" />
     <ClCompile Include="LuaModule.cpp" />
     <ClCompile Include="LuaScript.cpp" />
-    <ClCompile Include="luatinker.cpp" />
+    <ClCompile Include="LuaScriptModule.cpp" />
     <ClCompile Include="lundump.cpp" />
     <ClCompile Include="lutf8lib.cpp" />
     <ClCompile Include="lvm.cpp" />

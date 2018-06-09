@@ -50,6 +50,7 @@
 #include "MapFileAddress.h"
 #include "string.h"
 #include "sprintf.h"
+#include "SkyMockInterface.h"
 //-NAME---------------------------------
 //.DESCRIPTION..........................
 //.PARAMETERS...........................
@@ -86,7 +87,8 @@ MapFileSymbol::MapFileSymbol()
 
 MapFileSymbol::~MapFileSymbol()
 {
-	delete address;
+	if(address)
+		delete address;
 }
 
 //-NAME---------------------------------
@@ -94,7 +96,7 @@ MapFileSymbol::~MapFileSymbol()
 //.PARAMETERS...........................
 //.RETURN.CODES.........................
 //--------------------------------------
-
+extern SkyMockInterface g_mockInterface;
 void MapFileSymbol::setData(char	*p_name, 
 							char	*p_address, 
 							char	*p_rvabase, 
@@ -103,28 +105,32 @@ void MapFileSymbol::setData(char	*p_name,
 							char	*p_module)
 {
 	// function/object name and DLL/EXE/LIB/OBJ name
-
-	if (p_name != NULL)
+	if (p_name != nullptr && strlen(p_name) > 0)
 	{
 		name = p_name;
-		name.trimright();
+		//name = name.trimright();
 	}
 	else
 		name = "";
 
-	if (p_module != NULL)
+	if (p_module != nullptr && strlen(p_name) > 0)
 	{
 		module = p_module;
-		module.trimright();
+		//module = module.trimright();
 	}
 	else
 		module = "";
-
+	
 	// section/address
 
-	delete address;
-	address = new MapFileAddress(p_address);
+	if (address != nullptr)
+	{
+		delete address;
+		address = nullptr;
+	}
 
+	address = new MapFileAddress(p_address);
+	
 	// inline / function flags
 
 	isFunction = flagFunction;
@@ -142,7 +148,7 @@ void MapFileSymbol::setData(char	*p_name,
 
 	len = module.length();
 	mptr = p_module;
-
+	
 	if (len > 4)
 	{
 		const char	*mptr2;
@@ -165,7 +171,7 @@ void MapFileSymbol::setData(char	*p_name,
 		isLibraryObject = FALSE;
 		isDLLObject = FALSE;
 	}
-
+	
 	// extras for C++
 	
 	isCPP = (name.length() > 0 && name[0] == '?');
