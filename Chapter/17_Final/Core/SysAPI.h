@@ -7,7 +7,7 @@
 
 void *operator new(size_t size);
 void *operator new[](size_t size);
-//void *operator new(size_t, void *p);
+void *operator new(size_t, void *p);
 //void *operator new[](size_t, void *p);
 
 

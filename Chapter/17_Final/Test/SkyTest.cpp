@@ -374,7 +374,7 @@ void TestDeque()
 //공통 라이브러리 테스트 끝
 
 #include "lua.h"
-#include "luadebug.h"
+//#include "luadebug.h"
 #include "lualib.h"
 
 //저장장치 테스트
@@ -402,20 +402,6 @@ void TestStorage(const char* filename, char driveLetter)
 
 	SkyConsole::Print("Test End\n");
 	for (;;);
-}
-
-//루아 테스트
-void TestLua()
-{
-	StorageManager::GetInstance()->SetCurrentFileSystemByID('C');
-	lua_open();
-	lua_pushstring("> "); 
-	lua_setglobal("_PROMPT");
-	lua_userinit();
-
-	int result = lua_dofile("1.LUA");
-
-	SkyConsole::Print("Lua Exec Result : %d\n", result);	
 }
 
 void TestFPU()

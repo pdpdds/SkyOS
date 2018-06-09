@@ -165,6 +165,7 @@ bool SkyDebugger::LoadSymbol(const char* moduleName)
 		HaltSystem("Memory Module Load Fail!!");
 	}
 
+	
 //디버그 엔진 모듈로 부터 SetSkyMockInterface, GetDebugEngineDLL 함수를 얻어온다.
 	PSetSkyMockInterface SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "SetSkyMockInterface");
 	PGetDebugEngineDLL GetDebugEngineDLLInterface = (PGetDebugEngineDLL)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetDebugEngineDLL");
@@ -185,7 +186,7 @@ bool SkyDebugger::LoadSymbol(const char* moduleName)
 	}
 
 	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
-	
+
 	bool result = m_pMapReader->readFile("SKYOS32_MAP");
 	
 	if (result == false)

@@ -79,7 +79,9 @@ PFILE MemoryResourceAdaptor::Open(const char* fileName, const char *mode)
 		file->_id = (DWORD)pModule;
 		file->_fileLength = pModule->ModuleEnd - pModule->ModuleStart;
 		file->_eof = 0;
+		file->_currentCluster = 0;
 		file->_position = 0;
+		file->_flags = FS_FILE;
 		return file;
 	}
 

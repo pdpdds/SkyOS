@@ -13,6 +13,5 @@ void TestStorage(const char* filename, char driveLetter);
 void TestFPU();
 void TestTryCatch();
 void TestNullPointer();
-void TestLua();
 void TestEasyZLib();
 bool TestMemoryModule(const char* moduleName);

@@ -225,7 +225,7 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 	}
 	
 	//플로피 디스크
-	FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
+	/*FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
 	if (pFloppyDiskAdaptor->Initialize() == true)
 	{
 		StorageManager::GetInstance()->RegisterFileSystem(pFloppyDiskAdaptor, 'A');
@@ -233,7 +233,7 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 	else
 	{
 		delete pFloppyDiskAdaptor;
-	}
+	}*/
 
 	//TestStorage("sample.txt", 'A');
 

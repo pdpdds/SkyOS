@@ -107,6 +107,7 @@
     <ClCompile Include="KeyBoard\KeyBoard.cpp" />
     <ClCompile Include="KeyBoard\KeyboardController.cpp" />
     <ClCompile Include="kmain.cpp" />
+    <ClCompile Include="luatinker.cpp" />
     <ClCompile Include="Memory\PageDirectoryEntry.cpp" />
     <ClCompile Include="Memory\PageTableEntry.cpp" />
     <ClCompile Include="Memory\PhysicalMemoryManager.cpp" />
@@ -119,30 +120,6 @@
     <ClCompile Include="Test\SkyTest.cpp" />
     <ClCompile Include="Test\ZetPlane.cpp" />
     <ClCompile Include="ThirdParty\easyzlib\easyzlib.c" />
-    <ClCompile Include="ThirdParty\LUA\lapi.c" />
-    <ClCompile Include="ThirdParty\LUA\lauxlib.c" />
-    <ClCompile Include="ThirdParty\LUA\lbuffer.c" />
-    <ClCompile Include="ThirdParty\LUA\lbuiltin.c" />
-    <ClCompile Include="ThirdParty\LUA\ldblib.c" />
-    <ClCompile Include="ThirdParty\LUA\ldo.c" />
-    <ClCompile Include="ThirdParty\LUA\lfunc.c" />
-    <ClCompile Include="ThirdParty\LUA\lgc.c" />
-    <ClCompile Include="ThirdParty\LUA\linit.c" />
-    <ClCompile Include="ThirdParty\LUA\liolib.cpp" />
-    <ClCompile Include="ThirdParty\LUA\llex.c" />
-    <ClCompile Include="ThirdParty\LUA\lmathlib.c" />
-    <ClCompile Include="ThirdParty\LUA\lmem.c" />
-    <ClCompile Include="ThirdParty\LUA\lobject.c" />
-    <ClCompile Include="ThirdParty\LUA\lparser.c" />
-    <ClCompile Include="ThirdParty\LUA\lstate.c" />
-    <ClCompile Include="ThirdParty\LUA\lstring.c" />
-    <ClCompile Include="ThirdParty\LUA\lstrlib.cpp" />
-    <ClCompile Include="ThirdParty\LUA\ltable.c" />
-    <ClCompile Include="ThirdParty\LUA\ltm.c" />
-    <ClCompile Include="ThirdParty\LUA\lua.cpp" />
-    <ClCompile Include="ThirdParty\LUA\lundump.c" />
-    <ClCompile Include="ThirdParty\LUA\lvm.c" />
-    <ClCompile Include="ThirdParty\LUA\lzio.c" />
     <ClCompile Include="v8086\rme.cpp" />
     <ClCompile Include="v8086\RMEFunc.cpp" />
   </ItemGroup>
@@ -232,6 +209,7 @@
     <ClInclude Include="KeyBoard\KeyboardController.h" />
     <ClInclude Include="KeyBoard\KeyBoardIO.h" />
     <ClInclude Include="kmain.h" />
+    <ClInclude Include="luatinker.h" />
     <ClInclude Include="Memory\PageDirectoryEntry.h" />
     <ClInclude Include="Memory\PageTableEntry.h" />
     <ClInclude Include="Memory\PhysicalMemoryManager.h" />
@@ -249,27 +227,6 @@
     <ClInclude Include="Test\TestInteger.h" />
     <ClInclude Include="Test\ZetPlane.h" />
     <ClInclude Include="ThirdParty\easyzlib\easyzlib.h" />
-    <ClInclude Include="ThirdParty\LUA\lapi.h" />
-    <ClInclude Include="ThirdParty\LUA\lauxlib.h" />
-    <ClInclude Include="ThirdParty\LUA\lbuiltin.h" />
-    <ClInclude Include="ThirdParty\LUA\ldo.h" />
-    <ClInclude Include="ThirdParty\LUA\lfunc.h" />
-    <ClInclude Include="ThirdParty\LUA\lgc.h" />
-    <ClInclude Include="ThirdParty\LUA\llex.h" />
-    <ClInclude Include="ThirdParty\LUA\lmem.h" />
-    <ClInclude Include="ThirdParty\LUA\lobject.h" />
-    <ClInclude Include="ThirdParty\LUA\lopcodes.h" />
-    <ClInclude Include="ThirdParty\LUA\lparser.h" />
-    <ClInclude Include="ThirdParty\LUA\lstate.h" />
-    <ClInclude Include="ThirdParty\LUA\lstring.h" />
-    <ClInclude Include="ThirdParty\LUA\ltable.h" />
-    <ClInclude Include="ThirdParty\LUA\ltm.h" />
-    <ClInclude Include="ThirdParty\LUA\lua.h" />
-    <ClInclude Include="ThirdParty\LUA\luadebug.h" />
-    <ClInclude Include="ThirdParty\LUA\lualib.h" />
-    <ClInclude Include="ThirdParty\LUA\lundump.h" />
-    <ClInclude Include="ThirdParty\LUA\lvm.h" />
-    <ClInclude Include="ThirdParty\LUA\lzio.h" />
     <ClInclude Include="v8086\rme.h" />
     <ClInclude Include="v8086\RMEFunc.h" />
   </ItemGroup>
@@ -333,8 +290,8 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./ConsoleSystem;./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./V8086;./GUI/SkyGUI;./GUI/Simple;./GUI;../../CommonLib/math;./thirdparty/lua;./gui/svgagui;./gui/svgagui/example;../../Module/Include;../../Module/DebugEngine/DebugEngine;./thirdparty/easyzlib;./Device;./Core;../../CommonLib/CPlusPlus</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>SKYOS32;__LE__;OLD_ANSI;;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./ConsoleSystem;./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./V8086;./GUI/SkyGUI;./GUI/Simple;./GUI;../../CommonLib/math;./gui/svgagui;./gui/svgagui/example;../../Module/Include;../../Module/DebugEngine/DebugEngine;./thirdparty/easyzlib;./Device;./Core;../../CommonLib/CPlusPlus;../../Module/Lua5/Lua5</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SKYOS32;__LE__;OLD_ANSI;</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
       </StringPooling>
@@ -361,7 +318,7 @@
 /ALIGN:1024
  /SUBSYSTEM:CONSOLE
 /NODEFAULTLIB:LIBC %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>CommonLib.lib</AdditionalDependencies>
+      <AdditionalDependencies>CommonLib.lib;lua5.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>

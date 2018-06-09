@@ -81,17 +81,12 @@ u32int malloc(u32int sz)
 
 u32int calloc(u32int count, u32int size)
 {
-	return count * size;
+	return kmalloc(count * size);
 }
 
 u32int kmalloc(u32int sz)
-{
-	kEnterCriticalSection();
-	
-	g_usedHeapSize += sz + sizeof(footer_t) + sizeof(header_t);
-
+{		
 	u32int buffer = kmalloc_int(sz, 0, 0);
-	kLeaveCriticalSection();
 	return buffer;
 }
 
@@ -267,9 +262,11 @@ heap_t *create_heap(u32int start, u32int end_addr, u32int max, u8int supervisor,
 
 void *memory_alloc(u32int size, u8int page_align, heap_t *heap)
 {
+	kEnterCriticalSection();
 
     // Make sure we take the size of header/footer into account.
     u32int new_size = size + sizeof(header_t) + sizeof(footer_t);
+
     // Find the smallest hole that will fit.
     s32int iterator = find_smallest_hole(new_size, page_align, heap);
 
@@ -383,6 +380,11 @@ void *memory_alloc(u32int size, u8int page_align, heap_t *heap)
         // Put the new hole in the index;
         insert_ordered_array((void*)hole_header, &heap->index);
     }
+
+	kLeaveCriticalSection();
+
+	if (heap == &kheap)
+		g_usedHeapSize += new_size;
     
     // ...And we're done!
     return (void *) ( (u32int)block_header+sizeof(header_t) );

@@ -4,6 +4,7 @@
 #include "SkyConsole.h"
 #include "sprintf.h"
 #include "string.h"
+#include "SkyDebugger.h"
 
 #pragma warning (disable:4100)
 
@@ -307,6 +308,8 @@ void HaltSystem(const char* errMsg)
 	SkyConsole::Print(sickpc);
 
 	SkyConsole::Print("*** STOP: %s", errMsg);
+	SkyDebugger::GetInstance()->TraceStackWithSymbol();
+	for (;;);
 
 	__asm
 	{

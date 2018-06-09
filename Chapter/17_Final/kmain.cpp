@@ -64,6 +64,11 @@ void InitContext(multiboot_info* bootinfo);
 void InitHardware();
 bool InitMemoryManager(multiboot_info* bootinfo);
 
+#include "luatinker.h"
+#include "lualib.h"
+
+extern void TestLua53(lua_State* L);
+
 void kmain(unsigned long magic, unsigned long addr)
 {
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
@@ -91,6 +96,22 @@ void kmain(unsigned long magic, unsigned long addr)
 	PrintCurrentTime();
 	
 	kLeaveCriticalSection();
+
+	/*
+	StorageManager::GetInstance()->Initilaize(pBootInfo);
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
+
+	for (int i = 0; i < 1000; i++)
+	{
+		lua_State* L;
+		L = luaL_newstate();
+		luaopen_base(L);
+
+		TestLua53(L);
+
+		lua_close(L);
+	}
+	for (;;);*/
 	
 #if SKY_CONSOLE_MODE == 0	
 	pSystemLauncher = new SkyGUILauncher();

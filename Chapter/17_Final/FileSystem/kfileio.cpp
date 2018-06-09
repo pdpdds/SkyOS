@@ -6,6 +6,7 @@
 #include "string.h"
 #include "stdio.h"
 #include "SkyConsole.h"
+#include "SkyDebugger.h"
 
 FILE *fopen(const char *filename, const char *mode)
 {
@@ -14,21 +15,45 @@ FILE *fopen(const char *filename, const char *mode)
 
 size_t fread(void *ptr, size_t size, size_t count, FILE *stream)
 {
+	if (stream == 0)
+	{
+		SkyConsole::Print("fread stream is null\n");
+		return 0;
+	}
+
 	return StorageManager::GetInstance()->ReadFile(stream, (unsigned char*)ptr, size, count);
 }
 
 size_t fwrite(const void *ptr, size_t size, size_t count, FILE *stream)
 {
+	if (stream == 0)
+	{
+		SkyConsole::Print("fwrite stream is null\n");
+		return 0;
+	}
+
 	return StorageManager::GetInstance()->WriteFile(stream, (unsigned char*)ptr, size, count);
 }
 
 int fclose(FILE *stream)
 {
+	if (stream == 0)
+	{
+		SkyConsole::Print("fclose stream is null\n");
+		return 0;
+	}
+
 	return StorageManager::GetInstance()->CloseFile(stream);
 }
 
 int feof(FILE *stream)
 {
+	if (stream == 0)
+	{
+		SkyConsole::Print("feof stream is null\n");
+		return 1;
+	}
+
 	if (stream->_eof != 0)
 		return stream->_eof;
 
@@ -48,11 +73,20 @@ int fseek(FILE *stream, long int offset, int whence)
 
 long int ftell(FILE *stream)
 {
+	//SkyDebugger::GetInstance()->TraceStackWithSymbol(200);
+	//for (;;);
+
 	return (long int)stream->_position;
 }
 
 int fgetc(FILE * stream)
 {
+	if (stream == 0)
+	{
+		SkyConsole::Print("fgetc stream is null\n");
+		return EOF;
+	}
+
 	char buf[2];
 	int readCount = StorageManager::GetInstance()->ReadFile(stream, (unsigned char*)buf, 1, 1);
 
@@ -62,10 +96,13 @@ int fgetc(FILE * stream)
 	return buf[0];
 }
 
+
 char* fgets(char *dst, int max, FILE *fp)
 {
 	int c = 0;
 	char *p = nullptr;
+
+	
 
 	/* get max bytes or upto a newline */
 

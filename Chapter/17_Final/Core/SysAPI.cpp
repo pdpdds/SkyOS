@@ -18,6 +18,13 @@ void *operator new(size_t size)
 	return (void *)kmalloc(size);
 }
 
+void *operator new(size_t, void *p)
+{	
+	return p;
+}
+
+
+
 void * __cdecl operator new[](size_t size)
 {
 	return (void *)kmalloc(size);

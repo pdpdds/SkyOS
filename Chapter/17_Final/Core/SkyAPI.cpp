@@ -7,8 +7,7 @@ void __SKY_ASSERT(const char* expr_str, bool expr, const char* file, int line, c
 		//SkyConsole::Print("%s %s, %s %d\n", msg, expr_str, file, line);
 		//for (;;);
 		char buf[256];
-		sprintf(buf, "Assert failed: %s Expected: %s %s %d\n", msg, expr_str, file, line);
-
+		sprintf(buf, "Assert failed: %s Expected: %s %s %d\n", msg, expr_str, file, line);		
 
 		HaltSystem(buf);
 	}
@@ -156,7 +155,9 @@ void printf(const char* str, ...)
 
 					  /*** display in hex ***/
 					  /*int*/
-			case 'X': {
+			case 'X': 
+			case 'p':
+			{
 				int c = va_arg(args, int);
 				char str[32] = { 0 };
 				itoa_s(c, 16, str);
