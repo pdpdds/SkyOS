@@ -197,6 +197,7 @@
     <ClInclude Include="HanCode\HANTYPES.H" />
     <ClInclude Include="HanCode\typedefs.h" />
     <ClInclude Include="hanlib.h" />
+    <ClInclude Include="HanOut.h" />
     <ClInclude Include="Johab.h" />
     <ClInclude Include="KS2JohabTable.h" />
     <ClInclude Include="LoadEngFont.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="HanCode\HOUTVAR.C" />
     <ClCompile Include="HanCode\ISHAN1ST.C" />
     <ClCompile Include="HanCode\ISHAN2ND.C" />
+    <ClCompile Include="HanOut.cpp" />
     <ClCompile Include="Johab.c" />
     <ClCompile Include="KS2JohabTable.c" />
     <ClCompile Include="LoadEngFont.c" />

@@ -159,6 +159,9 @@
     <ClCompile Include="bsearch.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="HanOut.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CompleteHan.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="bsearch.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HanOut.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
