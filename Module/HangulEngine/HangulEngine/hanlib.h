@@ -97,6 +97,7 @@ typedef struct {
 
 	byte *pF1B, *pF2B, *pF3B;
 } THanFont;
+
 //-----------------------------------------------------------------------------
 #include "LoadEngFont.h"
 #include "LoadHanFont.h"

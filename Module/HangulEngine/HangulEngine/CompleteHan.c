@@ -6,10 +6,11 @@
 #include "hanlib.h"
 #include "CompleteHan.h"
 //-----------------------------------------------------------------------------
-void HanComplete(bool mode, byte *dest, byte *src, int nums)
+void HanComplete(bool mode, unsigned char* dest, unsigned char* src, int nums)
 {
 	int i;
 	if (mode == true) memcpy(dest, src, nums);
-	else for (i = 0; i < nums; i++) dest[i] |= src[i];
+	else for (i = 0; i < nums; i++) 
+		dest[i] |= src[i];
 }
 //------------------------------------------------------------------------------

@@ -16,6 +16,10 @@ bool IsEngFontSize(int AFileSize)
     sprintf(s, ";%d;", AFileSize);
     return (bool)strstr(BitmapEngFontFilesSize, s);
 }
+
+#include "SkyInterface.h"
+extern SkyMockInterface g_mockInterface;
+
 //-----------------------------------------------------------------------------
 bool LoadEngFont(TEngFont *AEngFont, const char *AEngFile)
 {
@@ -24,12 +28,17 @@ bool LoadEngFont(TEngFont *AEngFont, const char *AEngFile)
 	if (fp == NULL) return false;
 
 	size = GetFileSize(fp);
+	//g_mockInterface.g_printInterface.sky_printf("%d\n", size);
+	
 	switch (size) {
 	case 2048: 
 	case 4096: 
 	case 4112: break;
-	default: return false;
+	default: 
+		return false;
 	}
+
+	
 
 	for (i = 0; i < 128; i++)
 		fread(AEngFont->Eng[i], 16, 1, fp);
@@ -57,7 +66,7 @@ bool LoadEngFont(TEngFont *AEngFont, const char *AEngFile)
 
 	AEngFont->FileSize = size;
     strcpy(AEngFont->FullFileName, AEngFile);
-
+	
     return true;
 }
 //-----------------------------------------------------------------------------

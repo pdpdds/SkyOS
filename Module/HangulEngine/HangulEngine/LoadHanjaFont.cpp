@@ -21,7 +21,8 @@ bool IsHanjaFontSize(int AFileSize)
 bool LoadHanjaFont(THanjaFont *AHanjaFont, const char *AHanjaFile)
 {
 	int Page, Offset;
-	byte *p, HanjaFontFile[HANJAFONT_FILESIZE];
+	byte *p;
+	byte *HanjaFontFile = new byte[HANJAFONT_FILESIZE];
 
 	FILE *fp = fopen(AHanjaFile, "rb");
 	if (fp == NULL) return false;
@@ -29,6 +30,8 @@ bool LoadHanjaFont(THanjaFont *AHanjaFont, const char *AHanjaFile)
 	if (GetFileSize(fp) != HANJAFONT_FILESIZE) return false;
 
 	fread(HanjaFontFile, HANJAFONT_FILESIZE, 1, fp);
+
+	
     fclose(fp);
 
 	p = HanjaFontFile;
@@ -39,6 +42,8 @@ bool LoadHanjaFont(THanjaFont *AHanjaFont, const char *AHanjaFile)
 	AHanjaFont->FileSize = HANJAFONT_FILESIZE;
 	AHanjaFont->CharCount = HANJAFONT_FILESIZE / HANJAFONT_BYTEPERCHAR;
     strcpy(AHanjaFont->FullFileName, AHanjaFile);
+
+	delete HanjaFontFile;
 
     return true;
 }

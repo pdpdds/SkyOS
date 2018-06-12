@@ -6,7 +6,7 @@
 extern "C" {
 #endif 
 //-----------------------------------------------------------------------------
-void HanComplete(bool mode, byte *dest, byte *src, int nums);
+void HanComplete(bool mode, unsigned char* dest, unsigned char* src, int nums);
 //-----------------------------------------------------------------------------
 #ifdef __cplusplus
 }

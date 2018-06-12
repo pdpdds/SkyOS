@@ -539,11 +539,7 @@ FILE* g_skyStdErr;
 #include "LoadEngFont.h"
 #include "LoadHanFont.h"
 #include "HanOut.h"
-
-TEngFont EngFont1;
-THanFont HanFont1;
-TSpcFont SpcFont1;
-THanjaFont HanjaFont1;
+#include "HangulEngine.h"
 
 extern "C" __declspec(dllexport) void SetSkyMockInterface(SKY_ALLOC_Interface allocInterface, 
 														  SKY_FILE_Interface fileInterface, 
@@ -555,30 +551,11 @@ extern "C" __declspec(dllexport) void SetSkyMockInterface(SKY_ALLOC_Interface al
 	g_skyStdOut = printInterface.sky_stdout;
 	g_skyStdIn = printInterface.sky_stdin;
 	g_skyStdErr = printInterface.sky_stderr;
+}
 
-	char *EngFontFile = "fonts\\영문둥근모꼴.fnt";
-	char *HanFontFile = "fonts\\둥근모꼴.fnt";
-	char *SpcFontFile = "fonts\\kss1.fnt";
-	char *HanjaFontFile = "fonts\\hanja.fnt";
-
-	if (!LoadEngFont(&EngFont1, EngFontFile))
-		printInterface.sky_printf(" 파일을 찾을 수 없습니다! %s\n", EngFontFile);
-	else pDefEngFont = &EngFont1;
-
-	if (!LoadHanFont(&HanFont1, HanFontFile))
-		printInterface.sky_printf(" 파일을 찾을 수 없습니다! %s\n", HanFontFile);
-	else pDefHanFont = &HanFont1;
-
-	if (!LoadSpcFont(&SpcFont1, SpcFontFile))
-		printInterface.sky_printf(" 파일을 찾을 수 없습니다! %s\n", SpcFontFile);
-	else pDefSpcFont = &SpcFont1;
-
-	if (!LoadHanjaFont(&HanjaFont1, HanjaFontFile))
-		printInterface.sky_printf(" 파일을 찾을 수 없습니다! %s\n", HanjaFontFile);
-	else pDefHanjaFont = &HanjaFont1;
-
-	HanTextOut(0, 0, (byte*)"한글 테스트");
-
+extern "C" __declspec(dllexport) I_Hangul* GetHangulEngine()
+{
+	return new HangulEngine();
 }
 
 void *operator new(size_t size)

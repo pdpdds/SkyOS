@@ -186,6 +186,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Include\I_Hangul.h" />
     <ClInclude Include="bsearch.h" />
     <ClInclude Include="CompleteHan.h" />
     <ClInclude Include="CompleteKS.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="HanCode\HANIN.H" />
     <ClInclude Include="HanCode\HANTYPES.H" />
     <ClInclude Include="HanCode\typedefs.h" />
+    <ClInclude Include="HangulEngine.h" />
     <ClInclude Include="hanlib.h" />
     <ClInclude Include="HanOut.h" />
     <ClInclude Include="Johab.h" />
@@ -246,12 +248,13 @@
     <ClCompile Include="HanCode\HOUTVAR.C" />
     <ClCompile Include="HanCode\ISHAN1ST.C" />
     <ClCompile Include="HanCode\ISHAN2ND.C" />
+    <ClCompile Include="HangulEngine.cpp" />
     <ClCompile Include="HanOut.cpp" />
     <ClCompile Include="Johab.c" />
     <ClCompile Include="KS2JohabTable.c" />
-    <ClCompile Include="LoadEngFont.c" />
-    <ClCompile Include="LoadHanFont.c" />
-    <ClCompile Include="LoadHanjaFont.c" />
+    <ClCompile Include="LoadEngFont.cpp" />
+    <ClCompile Include="LoadHanFont.cpp" />
+    <ClCompile Include="LoadHanjaFont.cpp" />
     <ClCompile Include="LoadSpcFont.c" />
     <ClCompile Include="SkyInterface.cpp" />
     <ClCompile Include="Table10x4x4.c" />

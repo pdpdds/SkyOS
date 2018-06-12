@@ -5,41 +5,44 @@
 #include "hancode\hancode.h"    // 한라프로 3.0 한글코드 변환 라이브러리 0.1
 #include "hancode\hanin.h"      // "
 
+#include "SkyInterface.h"
+extern SkyMockInterface g_mockInterface;
 
-TEngFont *pDefEngFont = NULL;
-THanFont *pDefHanFont = NULL;
-TSpcFont *pDefSpcFont = NULL;
-THanjaFont *pDefHanjaFont = NULL;
 
-static void CompleteHanChar(byte *ABuffer32, byte *AHanByte, THanFont *AHanFont)
-{
-    THangul _Hangul;
-	bool flag = true;
-
-    _Hangul.HanByte.Byte0 = AHanByte[0];
-    _Hangul.HanByte.Byte1 = AHanByte[1];
-
-    int F1 = _CodeTable[0][_Hangul.HanCode.F1];
-    int F2 = _CodeTable[1][_Hangul.HanCode.F2];
-    int F3 = _CodeTable[2][_Hangul.HanCode.F3];
-
-    int F3B = AHanFont->pF3B[F2];
-    int F2B = AHanFont->pF2B[F1 * 2 + (F3 != 0)];
-    int F1B = AHanFont->pF1B[F2 * 2 + (F3 != 0)];
-
-    if (F1) HanComplete(true, ABuffer32, AHanFont->F1[F1B][F1], 32), flag = false;
-    if (F2) HanComplete(flag, ABuffer32, AHanFont->F2[F2B][F2], 32), flag = false;
-    if (F3)	HanComplete(flag, ABuffer32, AHanFont->F3[F3B][F3], 32), flag = false;
-}
 //---------------------------------------------------------------------------
 static void PutBitmap8x16_OVERWRITE(int x, int y, byte *ABitmap16)
 {
     for (int i = 0; i < 16; i++) {
        // byte *p = (byte *)EngBitmap->ScanLine[i];
         //p[0] = ~ABitmap16[i];
+		char p = ~ABitmap16[i];
+		char c = 'a';
+
+		if ((p & 0x80) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+		else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+		if ((p & 0x40) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+		else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+		if ((p & 0x20) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+		else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+		if ((p & 0x10) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+		else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+		if ((p & 0x08) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+		else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+		if ((p & 0x04) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+		else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+		if ((p & 0x02) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+		else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+		if ((p & 0x01) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+		else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+
+		g_mockInterface.g_printInterface.sky_printf("\n");
     }
+
+	//g_mockInterface.g_printInterface.sky_printf("\n");
     //ACanvas->Draw(x, y, EngBitmap);
 }
+
+
 //---------------------------------------------------------------------------
 static void PutBitmap16x16_OVERWRITE(int x, int y, byte *ABitmap32)
 {
@@ -47,9 +50,60 @@ static void PutBitmap16x16_OVERWRITE(int x, int y, byte *ABitmap32)
         //byte *p = (byte *)HanBitmap->ScanLine[i];
        // p[0] = ~ABitmap32[2*i];
         //p[1] = ~ABitmap32[2*i+1];
+		char p[2];
+		
+		char c = 'a';
+		for (i = 0; i < 16; i++) {
+		
+			p[0] = ~ABitmap32[2 * i];
+			p[1] = ~ABitmap32[2 * i + 1];
+			
+			if ((p[0] & 0x80) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c);}
+			if ((p[0] & 0x40) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c);}
+			if ((p[0] & 0x20) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c);}
+			if ((p[0] & 0x10) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c);}
+			if ((p[0] & 0x08) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c);}
+			if ((p[0] & 0x04) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c);}
+			if ((p[0] & 0x02) != 0) { g_mockInterface.g_printInterface.sky_printf(" ");}
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c);}
+			if ((p[0] & 0x01) != 0) { g_mockInterface.g_printInterface.sky_printf(" ");}
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c);}
+
+
+			if ((p[1] & 0x80) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+			if ((p[1] & 0x40) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+			if ((p[1] & 0x20) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+			if ((p[1] & 0x10) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+			if ((p[1] & 0x08) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+			if ((p[1] & 0x04) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+			if ((p[1] & 0x02) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+			if ((p[1] & 0x01) != 0) { g_mockInterface.g_printInterface.sky_printf(" "); }
+			else { g_mockInterface.g_printInterface.sky_printf("%c", c); }
+
+			g_mockInterface.g_printInterface.sky_printf("\n");
+		}
+
+
     }
+
+	//g_mockInterface.g_printInterface.sky_printf("\n");
     //ACanvas->Draw(x, y, HanBitmap);
 }
+
+
 //---------------------------------------------------------------------------
 static void PutBitmap8x16_OVERLAP(int x, int y, byte *ABitmap16)
 {   // 투명하게 그리기
@@ -101,6 +155,7 @@ void SetOutputMode(int mode)
         break;
     }
 }
+/*
 //---------------------------------------------------------------------------
 void HanTextOut(int left, int top, byte *s)
 {
@@ -132,6 +187,6 @@ void HanTextOut(int left, int top, byte *s)
             x += 8, i++;
         }
     }
-}
+}*/
 //---------------------------------------------------------------------------
 

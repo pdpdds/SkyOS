@@ -16,6 +16,9 @@
     <Filter Include="HanCode">
       <UniqueIdentifier>{25972315-dcc8-4778-9659-71fb1300edc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{64853025-551a-4c13-abcb-4b5797f2be3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -40,15 +43,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="KS2JohabTable.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadEngFont.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadHanFont.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadHanjaFont.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="LoadSpcFont.c">
@@ -162,6 +156,18 @@
     <ClCompile Include="HanOut.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="HangulEngine.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadHanFont.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadEngFont.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadHanjaFont.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CompleteHan.h">
@@ -232,6 +238,12 @@
     </ClInclude>
     <ClInclude Include="HanOut.h">
       <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\I_Hangul.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="HangulEngine.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
