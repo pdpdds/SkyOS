@@ -1,10 +1,9 @@
 #pragma once
 
-class I_HangulEngine
+//32비트 한글 그래픽 엔진
+class I_Hangul
 {
 public:
-	virtual bool SwitchMode() = 0; //한영전환
-	virtual void Reset() = 0; //새 문자열을 받을 준비를 한다.
-	virtual bool InputAscii(unsigned char letter) = 0; //아스키 문자를 집어넣는다.
-	virtual int GetString(char* buffer) = 0; //라인 문자열을 얻는다.	
+	virtual bool Initialize() = 0; //한글폰트 로드 및 초기화
+	virtual void PutFonts(char *vram, int xsize, int x, int y, unsigned int, unsigned char *s) = 0; //제공된 그래픽 선형 버퍼에 문자열을 출력한다. 
 };

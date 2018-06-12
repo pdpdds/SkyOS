@@ -77,15 +77,18 @@ bool SkyGUIConsole::Initialize(void* pVideoRamPtr, int width, int height, int bp
 
 #include "SkyMockInterface.h"
 #include "I_HangulEngine.h"
+#include "I_Hangul.h"
 
 extern SKY_FILE_Interface g_FileInterface;
 extern SKY_ALLOC_Interface g_allocInterface;
 extern SKY_Print_Interface g_printInterface;
 
 typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
-typedef I_HangulEngine*(*PGetHangulEngine)();
+typedef I_HangulEngine*(*PGetHangulMint64Engine)();
+typedef I_Hangul*(*PGetHangulEngine)();
 
-I_HangulEngine* pEngine = nullptr;
+I_HangulEngine* pMint64Engine = nullptr;
+I_Hangul* pEngine = nullptr;
 
 void SkyGUIConsole::GetCommandForGUI2(char* commandBuffer, int bufSize, char* driveName)
 {
@@ -120,8 +123,8 @@ void SkyGUIConsole::GetCommandForGUI2(char* commandBuffer, int bufSize, char* dr
 
 			if (i > 0) {
 
-				pEngine->InputAscii(c);
-				int len = pEngine->GetString(commandBuffer);
+				pMint64Engine->InputAscii(c);
+				int len = pMint64Engine->GetString(commandBuffer);
 
 				command = driveName;
 
@@ -138,7 +141,7 @@ void SkyGUIConsole::GetCommandForGUI2(char* commandBuffer, int bufSize, char* dr
 			//! dont buffer this char
 			BufChar = false;
 
-			pEngine->InputAscii(0x85);
+			pMint64Engine->InputAscii(0x85);
 		}
 
 		
@@ -151,8 +154,8 @@ void SkyGUIConsole::GetCommandForGUI2(char* commandBuffer, int bufSize, char* dr
 			//if (c != 0 && KEY_SPACE != c) { //insure its an ascii char
 			if (c != 0) { //insure its an ascii char
 
-				pEngine->InputAscii(c);
-				i = pEngine->GetString(commandBuffer);
+				pMint64Engine->InputAscii(c);
+				i = pMint64Engine->GetString(commandBuffer);
 				command = driveName;
 				command += commandBuffer;
 
@@ -179,19 +182,44 @@ bool SkyGUIConsole::Run()
 
 	
 	PSetSkyMockInterface SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "SetSkyMockInterface");
-	PGetHangulEngine HanguleEngine = (PGetHangulEngine)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetHangulEngine");
+	PGetHangulMint64Engine HanguleMint64Engine = (PGetHangulMint64Engine)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetHangulEngine");
 	
 	//디버그 엔진에 플랫폼 종속적인 인터페이스를 넘긴다.
 	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
 
-	if (!HanguleEngine)
+	if (!HanguleMint64Engine)
 	{
 		HaltSystem("Memory Module Load Fail!!");
 	}
 
-	pEngine = HanguleEngine();
-	
+	pMint64Engine = HanguleMint64Engine();
 
+	MODULE_HANDLE hwnd2 = SkyModuleManager::GetInstance()->LoadModuleFromMemory("HangulEngine.dll");
+	SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd2, "SetSkyMockInterface");
+	PGetHangulEngine HangulEngine = (PGetHangulEngine)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd2, "GetHangulEngine");
+	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
+
+
+	if (!HangulEngine)
+	{
+		
+		HaltSystem("HangulEngine Memory Module Load Fail!!");
+	}
+
+	pEngine = HangulEngine();
+
+	bool result = pEngine->Initialize();
+
+	if (!result)
+	{
+		HaltSystem("HangulEngine Initialize Fail!!");
+	}
+
+	Print2("SkyOS에 오신걸 환영합니다!!");
+	Print2("Welcome to SkyOS!!");
+	Print2("歡迎來到SkyOS!!");
+	Print2("SkyOSへようこそ!!");
+	
 	ConsoleManager manager;
 
 	int bufferLen = (m_width / CHAR_WIDTH) - 15;
@@ -211,7 +239,7 @@ bool SkyGUIConsole::Run()
 		PrintCommand((char*)driveName.c_str(), false);
 		
 		memset(commandBuffer, 0, bufferLen);				
-		pEngine->Reset();
+		pMint64Engine->Reset();
 
 		GetCommandForGUI2(commandBuffer, bufferLen, (char*)driveName.c_str());
 		SkyConsole::Print("\n");
@@ -353,6 +381,18 @@ bool SkyGUIConsole::Print(char* pMsg)
 	}
 
 	PutCursor();
+
+	return true;
+}
+
+bool SkyGUIConsole::Print2(char* pMsg)
+{
+	FillRect(m_xPos, m_yPos, CHAR_WIDTH, CHAR_HEIGHT, 0x00);
+
+	pEngine->PutFonts((char*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1024, m_xPos, m_yPos, 0xffffffff, (unsigned char*)pMsg);
+	GetNewLine();
+
+	//PutCursor();
 
 	return true;
 }

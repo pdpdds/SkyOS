@@ -60,15 +60,42 @@ int feof(FILE *stream)
 	return 0;
 }
 
+//수정을 요함. 기능상으로만 동작하게 작업
 int fseek(FILE *stream, long int offset, int whence)
 {
 	if (SEEK_CUR == whence)
 	{
-		fgetc(stream);
-		return 1;
+		if (stream->_position + offset > stream->_fileLength)
+			return -1;
+
+		stream->_position += offset;
+		
+		return 0;
+	}
+	else if (SEEK_SET == whence)
+	{
+		if (offset < 0 || offset > stream->_fileLength)
+			return -1;
+
+		stream->_position = offset;
+
+		if(stream->_position < stream->_fileLength)
+			stream->_eof = 0;
+
+		return 0;
+	}
+	else if (SEEK_END == whence)
+	{
+		if (offset > 0 || (-offset) >= stream->_fileLength)
+			return -1;
+
+		stream->_position = stream->_fileLength + offset;
+		stream->_eof = 1;
+
+		return 0;
 	}
 
-	return 0;
+	return -1;
 }
 
 long int ftell(FILE *stream)

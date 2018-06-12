@@ -56,4 +56,5 @@ private:
 	VideoRamInfo m_videoRamInfo;
 
 	SkyWindow<SKY_GUI_SYSTEM>* m_pWindow;
+
 };

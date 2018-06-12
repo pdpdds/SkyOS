@@ -10,6 +10,7 @@ public:
 	bool Initialize(void* pVideoRamPtr, int width, int height, int bpp, uint8_t buffertype);
 	bool Run();
 	bool Print(char* pMsg);
+	bool Print2(char* pMsg);
 	bool PrintCommand(char* pMsg, bool backspace);
 	void GetCommandForGUI2(char* commandBuffer, int bufSize, char* driveName);
 
