@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="2DGraphics.cpp" />
     <ClCompile Include="ConsoleSystem\commands.cpp" />
     <ClCompile Include="ConsoleSystem\ConsoleManager.cpp" />
     <ClCompile Include="Core\Exception.cpp" />
@@ -40,6 +41,7 @@
     <ClCompile Include="Device\nic.cpp" />
     <ClCompile Include="Device\PCI.cpp" />
     <ClCompile Include="Device\SkyPCI.cpp" />
+    <ClCompile Include="EnglishFont.cpp" />
     <ClCompile Include="FileSystem\ACEList.cpp" />
     <ClCompile Include="FileSystem\FAT12.cpp" />
     <ClCompile Include="FileSystem\fat32.cpp" />
@@ -100,6 +102,7 @@
     <ClCompile Include="GUI\svgagui\src\_mouse.cpp" />
     <ClCompile Include="GUI\svgagui\svgaguientry.cpp" />
     <ClCompile Include="GUI\vesa.cpp" />
+    <ClCompile Include="HangulFont.cpp" />
     <ClCompile Include="Heap\HeapManager.cpp" />
     <ClCompile Include="Heap\kheap.cpp" />
     <ClCompile Include="Heap\ordered_array.cpp" />
@@ -124,6 +127,7 @@
     <ClCompile Include="v8086\RMEFunc.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="2DGraphics.h" />
     <ClInclude Include="ConsoleSystem\commandMacros.h" />
     <ClInclude Include="ConsoleSystem\commands.h" />
     <ClInclude Include="ConsoleSystem\commandTable.h" />
@@ -175,6 +179,7 @@
     <ClInclude Include="FileSystem\RAMDisk.h" />
     <ClInclude Include="FileSystem\RamDiskAdaptor.h" />
     <ClInclude Include="FileSystem\StorageManager.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="GUI\JPEG.h" />
     <ClInclude Include="GUI\Simple\SkyGUIConsole.h" />
     <ClInclude Include="GUI\SkyGUISystem.h" />

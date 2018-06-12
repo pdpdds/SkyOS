@@ -5,6 +5,7 @@
 #include "SkyRenderer32.h"
 #include "SkyGUI.h"
 #include "KeyboardController.h"
+#include "ctype.h"
 
 #define COLOR(r,g,b) ((r<<16) | (g<<8) | b)
 #define WHITE COLOR(255,255,255)
@@ -74,6 +75,97 @@ bool SkyGUIConsole::Initialize(void* pVideoRamPtr, int width, int height, int bp
 	return true;
 }
 
+#include "SkyMockInterface.h"
+#include "I_HangulEngine.h"
+
+extern SKY_FILE_Interface g_FileInterface;
+extern SKY_ALLOC_Interface g_allocInterface;
+extern SKY_Print_Interface g_printInterface;
+
+typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
+typedef I_HangulEngine*(*PGetHangulEngine)();
+
+I_HangulEngine* pEngine = nullptr;
+
+void SkyGUIConsole::GetCommandForGUI2(char* commandBuffer, int bufSize, char* driveName)
+{
+	char c = 0;
+	bool	BufChar;
+
+
+	//! get command string
+	int i = 0;
+
+	
+	std::string command;
+	while (i < bufSize) {
+
+		//! buffer the next char
+		BufChar = true;
+		
+		//! grab next char
+		c = KeyboardController::GetInput();
+
+		//return
+		if (c == 0x0d)
+			break;
+
+		memset(commandBuffer, 0, bufSize);
+
+		//backspace
+		if (c == 0x08) {
+
+			//! dont buffer this char
+			BufChar = false;
+
+			if (i > 0) {
+
+				pEngine->InputAscii(c);
+				int len = pEngine->GetString(commandBuffer);
+
+				command = driveName;
+
+				if(len != 0)
+					command += commandBuffer;
+				
+				PrintCommand((char*)command.c_str(), true);
+				i--;
+			}
+		}
+
+		if (c == 0x85) {
+
+			//! dont buffer this char
+			BufChar = false;
+
+			pEngine->InputAscii(0x85);
+		}
+
+		
+
+		//! only add the char if it is to be buffered
+		if (BufChar) {
+
+			//! convert key to an ascii char and put it in buffer
+			//char c = KeyBoard::ConvertKeyToAscii(key);
+			//if (c != 0 && KEY_SPACE != c) { //insure its an ascii char
+			if (c != 0) { //insure its an ascii char
+
+				pEngine->InputAscii(c);
+				i = pEngine->GetString(commandBuffer);
+				command = driveName;
+				command += commandBuffer;
+
+				PrintCommand((char*)command.c_str(), false);
+				
+			}
+		}
+
+		//! wait for next key. You may need to adjust this to suite your needs
+		//msleep(10);
+	}	
+}
+
 bool SkyGUIConsole::Run()
 {	
 	Thread* pThread = ProcessManager::GetInstance()->GetCurrentTask();
@@ -81,21 +173,53 @@ bool SkyGUIConsole::Run()
 
 	ProcessManager::GetInstance()->CreateProcessFromMemory("GUIWatchDog", GUIWatchDogProc, NULL, PROCESS_KERNEL);
 
+	//Load Hangul Engine
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
+	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory("HangulMint64Engine.dll");
+
+	
+	PSetSkyMockInterface SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "SetSkyMockInterface");
+	PGetHangulEngine HanguleEngine = (PGetHangulEngine)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetHangulEngine");
+	
+	//디버그 엔진에 플랫폼 종속적인 인터페이스를 넘긴다.
+	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
+
+	if (!HanguleEngine)
+	{
+		HaltSystem("Memory Module Load Fail!!");
+	}
+
+	pEngine = HanguleEngine();
+	
+
 	ConsoleManager manager;
 
 	int bufferLen = (m_width / CHAR_WIDTH) - 15;
 	char* commandBuffer = new char[bufferLen];
 
+	
+	
+
 	while (1)
 	{
-		SkyConsole::Print("Command> ");		
-		memset(commandBuffer, 0, bufferLen);		
+		int driveId = StorageManager::GetInstance()->GetCurrentDriveId();
+		char driveLetter = 'a' + driveId;
+		std::string driveName;
+		driveName += toupper(driveLetter);
+		driveName += ":> ";
 
-		SkyConsole::GetCommandForGUI(commandBuffer, bufferLen);
+		PrintCommand((char*)driveName.c_str(), false);
+		
+		memset(commandBuffer, 0, bufferLen);				
+		pEngine->Reset();
+
+		GetCommandForGUI2(commandBuffer, bufferLen, (char*)driveName.c_str());
 		SkyConsole::Print("\n");
 
 		if (manager.RunCommand(commandBuffer) == true)
 			break;
+
+		
 	}
 
 	return false;
@@ -182,13 +306,15 @@ void SkyGUIConsole::Update(unsigned long *buf)
 	}
 }
 
+#include "2DGraphics.h"
+
 bool SkyGUIConsole::Print(char* pMsg)
 {
 	if (m_pRenderer == nullptr)
 		return false;
 
 	//백스페이스
-	if (strlen(pMsg) == 1 && pMsg[0] == 0x08) 
+	if (strlen(pMsg) == 1 && pMsg[0] == 0x08)
 	{
 		if (m_xPos > 9 * 8)
 		{
@@ -198,12 +324,12 @@ bool SkyGUIConsole::Print(char* pMsg)
 
 			PutCursor();
 		}
-		
+
 		return true;
 	}
 
 	FillRect(m_xPos, m_yPos, CHAR_WIDTH, CHAR_HEIGHT, 0x00);
-	
+
 	unsigned char *s = (unsigned char*)pMsg;
 	for (; *s != 0x00; s++)
 	{
@@ -213,20 +339,62 @@ bool SkyGUIConsole::Print(char* pMsg)
 			continue;
 		}
 
+		if (*s == '\r')
+		{
+			GetNewLine();
+			continue;
+		}
+
+		if (!isascii(*s) || (*s) < 0x20)
+			continue;
+
 		m_pRenderer->PutFont((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, CHAR_COLOR, skyFontData + *s * 16);
 		m_xPos += CHAR_WIDTH;
-	}	
-	
+	}
+
 	PutCursor();
-	
+
+	return true;
+}
+
+bool SkyGUIConsole::PrintCommand(char* pMsg, bool backspace)
+{
+	if (m_pRenderer == nullptr)
+		return false;
+
+	m_xPos = PIVOT_X;
+
+	if (backspace != true)
+	{
+		//FillRect(m_xPos, m_yPos, m_width - m_xPos, CHAR_HEIGHT, 0x00);
+	}
+	else
+	{
+		FillRect(m_lastCommandLength, m_yPos, CHAR_WIDTH, CHAR_HEIGHT, 0x00);
+	}
+
+	RECT rect;
+	rect.iX1 = 0;
+	rect.iY1 = 0;
+	rect.iX2 = m_width;
+	rect.iY2 = m_height;
+	m_lastCommandLength = kInternalDrawText(&rect, (COLOR*)m_pVideoRamPtr, m_xPos, m_yPos, 0xffffffff, 0x00, pMsg, strlen(pMsg));
+
+	m_lastCommandLength += 8;
+	m_xPos = m_lastCommandLength;
+	PutCursor();
+
 	return true;
 }
 
 void SkyGUIConsole::PutCursor()
 {
+	FillRect(m_xPos, m_yPos, CHAR_WIDTH*2, CHAR_HEIGHT, 0x00);
 	FillRect(m_xPos, m_yPos + (CHAR_HEIGHT - 4), CHAR_WIDTH, 4, WHITE);
 }
 
 void SkyGUIConsole::PutPixel(ULONG i, unsigned char r, unsigned char g, unsigned char b) {
 	m_pVideoRamPtr[i] = (r << 16) | (g << 8) | b;
 }
+
+

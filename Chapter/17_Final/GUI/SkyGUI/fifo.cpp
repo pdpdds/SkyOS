@@ -31,11 +31,7 @@ int fifo32_put(FIFO32 *fifo, int data)
 		fifo->p = 0;
 	}
 	fifo->free--;
-	//if (fifo->task != 0) {
-		//if (fifo->task->flags != 2) { /* 태스크가 sleeve하고 있으면 */
-			//task_run(fifo->task, -1, 0); /* 깨어 준다 */
-		//}
-	//}
+	
 	return 0;
 }
 
@@ -59,5 +55,8 @@ int fifo32_get(FIFO32 *fifo)
 int fifo32_status(FIFO32 *fifo)
 /* 어느 정도 데이터가 모여 있을까를 보고한다 */
 {
+	if (fifo == nullptr)
+		return 0;
+
 	return fifo->size - fifo->free;
 }

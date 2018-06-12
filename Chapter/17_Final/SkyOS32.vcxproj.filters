@@ -320,6 +320,9 @@
       <Filter>ThirdParty\easyzlib</Filter>
     </ClCompile>
     <ClCompile Include="luatinker.cpp" />
+    <ClCompile Include="2DGraphics.cpp" />
+    <ClCompile Include="HangulFont.cpp" />
+    <ClCompile Include="EnglishFont.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\Hal.h">
@@ -617,6 +620,8 @@
       <Filter>GUI\SkyGUI</Filter>
     </ClInclude>
     <ClInclude Include="luatinker.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="2DGraphics.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

@@ -13,6 +13,7 @@ long cmdTaskCount(char *theCommand);
 long cmdGlobalState(char *theCommand);
 long CmdExec(char *theCommand);
 long cmdGUI(char *theCommand);
+long cmdCD(char *theCommand);
 long cmdLua3(char *theCommand);
 long cmdLua5(char *theCommand);
 long cmdSwitchGUI(char *theCommand);

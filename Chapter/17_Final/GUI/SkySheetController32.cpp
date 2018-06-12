@@ -22,11 +22,11 @@ bool SkySheetController32::Initialize(unsigned char *vram, int xsize, int ysize)
 	m_vram = (ULONG*)vram;
 	m_xsize = xsize;
 	m_ysize = ysize;
-	m_top = -1; /* 시트는 한 장도 없다 */
+	m_sheetTop = -1; /* 시트는 한 장도 없다 */
 
 	for (int i = 0; i < MAX_SHEETS; i++)
 	{
-		sheets0[i].m_flags = 0; /* 미사용 마크 */
+		sheets0[i].Init();
 	}
 
 	return true;

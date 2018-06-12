@@ -235,6 +235,7 @@ void HandlePageFault(registers_t regs)
 {
 	kExceptionMessageHeader();
 	SkyConsole::Print("Page Fault at Address[0x%x]\n", regs.cs);	
+	SkyDebugger::GetInstance()->TraceStackWithSymbol();
 	for (;;);
 }
 

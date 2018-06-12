@@ -22,9 +22,6 @@ Process* UserProcessLoader::CreateProcessFromFile(char* appName, void* param)
 	pProcess->SetProcessId(GetNextProcessId());
 	PageDirectory* pPageDirectory = nullptr;
 
-	//if (strcmp(appName, "ConsoleSystem") != 0)
-	//{
-
 	PhysicalMemoryManager::EnablePaging(false);
 
 	pPageDirectory = VirtualMemoryManager::CreateCommonPageDirectory();
@@ -38,11 +35,14 @@ Process* UserProcessLoader::CreateProcessFromFile(char* appName, void* param)
 
 	HeapManager::MapHeapToAddressSpace(pPageDirectory);
 
-	PhysicalMemoryManager::EnablePaging(true);
+	//그래픽 버퍼 주소를 페이지 디렉토리에 매핑한다.
+	if (SkyGUISystem::GetInstance()->GUIEnable() == true)
+	{
+		VirtualMemoryManager::CreateVideoDMAVirtualAddress(pPageDirectory, (uintptr_t)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, (uintptr_t)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr,
+			(uintptr_t)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr + VIDEO_RAM_LOGICAL_ADDRESS_OFFSET);
+	}
 
-	//}
-	//else
-	//pPageDirectory = VirtualMemoryManager::GetKernelPageDirectory();	
+	PhysicalMemoryManager::EnablePaging(true);
 
 	pProcess->SetPageDirectory(pPageDirectory);
 

@@ -140,3 +140,9 @@ size_t HDDAdaptor::Write(PFILE file, unsigned char* buffer, unsigned int size, i
 {
 	return 0;
 }
+
+bool HDDAdaptor::GetFileList()
+{
+	SkyConsole::Print("Not Implemented\n");
+	return true;
+}

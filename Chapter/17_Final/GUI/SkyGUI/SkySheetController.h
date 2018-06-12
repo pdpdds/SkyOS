@@ -16,13 +16,12 @@ public:
 	virtual unsigned char* AllocBuffer(int width, int height) = 0;
 
 	SkySheet *Alloc();
-	int GetTop() { return m_top; }
-	void SetTop(int top) { m_top = top; }
+	int GetTop() { return m_sheetTop; }
+	void SetTop(int top) { m_sheetTop = top; }
 
 	void UpdateSheets(int old, int height, SkySheet* sheet);
 
-	void RefreshMap(int vx0, int vy0, int vx1, int vy1, int h0);
-	void RefreshMap2(int vx0, int vy0, int vx1, int vy1, int h0);
+	void RefreshMap(int vx0, int vy0, int vx1, int vy1, int h0);	
 
 	SkySheet* FindSheet(int x, int y);
 	SkySheet* FindSheetById(int processId);
@@ -30,7 +29,7 @@ public:
 
 protected:
 	unsigned char* m_map;
-	int m_xsize, m_ysize, m_top;
+	int m_xsize, m_ysize, m_sheetTop;
 	
 	SkySheet *m_pSheets[MAX_SHEETS];
 	SkySheet sheets0[MAX_SHEETS];

@@ -352,7 +352,15 @@ BYTE FindFileInEnumeration(struct DirEntry  * DEInfo, void * vFileName, struct D
 	}
 	else
 		return 1; 	//continue enumeration
+
 }
+
+void GetRootDirectoryFileList()
+{
+	//if (EnumerateFilesInRoot(Drive[0], FindFileInEnumeration, "C", DEInfo) != 2)
+	//	return 0;
+}
+
 DirEntry  * GetDirectoryEntry(const char * FilePath, struct DirEntry * DEInfo)
 {
 	char Drive[4], Dir[256], szFileName[32], szExt[5], szFile[14];
@@ -377,6 +385,8 @@ DirEntry  * GetDirectoryEntry(const char * FilePath, struct DirEntry * DEInfo)
 		szFile[12] = 0;
 	}
 	NextDir = SplitFirstDirectory(CurDir, Dir + 1);
+
+	SkyConsole::Print("test %c %s\n", Drive[0], CurDir);
 
 	if (CurDir[0] == 0)
 	{

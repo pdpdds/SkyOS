@@ -107,7 +107,7 @@ private:
 	int  my;
 
 	MOUSE_DEC mdec;
-	FIFO32 fifo;
+	FIFO32 m_fifo;
 	FIFO32 keycmd;
 	int fifobuf[1024];
 	int keycmd_buf[32];

@@ -11,7 +11,7 @@ public:
 	bool ReadyStatus();
 	int GetStatus();
 
-	FIFO32 fifo;
-	int    fifobuf[128];
+	FIFO32 m_fifo;
+	int    m_fifobuf[128];
 };
 

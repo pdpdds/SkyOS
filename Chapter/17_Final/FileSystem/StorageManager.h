@@ -39,6 +39,13 @@ public:
 	bool CloseFile(PFILE file);
 
 	bool GetFileList();
+	int GetCurrentDriveId()
+	{
+		if (m_pCurrentFileSystem)
+			return m_pCurrentFileSystem->m_deviceID;
+
+		return 0;
+	}
 
 protected:
 	bool ConstructFileSystem(multiboot_info* info);

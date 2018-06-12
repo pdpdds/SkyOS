@@ -56,13 +56,17 @@ namespace SkyConsole
 		{
 			SkyGUISystem::GetInstance()->Clear();
 		}
-
-		for (uint i = 0; i < m_ScreenWidth * m_ScreenHeight; i++)				//Remember, 25 rows and 80 columns
+		else
 		{
-			m_pVideoMemory[i] = (ushort)(0x20 | (m_Color << 8));
+			for (uint i = 0; i < m_ScreenWidth * m_ScreenHeight; i++)				//Remember, 25 rows and 80 columns
+			{
+				m_pVideoMemory[i] = (ushort)(0x20 | (m_Color << 8));
+			}
+
+			MoveCursor(0, 0);
 		}
 
-		MoveCursor(0, 0);
+		
 	}
 
 	void Write(const char *szString)
@@ -213,6 +217,14 @@ namespace SkyConsole
 					case 'd':
 					case 'i': {
 						int c = va_arg(args, int);
+
+						if (c < 0)
+						{
+							buffer[index] = '-';
+							index++;
+							c = (-c);
+						}
+
 						char str[32] = { 0 };
 						itoa_s(c, 10, str);
 						strcpy(buffer + index, str);

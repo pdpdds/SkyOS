@@ -11,6 +11,8 @@ public:
 	SkySheet();
 	virtual ~SkySheet();
 
+	void Init();
+
 	void SetBuf(unsigned char *buf, int xsize, int ysize, int col_inv);
 	void Updown(int height);
 	void Refresh(int bx0, int by0, int bx1, int by1);

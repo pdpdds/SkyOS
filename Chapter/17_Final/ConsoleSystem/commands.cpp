@@ -501,6 +501,20 @@ long cmdGUI(char *theCommand)
 	return false;
 }
 
+long cmdCD(char *theCommand)
+{
+	int size = strlen(theCommand);
+	if (size != 2 || theCommand[1] != ':')
+	{
+		SkyConsole::Print("Invalid Argument\n");
+		return false;
+	}
+	char driveLetter = toupper(theCommand[0]);
+	StorageManager::GetInstance()->SetCurrentFileSystemByID(driveLetter);
+
+	return false;
+}
+
 void FillRect8(int x, int y, int w, int h, char col, int actualX, int actualY)
 {
 	char* lfb = (char*)0xF0000000;

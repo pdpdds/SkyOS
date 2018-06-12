@@ -85,16 +85,19 @@ DWORD WINAPI SystemGUIProc(LPVOID parameter)
 	SkyConsole::Print("start ebp : %x\n", *ebp);	
 	SkyConsole::Print("parameter : %x\n", parameter);
 
+
+	multiboot_info* pBootInfo = SkyModuleManager::GetInstance()->GetMultiBootInfo();
+
 	systemOn = true;
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
-	multiboot_info* pBootInfo = SkyModuleManager::GetInstance()->GetMultiBootInfo();
 	StorageManager::GetInstance()->Initilaize(pBootInfo);
 	
 	kEnterCriticalSection();
 	SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
 	kLeaveCriticalSection();
 
+	SkyGUISystem::GetInstance()->InitGUIModule();
 	SkyGUISystem::GetInstance()->Run();
 
 	return 0;

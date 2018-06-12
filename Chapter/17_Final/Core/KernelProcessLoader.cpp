@@ -37,8 +37,8 @@ Process* KernelProcessLoader::CreateProcessFromMemory(const char* appName, LPTHR
 	//그래픽 버퍼 주소를 페이지 디렉토리에 매핑한다.
 	if (SkyGUISystem::GetInstance()->GUIEnable() == true)
 	{	
-		VirtualMemoryManager::CreateVideoDMAVirtualAddress(pPageDirectory, (uintptr_t)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, (uintptr_t)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 
-			(uintptr_t)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr + VIDEO_RAM_LOGICAL_ADDRESS_OFFSET);
+		uintptr_t videoAddress = (uintptr_t)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr;
+		VirtualMemoryManager::CreateVideoDMAVirtualAddress(pPageDirectory, videoAddress, videoAddress, videoAddress + VIDEO_RAM_LOGICAL_ADDRESS_OFFSET);
 	}
 	
 	//페이징을 활성화한다.

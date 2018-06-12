@@ -372,4 +372,13 @@ void KeyboardController::HandleKeyboardInterrupt()
 		}
 		buffer[buffend] = asciiCode;
 	}
+	else if (scanCode == 0x38) //LEFT ALT
+	{
+		//키버퍼에 아스키값을 기록한다.
+		if (buffend != (KEYBUFFSIZE - 1))
+		{
+			buffend++;
+		}
+		buffer[buffend] = 0x85;
+	}
 }

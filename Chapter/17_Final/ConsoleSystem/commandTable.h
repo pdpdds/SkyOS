@@ -18,6 +18,7 @@ START_COMMAND_TABLE
 	CMD_ENTRY("gui", false, cmdGUI, "Get Resolution Mode")	
 	CMD_ENTRY("pci", false, cmdPCI, "Get PCI List")
 	CMD_ENTRY("dir", false, cmdDir, "Get File List")
+	CMD_ENTRY("cd", true, cmdCD, "Change Drive")
 	CMD_ENTRY("lua3", true, cmdLua3, "exec lua3 file")
 	CMD_ENTRY("lua5", true, cmdLua5, "test lua5 file")
 	CMD_ENTRY("guiconsole", false, cmdSwitchGUI, "Switch to GUI Console Mode")

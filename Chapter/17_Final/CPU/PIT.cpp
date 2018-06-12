@@ -73,7 +73,7 @@ __declspec(naked) void InterruptPITHandler()
 
 	__asm
 	{
-		cmp g_pageDirectory, 0;페이지 디렉토리 값이 0이면 정상적으로 인터럽트를 완료
+		cmp g_pageDirectory, 0; 페이지 디렉토리 값이 0이면 정상적으로 인터럽트를 완료
 		jz pass
 
 		//페이지 디렉토리값이 설정되어 있다면 
@@ -83,17 +83,20 @@ __declspec(naked) void InterruptPITHandler()
 
 		mov	eax, [g_pageDirectory]
 		mov	cr3, eax; CR3(PDBR) 레지스터에 페이지 디렉토리값 변경
-	pass:
+		pass :
 		//스택에 넣었던 레지스터 값들을 복원하고 원래 수행하던 코드로 리턴한다
 		pop gs
-		pop fs
-		pop es
-		pop ds
+			pop fs
+			pop es
+			pop ds
 
-		popad;
+			popad;
+	}
+	SendEOI();
 
-		mov al, 0x20
-		out 0x20, al
+	__asm
+	{
+		
 		POPFD
 		iretd;
 	}

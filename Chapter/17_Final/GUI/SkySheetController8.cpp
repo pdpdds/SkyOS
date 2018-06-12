@@ -2,6 +2,7 @@
 #include "SkyConsole.h"
 #include "memory.h"
 
+extern void HaltSystem(const char* errMsg);
 
 SkySheetController8::SkySheetController8()
 {
@@ -18,19 +19,20 @@ bool SkySheetController8::Initialize(unsigned char *vram, int xsize, int ysize)
 
 	if (m_map == nullptr)
 	{
+		HaltSystem("SkySheetController8::Initialize");
 		return false;
 	}
-
+	
 	memset(m_map, 0, sizeof(unsigned char ) * xsize * ysize);
 
 	m_vram = vram;
 	m_xsize = xsize;
 	m_ysize = ysize;
-	m_top = -1; /* 시트는 한 장도 없다 */
+	m_sheetTop = -1;
 
 	for (int i = 0; i < MAX_SHEETS; i++)
 	{
-		sheets0[i].m_flags = 0; /* 미사용 마크 */
+		sheets0[i].m_flags = 0;
 	}
 
 	return true;
@@ -58,8 +60,16 @@ void SkySheetController8::RefreshSub(int vx0, int vy0, int vx1, int vy1, int h0,
 	for (h = h0; h <= h1; h++)
 	{
 		sht = m_pSheets[h];
+
+		if (sht == nullptr)
+			continue;
+
 		buf = sht->m_buf;
-		sid = sht - sheets0;
+
+		if (buf == nullptr)
+			continue;
+
+		sid = (sht - sheets0);
 		
 		/* vx0~vy1를 사용해, bx0~by1를 역산한다 */
 		bx0 = vx0 - sht->m_vx0;
@@ -95,11 +105,15 @@ void SkySheetController8::RefreshSub(int vx0, int vy0, int vx1, int vy1, int h0,
 			{
 				vx = sht->m_vx0 + bx;
 
-				if (m_map[vy * m_xsize + vx] == sid)
+				if (vy * m_xsize + vx < m_xsize * m_ysize)
 				{
-					
-					m_vram[vy * m_xsize + vx] = buf[by * sht->m_bxsize + bx];
+					if (m_map[vy * m_xsize + vx] == sid)
+					{
+
+						m_vram[vy * m_xsize + vx] = buf[by * sht->m_bxsize + bx];
+					}
 				}
+				
 			}
 		}
 	}

@@ -17,6 +17,7 @@
 #include "Process.h"
 #include "Thread.h"
 #include "SkyConsoleTask.h"
+#include "SkyDebugger.h"
 
 extern void EnableMouse(FIFO32 *fifo, int data0, MOUSE_DEC *mdec);
 extern void ProcessSkyMouseHandler();
@@ -54,6 +55,8 @@ __declspec(naked) void SendEOI()
 }
 int first = 0;
 int second = 0;
+static int color = COL8_FF00FF;
+
 __declspec(naked) void kSkyMouseHandler()
 {
 
@@ -69,14 +72,19 @@ __declspec(naked) void kSkyMouseHandler()
 	}
 
 	
-	/*
-	second = GetTickCount();
 	
-	//if (second - first >= 50)
+	/*second = GetTickCount();
+	
+	if (second - first >= 10)
 	{
+		
 
+		if (color == COL8_FF00FF)
+			color = COL8_C6C6C6;
+		else color = COL8_FF00FF;
 		SkyConsole::Print("%d\n", first);
 		first = GetTickCount();
+		SkyGUI::FillRect8(100, 100, 100, 100, color, 1024, 768);
 	}*/
 
 		
@@ -84,8 +92,6 @@ __declspec(naked) void kSkyMouseHandler()
 
 	_asm
 	{
-		mov al, 0x20
-		out 0x20, al
 
 		POPFD
 		POPAD
@@ -149,6 +155,33 @@ SkyGUI::~SkyGUI()
 {
 }
 
+int cons_newline2(int cursor_y, SkySheet *sheet)
+{
+	int x, y;
+	unsigned char* buf = sheet->GetBuf();
+	int bxsize = sheet->GetXSize();
+	if (cursor_y < 28 + 112) {
+		cursor_y += 16; /* 다음 행에 */
+	}
+	else {
+		/* 스크롤 */
+		for (y = 28; y < 28 + 112; y++) {
+			for (x = 8; x < 8 + 340; x++) {
+				buf[x + y * bxsize] = buf[x + (y + 16) * bxsize];
+			}
+		}
+		for (y = 28 + 112; y < 28 + 628; y++) {
+			for (x = 8; x < 8 + 340; x++) {
+				buf[x + y * bxsize] = COL8_000000;
+			}
+		}
+		sheet->Refresh(8, 28, 8 + 340, 28 + 628);
+	}
+	return cursor_y;
+}
+
+int g_cursory = 0;
+bool errorOuccored = false;
 bool SkyGUI::Print(char* pMsg)
 {
 	int len = strlen(pMsg);
@@ -168,12 +201,22 @@ bool SkyGUI::Print(char* pMsg)
 		
 	}
 
+	if (errorOuccored == true)
+	{
+		m_pRenderer->PutFontAscToSheet(sht_back, 8, g_cursory, COL8_FFFFFF, COL8_000000, pMsg, strlen(pMsg));
+		g_cursory += 16;
+		
+	}
+	
+
 	return true;
 }
 
 bool SkyGUI::Clear()
 {
-	return false;
+	memset(m_pVideoRamPtr, 0, (m_width * m_height) * sizeof(char));
+	errorOuccored = true;
+	return true;
 }
 
 bool SkyGUI::Initialize(void* pVideoRamPtr, int width, int height, int bpp, uint8_t buffertype)
@@ -188,6 +231,15 @@ bool SkyGUI::Initialize(void* pVideoRamPtr, int width, int height, int bpp, uint
 	//초기화면 구성
 	//화면 구성요소인 백그라운드, 마우스를 표현한 쉬트를 생성하고 각각의 외형에 맞게 태스크바나 텍스트바를 붙인다.
 	MakeInitScreen();
+
+	//입출력 시스템 재구성
+	MakeIOSystem();
+
+	CreateGUIDebugProcess();
+	CreateGUIConsoleProcess(300, 4);
+	//ProcessManager::GetInstance()->CreateProcessFromMemory("GUIWatchDog", GUIWatchDogProc, NULL, PROCESS_KERNEL);
+
+	//SkyDebugger::GetInstance()->TraceStackWithSymbol();
 
 	return true;
 }
@@ -221,6 +273,9 @@ bool SkyGUI::MakeInitScreen()
 
 	sht_back->Slide(0, 0);
 	sht_back->Updown(0);
+
+	sht_mouse->Slide(mx, my);
+	sht_mouse->Updown(1);
 
 	return true;
 }
@@ -288,11 +343,11 @@ bool SkyGUI::MakeIOSystem()
 	//키보드, 마우스 핸들러 변경
 	kEnterCriticalSection();
 
-	fifo32_init(&fifo, 1024, fifobuf);
+	fifo32_init(&m_fifo, 1024, fifobuf);
 	fifo32_init(&keycmd, 32, keycmd_buf);
 
-	init_keyboard(&fifo, 256);
-	EnableMouse(&fifo, 512, &mdec);
+	init_keyboard(&m_fifo, 256);
+	EnableMouse(&m_fifo, 512, &mdec);
 
 	setvect(0x21, kSkyKeyboardHandler);
 	setvect(0x2c, kSkyMouseHandler);
@@ -339,10 +394,10 @@ bool SkyGUI::kGetMessage(LPSKY_MSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 		kLeaveCriticalSection();
 
 	kEnterCriticalSection();
-	if (fifo32_status(&fifo) != 0)
+	if (fifo32_status(&m_fifo) != 0)
 	{
 		lpMsg->_msgId = SKY_MSG_MESSAGE;
-		lpMsg->_extra = fifo32_get(&fifo);
+		lpMsg->_extra = fifo32_get(&m_fifo);
 	}
 	else
 	{
@@ -362,16 +417,9 @@ bool SkyGUI::kTranslateAccelerator(HWND hWnd, HANDLE hAccTable, LPSKY_MSG lpMsg)
 }
 
 bool SkyGUI::Run()
-{	
-	//입출력 시스템 재구성
-	MakeIOSystem();
-	
-	CreateGUIDebugProcess();
-	CreateGUIConsoleProcess(300, 4);
-	//ProcessManager::GetInstance()->CreateProcessFromMemory("GUIWatchDog", GUIWatchDogProc, NULL, PROCESS_KERNEL);
-
-	sht_mouse->Slide(mx, my);
-	sht_mouse->Updown(3);
+{			
+	uintptr_t videoAddress = (uintptr_t)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr;
+	SkyConsole::Print("PhysBasePtr : 0x%x\n", videoAddress);
 
 	SKY_MSG msg;
 	while (kGetMessage(&msg, nullptr, 0, 0))
@@ -524,9 +572,12 @@ void SkyGUI::ProcessMouse(int value)
 			my = m_height - 1;
 		}
 
-		kEnterCriticalSection();
-		SkyConsole::Print("%d %d\n", mx , my);
+		
+		//SkyConsole::Print("%d %d %d\n", mx, my, m_height);
 		sht_mouse->Slide(mx, my);
+		kEnterCriticalSection();
+		
+		
 		//sht_mouse->Updown(3);
 
 		if ((mdec.btn & 0x01) != 0)  //왼쪽 버튼을 눌렀다면 마우스 바로 아래의 윈도우를 드래그 처리한다.
@@ -543,7 +594,7 @@ void SkyGUI::ProcessMouse(int value)
 			}
 			m_pPressedSheet = nullptr;
 		}
-
+		kLeaveCriticalSection();
 		/*if ((mdec.btn & 0x02) != 0) //오른쪽 버튼을 눌렀다면 콘솔 프로세스를 생성한다.
 		{
 			if (m_RButtonPressed == false)
@@ -557,8 +608,8 @@ void SkyGUI::ProcessMouse(int value)
 		{
 			m_RButtonPressed = false;
 		}*/
-
-		kLeaveCriticalSection();
+		
+		
 
 	}
 }

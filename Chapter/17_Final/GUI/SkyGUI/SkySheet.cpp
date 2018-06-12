@@ -3,10 +3,22 @@
 
 SkySheet::SkySheet()
 {
+	Init();
+}
+
+void SkySheet::Init()
+{
 	m_ownerProcess = -1;
 	m_movable = true;
 	m_vx0 = 0;
 	m_vy0 = 0;
+	m_buf = nullptr;
+	m_bxsize = 0;
+	m_bysize = 0;
+	m_col_inv = 0;
+	m_ctl = nullptr;
+	m_height = -1;
+	m_flags = 0;/* 미사용 마크 */
 }
 
 
@@ -58,7 +70,7 @@ void SkySheet::Refresh(int bx0, int by0, int bx1, int by1)
 	}
 	return;
 }
-
+#include "SkyConsole.h"
 void SkySheet::Slide(int vx0, int vy0)
 {
 	int old_vx0 = m_vx0, old_vy0 = m_vy0;
@@ -66,10 +78,10 @@ void SkySheet::Slide(int vx0, int vy0)
 	m_vy0 = vy0;
 
 	SkySheetController* ctl = GetOwner();
-
+	//SkyConsole::Print("SkySheet height %d %d\n", m_height, m_ownerProcess);
 	if (m_height >= 0) { /* 만약 표시중이라면, 새로운 레이어의 정보에 따라 화면을 다시 그린다 */
-		ctl->RefreshMap2(old_vx0, old_vy0, old_vx0 + m_bxsize, old_vy0 + m_bysize, 0);
-		ctl->RefreshMap2(vx0, vy0, vx0 + m_bxsize, vy0 + m_bysize, m_height);
+		ctl->RefreshMap(old_vx0, old_vy0, old_vx0 + m_bxsize, old_vy0 + m_bysize, 0);
+		ctl->RefreshMap(vx0, vy0, vx0 + m_bxsize, vy0 + m_bysize, m_height);
 		ctl->RefreshSub(old_vx0, old_vy0, old_vx0 + m_bxsize, old_vy0 + m_bysize, 0, m_height - 1);
 		ctl->RefreshSub(vx0, vy0, vx0 + m_bxsize, vy0 + m_bysize, m_height, m_height);
 	}

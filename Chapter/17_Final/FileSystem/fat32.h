@@ -187,6 +187,7 @@ void InitFATFileSystem();
 FATInfo * GetFATInfo(BYTE DriveLetter);
 
 KERNELDLL DirEntry  * GetDirectoryEntry(const char * FilePath, struct DirEntry  * DEInfo);
+void GetRootDirectoryFileList();
 /*Following two functions enumerate  valid Directory Entries in the root directory or in
 a specified directory. They will stop when the end of folder or root is reached or when
 the CallBackFn canceled the enumeration by returning 0.
