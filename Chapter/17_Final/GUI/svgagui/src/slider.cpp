@@ -68,19 +68,18 @@ static void new_position(GuiObject *slid, int pos_neg)
 static void move_slider(GuiObject * slid, int pos_neg)
 {
 	GuiWinThread *win_thread;
-	
+
 	check_object(slid, "slid", "move_slider");
 	check_window(slid->win, "move_slider");
 	win_thread = (slid->win)->win_thread;
-	
+
 	do {
-		ksleep(sleep_time);
+		//usleep(sleep_time);
 		do_window_functions(win_thread);
 		new_position(slid, pos_neg);
 		if (GuiGetMessage() == GuiMouseEvent)
 			move_mouse();
-	}
-	while (GuiMouseGetButton() == GuiMouseLeftButton);
+	} while (GuiMouseGetButton() == GuiMouseLeftButton);
 }
 
 
@@ -117,13 +116,13 @@ static void right_cb(GuiObject * obj, int data)
 
 
 GuiObject *add_slider(GuiWindow * win, int type, int x, int y, int length,
-		      int buttons)
+	int buttons)
 {
 	GuiObject *slid, *obj;
-	
+
 	check_window(win, "add_slider");
 
-	slid = (GuiObject *) malloc(sizeof(GuiObject));
+	slid = (GuiObject *)malloc(sizeof(GuiObject));
 	if (slid == NULL)
 		error("Cannot allocate memory for slider.");
 
@@ -164,8 +163,8 @@ GuiObject *add_slider(GuiWindow * win, int type, int x, int y, int length,
 
 		if (slid->buttons) {
 			obj = add_button(win, PIXMAP_BUTTON, slid->x_min,
-				      slid->y_min - dimension, dimension,
-					 dimension, "");
+				slid->y_min - dimension, dimension,
+				dimension, "");
 			set_object_image_data(obj, up_xpm, 3, 4, 0, obj->bg_col1);
 			set_object_image_data(obj, up_xpm, 4, 5, 1, obj->bg_col1);
 			set_object_callback(obj, up_cb);
@@ -173,8 +172,8 @@ GuiObject *add_slider(GuiWindow * win, int type, int x, int y, int length,
 			obj->obj_link = slid;
 
 			obj = add_button(win, PIXMAP_BUTTON, slid->x_min,
-				   slid->y_max + 1, dimension, dimension,
-					 "");
+				slid->y_max + 1, dimension, dimension,
+				"");
 			set_object_image_data(obj, down_xpm, 3, 4, 0, obj->bg_col1);
 			set_object_image_data(obj, down_xpm, 4, 5, 1, obj->bg_col1);
 			set_object_callback(obj, down_cb);
@@ -182,7 +181,6 @@ GuiObject *add_slider(GuiWindow * win, int type, int x, int y, int length,
 			obj->obj_link = slid;
 		}
 	}
-
 	if (slid->type == HOR_SLIDER) {
 		slid->x_min = slid->x;
 		slid->x_max = slid->x + slid->slider_length - 1;
@@ -190,7 +188,7 @@ GuiObject *add_slider(GuiWindow * win, int type, int x, int y, int length,
 		slid->y_max = slid->y + dimension - 1;
 		if (slid->buttons) {
 			obj = add_button(win, PIXMAP_BUTTON, slid->x_min - dimension,
-				  slid->y_min, dimension, dimension, "");
+				slid->y_min, dimension, dimension, "");
 			set_object_image_data(obj, left_xpm, 4, 3, 0, obj->bg_col1);
 			set_object_image_data(obj, left_xpm, 5, 4, 1, obj->bg_col1);
 			set_object_callback(obj, left_cb);
@@ -198,7 +196,7 @@ GuiObject *add_slider(GuiWindow * win, int type, int x, int y, int length,
 			obj->obj_link = slid;
 
 			obj = add_button(win, PIXMAP_BUTTON, slid->x_max + 1,
-				  slid->y_min, dimension, dimension, "");
+				slid->y_min, dimension, dimension, "");
 			set_object_image_data(obj, right_xpm, 5, 3, 0, obj->bg_col1);
 			set_object_image_data(obj, right_xpm, 6, 4, 1, obj->bg_col1);
 			set_object_callback(obj, right_cb);
@@ -221,12 +219,11 @@ GuiObject *add_slider(GuiWindow * win, int type, int x, int y, int length,
 		slid->length = 1;
 	}
 	add_object(slid);	/* add slider to the object list */
-	
+
 	if (slid->type == NICE_VALUE_SLIDER) {
-		add_text(win, NORMAL_TEXT, slid->x_min - 18, slid->y - 18, "0.00");		
-		set_slider_maxvalue(slid, 1.0f);
+		add_text(win, NORMAL_TEXT, slid->x_min - 18, slid->y - 18, "0.00");
+		set_slider_maxvalue(slid, 1.0);
 	}
-	
 	return slid;
 }
 
@@ -235,7 +232,7 @@ static void update_slider_value(GuiObject * slid)
 {
 	GuiObject *text;
 	GuiWindow *win;
-	
+
 	check_object(slid, "slid", "update_slider_value");
 	text = slid->next;
 	check_object(text, "text", "update_slider_value");
@@ -243,13 +240,13 @@ static void update_slider_value(GuiObject * slid)
 	check_window(win, "update_slider_value");
 
 	if (slid->max_value <= 2)
-		sprintf(text->label, "%0.2f", slid->position / (float) (slid->slider_length - 1) *
+		sprintf(text->label, "%0.2f", slid->position / (float)(slid->slider_length - 1) *
 			slid->max_value);
 	else if (slid->max_value <= 10)
-		sprintf(text->label, "%0.1f", slid->position / (float) (slid->slider_length - 1) *
+		sprintf(text->label, "%0.1f", slid->position / (float)(slid->slider_length - 1) *
 			slid->max_value);
 	else
-		sprintf(text->label, "%0.0f", slid->position / (float) (slid->slider_length - 1) *
+		sprintf(text->label, "%0.0f", slid->position / (float)(slid->slider_length - 1) *
 			slid->max_value);
 
 	win_fillbox(win, text->x, text->y, text->width, text->height, text->bg_col1);
@@ -263,7 +260,7 @@ void create_slider(GuiObject * slid)
 {
 	GuiWindow *win;
 	int x, y, length, XPos, YPos;
-	
+
 	check_object(slid, "slid", "create_slider");
 	win = slid->win;
 	check_window(win, "create_slider");
@@ -273,16 +270,18 @@ void create_slider(GuiObject * slid)
 		win_fillbox(win, slid->x, slid->y, slid->slider_length, dimension, slid->bg_col2);
 		win_fillbox(win, slid->x + slid->position, slid->y, slid->length, dimension, slid->fg_col);
 		win_3dbox(win, UP_FRAME, slid->x + slid->position, slid->y, slid->length, dimension);
-	} else if (slid->type == VERT_SLIDER) {		/* vertical slider */
+	}
+	else if (slid->type == VERT_SLIDER) {		/* vertical slider */
 		win_fillbox(win, slid->x, slid->y, dimension, slid->slider_length, slid->bg_col2);
 		win_fillbox(win, slid->x, slid->y + slid->slider_length - slid->position -
-		       slid->length, dimension, slid->length, slid->fg_col);
+			slid->length, dimension, slid->length, slid->fg_col);
 		win_3dbox(win, UP_FRAME, slid->x, slid->y + slid->slider_length - slid->position -
-			  slid->length, dimension, slid->length);
-	} else if (slid->type == NICE_HOR_SLIDER) {	/* nice horizontal slider */
+			slid->length, dimension, slid->length);
+	}
+	else if (slid->type == NICE_HOR_SLIDER) {	/* nice horizontal slider */
 		win_fillbox(win, slid->x - 4, slid->y, slid->slider_length + 9, slid_width, slid->bg_col1);
 		/* Draw a grid lines */
-		for (x = 0;x <= slid->slider_length;x += 10) {
+		for (x = 0; x <= slid->slider_length; x += 10) {
 			if (x % 50 == 0)
 				length = 3;
 			else
@@ -299,11 +298,12 @@ void create_slider(GuiObject * slid)
 		win_fillbox(win, slid->x + slid->position - 4, slid->y, 8, slid_width, slid->bg_col2);
 		win_3dbox(win, UP_FRAME, slid->x + slid->position - 4, slid->y, 8, slid_width);
 		win_box(win, slid->x + slid->position, slid->y + 3, 0, slid_width - 6, slid->fg_col);
-	} else if (slid->type == NICE_VERT_SLIDER ||
-		   slid->type == NICE_VALUE_SLIDER) {	/* nice vertical slider */
-		/* Draw a grid lines */
+	}
+	else if (slid->type == NICE_VERT_SLIDER ||
+		slid->type == NICE_VALUE_SLIDER) {	/* nice vertical slider */
+											/* Draw a grid lines */
 		win_fillbox(win, slid->x, slid->y - 4, slid_width, slid->slider_length + 9, slid->bg_col1);
-		for (y = 0;y <= slid->slider_length;y += 10) {
+		for (y = 0; y <= slid->slider_length; y += 10) {
 			if (y % 50 == 0)
 				length = 3;
 			else
@@ -353,7 +353,7 @@ void set_slider_barlength(GuiObject * slid, int length)
 
 
 void set_slider_maxvalue(GuiObject * slid, float max)
-{	
+{
 	check_object(slid, "slid", "set_slider_maxvalue");
 
 	if (max > 999)
@@ -380,7 +380,7 @@ void press_slider(GuiObject * slid)
 	int position, old_x, old_y;
 	int x, y;
 	int old_position = 0, on_bar = FALSE;
-	
+
 	check_object(slid, "slid", "press_slider");
 	win = slid->win;
 	check_window(win, "press_slider");
@@ -391,11 +391,11 @@ void press_slider(GuiObject * slid)
 	y = mouse.y - win->y;
 
 	if ((slid->type == HOR_SLIDER &&	/* on slider bar? */
-	     x >= slid->x + slid->position &&
-	     x <= slid->x + slid->position + slid->length) ||
-	    (slid->type == VERT_SLIDER &&
-	     y >= slid->y + slid->slider_length - slid->position - slid->length &&
-	     y <= slid->y + slid->slider_length - slid->position)) {
+		x >= slid->x + slid->position &&
+		x <= slid->x + slid->position + slid->length) ||
+		(slid->type == VERT_SLIDER &&
+			y >= slid->y + slid->slider_length - slid->position - slid->length &&
+			y <= slid->y + slid->slider_length - slid->position)) {
 		old_x = x;
 		old_y = y - slid->slider_length;
 		old_position = slid->position;
@@ -417,7 +417,7 @@ void press_slider(GuiObject * slid)
 		return;
 	}
 	do {
-		ksleep(sleep_time);
+		//usleep(sleep_time);
 		do_window_functions(win_thread);
 		if (GuiGetMessage() == GuiMouseEvent) {
 			move_mouse();
@@ -429,15 +429,14 @@ void press_slider(GuiObject * slid)
 			else
 				position += slid->slider_length - (y - old_y);
 			if (position > slid->slider_length - slid->length)
-					position = slid->slider_length - slid->length;
+				position = slid->slider_length - slid->length;
 			if (position < 0)
 				position = 0;
 			slid->position = position;
 			show_slider(slid);
 			slid->object_callback(slid, slid->u_data);
 		}
-	}
-	while (GuiMouseGetButton() == GuiMouseLeftButton);
+	} while (GuiMouseGetButton() == GuiMouseLeftButton);
 
 	/* check for double click on slider bar */
 	if (on_bar)

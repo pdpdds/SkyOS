@@ -64,11 +64,6 @@ void InitContext(multiboot_info* bootinfo);
 void InitHardware();
 bool InitMemoryManager(multiboot_info* bootinfo);
 
-#include "luatinker.h"
-#include "lualib.h"
-
-extern void TestLua53(lua_State* L);
-
 void kmain(unsigned long magic, unsigned long addr)
 {
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
@@ -84,34 +79,15 @@ void kmain(unsigned long magic, unsigned long addr)
 	Scheduler::GetInstance();
 	
 	SkyModuleManager::GetInstance()->Initialize(pBootInfo);
+	SystemProfiler::GetInstance()->Initialize();
 
-	//GUI 시스템의초기화 코드위치를 여기에 둔 것은 
-	//로그를 출력하기 위해서다.
 #if SKY_CONSOLE_MODE == 0
 	SkyGUISystem::GetInstance()->Initialize(pBootInfo);
-#endif
-
-	SystemProfiler::GetInstance()->Initialize();
+#endif	
 	
 	PrintCurrentTime();
 	
 	kLeaveCriticalSection();
-
-	/*
-	StorageManager::GetInstance()->Initilaize(pBootInfo);
-	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
-
-	for (int i = 0; i < 1000; i++)
-	{
-		lua_State* L;
-		L = luaL_newstate();
-		luaopen_base(L);
-
-		TestLua53(L);
-
-		lua_close(L);
-	}
-	for (;;);*/
 	
 #if SKY_CONSOLE_MODE == 0	
 	pSystemLauncher = new SkyGUILauncher();
@@ -195,25 +171,25 @@ bool InitMemoryManager(multiboot_info* pBootInfo)
 
 void SetInterruptVector()
 {
-	setvect(0, (void(__cdecl &)(void))kHandleDivideByZero);
-	setvect(1, (void(__cdecl &)(void))kHandleSingleStepTrap);
-	setvect(2, (void(__cdecl &)(void))kHandleNMITrap);
-	setvect(3, (void(__cdecl &)(void))kHandleBreakPointTrap);
-	setvect(4, (void(__cdecl &)(void))kHandleOverflowTrap);
-	setvect(5, (void(__cdecl &)(void))kHandleBoundsCheckFault);
-	setvect(6, (void(__cdecl &)(void))kHandleInvalidOpcodeFault);
-	setvect(7, (void(__cdecl &)(void))kHandleNoDeviceFault);
-	setvect(8, (void(__cdecl &)(void))kHandleDoubleFaultAbort);
-	setvect(10, (void(__cdecl &)(void))kHandleInvalidTSSFault);
-	setvect(11, (void(__cdecl &)(void))kHandleSegmentFault);
-	setvect(12, (void(__cdecl &)(void))kHandleStackFault);
-	setvect(13, (void(__cdecl &)(void))kHandleGeneralProtectionFault);
-	setvect(14, (void(__cdecl &)(void))kHandlePageFault);
-	setvect(16, (void(__cdecl &)(void))kHandlefpu_fault);
-	setvect(17, (void(__cdecl &)(void))kHandleAlignedCheckFault);
-	setvect(18, (void(__cdecl &)(void))kHandleMachineCheckAbort);
-	setvect(19, (void(__cdecl &)(void))kHandleSIMDFPUFault);
+	SetInterruptVector(0, (void(__cdecl &)(void))kHandleDivideByZero);
+	SetInterruptVector(1, (void(__cdecl &)(void))kHandleSingleStepTrap);
+	SetInterruptVector(2, (void(__cdecl &)(void))kHandleNMITrap);
+	SetInterruptVector(3, (void(__cdecl &)(void))kHandleBreakPointTrap);
+	SetInterruptVector(4, (void(__cdecl &)(void))kHandleOverflowTrap);
+	SetInterruptVector(5, (void(__cdecl &)(void))kHandleBoundsCheckFault);
+	SetInterruptVector(6, (void(__cdecl &)(void))kHandleInvalidOpcodeFault);
+	SetInterruptVector(7, (void(__cdecl &)(void))kHandleNoDeviceFault);
+	SetInterruptVector(8, (void(__cdecl &)(void))kHandleDoubleFaultAbort);
+	SetInterruptVector(10, (void(__cdecl &)(void))kHandleInvalidTSSFault);
+	SetInterruptVector(11, (void(__cdecl &)(void))kHandleSegmentFault);
+	SetInterruptVector(12, (void(__cdecl &)(void))kHandleStackFault);
+	SetInterruptVector(13, (void(__cdecl &)(void))kHandleGeneralProtectionFault);
+	SetInterruptVector(14, (void(__cdecl &)(void))kHandlePageFault);
+	SetInterruptVector(16, (void(__cdecl &)(void))kHandlefpu_fault);
+	SetInterruptVector(17, (void(__cdecl &)(void))kHandleAlignedCheckFault);
+	SetInterruptVector(18, (void(__cdecl &)(void))kHandleMachineCheckAbort);
+	SetInterruptVector(19, (void(__cdecl &)(void))kHandleSIMDFPUFault);
 
-	setvect(33, (void(__cdecl &)(void))InterrputDefaultHandler);
-	setvect(38, (void(__cdecl &)(void))InterrputDefaultHandler);
+	SetInterruptVector(33, (void(__cdecl &)(void))InterrputDefaultHandler);
+	SetInterruptVector(38, (void(__cdecl &)(void))InterrputDefaultHandler);
 }

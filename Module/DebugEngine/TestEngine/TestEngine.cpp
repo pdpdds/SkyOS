@@ -68,7 +68,8 @@ int main()
 	//라인번호를 얻어내기 위해서는 COD 파일이 필요하다.
 	int result = pMapReader->getAddressInfo(0x00100df0,
 		moduleName, fileName2, lineNumber, function, resultAddress);
-	
+
+	pMapReader->SimpleUndecorateCPP("?TraceStackWithSymbol@SkyDebugger@@QAEXI@Z", fileName2, 256);
 	return 0;
 }
 

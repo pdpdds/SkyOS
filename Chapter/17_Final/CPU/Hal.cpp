@@ -89,8 +89,8 @@ void InterruptDone(unsigned int intno) {
 	SendCommandToPIC(I86_PIC_OCW2_MASK_EOI, 0);
 }
 
-//! sets new interrupt vector
-void setvect(int intno, void(&vect) (), int flags) {
+//인터럽트 벡터 설정
+void SetInterruptVector(int intno, void(&vect) (), int flags) {
 
 	//! install interrupt handler! This overwrites prev interrupt descriptor
 	InstallInterrputHandler(intno, (uint16_t)(I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32 | flags), 0x8, vect);

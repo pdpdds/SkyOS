@@ -60,7 +60,7 @@
 #include "undecorate.h"
 #include "string.h"
 #include "sprintf.h"
-
+#include "MapFile.h"
 
 std::string Right(std::string& strText, int nRight)
 {
@@ -99,7 +99,7 @@ std::string Mid(std::string& strText, int start, int len)
 	const char* p = strText.c_str() + start;
 	char buf[256];
 	size_t i = 0;
-	for (size_t i = 0; i < len; i++)
+	for (i = 0; i < len; i++)
 	{
 		buf[i] = p[i];
 	}
@@ -139,111 +139,6 @@ static void processParams(std::string	&params,
 static void decodeCPPType(char		**p, 
 	std::string	&type);
 
-//-NAME---------------------------------
-//.DESCRIPTION..........................
-// Trivial implementation of this so that can get
-// away from imagehlp library.
-//.PARAMETERS...........................
-//.RETURN.CODES.........................
-//--------------------------------------
-
-void simpleUndecorateCPP(char* ina,
-	char* outa)
-{
-	std::string out;
-	out = "";
-
-	std::string in = ina;
-
-	if (strlen(ina) == 0)
-		return;
-
-	if (ina[0] == '?')
-	{
-		// C++
-		// if the name is prefixed with ? its a C++ name
-		// remove the ? and then remove all from the @ symbol onwards
-
-		out = Right(in, in.length() - 1);
-
-		int	idx;
-
-		idx = Find(out, '@');
-		if (idx != -1)
-			out = Left(out, idx);
-	}
-	else if (in[0] == '_')
-	{
-		// C
-		// if the name starts with an underscore, its a C name, 
-		// remove it (just the one underscore)
-
-		out = Right(in, in.length() - 1);
-	}
-
-	if (out.length())
-		strcpy(outa, out.c_str());
-}
-
-//-NAME---------------------------------
-//.DESCRIPTION..........................
-// Own implementation of this so that can get
-// away from imagehlp library. This is not a full
-// decoding, but its not a bad attempt for now...
-//
-// See MapDLL project for a lot of simple dummy functions so that I
-// could determine argument type mapping.
-//.PARAMETERS...........................
-//.RETURN.CODES.........................
-//--------------------------------------
-
-
-void UndecorateCPP(std::string	&in,
-	std::string	&out)
-{
-	out = "";
-
-	if (in.length() == 0)
-		return;
-
-	if (in[0] == '?')
-	{
-		// C++
-		// if the name is prefixed with ? its a C++ name
-		// remove the ? and then remove all from the @ symbol onwards
-
-		out = Right(in, in.length() - 1);
-
-		int	idx;
-
-		idx = Find(out, '@');
-		if (idx != -1)
-		{
-			std::string	params;
-			std::string	func, arguments, returnType;
-
-			params = Right(out, in.length() - idx - 1);
-			func = Left(out, idx);
-
-			// now process the params
-
-			processParams(params, returnType, arguments);
-			out = returnType;
-			out += func;
-			out += "(";
-			out += arguments;
-			out += ")";
-		}
-	}
-	else if (in[0] == '_')
-	{
-		// C
-		// if the name starts with an underscore, its a C name, 
-		// remove it (just the one underscore)
-
-		out = Right(in, in.length() - 1);
-	}
-}
 
 //-NAME---------------------------------
 //.DESCRIPTION..........................
@@ -485,4 +380,154 @@ static void decodeCPPType(char		**pp,
 	// return update pointer
 
 	*pp = p;
+}
+
+//-NAME---------------------------------
+//.DESCRIPTION..........................
+// Trivial implementation of this so that can get
+// away from imagehlp library.
+//.PARAMETERS...........................
+//.RETURN.CODES.........................
+//--------------------------------------
+
+std::string GetClassName(std::string& strText, int start)
+{
+	if (start >= strText.length())
+		return "";
+
+	std::string str;
+	const char* p = strText.c_str() + start;
+	char buf[256];
+	size_t i = 0;
+	for (i = 0; i < strlen(p); i++)
+	{
+		if (p[i] == '@')
+			break;
+
+		buf[i] = p[i];
+	}
+
+	buf[i] = 0;
+	str = buf;
+
+	return str;
+}
+
+bool MapFileReader::SimpleUndecorateCPP(char* inSymbol, char* outSymbol, int outLen)
+{
+	std::string out;
+	std::string className;
+
+	std::string in = inSymbol;
+
+	if (strlen(inSymbol) == 0)
+		return false;
+
+	if (inSymbol[0] == '?')
+	{
+		// C++
+		// if the name is prefixed with ? its a C++ name
+		// remove the ? and then remove all from the @ symbol onwards
+
+		out = Right(in, in.length() - 1);
+
+		int	idx;
+
+		idx = Find(out, '@');
+		if (idx != -1)
+		{
+			className = GetClassName(out, idx + 1);
+			out = Left(out, idx);
+		}
+	}
+	else if (in[0] == '_')
+	{
+		// C
+		// if the name starts with an underscore, its a C name, 
+		// remove it (just the one underscore)
+
+		out = Right(in, in.length() - 1);
+	}
+
+	if (className.length() > 0)
+	{
+		out = className + "::" + out;
+	}
+
+	if (out.length() > outLen)
+		return false;
+
+	strcpy(outSymbol, out.c_str());
+	return true;
+}
+
+//-NAME---------------------------------
+//.DESCRIPTION..........................
+// Own implementation of this so that can get
+// away from imagehlp library. This is not a full
+// decoding, but its not a bad attempt for now...
+//
+// See MapDLL project for a lot of simple dummy functions so that I
+// could determine argument type mapping.
+//.PARAMETERS...........................
+//.RETURN.CODES.........................
+//--------------------------------------
+
+bool MapFileReader::UndecorateCPP(char* inSymbol, char* outSymbol, int outLen)
+{
+	std::string out;
+	out = "";
+
+	std::string in = inSymbol;
+
+	if (strlen(inSymbol) == 0)
+		return false;
+
+	if (in.length() == 0)
+		return false;
+
+	if (in[0] == '?')
+	{
+		// C++
+		// if the name is prefixed with ? its a C++ name
+		// remove the ? and then remove all from the @ symbol onwards
+
+		out = Right(in, in.length() - 1);
+
+		int	idx;
+
+		idx = Find(out, '@');
+		if (idx != -1)
+		{
+			std::string	params;
+			std::string	func, arguments, returnType;
+
+			params = Right(out, in.length() - idx - 1);
+			func = Left(out, idx);
+
+			// now process the params
+
+			processParams(params, returnType, arguments);
+			out = returnType;
+			out += func;
+			out += "(";
+			out += arguments;
+			out += ")";
+		}
+	}
+	else if (in[0] == '_')
+	{
+		// C
+		// if the name starts with an underscore, its a C name, 
+		// remove it (just the one underscore)
+
+		out = Right(in, in.length() - 1);
+	}
+
+	if (out.length() > outLen)
+		return false;
+	
+	strcpy(outSymbol, out.c_str());
+
+	return true;
 }

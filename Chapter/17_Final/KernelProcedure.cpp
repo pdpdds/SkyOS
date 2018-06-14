@@ -138,28 +138,26 @@ DWORD WINAPI WatchDogProc(LPVOID parameter)
 	return 0;
 }
 
-void SampleFillRect(ULONG* lfb, int x, int y, int w, int h, int col)
+void SampleFillRect(ULONG* lfb0, int x, int y, int w, int h, int col)
 {
 	for (int k = 0; k < h; k++)
 		for (int j = 0; j < w; j++)
 		{
 			int index = ((j + x) + (k + y) * 1024);
-			lfb[index] = col;
+			lfb0[index] = col;
 		}
 }
 
-DWORD WINAPI GUIWatchDogProc(LPVOID parameter)
+void WatchDogLoop(Process* pProcess)
 {
-	Process* pProcess = (Process*)parameter;
 	int pos = 0;
 
 	int colorStatus[] = { 0x00FF0000, 0x0000FF00, 0x0000FF };
 	int first = GetTickCount();
-	
+
 	//그래픽 버퍼 주소를 얻는다.
 	ULONG* lfb = (ULONG*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr;
 
-	//루프를 돌면서 오른쪽 상단에 사각형을 그린다.
 	while (1)
 	{
 		int second = GetTickCount();
@@ -171,23 +169,29 @@ DWORD WINAPI GUIWatchDogProc(LPVOID parameter)
 
 			if (m_bShowTSWatchdogClock)
 			{
-				SampleFillRect(lfb, 1004, 0, 20, 20, colorStatus[pos]);				
+				SampleFillRect(lfb, 1004, 0, 20, 20, colorStatus[pos]);
 			}
-				
+
 			first = GetTickCount();
 		}
-		
+
 		//빠르게 실행될 필요가 없으므로 실행시간을 타 프로세스에 양보한다.
-		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());		
+		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
 	}
+}
+
+DWORD WINAPI GUIWatchDogProc(LPVOID parameter)
+{
+	Process* pProcess = (Process*)parameter;	
+
+	//루프를 돌면서 오른쪽 상단에 사각형을 그린다.
+	WatchDogLoop(pProcess);
 
 	return 0;
 }
 
-DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
+void LoopProcessRemove(Process* pProcess)
 {
-	Process* pProcess = (Process*)parameter;
-
 	int static id = 0;
 	int temp = id++;
 	int first = GetTickCount();
@@ -211,6 +215,13 @@ DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
 			first = GetTickCount();
 		}
 	}
+}
+
+DWORD WINAPI ProcessRemoverProc(LPVOID parameter)
+{
+	Process* pProcess = (Process*)parameter;
+
+	LoopProcessRemove(pProcess);
 
 	return 0;
 }

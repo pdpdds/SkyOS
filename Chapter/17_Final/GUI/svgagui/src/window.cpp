@@ -81,7 +81,7 @@ void move_window(GuiWindow * win)
 	y_old = win->y;
 
 	do {
-		ksleep(sleep_time / 5);
+		//ksleep(sleep_time / 5);
 		do_window_functions(win_thread);
 		if (GuiGetMessage() == GuiMouseEvent) {
 			move_mouse();

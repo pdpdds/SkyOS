@@ -128,7 +128,7 @@ void StartPITCounter(uint32_t freq, uint8_t counter, uint8_t mode) {
 //PIT √ ±‚»≠
 void PITInitialize()
 {
-	setvect(32, InterruptPITHandler);
+	SetInterruptVector(32, InterruptPITHandler);
 }
 
 unsigned int GetTickCount()

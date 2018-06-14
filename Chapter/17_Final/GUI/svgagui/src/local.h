@@ -51,14 +51,14 @@ extern Mouse mouse;
 void open_svga_screen(int width, int height, int colors);
 void close_svga_screen(void);
 void update_svga_screen(void);
-void init_svga_mouse(void);
-void get_svga_mouse_position(void);
-void set_svga_mouse_position(int x, int y);
+extern "C" void init_svga_mouse(void);
+extern "C" void get_svga_mouse_position(void);
+extern "C" void set_svga_mouse_position(int x, int y);
 void save_svga_screen_to_xpm(void);
 void set_svga_default_palette(int colors);
 void set_svga_palette(int color, int red, int green, int blue);
 void get_svga_palette(int color, int *red, int *green, int *blue);
-int get_svga_message(void);
+extern "C" int get_svga_message(void);
 int get_svga_mouse_button(void);
 char get_svga_keyboard_char(void);
 

@@ -54,7 +54,7 @@ void save_background(GuiWinThread *win_thread)
 	src = guiscreen.data;
 	dst = win_thread->background;
 	delete_mouse();
-	for (i = 0;i < guiscreen.height;i++) {
+	for (i = 0; i < guiscreen.height; i++) {
 		memcpy(dst, src, guiscreen.width);
 		dst += guiscreen.width;
 		src += guiscreen.width;
@@ -68,7 +68,7 @@ GuiWinThread *create_window_thread(void)
 {
 	GuiWinThread *win_thread;
 
-	win_thread = (GuiWinThread *) malloc(sizeof(GuiWinThread));
+	win_thread = (GuiWinThread *)malloc(sizeof(GuiWinThread));
 	if (win_thread == NULL)
 		error("Cannot allocate window thread.");
 	win_thread->first = NULL;
@@ -85,7 +85,7 @@ GuiWinThread *create_window_thread(void)
 
 	/* save the background image */
 	save_background(win_thread);
-	
+
 	return win_thread;
 }
 
@@ -107,7 +107,7 @@ void show_window_thread(GuiWinThread * win_thread)
 {
 	GuiWindow *tmp_win;
 	int z = win_thread->number - 1;
-	
+
 	win_thread->show_window_thread = TRUE;
 	while (z >= 0) {
 		tmp_win = win_thread->first;
@@ -133,7 +133,7 @@ void show_window_thread(GuiWinThread * win_thread)
 void do_window_functions(GuiWinThread *win_thread)
 {
 	GuiWindow *win = win_thread->first;
-	
+
 	while (win != NULL) {
 		if (!win->hide)
 			win->function();
@@ -149,7 +149,7 @@ static int in_title(GuiWindow * win)
 
 	if (win->type == NORMAL_WINDOW) {
 		if (mouse.x >= win->x && mouse.x <= win->x + win->width &&
-		    mouse.y >= win->y && mouse.y < win->y + 18)
+			mouse.y >= win->y && mouse.y < win->y + 18)
 			return TRUE;
 	}
 	return FALSE;
@@ -159,7 +159,7 @@ static GuiObject *in_window(GuiWindow * win)
 {
 	int button_touched = FALSE;
 	GuiObject *obj;
-	
+
 	if (check_window(win, "in_window"))
 		return NULL;
 
@@ -172,7 +172,8 @@ static GuiObject *in_window(GuiWindow * win)
 				info_obj = win->focusobj;
 			}
 		}
-	} else
+	}
+	else
 		time_count = 0;
 
 	if (info_obj != NULL && info_obj != win->focusobj) {
@@ -189,7 +190,8 @@ static GuiObject *in_window(GuiWindow * win)
 			info_obj = NULL;
 		}
 		obj = win->focusobj;
-	} else
+	}
+	else
 		obj = NULL;
 
 	return obj;
@@ -209,7 +211,7 @@ static int wait_for_mouse(GuiObject * obj)
 	show_object(obj);
 	status = GuiMouseGetButton();
 	while (status != 0) {
-		ksleep(sleep_time);
+		//usleep(sleep_time);
 		do_window_functions(win->win_thread);
 		if (GuiGetMessage()) {
 			move_mouse();
@@ -221,7 +223,8 @@ static int wait_for_mouse(GuiObject * obj)
 						show_object(obj);
 					if (win->focusobj == obj && !obj->pressed)
 						show_object(obj);
-				} else {
+				}
+				else {
 					if (win->focusobj != obj && !obj->pressed)
 						show_object(obj);
 					if (win->focusobj == obj && obj->pressed)
@@ -247,8 +250,9 @@ static void update_wintitle(GuiWindow * win, int focus)
 	if (focus) {
 		win_fillbox(win, 3, 3, win->width - 6, 15, ACTIVE_TITLE_BACK);
 		set_object_color(win->title, ACTIVE_TITLE_BACK,
-				 ACTIVE_TITLE_BACK , ACTIVE_TITLE_FORE);
-	} else {
+			ACTIVE_TITLE_BACK, ACTIVE_TITLE_FORE);
+	}
+	else {
 		win_fillbox(win, 3, 3, win->width - 6, 15, TITLE_BACK);
 		set_object_color(win->title, TITLE_BACK, TITLE_BACK, TITLE_FORE);
 	}
@@ -269,8 +273,8 @@ void bring_window_to_top(GuiWindow * win)
 	if (!win->active)
 		return;
 	first_win = (win->win_thread)->first;
-	z_old = win->z_order;	
-		
+	z_old = win->z_order;
+
 	if (win->always_on_top) {
 		if (win->z_order != 0) {
 			/* Reorganise the z-order for the always on top windows */
@@ -279,7 +283,8 @@ void bring_window_to_top(GuiWindow * win)
 					tmp_win->z_order++;
 			win->z_order = 0;
 		}
-	} else {
+	}
+	else {
 		depth = 0;
 		for (tmp_win = first_win; tmp_win != NULL; tmp_win = tmp_win->next)
 			if (tmp_win->always_on_top)
@@ -309,12 +314,12 @@ static void window_region(GuiWinThread * win_thread)
 			win = win->next;
 		z++;
 		if (mouse.x >= win->x && mouse.x < win->x + win->width &&
-		    mouse.y >= win->y && mouse.y < win->y + win->height &&
-		    !win->hide)
+			mouse.y >= win->y && mouse.y < win->y + win->height &&
+			!win->hide)
 			found = TRUE;
 	}
 	if (win != old_focus_win && old_focus_win != NULL &&
-	    info_obj != NULL) {
+		info_obj != NULL) {
 		delete_info();
 		info_obj = NULL;
 	}
@@ -324,7 +329,7 @@ static void window_region(GuiWinThread * win_thread)
 				update_wintitle(old_focus_win, FALSE);
 			if (old_focus_win != NULL && (old_focus_win)->inputfocus != NULL) {
 				GuiObject *obj = old_focus_win->inputfocus;
-				
+
 				old_focus_win->inputfocus = NULL;
 				create_input(obj);
 				show_input(obj);
@@ -338,7 +343,8 @@ static void window_region(GuiWinThread * win_thread)
 			bring_count = 0;
 			bring_to_top = TRUE;
 		}
-	} else
+	}
+	else
 		win_thread->focuswin = NULL;
 }
 
@@ -352,20 +358,20 @@ GuiObject *do_windows(GuiWinThread * win_thread)
 
 	window_region(win_thread);
 	do {
-		ksleep(sleep_time);
+//		usleep(sleep_time);
 		do_window_functions(win_thread);
 		if (win_thread->focuswin != NULL) {
 			win = win_thread->focuswin;
 			obj = in_window(win);
 			if (in_title(win) && (obj != win->kill || win->kill == NULL) &&
-			    GuiMouseGetButton() == GuiMouseLeftButton) {
-				if (bring_to_top) {
+				GuiMouseGetButton() == GuiMouseLeftButton) {
+				if (bring_to_top) {					
 					bring_window_to_top(win_thread->focuswin);
 					bring_to_top = FALSE;
 				}
 				move_window(win);
 			}
-			
+
 			if (obj == win->title && obj != NULL)
 				obj = NULL;
 			if (obj != NULL) {
@@ -376,43 +382,45 @@ GuiObject *do_windows(GuiWinThread * win_thread)
 		}
 		message = GuiGetMessage();
 		switch (message) {
-			case GuiMouseEvent:
-				move_mouse();
-				window_region(win_thread);
-				break;
-			case GuiKeyboardEvent:
-				ch = GuiKeyboardGetChar();
-				switch (ch) {
+		case GuiMouseEvent:
+			move_mouse();
+			window_region(win_thread);
+			//20180614 일단 비효율적이지만 버그를 고쳤으므로 나중에 개선한다.
+			bring_window_to_top(win_thread->focuswin);
+			break;
+		case GuiKeyboardEvent:
+			ch = GuiKeyboardGetChar();
+			switch (ch) {
 
-				case 19:	/* CTRL-s pressed */
-					if (guiscreen.type == SVGALIB)
-						save_svga_screen_to_xpm();
+			case 19:	/* CTRL-s pressed */
+				if (guiscreen.type == SVGALIB)
+					save_svga_screen_to_xpm();
+				break;
+			case 13:	/* enter pressed Xlib */
+			case 10:	/* enter pressed Svgalib */
+				if (win_thread->oldfocuswin == NULL)
 					break;
-				case 13:	/* enter pressed Xlib */
-				case 10:	/* enter pressed Svgalib */
-					if (win_thread->oldfocuswin == NULL)
+				input = (win_thread->oldfocuswin)->inputfocus;
+				if (input != NULL)
+					input->object_callback(input, input->u_data);
+				else {
+					obj = (win_thread->oldfocuswin)->enterobj;
+					if (obj == NULL)
 						break;
-					input = (win_thread->oldfocuswin)->inputfocus;
-					if (input != NULL)
-						input->object_callback(input, input->u_data);
-					else {
-						obj = (win_thread->oldfocuswin)->enterobj;
-						if (obj == NULL)
-							break;
-						if (obj->wait_for_mouse && obj->objclass == BUTTON)
-							show_button(obj);
-						if (info_obj != NULL) {
-							delete_info();
-							info_obj = NULL;
-						}
+					if (obj->wait_for_mouse && obj->objclass == BUTTON)
+						show_button(obj);
+					if (info_obj != NULL) {
+						delete_info();
+						info_obj = NULL;
 					}
 				}
-				if (win_thread->oldfocuswin != NULL &&
-				    (win_thread->oldfocuswin)->inputfocus != NULL)
-					change_input((win_thread->oldfocuswin)->inputfocus, ch);
-				break;
-			default:
-				break;
+			}
+			if (win_thread->oldfocuswin != NULL &&
+				(win_thread->oldfocuswin)->inputfocus != NULL)
+				change_input((win_thread->oldfocuswin)->inputfocus, ch);
+			break;
+		default:
+			break;
 		}
 		if (bring_to_top && win_thread->auto_raise && win_thread->focuswin != NULL) {
 			bring_count++;
@@ -421,8 +429,7 @@ GuiObject *do_windows(GuiWinThread * win_thread)
 				bring_to_top = FALSE;
 			}
 		}
-	}
-	while (obj == NULL);
+	} while (obj == NULL);
 	if (bring_to_top && win_thread->auto_raise && win_thread->focuswin != NULL) {
 		bring_window_to_top(win_thread->focuswin);
 		bring_to_top = FALSE;
@@ -445,6 +452,6 @@ GuiObject *do_windows(GuiWinThread * win_thread)
 		press_listbox(obj);
 	if (obj->objclass == LISTENTRY_ICON)
 		press_iconlist(obj);
-		
+
 	return obj;
 }

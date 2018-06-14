@@ -67,11 +67,11 @@
 // My own undecorating functions so that I don't have to rely
 // on imagehlp.dll
 //--------------------------------------
-
+/*
 MAPFILEDLL_API void  simpleUndecorateCPP(char* ina,
 	char* outa);
 
 MAPFILEDLL_API void UndecorateCPP(std::string	&in,
-	std::string	&out);
+	std::string	&out);*/
 
 #endif

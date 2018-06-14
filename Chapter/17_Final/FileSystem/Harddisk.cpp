@@ -154,8 +154,8 @@ void HardDiskHandler::Initialize()
 	char strKey[3] = "H0"; //하드디스크 ID
 	
 	//아무런 역할을 하지 않는 하드디스크 핸들러이지만 정의를 해야 한다.
-	setvect(32 + 14, _HDDInterruptHandler);
-	setvect(32 + 15, _HDDInterruptHandler);
+	SetInterruptVector(32 + 14, _HDDInterruptHandler);
+	SetInterruptVector(32 + 15, _HDDInterruptHandler);
 
 	//Collection 구조체 발견한 하드디스크 정보 리스트를 관리한다.
 	HDDs.Initialize();	

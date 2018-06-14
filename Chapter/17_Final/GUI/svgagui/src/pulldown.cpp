@@ -342,7 +342,7 @@ static GuiObject *pulldown_loop(GuiObject * obj)
 	/* wait until the user leaves the object */
 	object_region(win_p);
 	while (win_p->focusobj == obj) {
-		ksleep(sleep_time);
+		//ksleep(sleep_time);
 		do_window_functions(win_thread);
 		if (GuiGetMessage() == GuiMouseEvent) {
 			move_mouse();
@@ -358,7 +358,7 @@ static GuiObject *pulldown_loop(GuiObject * obj)
 			next_item = TRUE;
 		}
 	while (!exit_loop) {
-		ksleep(sleep_time);
+		//ksleep(sleep_time);
 		do_window_functions(win_thread);
 		if (GuiGetMessage() == GuiMouseEvent) {
 			move_mouse();
@@ -407,7 +407,7 @@ static GuiObject *pulldown_loop(GuiObject * obj)
 
 	/* wait for mousebutton to be released */
 	while (status == GuiMouseLeftButton && !next_pulldown && !next_item) {
-		ksleep(sleep_time);
+		//ksleep(sleep_time);
 		do_window_functions(win_thread);
 		if (GuiGetMessage() == GuiMouseEvent)
 			status = GuiMouseGetButton();

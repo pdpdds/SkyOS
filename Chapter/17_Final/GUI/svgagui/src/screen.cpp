@@ -59,7 +59,7 @@ void open_screen(int type, int width, int height, int colors, char *title)
 	if (type != SVGALIB && type != XLIB)
 		error("Not a valid screen type! Use SVGALIB or XLIB.");
 		
-	guiscreen.type = 0;
+	guiscreen.type = type;
 	switch (type) {
 		case SVGALIB:
 			open_svga_screen(width, height, colors);

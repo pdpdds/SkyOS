@@ -333,7 +333,7 @@ int init_3c905b( UINT16 *pMacWord )
 
 	// set interrupt handler
 	//set_int_handler(pci_3c905b.cfg.byIntLine, int_handler_3c905b);
-	setvect(pci_3c905b.cfg.byIntLine, int_handler_3c905b);
+	SetInterruptVector(pci_3c905b.cfg.byIntLine, int_handler_3c905b);
 
 	// make ucbs
 	alloc_ucbs( &ucb );

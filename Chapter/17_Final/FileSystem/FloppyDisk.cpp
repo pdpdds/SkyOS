@@ -46,7 +46,7 @@ namespace FloppyDisk
 
 	void Install(int irq) {
 
-		setvect(irq, FloppyDiskHandler);
+		SetInterruptVector(irq, FloppyDiskHandler);
 
 		Reset();
 

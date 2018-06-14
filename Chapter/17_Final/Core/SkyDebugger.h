@@ -15,9 +15,10 @@ public:
 
 		return m_pDebugger;
 	}
-
-	void TraceStack(unsigned int maxFrames = 20);	
+	
 	void TraceStackWithSymbol(unsigned int maxFrames = 20);
+	void TraceStackWithProcessId(int processId);
+
 	bool LoadSymbol(const char* moduleName);
 
 protected:

@@ -221,7 +221,7 @@ bool SkyGUIConsole::Run()
 	Print2("SkyOSªØªèª¦ª³ª½!!");
 	
 	ConsoleManager manager;
-
+		
 	int bufferLen = (m_width / CHAR_WIDTH) - 15;
 	char* commandBuffer = new char[bufferLen];
 

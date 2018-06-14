@@ -22,7 +22,7 @@ START_COMMAND_TABLE
 	CMD_ENTRY("lua3", true, cmdLua3, "exec lua3 file")
 	CMD_ENTRY("lua5", true, cmdLua5, "test lua5 file")
 	CMD_ENTRY("guiconsole", false, cmdSwitchGUI, "Switch to GUI Console Mode")
-	CMD_ENTRY("callstack", false, cmdCallStack, "Trace Call stack")
-	CMD_ENTRY("callstack2", false, cmdCallStack2, "Trace Call stack with symbol")
+	CMD_ENTRY("callstack", false, cmdCallStack, "Trace Callstack")	
+	CMD_ENTRY("callstack2", true, cmdCallStack2, "Trace Callstack with Process Id")
 END_COMMAND_TABLE
 

@@ -278,7 +278,7 @@ void press_iconlist(GuiObject * list_item)
 
 	/* Wait for the mousebutton to be released */
 	while (GuiMouseGetButton() == GuiMouseLeftButton) {
-		ksleep(sleep_time);
+		//ksleep(sleep_time);
 		do_window_functions(win_thread);
 		if (GuiGetMessage() == GuiMouseEvent)
 			move_mouse();

@@ -74,7 +74,9 @@
     <ClCompile Include="GUI\SkySheetController32.cpp" />
     <ClCompile Include="GUI\SkySheetController8.cpp" />
     <ClCompile Include="GUI\SkySVGA.cpp" />
+    <ClCompile Include="GUI\svgagui\bar.cpp" />
     <ClCompile Include="GUI\svgagui\example\color.cpp" />
+    <ClCompile Include="GUI\svgagui\font.cpp" />
     <ClCompile Include="GUI\svgagui\src\browser.cpp" />
     <ClCompile Include="GUI\svgagui\src\button.cpp" />
     <ClCompile Include="GUI\svgagui\src\check.cpp" />
@@ -101,6 +103,11 @@
     <ClCompile Include="GUI\svgagui\src\xlib.cpp" />
     <ClCompile Include="GUI\svgagui\src\_mouse.cpp" />
     <ClCompile Include="GUI\svgagui\svgaguientry.cpp" />
+    <ClCompile Include="GUI\svgagui\svga_keyb.cpp" />
+    <ClCompile Include="GUI\svgagui\svga_mouse.cpp" />
+    <ClCompile Include="GUI\svgagui\textCtrl.cpp" />
+    <ClCompile Include="GUI\svgagui\svga_window.cpp" />
+    <ClCompile Include="GUI\svgagui\wnd.cpp" />
     <ClCompile Include="GUI\vesa.cpp" />
     <ClCompile Include="HangulFont.cpp" />
     <ClCompile Include="Heap\HeapManager.cpp" />
@@ -198,6 +205,9 @@
     <ClInclude Include="GUI\SkySheetController8.h" />
     <ClInclude Include="GUI\SkySVGA.h" />
     <ClInclude Include="GUI\SkyWindow.h" />
+    <ClInclude Include="GUI\svgagui\bar.h" />
+    <ClInclude Include="GUI\svgagui\font.h" />
+    <ClInclude Include="GUI\svgagui\fontres.h" />
     <ClInclude Include="GUI\svgagui\src\bigfont.h" />
     <ClInclude Include="GUI\svgagui\src\font.h" />
     <ClInclude Include="GUI\svgagui\src\font2.h" />
@@ -205,6 +215,11 @@
     <ClInclude Include="GUI\svgagui\src\_mouse.h" />
     <ClInclude Include="GUI\svgagui\svgagui.h" />
     <ClInclude Include="GUI\svgagui\svgaguientry.h" />
+    <ClInclude Include="GUI\svgagui\svga_keyb.h" />
+    <ClInclude Include="GUI\svgagui\svga_mouse.h" />
+    <ClInclude Include="GUI\svgagui\txtCtrl.h" />
+    <ClInclude Include="GUI\svgagui\svga_window.h" />
+    <ClInclude Include="GUI\svgagui\wnd.h" />
     <ClInclude Include="GUI\VESA.h" />
     <ClInclude Include="Heap\HeapManager.h" />
     <ClInclude Include="Heap\kheap.h" />
@@ -295,7 +310,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>./ConsoleSystem;./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./V8086;./GUI/SkyGUI;./GUI/Simple;./GUI;../../CommonLib/math;./gui/svgagui;./gui/svgagui/example;../../Module/Include;../../Module/DebugEngine/DebugEngine;./thirdparty/easyzlib;./Device;./Core;../../CommonLib/CPlusPlus;../../Module/Lua5/Lua5</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./ConsoleSystem;./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./V8086;./GUI/SkyGUI;./GUI/Simple;./GUI;../../CommonLib/math;./gui/svgagui;./gui/svgagui/example;../../Module/Include;../../Module/DebugEngine/DebugEngine;./thirdparty/easyzlib;./Device;./Core;../../CommonLib/CPlusPlus;../../Module/Lua5/Lua5;./GUI/SkySVGA</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SKYOS32;__LE__;OLD_ANSI;</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>

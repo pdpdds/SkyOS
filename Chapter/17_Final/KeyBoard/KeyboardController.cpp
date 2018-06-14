@@ -290,7 +290,7 @@ void KeyboardController::FlushBuffers()
 void KeyboardController::SetupInterrupts()
 {
 	FlushBuffers();
-	setvect(33, KeyboardHandler);
+	SetInterruptVector(33, KeyboardHandler);
 }
 
 void KeyboardController::SetLEDs(bool scroll, bool number, bool capslk)

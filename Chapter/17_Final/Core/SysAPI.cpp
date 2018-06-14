@@ -107,6 +107,6 @@ _declspec(naked) void SysCallDispatcher()
 
 void InitializeSysCall()
 {
-	setvect(0x80, SysCallDispatcher, I86_IDT_DESC_RING3);
+	SetInterruptVector(0x80, SysCallDispatcher, I86_IDT_DESC_RING3);
 }
 

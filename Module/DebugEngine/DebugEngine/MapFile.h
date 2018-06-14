@@ -104,6 +104,9 @@ public:
 	// caution! this version requires that you've set the load
 	//          address using setLoadAddress()
 
+	virtual bool MAPFILEDLL_API SimpleUndecorateCPP(char* in, char* out, int outLen) override;
+	virtual bool MAPFILEDLL_API UndecorateCPP(char* in, char* out, int outLen) override;
+
 	virtual MAPFILEDLL_API int getAddressInfo(DWORD	address,
 							        	char* module,
 		char* fileName,
@@ -134,7 +137,7 @@ public:
 		s = mapObjectName;
 	}
 
-	MAPFILEDLL_API DWORD getPreferredLoadAddress()
+	virtual MAPFILEDLL_API unsigned int getPreferredLoadAddress()
 	{
 		return preferredLoadAddress;
 	}

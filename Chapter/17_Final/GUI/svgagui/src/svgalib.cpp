@@ -29,8 +29,8 @@
 #include "memory.h"
 #include "vesa.h"
 #include <string.h>
-//#include <mouse.h>
-//#include <keyb.h>
+#include "svga_mouse.h"
+#include "svga_keyb.h"
 
 static char savechar = '\0';
 static unsigned long color[50];
@@ -82,7 +82,7 @@ void update_svga_screen(void)
 	}
 }*/
 
-void init_svga_mouse()
+extern "C" void init_svga_mouse()
 {
 	/*
 	if (mouse_init("/dev/mouse", vga_getmousetype(), MOUSE_DEFAULTSAMPLERATE))
@@ -93,33 +93,35 @@ void init_svga_mouse()
 	mouse_setyrange(0, guiscreen.height - 1);
 	mouse_setposition(guiscreen.width / 2, guiscreen.height / 2);
     */
-	//mouse.x = mouse_getx();
-	//mouse.y = mouse_gety();
+	mouse.x = mouse_getx();
+	mouse.y = mouse_gety();
 }
 
 
-void get_svga_mouse_position(void)
+
+extern "C" void get_svga_mouse_position(void)
 {
-	//mouse.x = mouse_getx();
-	//mouse.y = mouse_gety();
+	mouse.x = mouse_getx();
+	mouse.y = mouse_gety();
 }
 
 
-void set_svga_mouse_position(int x, int y)
+
+extern "C" void set_svga_mouse_position(int x, int y)
 {
-	//mouse_setposition(x, y);
+	mouse_setposition(x, y);
 }
 
 
-int get_svga_message(void)
+
+extern "C" int get_svga_message(void)
 {
-//gui check
-	/*if ((savechar = vga_getkey()))
+	if ((savechar = vga_getkey()))
 		return GuiKeyboardEvent;
 
 	if (mouse_update())
-		return GuiMouseEvent;*/
-			
+		return GuiMouseEvent;
+
 	return FALSE;
 }
 
@@ -127,8 +129,8 @@ int get_svga_message(void)
 int get_svga_mouse_button(void)
 {
 	int status = 0;
-//gui check	
-	/*status = mouse_getbutton();
+
+	status = mouse_getbutton();
 	if (status & 1) {
 		if (status & 2)
 			return GuiMouseMiddleButton;
@@ -138,17 +140,15 @@ int get_svga_mouse_button(void)
 	if (status == 3)
 		return GuiMouseMiddleButton;
 	if (status == 2)
-		return GuiMouseRightButton;*/
-		
+		return GuiMouseRightButton;
+
 	return FALSE;
 }
-
 
 char get_svga_keyboard_char(void)
 {
 	return savechar;
 }
-
 
 void save_svga_screen_to_xpm(void)
 {

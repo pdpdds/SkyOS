@@ -80,26 +80,19 @@ void create_listbox(GuiObject * listbox)
 			if (obj->data[0] == NULL)
 				error("Unable to allocate data array in create_listbox().");
 			create_text(obj);
-		}	
+		}
 
 	x = listbox->x + width + 2 - slid->x;
 	y = listbox->y + 13 - slid->y;
 	reposition_object(slid, x, y);
 	reposition_object(but1, x, y);
 	reposition_object(but2, x, y);
-	
+
 	if (listbox->tot_nr_items < listbox->nr_items)
-	{
 		slid->length = slid->slider_length;
-	}
 	else
-	{		
-		//slid->length = (int)(slid->slider_length * listbox->nr_items / (float)listbox->tot_nr_items);
-		slid->length = (int)(slid->slider_length * listbox->nr_items / listbox->tot_nr_items);
-	}
+		slid->length = (int)(slid->slider_length * listbox->nr_items / (float)listbox->tot_nr_items);
 	slid->position = slid->slider_length - slid->length;
-
-
 
 	/* place all items in the box */
 	update_listbox(listbox);
@@ -215,8 +208,8 @@ GuiObject *add_listentry(GuiObject *listbox, char *label)
 
 	listbox->tot_nr_items++;
 	width = obj->width + 2 * indent + 15;	/* rescale the listbox automatically */
-/*	if (width > listbox->width)
-		listbox->width = width; */
+											/*	if (width > listbox->width)
+											listbox->width = width; */
 
 	return obj;
 }
@@ -271,7 +264,7 @@ void press_listbox(GuiObject * list_item)
 
 	/* Wait for the mousebutton to be released */
 	while (GuiMouseGetButton() == GuiMouseLeftButton) {
-		ksleep(sleep_time);
+		//usleep(sleep_time);
 		do_window_functions(win_thread);
 		if (GuiGetMessage() == GuiMouseEvent)
 			move_mouse();

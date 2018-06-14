@@ -510,7 +510,7 @@ void check_double_click(GuiObject *obj)
 	
 	count = 0;
 	while (GuiMouseGetButton() != GuiMouseLeftButton && count < 30) {
-		ksleep(sleep_time);
+		//ksleep(sleep_time);
 		do_window_functions(win_thread);
 		if (GuiGetMessage() == GuiMouseEvent)
 			move_mouse();
@@ -518,7 +518,7 @@ void check_double_click(GuiObject *obj)
 	}
 	if (count < 30) {		/* Wait for the mousebutton to be released */
 		while (GuiMouseGetButton() == GuiMouseLeftButton) {
-			ksleep(sleep_time);
+			//ksleep(sleep_time);
 			do_window_functions(win_thread);
 			if (GuiGetMessage() == GuiMouseEvent)
 				move_mouse();

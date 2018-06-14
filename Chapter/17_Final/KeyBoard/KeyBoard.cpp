@@ -287,7 +287,7 @@ namespace KeyBoard
 	void Install(int irq) {
 
 		//키보드 인터럽트 핸들러 설치
-		setvect(irq, i86_kybrd_irq);
+		SetInterruptVector(irq, i86_kybrd_irq);
 
 		_keyBoardState._alt = false;
 		_keyBoardState._ctrl = false;

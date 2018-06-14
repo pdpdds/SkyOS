@@ -24,7 +24,7 @@
 #include "local.h"
 #include <stdio.h>
 
-int svgagui_initialized = FALSE, sleep_time = 5000;
+int svgagui_initialized = FALSE, sleep_time = 1;
 
 
 void set_sleep_time(int time)
@@ -45,7 +45,7 @@ void init_svgagui(void)
 	mouse.num_cursors = 0;
 	mouse.cursor_id = -1;	/* no mouse defined yet */
 	
-	set_sleep_time(5000);
+	set_sleep_time(0);
 	svgagui_initialized = TRUE;
 }
 

@@ -556,14 +556,15 @@ long cmdPCI(char *theCommand)
 
 long cmdCallStack(char *theCommand)
 {
-	SkyDebugger::GetInstance()->TraceStack();
+	SkyDebugger::GetInstance()->TraceStackWithSymbol();
 
 	return false;
 }
 
 long cmdCallStack2(char *theCommand)
 {
-	SkyDebugger::GetInstance()->TraceStackWithSymbol();
+	int id = atoi(theCommand);
+	SkyDebugger::GetInstance()->TraceStackWithProcessId(id);
 
 	return false;
 }

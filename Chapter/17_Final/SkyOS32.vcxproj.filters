@@ -323,6 +323,27 @@
     <ClCompile Include="2DGraphics.cpp" />
     <ClCompile Include="HangulFont.cpp" />
     <ClCompile Include="EnglishFont.cpp" />
+    <ClCompile Include="GUI\svgagui\svga_mouse.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\svga_keyb.cpp">
+      <Filter>GUI\SVGA</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\bar.cpp">
+      <Filter>GUI\SVGA\core</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\textCtrl.cpp">
+      <Filter>GUI\SVGA\core</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\wnd.cpp">
+      <Filter>GUI\SVGA\core</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\svga_window.cpp">
+      <Filter>GUI\SVGA\core</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\svgagui\font.cpp">
+      <Filter>GUI\SVGA\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\Hal.h">
@@ -622,6 +643,30 @@
     <ClInclude Include="luatinker.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="2DGraphics.h" />
+    <ClInclude Include="GUI\svgagui\svga_keyb.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\svga_mouse.h">
+      <Filter>GUI\SVGA</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\bar.h">
+      <Filter>GUI\SVGA\core</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\txtCtrl.h">
+      <Filter>GUI\SVGA\core</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\wnd.h">
+      <Filter>GUI\SVGA\core</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\svga_window.h">
+      <Filter>GUI\SVGA\core</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\font.h">
+      <Filter>GUI\SVGA\core</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\svgagui\fontres.h">
+      <Filter>GUI\SVGA\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
@@ -671,6 +716,9 @@
     </Filter>
     <Filter Include="GUI\SkyGUI">
       <UniqueIdentifier>{038e56cf-3636-437f-b7f9-81cae7203789}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\SVGA\core">
+      <UniqueIdentifier>{fac54b22-fcf5-4725-9609-8583ea9e7317}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

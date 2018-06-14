@@ -349,8 +349,8 @@ bool SkyGUI::MakeIOSystem()
 	init_keyboard(&m_fifo, 256);
 	EnableMouse(&m_fifo, 512, &mdec);
 
-	setvect(0x21, kSkyKeyboardHandler);
-	setvect(0x2c, kSkyMouseHandler);
+	SetInterruptVector(0x21, kSkyKeyboardHandler);
+	SetInterruptVector(0x2c, kSkyMouseHandler);
 
 	fifo32_put(&keycmd, KEYCMD_LED);
 	fifo32_put(&keycmd, key_leds);

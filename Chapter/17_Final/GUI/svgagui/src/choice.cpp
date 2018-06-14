@@ -189,7 +189,7 @@ void press_choice(GuiObject * obj)
 	/* wait until the users leaves the pulldown title */
 	object_region(obj->win);
 	while ((obj->win)->focusobj == obj) {
-		ksleep(sleep_time);
+		//ksleep(sleep_time);
 		do_window_functions(win_thread);
 		if (GuiGetMessage() == GuiMouseEvent) {
 			move_mouse();
@@ -200,7 +200,7 @@ void press_choice(GuiObject * obj)
 	if (GuiMouseGetButton() == GuiMouseLeftButton)
 		mouse_hold = TRUE;
 	do {
-		ksleep(sleep_time);
+		//ksleep(sleep_time);
 		do_window_functions(win_thread);
 		if (GuiGetMessage() == GuiMouseEvent) {
 			move_mouse();
@@ -226,7 +226,7 @@ void press_choice(GuiObject * obj)
 
 	/* wait for mousebutton to be released */
 	while (status == GuiMouseLeftButton) {
-		ksleep(sleep_time);
+		//ksleep(sleep_time);
 		do_window_functions(win_thread);
 		if (GuiGetMessage() == GuiMouseEvent) {
 			move_mouse();

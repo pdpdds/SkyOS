@@ -30,7 +30,7 @@ ushort InPortWord(ushort port);
 long InPortDWord(unsigned int port);
 
 void InterruptDone(unsigned int intno);
-void setvect(int intno, void(&vect) (), int flags = 0);
+void SetInterruptVector(int intno, void(&vect) (), int flags = 0);
 
 #pragma pack (push, 1)
 typedef struct registers
