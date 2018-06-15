@@ -11,7 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="2DGraphics.cpp" />
     <ClCompile Include="ConsoleSystem\commands.cpp" />
     <ClCompile Include="ConsoleSystem\ConsoleManager.cpp" />
     <ClCompile Include="Core\Exception.cpp" />
@@ -41,7 +40,6 @@
     <ClCompile Include="Device\nic.cpp" />
     <ClCompile Include="Device\PCI.cpp" />
     <ClCompile Include="Device\SkyPCI.cpp" />
-    <ClCompile Include="EnglishFont.cpp" />
     <ClCompile Include="FileSystem\ACEList.cpp" />
     <ClCompile Include="FileSystem\FAT12.cpp" />
     <ClCompile Include="FileSystem\fat32.cpp" />
@@ -74,9 +72,7 @@
     <ClCompile Include="GUI\SkySheetController32.cpp" />
     <ClCompile Include="GUI\SkySheetController8.cpp" />
     <ClCompile Include="GUI\SkySVGA.cpp" />
-    <ClCompile Include="GUI\svgagui\bar.cpp" />
     <ClCompile Include="GUI\svgagui\example\color.cpp" />
-    <ClCompile Include="GUI\svgagui\font.cpp" />
     <ClCompile Include="GUI\svgagui\src\browser.cpp" />
     <ClCompile Include="GUI\svgagui\src\button.cpp" />
     <ClCompile Include="GUI\svgagui\src\check.cpp" />
@@ -105,11 +101,7 @@
     <ClCompile Include="GUI\svgagui\svgaguientry.cpp" />
     <ClCompile Include="GUI\svgagui\svga_keyb.cpp" />
     <ClCompile Include="GUI\svgagui\svga_mouse.cpp" />
-    <ClCompile Include="GUI\svgagui\textCtrl.cpp" />
-    <ClCompile Include="GUI\svgagui\svga_window.cpp" />
-    <ClCompile Include="GUI\svgagui\wnd.cpp" />
     <ClCompile Include="GUI\vesa.cpp" />
-    <ClCompile Include="HangulFont.cpp" />
     <ClCompile Include="Heap\HeapManager.cpp" />
     <ClCompile Include="Heap\kheap.cpp" />
     <ClCompile Include="Heap\ordered_array.cpp" />
@@ -126,6 +118,7 @@
     <ClCompile Include="SkyConsoleLauncher.cpp" />
     <ClCompile Include="SkyGUILauncher.cpp" />
     <ClCompile Include="SkyLauncher.cpp" />
+    <ClCompile Include="TestLua.cpp" />
     <ClCompile Include="Test\Plane.cpp" />
     <ClCompile Include="Test\SkyTest.cpp" />
     <ClCompile Include="Test\ZetPlane.cpp" />
@@ -134,7 +127,6 @@
     <ClCompile Include="v8086\RMEFunc.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="2DGraphics.h" />
     <ClInclude Include="ConsoleSystem\commandMacros.h" />
     <ClInclude Include="ConsoleSystem\commands.h" />
     <ClInclude Include="ConsoleSystem\commandTable.h" />
@@ -186,7 +178,6 @@
     <ClInclude Include="FileSystem\RAMDisk.h" />
     <ClInclude Include="FileSystem\RamDiskAdaptor.h" />
     <ClInclude Include="FileSystem\StorageManager.h" />
-    <ClInclude Include="Font.h" />
     <ClInclude Include="GUI\JPEG.h" />
     <ClInclude Include="GUI\Simple\SkyGUIConsole.h" />
     <ClInclude Include="GUI\SkyGUISystem.h" />
@@ -205,9 +196,6 @@
     <ClInclude Include="GUI\SkySheetController8.h" />
     <ClInclude Include="GUI\SkySVGA.h" />
     <ClInclude Include="GUI\SkyWindow.h" />
-    <ClInclude Include="GUI\svgagui\bar.h" />
-    <ClInclude Include="GUI\svgagui\font.h" />
-    <ClInclude Include="GUI\svgagui\fontres.h" />
     <ClInclude Include="GUI\svgagui\src\bigfont.h" />
     <ClInclude Include="GUI\svgagui\src\font.h" />
     <ClInclude Include="GUI\svgagui\src\font2.h" />
@@ -217,9 +205,6 @@
     <ClInclude Include="GUI\svgagui\svgaguientry.h" />
     <ClInclude Include="GUI\svgagui\svga_keyb.h" />
     <ClInclude Include="GUI\svgagui\svga_mouse.h" />
-    <ClInclude Include="GUI\svgagui\txtCtrl.h" />
-    <ClInclude Include="GUI\svgagui\svga_window.h" />
-    <ClInclude Include="GUI\svgagui\wnd.h" />
     <ClInclude Include="GUI\VESA.h" />
     <ClInclude Include="Heap\HeapManager.h" />
     <ClInclude Include="Heap\kheap.h" />
@@ -241,6 +226,7 @@
     <ClInclude Include="SkyLauncher.h" />
     <ClInclude Include="SkyOS.h" />
     <ClInclude Include="SkyStartOption.h" />
+    <ClInclude Include="TestLua.h" />
     <ClInclude Include="Test\Plane.h" />
     <ClInclude Include="Test\PureCallExtend.h" />
     <ClInclude Include="Test\SkyTest.h" />

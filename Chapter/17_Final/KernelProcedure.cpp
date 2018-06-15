@@ -35,10 +35,7 @@ __declspec(naked) void ProcInit()
 		ret
 	}
 }
-#include "luatinker.h"
-#include "lualib.h"
 
-extern void TestLua53(lua_State* L);
 DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 {
 	SkyConsole::Print("Console Mode Start!!\n");
@@ -53,24 +50,7 @@ DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 	kLeaveCriticalSection();
 
 	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
-	kEnterCriticalSection();
-
-	/*SystemProfiler::GetInstance()->PrintMemoryState();
-	for (int i = 0; i < 100; i++)
-	{	
-		lua_State* L;
-		L = luaL_newstate();
-		luaopen_base(L);
-
-		TestLua53(L);
-
-		lua_close(L);
-	}
 	
-	SystemProfiler::GetInstance()->PrintMemoryState();
-	*/
-	kLeaveCriticalSection();
-
 	NativeConsole();
 
 	SkyConsole::Print("Bye!!");

@@ -35,10 +35,12 @@ long processCommandLine(char *a_szCommand)
 	char  *pCurrentToken;
 
 	if (0 == strlen(a_szCommand))
-		return FALSE;
+		return false;
+
+	memset(szCmdCopy, 0, 256);
 
 	bool result = false;
-	for (i = 0; i<g_NumberOfCommands; i++)
+	for (i = 0; i < g_NumberOfCommands; i++)
 	{
 		if (g_Commands[i].bHasArguments)
 		{
@@ -57,8 +59,7 @@ long processCommandLine(char *a_szCommand)
 					if (pCurrentToken != nullptr)
 					{
 						g_Commands[i].ProcessingFunc(pCurrentToken);
-						result = true;
-						return result;
+						return true;
 					}
 					else
 					{
@@ -66,43 +67,47 @@ long processCommandLine(char *a_szCommand)
 						return false;
 					}
 
-				}				
+				}
 			}
 		}
 		else
 		{
+			// Copy the command.
+			strcpy(szCmdCopy, a_szCommand);
+
 			if (g_Commands[i].ProcessingFunc != nullptr)
 			{
-				// Since we have no arguments, we do an exact match.
-				if (0 == stricmp(a_szCommand, g_Commands[i].szCommand))
-				{
+				// This returns the command sub-string.
+				pCurrentToken = strtok(szCmdCopy, szDelim);
 
-					g_Commands[i].ProcessingFunc(NULL);
-					result = true;
-					return result;
+				if (0 == stricmp(pCurrentToken, g_Commands[i].szCommand))
+				{
+					pCurrentToken = strtok(NULL, szDelim);
+
+					if (pCurrentToken != nullptr)
+					{
+						g_Commands[i].ProcessingFunc(pCurrentToken);
+						return true;
+					}
+					else
+					{
+						g_Commands[i].ProcessingFunc(NULL);
+						return false;
+					}
 
 				}
 			}
 		}
 	}
-	
+
 	if (result == false)
 	{
-		for (i = 0; i < g_NumberOfCommands; i++)
+		if (0 == strcmp("help", a_szCommand))
 		{
-			if (g_Commands[i].ProcessingFunc == nullptr)
-			{
-				if (0 == strcmp("help", a_szCommand))
-				{
-					showHelp();
-					return true;
-				}
-			}			
+			showHelp();
+			return true;
 		}
-	}
-	
-	if (result == false)
-	{
+
 		SkyConsole::Print("Command not found....\n");
 	}
 
@@ -118,17 +123,17 @@ ConsoleManager::~ConsoleManager()
 }
 
 
-bool ConsoleManager::RunCommand(char* buf) 
+bool ConsoleManager::RunCommand(char* buf)
 {
 	if (buf[0] == '\0')
-	{		
+	{
 		return false;
 	}
 
-	if (strcmp(buf, "exit") == 0) 
+	if (strcmp(buf, "exit") == 0)
 	{
 		return true;
-	}	
+	}
 
 	processCommandLine(buf);
 

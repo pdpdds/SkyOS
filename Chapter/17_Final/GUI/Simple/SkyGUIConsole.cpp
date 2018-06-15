@@ -225,9 +225,6 @@ bool SkyGUIConsole::Run()
 	int bufferLen = (m_width / CHAR_WIDTH) - 15;
 	char* commandBuffer = new char[bufferLen];
 
-	
-	
-
 	while (1)
 	{
 		int driveId = StorageManager::GetInstance()->GetCurrentDriveId();
@@ -334,8 +331,6 @@ void SkyGUIConsole::Update(unsigned long *buf)
 	}
 }
 
-#include "2DGraphics.h"
-
 bool SkyGUIConsole::Print(char* pMsg)
 {
 	if (m_pRenderer == nullptr)
@@ -413,12 +408,7 @@ bool SkyGUIConsole::PrintCommand(char* pMsg, bool backspace)
 		FillRect(m_lastCommandLength, m_yPos, CHAR_WIDTH, CHAR_HEIGHT, 0x00);
 	}
 
-	RECT rect;
-	rect.iX1 = 0;
-	rect.iY1 = 0;
-	rect.iX2 = m_width;
-	rect.iY2 = m_height;
-	m_lastCommandLength = kInternalDrawText(&rect, (COLOR*)m_pVideoRamPtr, m_xPos, m_yPos, 0xffffffff, 0x00, pMsg, strlen(pMsg));
+	m_lastCommandLength = pMint64Engine->DrawText(0, 0, m_width, m_height, m_pVideoRamPtr, m_xPos, m_yPos, 0xffffffff, 0x00, pMsg, strlen(pMsg));
 
 	m_lastCommandLength += 8;
 	m_xPos = m_lastCommandLength;

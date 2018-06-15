@@ -13,7 +13,7 @@ extern "C" {
 	void lfb_update(unsigned long *buf);
 	unsigned long *getlfb();
 	void putp(ULONG i, ULONG col);
-	unsigned long *getOffscreenBuffer();
+	
 	void pp(ULONG i, unsigned char r, unsigned char g, unsigned char b) ;
 
 	ULONG getp(ULONG i);

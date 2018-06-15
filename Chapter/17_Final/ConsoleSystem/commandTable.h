@@ -21,8 +21,7 @@ START_COMMAND_TABLE
 	CMD_ENTRY("cd", true, cmdCD, "Change Drive")
 	CMD_ENTRY("lua3", true, cmdLua3, "exec lua3 file")
 	CMD_ENTRY("lua5", true, cmdLua5, "test lua5 file")
-	CMD_ENTRY("guiconsole", false, cmdSwitchGUI, "Switch to GUI Console Mode")
-	CMD_ENTRY("callstack", false, cmdCallStack, "Trace Callstack")	
-	CMD_ENTRY("callstack2", true, cmdCallStack2, "Trace Callstack with Process Id")
+	CMD_ENTRY("guiconsole", false, cmdSwitchGUI, "Switch to GUI Console Mode")	
+	CMD_ENTRY("callstack", false, cmdCallStack, "Trace Callstack with Process Id")
 END_COMMAND_TABLE
 
