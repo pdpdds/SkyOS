@@ -16,7 +16,7 @@ public:
 	void MakeWindow(unsigned char *buf, int xsize, int ysize, char *title, char act) override;
 	void PutFonts_ASC(char *vram, int xsize, int x, int y, char c, unsigned char *s) override;
 	void InitMouseCursor(char *mouse, char bc) override;
-	void InitScreen(unsigned char *vram, int x, int y) override;
+	bool LoadImage(unsigned char *vram, int x, int y, char* filename) override;
 
 	void PutFont(char *vram, int xsize, int x, int y, char c, char *font) override;
 	void MakeWindowTitle(unsigned char *buf, int xsize, char *title, char act) override;

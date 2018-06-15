@@ -27,15 +27,6 @@ void NativeConsole()
 	}
 }
 
-__declspec(naked) void ProcInit()
-{
-	__asm
-	{		
-		xor ebp, ebp; Set %ebp to NULL
-		ret
-	}
-}
-
 DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 {
 	SkyConsole::Print("Console Mode Start!!\n");

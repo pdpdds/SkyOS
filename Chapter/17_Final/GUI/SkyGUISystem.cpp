@@ -2,9 +2,16 @@
 
 SkyGUISystem* SkyGUISystem::m_GUISystem = nullptr;
 
+extern SKY_FILE_Interface g_FileInterface;
+extern SKY_ALLOC_Interface g_allocInterface;
+extern SKY_Print_Interface g_printInterface;
+
+
 SkyGUISystem::SkyGUISystem()
 {
 	m_GUIEnable = false;
+	m_pMint64Engine = nullptr;
+	m_pEngine = nullptr;
 }
 
 SkyGUISystem::~SkyGUISystem()
@@ -67,7 +74,54 @@ bool SkyGUISystem::InitGUIModule()
 	if (m_pWindow == nullptr)
 		return false;
 
+
+	if (false == LoadGUIModule())
+		return false;
+
+
 	m_pWindow->Initialize(m_videoRamInfo._pVideoRamPtr, m_videoRamInfo._width, m_videoRamInfo._height, m_videoRamInfo._bpp, m_videoRamInfo._framebuffer_type);
+
+	return true;
+}
+
+bool SkyGUISystem::LoadGUIModule()
+{
+	//Load Hangul Engine
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
+
+	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory("HangulMint64Engine.dll");
+	PSetSkyMockInterface SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "SetSkyMockInterface");
+	PGetHangulMint64Engine HanguleMint64Engine = (PGetHangulMint64Engine)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetHangulEngine");
+
+	//디버그 엔진에 플랫폼 종속적인 인터페이스를 넘긴다.
+	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
+
+	if (!HanguleMint64Engine)
+	{
+		HaltSystem("HanguleMint64Engine Module Load Fail!!");
+	}
+
+	m_pMint64Engine = HanguleMint64Engine();
+
+	MODULE_HANDLE hwnd2 = SkyModuleManager::GetInstance()->LoadModuleFromMemory("HangulEngine.dll");
+	SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd2, "SetSkyMockInterface");
+	PGetHangulEngine HangulEngine = (PGetHangulEngine)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd2, "GetHangulEngine");
+	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
+
+	if (!HangulEngine)
+	{
+
+		HaltSystem("HangulEngine Module Load Fail!!");
+	}
+
+	m_pEngine = HangulEngine();
+
+	bool result = m_pEngine->Initialize();
+
+	if (!result)
+	{
+		HaltSystem("HangulEngine Initialize Fail!!");
+	}
 
 	return true;
 }

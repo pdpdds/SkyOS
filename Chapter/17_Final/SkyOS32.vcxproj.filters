@@ -326,7 +326,9 @@
     <ClCompile Include="GUI\svgagui\svga_keyb.cpp">
       <Filter>GUI\SVGA</Filter>
     </ClCompile>
-    <ClCompile Include="TestLua.cpp" />
+    <ClCompile Include="Test\TestLua.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\Hal.h">
@@ -630,7 +632,9 @@
     <ClInclude Include="GUI\svgagui\svga_mouse.h">
       <Filter>GUI\SVGA</Filter>
     </ClInclude>
-    <ClInclude Include="TestLua.h" />
+    <ClInclude Include="Test\TestLua.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

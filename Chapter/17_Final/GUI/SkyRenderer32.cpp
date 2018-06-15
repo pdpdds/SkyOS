@@ -168,75 +168,60 @@ void SkyRenderer32::BoxFill(unsigned char *vram, int xsize, int color, int x0, i
 	return;
 }
 
-void SkyRenderer32::InitScreen(unsigned char *vram, int x, int y)
+bool SkyRenderer32::LoadImage(unsigned char *vram, int x, int y, char* filename)
 {
 	ULONG* pBuffer = (ULONG*)vram;
-	FILE* pFile = StorageManager::GetInstance()->OpenFile("Background.jpg", "rb");
+	FILE* pFile = StorageManager::GetInstance()->OpenFile(filename, "rb");
 
-	if (pFile != nullptr)
+	if (pFile == nullptr)
+		return false;
+
+
+	JPEG* jpeg = new JPEG;
+
+	char* buffer = new char[pFile->_fileLength];
+
+	StorageManager::GetInstance()->ReadFile(pFile, (unsigned char*)buffer, 1, pFile->_fileLength);
+
+	if (true == kJPEGInit(jpeg, (BYTE*)buffer, pFile->_fileLength))
 	{
-		JPEG* jpeg = new JPEG;
+		// 디코딩할 메모리 할당
+		COLOR* outBuffer = (COLOR*) new char[jpeg->width * jpeg->height * sizeof(COLOR)];
+		ULONG* rgb888Buffer = (ULONG*) new char[jpeg->width * jpeg->height * sizeof(ULONG)];
 
-		char* buffer = new char[pFile->_fileLength];
-
-		StorageManager::GetInstance()->ReadFile(pFile, (unsigned char*)buffer, 1, pFile->_fileLength);
-
-		if (true == kJPEGInit(jpeg, (BYTE*)buffer, pFile->_fileLength))
+		if (outBuffer != nullptr)
 		{
-			// 디코딩할 메모리 할당
-			COLOR* outBuffer = (COLOR*) new char[jpeg->width * jpeg->height * sizeof(COLOR)];
-			ULONG* rgb888Buffer = (ULONG*) new char[jpeg->width * jpeg->height * sizeof(ULONG)];
-
-			if (outBuffer != nullptr)
+			if (true == kJPEGDecode(jpeg, outBuffer))
 			{
-				if (true == kJPEGDecode(jpeg, outBuffer))
+				for (int i = 0; i < jpeg->width * jpeg->height; i++)
 				{
-					for (int i = 0; i < jpeg->width * jpeg->height; i++)
+					COLOR color = outBuffer[i];
+					uint8_t r = ((color >> 11) & 0x1F);
+					uint8_t g = ((color >> 5) & 0x3F);
+					uint8_t b = (color & 0x1F);
+
+					r = ((((color >> 11) & 0x1F) * 527) + 23) >> 6;
+					g = ((((color >> 5) & 0x3F) * 259) + 33) >> 6;
+					b = (((color & 0x1F) * 527) + 23) >> 6;
+
+					uint32_t RGB888 = r << 16 | g << 8 | b;
+
+					rgb888Buffer[i] = RGB888;
+				}
+
+				for (int y = 0; y < jpeg->height; ++y)
+				{
+					for (int x = 0; x < jpeg->width; ++x)
 					{
-						COLOR color = outBuffer[i];
-						uint8_t r = ((color >> 11) & 0x1F);
-						uint8_t g = ((color >> 5) & 0x3F);
-						uint8_t b = (color & 0x1F);
-
-						r = ((((color >> 11) & 0x1F) * 527) + 23) >> 6;
-						g = ((((color >> 5) & 0x3F) * 259) + 33) >> 6;
-						b = (((color & 0x1F) * 527) + 23) >> 6;
-
-						uint32_t RGB888 = r << 16 | g << 8 | b;
-
-						rgb888Buffer[i] = RGB888;
-					}
-					
-					for (int y = 0; y < jpeg->height; ++y)
-					{
-						for (int x = 0; x < jpeg->width; ++x)
-						{
-							pBuffer[y * jpeg->width + x] = rgb888Buffer[y * jpeg->width + x]; //노란색
-						}
+						pBuffer[y * jpeg->width + x] = rgb888Buffer[y * jpeg->width + x]; //노란색
 					}
 				}
+				
+				return true;
 			}
 		}
 	}
-	else
-	{
-		BoxFill(vram, x, 0x00FF0000, 0, 0, x - 1, y - 29);
-	}
 
-	BoxFill(vram, x, 0x0000FF00, 0, y - 28, x - 1, y - 28);
-	BoxFill(vram, x, 0x000000FF, 0, y - 27, x - 1, y - 27);
-	BoxFill(vram, x, 0x0000FF00, 0, y - 26, x - 1, y - 1);
-
-	BoxFill(vram, x, 0x000000FF, 3, y - 24, 59, y - 24);
-	BoxFill(vram, x, 0x000000FF, 2, y - 24, 2, y - 4);
-	BoxFill(vram, x, 0x00FF0000, 3, y - 4, 59, y - 4);
-	BoxFill(vram, x, 0x00FF0000, 59, y - 23, 59, y - 5);
-	BoxFill(vram, x, 0x00000000, 2, y - 3, 59, y - 3);
-	BoxFill(vram, x, 0x00000000, 60, y - 24, 60, y - 3);
-
-	BoxFill(vram, x, 0x00FF0000, x - 47, y - 24, x - 4, y - 24);
-	BoxFill(vram, x, 0x00FF0000, x - 47, y - 23, x - 47, y - 4);
-	BoxFill(vram, x, 0x000000FF, x - 47, y - 3, x - 4, y - 3);
-	BoxFill(vram, x, 0x000000FF, x - 3, y - 24, x - 3, y - 3);
+	return false;
 }
 

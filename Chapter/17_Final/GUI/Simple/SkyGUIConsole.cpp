@@ -47,12 +47,8 @@ bool SkyGUIConsole::Initialize(void* pVideoRamPtr, int width, int height, int bp
 	m_bpp = bpp;
 
 	unsigned char buf[512];
-	sprintf((char*)buf, "XRes : %d", width);
+	sprintf((char*)buf, "Resolution(%d x %d)", width, height);
 	unsigned char charColor = 0xff;
-	m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, buf);
-	GetNewLine();
-
-	sprintf((char*)buf, "YRes : %d", height);
 	m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, buf);
 	GetNewLine();
 
@@ -60,7 +56,7 @@ bool SkyGUIConsole::Initialize(void* pVideoRamPtr, int width, int height, int bp
 	m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, buf);
 	GetNewLine();
 
-	sprintf((char*)buf, "Ram Virtual Address : %x", (uint32_t)pVideoRamPtr);
+	sprintf((char*)buf, "Video Buffer Address : %x", (uint32_t)pVideoRamPtr);
 	m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, buf);
 	GetNewLine();
 
@@ -75,26 +71,13 @@ bool SkyGUIConsole::Initialize(void* pVideoRamPtr, int width, int height, int bp
 	return true;
 }
 
-#include "SkyMockInterface.h"
-#include "I_HangulEngine.h"
-#include "I_Hangul.h"
 
-extern SKY_FILE_Interface g_FileInterface;
-extern SKY_ALLOC_Interface g_allocInterface;
-extern SKY_Print_Interface g_printInterface;
-
-typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
-typedef I_HangulEngine*(*PGetHangulMint64Engine)();
-typedef I_Hangul*(*PGetHangulEngine)();
-
-I_HangulEngine* pMint64Engine = nullptr;
-I_Hangul* pEngine = nullptr;
 
 void SkyGUIConsole::GetCommandForGUI2(char* commandBuffer, int bufSize, char* driveName)
 {
 	char c = 0;
 	bool	BufChar;
-
+	I_HangulEngine* pIMEEngine = SkyGUISystem::GetInstance()->GetIMEEngine();
 
 	//! get command string
 	int i = 0;
@@ -123,8 +106,8 @@ void SkyGUIConsole::GetCommandForGUI2(char* commandBuffer, int bufSize, char* dr
 
 			if (i > 0) {
 
-				pMint64Engine->InputAscii(c);
-				int len = pMint64Engine->GetString(commandBuffer);
+				pIMEEngine->InputAscii(c);
+				int len = pIMEEngine->GetString(commandBuffer);
 
 				command = driveName;
 
@@ -141,7 +124,7 @@ void SkyGUIConsole::GetCommandForGUI2(char* commandBuffer, int bufSize, char* dr
 			//! dont buffer this char
 			BufChar = false;
 
-			pMint64Engine->InputAscii(0x85);
+			pIMEEngine->InputAscii(0x85);
 		}
 
 		
@@ -154,8 +137,8 @@ void SkyGUIConsole::GetCommandForGUI2(char* commandBuffer, int bufSize, char* dr
 			//if (c != 0 && KEY_SPACE != c) { //insure its an ascii char
 			if (c != 0) { //insure its an ascii char
 
-				pMint64Engine->InputAscii(c);
-				i = pMint64Engine->GetString(commandBuffer);
+				pIMEEngine->InputAscii(c);
+				i = pIMEEngine->GetString(commandBuffer);
 				command = driveName;
 				command += commandBuffer;
 
@@ -173,47 +156,9 @@ bool SkyGUIConsole::Run()
 {	
 	Thread* pThread = ProcessManager::GetInstance()->GetCurrentTask();
 	Process* pProcess = pThread->m_pParent;
+	I_HangulEngine* pIMEEngine = SkyGUISystem::GetInstance()->GetIMEEngine();
 
 	ProcessManager::GetInstance()->CreateProcessFromMemory("GUIWatchDog", GUIWatchDogProc, NULL, PROCESS_KERNEL);
-
-	//Load Hangul Engine
-	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
-	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory("HangulMint64Engine.dll");
-
-	
-	PSetSkyMockInterface SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "SetSkyMockInterface");
-	PGetHangulMint64Engine HanguleMint64Engine = (PGetHangulMint64Engine)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetHangulEngine");
-	
-	//디버그 엔진에 플랫폼 종속적인 인터페이스를 넘긴다.
-	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
-
-	if (!HanguleMint64Engine)
-	{
-		HaltSystem("Memory Module Load Fail!!");
-	}
-
-	pMint64Engine = HanguleMint64Engine();
-
-	MODULE_HANDLE hwnd2 = SkyModuleManager::GetInstance()->LoadModuleFromMemory("HangulEngine.dll");
-	SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd2, "SetSkyMockInterface");
-	PGetHangulEngine HangulEngine = (PGetHangulEngine)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd2, "GetHangulEngine");
-	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
-
-
-	if (!HangulEngine)
-	{
-		
-		HaltSystem("HangulEngine Memory Module Load Fail!!");
-	}
-
-	pEngine = HangulEngine();
-
-	bool result = pEngine->Initialize();
-
-	if (!result)
-	{
-		HaltSystem("HangulEngine Initialize Fail!!");
-	}
 
 	Print2("SkyOS에 오신걸 환영합니다!!");
 	Print2("Welcome to SkyOS!!");
@@ -236,10 +181,16 @@ bool SkyGUIConsole::Run()
 		PrintCommand((char*)driveName.c_str(), false);
 		
 		memset(commandBuffer, 0, bufferLen);				
-		pMint64Engine->Reset();
+		pIMEEngine->Reset();
 
 		GetCommandForGUI2(commandBuffer, bufferLen, (char*)driveName.c_str());
 		SkyConsole::Print("\n");
+
+		if (strcmp(commandBuffer, "jpeg") == 0)
+		{
+			m_pRenderer->LoadImage((unsigned char*)m_pVideoRamPtr, 0, 0, "sample.jpg");
+			continue;
+		}
 
 		if (manager.RunCommand(commandBuffer) == true)
 			break;
@@ -264,7 +215,7 @@ VOID SkyGUIConsole::GetNewLine()
 		//화면을 스크롤한다.
 		for (y = PIVOT_Y; y < (m_height - CHAR_HEIGHT - PIVOT_Y); y++)
 		{
-			for (x = PIVOT_X; x < m_width; x++) 
+			for (x = PIVOT_X; x < m_width/2; x++) 
 			{
 				buf[x + y * bxsize] = buf[x + (y + CHAR_HEIGHT) * bxsize];
 			}
@@ -276,6 +227,7 @@ VOID SkyGUIConsole::GetNewLine()
 				buf[x + y * bxsize] = 0x00000000;
 			}
 		}
+
 	}
 
 	m_xPos = PIVOT_X;
@@ -383,7 +335,7 @@ bool SkyGUIConsole::Print(char* pMsg)
 bool SkyGUIConsole::Print2(char* pMsg)
 {
 	FillRect(m_xPos, m_yPos, CHAR_WIDTH, CHAR_HEIGHT, 0x00);
-
+	I_Hangul* pEngine = SkyGUISystem::GetInstance()->GetUnicodeEngine();
 	pEngine->PutFonts((char*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1024, m_xPos, m_yPos, 0xffffffff, (unsigned char*)pMsg);
 	GetNewLine();
 
@@ -394,6 +346,7 @@ bool SkyGUIConsole::Print2(char* pMsg)
 
 bool SkyGUIConsole::PrintCommand(char* pMsg, bool backspace)
 {
+	I_HangulEngine* pIMEEngine = SkyGUISystem::GetInstance()->GetIMEEngine();
 	if (m_pRenderer == nullptr)
 		return false;
 
@@ -408,7 +361,7 @@ bool SkyGUIConsole::PrintCommand(char* pMsg, bool backspace)
 		FillRect(m_lastCommandLength, m_yPos, CHAR_WIDTH, CHAR_HEIGHT, 0x00);
 	}
 
-	m_lastCommandLength = pMint64Engine->DrawText(0, 0, m_width, m_height, m_pVideoRamPtr, m_xPos, m_yPos, 0xffffffff, 0x00, pMsg, strlen(pMsg));
+	m_lastCommandLength = pIMEEngine->DrawText(0, 0, m_width, m_height, m_pVideoRamPtr, m_xPos, m_yPos, 0xffffffff, 0x00, pMsg, strlen(pMsg));
 
 	m_lastCommandLength += 8;
 	m_xPos = m_lastCommandLength;

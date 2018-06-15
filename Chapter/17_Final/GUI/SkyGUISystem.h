@@ -3,6 +3,13 @@
 #include "SkyGUI.h"
 #include "SkyGUIConsole.h"
 #include "SkySVGA.h"
+#include "SkyMockInterface.h"
+#include "I_HangulEngine.h"
+#include "I_Hangul.h"
+
+typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
+typedef I_HangulEngine*(*PGetHangulMint64Engine)();
+typedef I_Hangul*(*PGetHangulEngine)();
 
 typedef struct tagVideoRamInfo
 {
@@ -48,6 +55,12 @@ public:
 	VideoRamInfo& GetVideoRamInfo() { return m_videoRamInfo; }
 	void  SetVideoRamInfo(VideoRamInfo& info) { m_videoRamInfo = info; }
 
+	I_HangulEngine* GetIMEEngine() { return m_pMint64Engine; }
+	I_Hangul* GetUnicodeEngine() { return m_pEngine; }
+
+protected:
+	bool LoadGUIModule();
+
 private:
 	SkyGUISystem();
 	static SkyGUISystem* m_GUISystem;
@@ -56,5 +69,8 @@ private:
 	VideoRamInfo m_videoRamInfo;
 
 	SkyWindow<SKY_GUI_SYSTEM>* m_pWindow;
+
+	I_HangulEngine* m_pMint64Engine;
+	I_Hangul* m_pEngine;
 
 };

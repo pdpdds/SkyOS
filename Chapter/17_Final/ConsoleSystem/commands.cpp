@@ -105,6 +105,17 @@ long CmdExec(char *szCommand)
 	return false;
 }
 
+long cmdJpeg(char *szCommand)
+{
+	if (false == SkyGUISystem::GetInstance()->GUIEnable())
+	{
+		SkyConsole::Print("GUI console mode only support this command.\n", szCommand);
+		return false;
+	}
+
+
+	return false;
+}
 
 long cmdLua3(char *szCommand)
 {

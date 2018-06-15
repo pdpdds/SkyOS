@@ -23,5 +23,6 @@ START_COMMAND_TABLE
 	CMD_ENTRY("lua5", true, cmdLua5, "test lua5 file")
 	CMD_ENTRY("guiconsole", false, cmdSwitchGUI, "Switch to GUI Console Mode")	
 	CMD_ENTRY("callstack", false, cmdCallStack, "Trace Callstack with Process Id")
+	CMD_ENTRY("jpeg", true, cmdJpeg, "Print jpeg")	
 END_COMMAND_TABLE
 

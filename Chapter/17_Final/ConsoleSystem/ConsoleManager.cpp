@@ -132,7 +132,7 @@ bool ConsoleManager::RunCommand(char* buf)
 
 	if (strcmp(buf, "exit") == 0)
 	{
-		return true;
+		return true;	
 	}
 
 	processCommandLine(buf);

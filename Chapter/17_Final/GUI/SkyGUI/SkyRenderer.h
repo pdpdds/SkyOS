@@ -32,7 +32,8 @@ public:
 	virtual void MakeWindow(unsigned char *buf, int xsize, int ysize, char *title, char act) = 0;
 	virtual void PutFonts_ASC(char *vram, int xsize, int x, int y, char c, unsigned char *s) = 0;
 	virtual void InitMouseCursor(char *mouse, char bc) = 0;
-	virtual void InitScreen(unsigned char *vram, int x, int y) = 0;
+	virtual void InitScreen(unsigned char *vram, int x, int y) {}
+	virtual bool LoadImage(unsigned char *vram, int x, int y, char* filename) { return false; }
 
 	virtual void PutFont(char *vram, int xsize, int x, int y, char c, char *font) = 0;
 	virtual void MakeWindowTitle(unsigned char *buf, int xsize, char *title, char act) = 0;

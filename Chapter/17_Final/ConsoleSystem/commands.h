@@ -20,3 +20,4 @@ long cmdSwitchGUI(char *szCommand);
 long cmdPCI(char *szCommand);
 long cmdDir(char *szCommand);
 long cmdCallStack(char *szCommand);
+long cmdJpeg(char *szCommand);
