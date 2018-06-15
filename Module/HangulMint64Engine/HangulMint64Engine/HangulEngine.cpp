@@ -2,6 +2,7 @@
 #include "HangulInput.h"
 #include "memory.h"
 #include "string.h"
+#include "2DGraphics.h"
 
 #define KEY_BACKSPACE 8
 #define KEY_LALT 0x85
@@ -229,8 +230,17 @@ int HangulEngine::GetString(char* buffer)
 		length += 2;
 	}
 
-	return length;
+	return length;	
+}
 
-	
-	
+int HangulEngine::DrawText(int iX1, int iY1, int iX2, int iY2, DWORD* pstMemoryAddress, int iX, int iY,
+	DWORD stTextColor, DWORD stBackgroundColor, const char* pcString, int iLength)
+{
+	RECT memoryArea;
+	memoryArea.iX1 = iX1;
+	memoryArea.iY1 = iY1;
+	memoryArea.iX2 = iX2;
+	memoryArea.iY2 = iY2;
+
+	return kInternalDrawText(&memoryArea, pstMemoryAddress, iX, iY, stTextColor, stBackgroundColor, pcString, iLength);
 }

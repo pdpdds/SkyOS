@@ -186,13 +186,18 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="2DGraphics.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="EnglishFont.cpp" />
     <ClCompile Include="HangulEngine.cpp" />
+    <ClCompile Include="HangulFont.cpp" />
     <ClCompile Include="HangulInput.cpp" />
     <ClCompile Include="SkyInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\I_HangulEngine.h" />
+    <ClInclude Include="2DGraphics.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="HangulEngine.h" />
     <ClInclude Include="HangulInput.h" />
     <ClInclude Include="SkyInterface.h" />
