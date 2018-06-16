@@ -24,7 +24,7 @@
     <ClCompile Include="Core\SkyAPI.cpp" />
     <ClCompile Include="Core\SkyDebugger.cpp" />
     <ClCompile Include="Core\SkyModuleManager.cpp" />
-    <ClCompile Include="Core\SysAPI.cpp" />
+    <ClCompile Include="Core\SystemCall.cpp" />
     <ClCompile Include="Core\SystemProfiler.cpp" />
     <ClCompile Include="Core\Thread.cpp" />
     <ClCompile Include="Core\UserProcessLoader.cpp" />
@@ -104,6 +104,7 @@
     <ClCompile Include="Heap\HeapManager.cpp" />
     <ClCompile Include="Heap\kheap.cpp" />
     <ClCompile Include="Heap\ordered_array.cpp" />
+    <ClCompile Include="intrinsic.cpp" />
     <ClCompile Include="KernelProcedure.cpp" />
     <ClCompile Include="KeyBoard\KeyBoard.cpp" />
     <ClCompile Include="KeyBoard\KeyboardController.cpp" />
@@ -121,7 +122,6 @@
     <ClCompile Include="Test\SkyTest.cpp" />
     <ClCompile Include="Test\TestLua.cpp" />
     <ClCompile Include="Test\ZetPlane.cpp" />
-    <ClCompile Include="ThirdParty\easyzlib\easyzlib.c" />
     <ClCompile Include="v8086\rme.cpp" />
     <ClCompile Include="v8086\RMEFunc.cpp" />
   </ItemGroup>
@@ -142,7 +142,7 @@
     <ClInclude Include="Core\SkyAPI.h" />
     <ClInclude Include="Core\SkyDebugger.h" />
     <ClInclude Include="Core\SkyModuleManager.h" />
-    <ClInclude Include="Core\SysAPI.h" />
+    <ClInclude Include="Core\SystemCall.h" />
     <ClInclude Include="Core\SysError.h" />
     <ClInclude Include="Core\SystemProfiler.h" />
     <ClInclude Include="Core\Thread.h" />
@@ -207,6 +207,7 @@
     <ClInclude Include="Heap\HeapManager.h" />
     <ClInclude Include="Heap\kheap.h" />
     <ClInclude Include="Heap\ordered_array.h" />
+    <ClInclude Include="intrinsic.h" />
     <ClInclude Include="KernelProcedure.h" />
     <ClInclude Include="KeyBoard\KeyBoard.h" />
     <ClInclude Include="KeyBoard\KeyboardController.h" />
@@ -230,7 +231,6 @@
     <ClInclude Include="Test\TestInteger.h" />
     <ClInclude Include="Test\TestLua.h" />
     <ClInclude Include="Test\ZetPlane.h" />
-    <ClInclude Include="ThirdParty\easyzlib\easyzlib.h" />
     <ClInclude Include="v8086\rme.h" />
     <ClInclude Include="v8086\RMEFunc.h" />
   </ItemGroup>

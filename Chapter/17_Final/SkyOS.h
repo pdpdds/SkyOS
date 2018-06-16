@@ -24,7 +24,7 @@
 #include "VirtualMemoryManager.h"
 #include "HeapManager.h"
 #include "StorageManager.h"
-#include "SysAPI.h"
+#include "SystemCall.h"
 #include "FPU.h"
 #include "TSS.h"
 #include "ProcessUtil.h"

@@ -4,7 +4,7 @@
 #include "ZetPlane.h"
 #include "jsmn.h"
 #include "ctrycatch.h"
-#include "easyzlib.h"
+#include "I_Compress.h"
 //#include "hash_map.h"
 
 //인터럽트 핸들러 테스트
@@ -442,9 +442,31 @@ void TestNullPointer()
 	pPlane->IsRotate();
 }
 
+typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
+typedef I_Compress* (*PGetEasyCompress)();
+extern SKY_FILE_Interface g_FileInterface;
+extern SKY_ALLOC_Interface g_allocInterface;
+extern SKY_Print_Interface g_printInterface;
+
 char easyTestBuffer[] = "Sky OS Compression Test!!";
 void TestEasyZLib()
 {
+	//Load Hangul Engine
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
+
+	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory("zlib.dll");
+	PSetSkyMockInterface SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "SetSkyMockInterface");	
+	PGetEasyCompress GetEasyCompress = (PGetEasyCompress)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetEasyCompress");
+	//디버그 엔진에 플랫폼 종속적인 인터페이스를 넘긴다.
+	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
+
+	if (!GetEasyCompress)
+	{
+		HaltSystem("HanguleMint64Engine Module Load Fail!!");
+	}
+
+	I_Compress* pEasyCompress = GetEasyCompress();
+
 	char* destBuffer = new char[256];
 	long destBufferLen = 256;
 	long nSrcLen = sizeof(easyTestBuffer);
@@ -458,14 +480,14 @@ void TestEasyZLib()
 	SkyConsole::Print("text : %s\n", easyTestBuffer);
 	
 	//압축한다.
-	if (0 != ezcompress((unsigned char* )destBuffer, &destBufferLen, (const unsigned char* )easyTestBuffer, nSrcLen))
+	if (0 != pEasyCompress->Compress((unsigned char* )destBuffer, &destBufferLen, ( unsigned char* )easyTestBuffer, nSrcLen))
 	{
 		HaltSystem("easyzlib test fail!!");
 	}
 	SkyConsole::Print("Compressed : Src Size %d, Dest Size %d\n", nSrcLen, destBufferLen);
 
 	//압축을 해제한다. 
-	if (0 != ezuncompress((unsigned char*)decompressedBuffer, &decompressedLen, (const unsigned char*)destBuffer, destBufferLen))
+	if (0 != pEasyCompress->Decompress((unsigned char*)decompressedBuffer, &decompressedLen, ( unsigned char*)destBuffer, destBufferLen))
 	{
 		HaltSystem("easyzlib test fail!!");
 	}

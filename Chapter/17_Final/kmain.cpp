@@ -1,8 +1,7 @@
 ﻿#include "kmain.h"
-#include "SkyTest.h"
 #include "SkyGUILauncher.h"
 #include "SkyConsoleLauncher.h"
-#include "SkyDebugger.h"
+#include "SkyTest.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -60,10 +59,6 @@ _declspec(naked) void multiboot_entry(void)
 #endif
 }
 
-void InitContext(multiboot_info* bootinfo);
-void InitHardware();
-bool InitMemoryManager(multiboot_info* bootinfo);
-
 void kmain(unsigned long magic, unsigned long addr)
 {
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
@@ -88,12 +83,17 @@ void kmain(unsigned long magic, unsigned long addr)
 	PrintCurrentTime();
 	
 	kLeaveCriticalSection();
+
+
+	TestEasyZLib();
+	for (;;);
 	
 #if SKY_CONSOLE_MODE == 0	
 	pSystemLauncher = new SkyGUILauncher();
 #else
 	pSystemLauncher = new SkyConsoleLauncher();	
 #endif
+
 	pSystemLauncher->Launch();
 
 	for (;;);	
@@ -101,7 +101,7 @@ void kmain(unsigned long magic, unsigned long addr)
 
 void InitContext(multiboot_info* pBootInfo)
 {
-	//InitializeConstructors();
+	InitializeConstructors();
 	SkyConsole::Initialize();
 	//헥사를 표시할 때 %X는 integer, %x는 unsigned integer의 헥사값을 표시한다.	
 	SkyConsole::Print("*** Sky OS Console System Init ***\n");

@@ -217,9 +217,6 @@
     <ClCompile Include="Core\SkyModuleManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\SysAPI.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\SystemProfiler.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -313,9 +310,6 @@
     <ClCompile Include="GUI\SkyGUI\SkySheetController.cpp">
       <Filter>GUI\SkyGUI</Filter>
     </ClCompile>
-    <ClCompile Include="ThirdParty\easyzlib\easyzlib.c">
-      <Filter>ThirdParty\easyzlib</Filter>
-    </ClCompile>
     <ClCompile Include="luatinker.cpp" />
     <ClCompile Include="GUI\svgagui\svga_mouse.cpp">
       <Filter>GUI\SVGA</Filter>
@@ -326,6 +320,10 @@
     <ClCompile Include="Test\TestLua.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Core\SystemCall.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="intrinsic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\Hal.h">
@@ -499,9 +497,6 @@
     <ClInclude Include="Core\SkyModuleManager.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\SysAPI.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\SysError.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -522,9 +517,6 @@
     </ClInclude>
     <ClInclude Include="ConsoleSystem\commandTable.h">
       <Filter>ConsoleSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\easyzlib\easyzlib.h">
-      <Filter>ThirdParty\easyzlib</Filter>
     </ClInclude>
     <ClInclude Include="KernelProcedure.h" />
     <ClInclude Include="kmain.h" />
@@ -629,6 +621,10 @@
     <ClInclude Include="Test\TestLua.h">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="Core\SystemCall.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="intrinsic.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
@@ -657,12 +653,6 @@
     </Filter>
     <Filter Include="GUI\SkyGUIConsole">
       <UniqueIdentifier>{b1600453-6a49-4b0c-acf7-a29e797046fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty">
-      <UniqueIdentifier>{ed89521a-a04d-4826-81ee-909009de1595}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\easyzlib">
-      <UniqueIdentifier>{8836ebd4-0c3b-432d-96af-277a768dea88}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{592d1206-0af8-47a5-877a-333ef81963f0}</UniqueIdentifier>

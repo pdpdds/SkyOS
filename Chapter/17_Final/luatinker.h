@@ -11,13 +11,14 @@
 
 #ifndef WIN32
 #include "windef.h"
+#include "intrinsic.h"
 #else
 #include <winnt.h>
 #endif
 
-
 #include "lua.h"
 #include "lauxlib.h"
+
 namespace luatinker
 {
     // string-buffer excution
@@ -45,47 +46,39 @@ namespace luatinker
     template<typename T> struct class_name;
     struct table;
 
-    // 编译期间的if，如果C是true就是A类型，false就是B类型
     template<bool C, typename A, typename B>    struct if_ {};
     template<typename A, typename B>            struct if_ < true, A, B > { typedef A type; };
     template<typename A, typename B>            struct if_ < false, A, B > { typedef B type; };
 
-    // 判断是否是指针
     template<typename A>
         struct is_ptr { static const bool value = false; };
     template<typename A>
         struct is_ptr < A* > { static const bool value = true; };
 
-    // 判断是否是引用
     template<typename A>
         struct is_ref { static const bool value = false; };
     template<typename A>
         struct is_ref < A& > { static const bool value = true; };
 
-    // 移除const
     template<typename A>
         struct remove_const { typedef A type; };
     template<typename A>
         struct remove_const < const A > { typedef A type; };
-
-    // 获取基本类型 指针以及引用
+    
     template<typename A>
         struct base_type { typedef A type; };
     template<typename A>
         struct base_type < A* > { typedef A type; };
     template<typename A>
         struct base_type < A& > { typedef A type; };
-
-    // 获取类的类型 class A;
+    
     // class_type<A*>::type a_inst;
     // class_type<A&>::type a_inst;
     // class_type<const A*>::type a_inst;
-    // class_type<const A&>::type a_inst;
-    // 都可以用来声明
+    // class_type<const A&>::type a_inst;    
     template<typename A>
         struct class_type { typedef typename remove_const<typename base_type<A>::type>::type type; };
-
-    // 判断是否是对象
+    
     template<typename A> struct is_obj { static const bool value = true; };
     template<> struct is_obj < char > { static const bool value = false; };
     template<> struct is_obj < unsigned char > { static const bool value = false; };
@@ -104,21 +97,16 @@ namespace luatinker
     template<> struct is_obj < long long > { static const bool value = false; };
     template<> struct is_obj < unsigned long long > { static const bool value = false; };
     template<> struct is_obj < table > { static const bool value = false; };
-
-    // 数组引用 sizeof(no_type) == 1  sizeof(yes_type) == 2
+    
     enum { no = 1, yes = 2 };
     typedef char( &no_type )[no];
     typedef char( &yes_type )[yes];
 
-    // int_conv_type 结构体，里面是它的构造函数，需要传入一个int类型
     struct int_conv_type { int_conv_type( int ); };
 
-    // 枚举可以隐式转换为int
-    // 如果是int类型就会隐式转化为int_conv_type，返回yes_type；否则是no_type
     no_type int_conv_tester( ... );
     yes_type int_conv_tester( int_conv_type );
-
-    // 传入枚举类型返回yes_type
+    
     // enum XXX xxx;
     // sizeof(vfnd_ptr_tester(add_ptr(xxx))) == sizeof(yes_type)
     no_type vfnd_ptr_tester( const volatile char * );
@@ -129,15 +117,13 @@ namespace luatinker
     no_type vfnd_ptr_tester( const volatile float * );
     no_type vfnd_ptr_tester( const volatile bool * );
     yes_type vfnd_ptr_tester( const volatile void * );
-
-    // 获取指针类型
+    
     template <typename T> T* add_ptr( T& );
 
     // bool类型转化为yes_type 或者 no_type
     template <bool C> struct bool_to_yesno { typedef no_type type; };
     template <> struct bool_to_yesno < true > { typedef yes_type type; };
-
-    // 判断是否是枚举变量
+    
     template <typename T>
         struct is_enum
         {
@@ -145,18 +131,16 @@ namespace luatinker
             static const bool value = ( ( sizeof(int_conv_tester(arg)) == sizeof(yes_type) ) && ( sizeof(vfnd_ptr_tester(add_ptr(arg))) == sizeof(yes_type) ) );
         };
 
-    // from lua
-    // 输入参数转成T类型
+    // from lua    
     template<typename T>
         struct void2val { static T invoke( void* input ){ return *( T* ) input; } };
-    // 输入参数转成T类型指针
+    
     template<typename T>
         struct void2ptr { static T* invoke( void* input ){ return( T* ) input; } };
-    // 输入参数转成T类型引用
+    
     template<typename T>
         struct void2ref { static T& invoke( void* input ){ return *( T* ) input; } };
-
-    // 将输入参数ptr转换成T T* 或者T&
+    
     template<typename T>
         struct void2type
         {
@@ -172,15 +156,13 @@ namespace luatinker
             }
         };
 
-    // 存储指针的类
     struct user
     {
         user( void* p ) : m_p( p ) {}
         virtual ~user( ) {}
         void* m_p;
     };
-
-    // 将lua栈上索引的userdata转换为T T* T&
+    
     template<typename T>
         struct user2type
         {
@@ -190,8 +172,6 @@ namespace luatinker
             }
         };
 
-    // 将lua栈上索引的number转换为T T* T&
-    // T为索引类型
     template<typename T>
         struct lua2enum
         {
@@ -201,8 +181,6 @@ namespace luatinker
             }
         };
 
-    // 将lua栈上索引的userdata转换为T T* T&
-    // 非userdata报错
     template<typename T>
         struct lua2object
         {
@@ -216,8 +194,7 @@ namespace luatinker
                 return void2type<T>::invoke( user2type<user*>::invoke( L, index )->m_p );
             }
         };
-
-    // 将lua栈上索引的枚举值或者userdata转换为相对应的类型
+    
     template<typename T>
         T lua2type( lua_State *L, int index )
         {
@@ -226,8 +203,7 @@ namespace luatinker
                 , lua2object<T>
                 >::type::invoke( L, index );
         }
-
-    // val转换到user
+    
     template<typename T>
         struct val2user : user
         {
@@ -247,30 +223,23 @@ namespace luatinker
 
             template<typename T1, typename T2, typename T3, typename T4, typename T5>
                 val2user( T1 t1, T2 t2, T3 t3, T4 t4, T5 t5 ) : user( new T( t1, t2, t3, t4, t5 ) ) {}
-
-            // 只有lua调用new在C++堆上分配内存才会被__gc
+            
             ~val2user( ) { delete(( T* ) m_p ); }
         };
-
-    // ptr转化到user
+    
     template<typename T>
         struct ptr2user : user
         {
-            // 指针传入不会被__gc
             ptr2user( T* t ) : user(( void* ) t ) {}
         };
-
-    // ref转化到user
+    
     template<typename T>
         struct ref2user : user
-        {
-            // 引用传入不会被__gc
+        {            
             ref2user( T& t ) : user( &t ) {}
         };
 
     // to lua
-    // 值传入lua
-    // 方法：val2user<T> 分配在lua上，而T类型input分配在C++堆上，通过val2user<T>中的指针指向
     template<typename T>
         struct val2lua
         {
@@ -280,8 +249,6 @@ namespace luatinker
             }
         };
 
-    // 指针传入lua
-    // 方法：ptr2user<T> 分配在lua上，而T指针input存在C++中，通过ptr2user<T>中的指针指向
     template<typename T>
         struct ptr2lua
         {
@@ -297,9 +264,7 @@ namespace luatinker
                 }
             }
         };
-
-    // 引用传入lua
-    // 方法：ref2user<T> 分配在lua上，而T引用input存在C++中，通过ref2user<T>中的指针指向
+    
     template<typename T>
         struct ref2lua
         {
@@ -308,8 +273,7 @@ namespace luatinker
                 new( lua_newuserdata( L, sizeof( ref2user<T> ) ) ) ref2user<T>( input );
             }
         };
-
-    // 枚举传入lua
+    
     template<typename T>
         struct enum2lua
         {
@@ -318,8 +282,7 @@ namespace luatinker
                 lua_pushnumber( L,( int ) val );
             }
         };
-
-    // 对象传入lua
+    
     template<typename T>
         struct object2lua
         {
@@ -332,14 +295,12 @@ namespace luatinker
                     , val2lua<typename base_type<T>::type>
                     >::type
                     >::type::invoke( L, val );
-
-                // set C++对象传入lua 设置metatable
+                
                 push_meta( L, class_name<typename class_type<T>::type>::name( ) );
                 lua_setmetatable( L, -2 );
             }
         };
-
-    // 类型传入lua
+    
     template<typename T>
         void type2lua( lua_State *L, T val )
         {
@@ -352,8 +313,7 @@ namespace luatinker
     // get value from cclosure
     template<typename T>
         T upvalue_( lua_State *L )
-        {
-            // 获取函数指针
+        {            
             return user2type<T>::invoke( L, lua_upvalueindex( 1 ) );
         }
 
@@ -406,9 +366,6 @@ namespace luatinker
     template<>  table   pop( lua_State *L );
 
     // functor(with return value)
-    // C函数
-    // upvalue_<>(L)获取函数指针
-    // 执行该函数，并压入栈
     template<typename RVal, typename T1 = void, typename T2 = void, typename T3 = void, typename T4 = void, typename T5 = void>
         struct functor
         {
@@ -470,9 +427,6 @@ namespace luatinker
         };
 
     // functor(without return value)
-    // C函数
-    // upvalue_<>(L)获取函数指针
-    // 执行该函数，不用压入栈
     template<typename T1, typename T2, typename T3, typename T4, typename T5>
         struct functor < void, T1, T2, T3, T4, T5 >
         {
@@ -553,8 +507,6 @@ namespace luatinker
         };
 
     // push_functor
-    // 将栈上数据（函数指针）压入functor<>::invoke闭包
-    // 并压入该函数
     template<typename RVal>
         void push_functor( lua_State *L, RVal( *func )( ) )
         {
@@ -844,10 +796,9 @@ namespace luatinker
     template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5>
         int constructor( lua_State *L )
         {
-            // 类T构造函数，参数分别为T1 T2 T3 T4 T5
-            // 透过new构建在C++堆上
+            
             new( lua_newuserdata( L, sizeof( val2user<T> ) ) ) val2user<T>( read<T1>( L, 2 ), read<T2>( L, 3 ), read<T3>( L, 4 ), read<T4>( L, 5 ), read<T5>( L, 6 ) );
-            // 给实例赋上metatable
+            
             push_meta( L, class_name<typename class_type<T>::type>::name() );
             lua_setmetatable( L, -2 );
 
@@ -907,8 +858,7 @@ namespace luatinker
     // destroyer
     template<typename T>
         int destroyer( lua_State *L )
-        {
-            // 删除C++堆上分配的内存
+        {            
             (( user* ) lua_touserdata( L, 1 ) )->~user( );
             return 0;
         }
@@ -916,17 +866,14 @@ namespace luatinker
     // global function
     template<typename F>
         void def( lua_State* L, const char* name, F func )
-        {
-            // 传入函数指针
-            lua_pushlightuserdata( L,( void* ) func );
-            // 压入函数（实际上压入的是functor<>::invoke 真正的函数指针绑定在闭包上)
+        {            
+            lua_pushlightuserdata( L,( void* ) func );            
             push_functor( L, func );
-            // 设置名字
+            
             lua_setglobal( L, name );
         }
 
     // global variable
-    // 设置全局变量
     template<typename T>
         void set( lua_State* L, const char* name, T object )
         {
@@ -934,7 +881,7 @@ namespace luatinker
             lua_setglobal( L, name );
         }
 
-    // 获取全局变量
+    
     // get<T>()
     template<typename T>
         T get( lua_State* L, const char* name )
@@ -943,7 +890,7 @@ namespace luatinker
             return pop<T>( L );
         }
 
-    // 设置全局变量
+    
     template<typename T>
         void decl( lua_State* L, const char* name, T object )
         {
@@ -1048,8 +995,7 @@ namespace luatinker
     template<typename T>
         void class_add( lua_State* L, const char* name )
         {
-            // 通过类名设置类table
-            // 如果该类没有注册，在lua中是获取不到类信息的
+            
             class_name<T>::name( name );
 
             lua_newtable( L );
@@ -1077,12 +1023,12 @@ namespace luatinker
     template<typename T, typename P>
         void class_inh( lua_State* L )
         {
-            // 获取类table
+            
             push_meta( L, class_name<T>::name( ) );
 
             if( lua_istable( L, -1 ) )
             {
-                // 压入父类名字
+                
                 lua_pushstring( L, "__parent" );
                 push_meta( L, class_name<P>::name( ) );
                 lua_rawset( L, -3 );
@@ -1095,18 +1041,18 @@ namespace luatinker
     template<typename T, typename F>
         void class_con( lua_State* L, F func )
         {
-            // 获取类table
+            
             push_meta( L, class_name<T>::name( ) );
 
             if( lua_istable( L, -1 ) )
             {
-                // 创建新的table __call
+                
                 lua_newtable( L );
                 lua_pushstring( L, "__call" );
-                // 压入构造函数
+                
                 lua_pushcclosure( L, func, 0 );
                 lua_rawset( L, -3 );
-                // 设置__call为类table的metatable
+                
                 lua_setmetatable( L, -2 );
             }
 
@@ -1117,12 +1063,12 @@ namespace luatinker
     template<typename T, typename F>
         void class_def( lua_State* L, const char* name, F func )
         {
-            // 获取类table
+            
             push_meta( L, class_name<T>::name( ) );
 
             if( lua_istable( L, -1 ) )
             {
-                // 压入函数到类table
+                
                 lua_pushstring( L, name );
                 new( lua_newuserdata( L, sizeof( F ) ) ) F( func );
                 push_functor( L, func );
@@ -1136,12 +1082,12 @@ namespace luatinker
     template<typename T, typename BASE, typename VAR>
         void class_mem( lua_State* L, const char* name, VAR BASE::*val )
         {
-            // 获取类table
+            
             push_meta( L, class_name<T>::name( ) );
 
             if( lua_istable( L, -1 ) )
             {
-                // 压入类参数
+                
                 lua_pushstring( L, name );
                 new( lua_newuserdata( L, sizeof( mem_var<BASE, VAR> ) ) ) mem_var<BASE, VAR>( val );
                 lua_rawset( L, -3 );

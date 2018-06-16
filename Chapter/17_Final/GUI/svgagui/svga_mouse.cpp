@@ -399,7 +399,7 @@ unsigned char mouse_read()
 }
 
 void mouse_init() {
-	int x,y;
+	//int x,y;
 	unsigned char status;
 	/*
 	mouseback=(unsigned long*) kalloc(MOUSE_SIZEX*MOUSE_SIZEY*sizeof(unsigned long));	
