@@ -46,3 +46,5 @@ typedef struct SkyMockInterface
 	SKY_FILE_Interface g_fileInterface;
 	SKY_Print_Interface g_printInterface;
 }SkyMockInterface;
+
+typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);

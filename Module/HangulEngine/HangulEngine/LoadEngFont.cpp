@@ -2,6 +2,9 @@
 #include "hanlib.h"
 #include "GetFileSize.h"
 #include "LoadEngFont.h"
+#include "SkyInterface.h"
+extern SkyMockInterface g_mockInterface;
+
 //-----------------------------------------------------------------------------
 char *BitmapEngFontFilesSize =
     ";" "2048"
@@ -16,9 +19,6 @@ bool IsEngFontSize(int AFileSize)
     sprintf(s, ";%d;", AFileSize);
     return (bool)strstr(BitmapEngFontFilesSize, s);
 }
-
-#include "SkyInterface.h"
-extern SkyMockInterface g_mockInterface;
 
 //-----------------------------------------------------------------------------
 bool LoadEngFont(TEngFont *AEngFont, const char *AEngFile)

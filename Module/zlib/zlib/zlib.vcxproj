@@ -24,7 +24,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SampleDll</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
-    <ProjectName>HangulEngine</ProjectName>
+    <ProjectName>zlib</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -89,7 +89,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>SKY_DLL;SKYOS32;_CRT_SECURE_NO_WARNINGS;_X86_;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SKY_DLL;SKYOS32;_CRT_SECURE_NO_WARNINGS;_X86_;_DEBUG;</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>false</ExceptionHandling>
@@ -186,81 +186,16 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Include\I_Hangul.h" />
-    <ClInclude Include="bsearch.h" />
-    <ClInclude Include="CompleteHan.h" />
-    <ClInclude Include="CompleteKS.h" />
-    <ClInclude Include="CP949Table.h" />
-    <ClInclude Include="GetFileSize.h" />
-    <ClInclude Include="HanCode\EXTKEY.H" />
-    <ClInclude Include="HanCode\HANCODE.H" />
-    <ClInclude Include="HanCode\HANIN.H" />
-    <ClInclude Include="HanCode\HANTYPES.H" />
-    <ClInclude Include="HanCode\typedefs.h" />
-    <ClInclude Include="HangulEngine.h" />
-    <ClInclude Include="hanlib.h" />
-    <ClInclude Include="HanOut.h" />
-    <ClInclude Include="Johab.h" />
-    <ClInclude Include="KS2JohabTable.h" />
-    <ClInclude Include="LoadEngFont.h" />
-    <ClInclude Include="LoadHanFont.h" />
-    <ClInclude Include="LoadHanjaFont.h" />
-    <ClInclude Include="LoadSpcFont.h" />
-    <ClInclude Include="SkyInterface.h" />
-    <ClInclude Include="Table10x4x4.h" />
-    <ClInclude Include="Table2x1x2.h" />
-    <ClInclude Include="Table6x2x1.h" />
-    <ClInclude Include="Table8x4x4.h" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="EasyCompress.cpp" />
+    <ClCompile Include="easyzlib.c" />
+    <ClCompile Include="SkyInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bsearch.c" />
-    <ClCompile Include="CompleteHan.c" />
-    <ClCompile Include="CompleteKS.c" />
-    <ClCompile Include="CP949Table.c" />
-    <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="GetFileSize.c" />
-    <ClCompile Include="HanCode\C_7BIT.C" />
-    <ClCompile Include="HanCode\C_7BITBL.C" />
-    <ClCompile Include="HanCode\C_CNVTCC.C" />
-    <ClCompile Include="HanCode\C_CNVTCS.C" />
-    <ClCompile Include="HanCode\C_CNVTHJ.C" />
-    <ClCompile Include="HanCode\C_CNVTS.C" />
-    <ClCompile Include="HanCode\C_CODE.C" />
-    <ClCompile Include="HanCode\C_COMMON.C" />
-    <ClCompile Include="HanCode\C_COMTBL.C" />
-    <ClCompile Include="HanCode\C_CP949.C" />
-    <ClCompile Include="HanCode\C_CP949TBL.C" />
-    <ClCompile Include="HanCode\C_DKBII.C" />
-    <ClCompile Include="HanCode\C_GETHJT.C" />
-    <ClCompile Include="HanCode\C_GOLDST.C" />
-    <ClCompile Include="HanCode\C_HJIDX.C" />
-    <ClCompile Include="HanCode\C_HJLIST.C" />
-    <ClCompile Include="HanCode\C_HJTBL.C" />
-    <ClCompile Include="HanCode\C_ISHJ.C" />
-    <ClCompile Include="HanCode\C_IYGKS.C" />
-    <ClCompile Include="HanCode\C_KS.C" />
-    <ClCompile Include="HanCode\C_KSSM.C" />
-    <ClCompile Include="HanCode\C_KSTBL.C" />
-    <ClCompile Include="HanCode\C_OLDKS.C" />
-    <ClCompile Include="HanCode\C_SAMSUN.C" />
-    <ClCompile Include="HanCode\C_SETHJ.C" />
-    <ClCompile Include="HanCode\C__COMBI.C" />
-    <ClCompile Include="HanCode\HOUTVAR.C" />
-    <ClCompile Include="HanCode\ISHAN1ST.C" />
-    <ClCompile Include="HanCode\ISHAN2ND.C" />
-    <ClCompile Include="HangulEngine.cpp" />
-    <ClCompile Include="HanOut.cpp" />
-    <ClCompile Include="Johab.c" />
-    <ClCompile Include="KS2JohabTable.c" />
-    <ClCompile Include="LoadEngFont.cpp" />
-    <ClCompile Include="LoadHanFont.cpp" />
-    <ClCompile Include="LoadHanjaFont.cpp" />
-    <ClCompile Include="LoadSpcFont.c" />
-    <ClCompile Include="SkyInterface.cpp" />
-    <ClCompile Include="Table10x4x4.c" />
-    <ClCompile Include="Table2x1x2.c" />
-    <ClCompile Include="Table6x2x1.c" />
-    <ClCompile Include="Table8x4x4.c" />
+    <ClInclude Include="..\..\Include\I_Compress.h" />
+    <ClInclude Include="EasyCompress.h" />
+    <ClInclude Include="easyzlib.h" />
+    <ClInclude Include="SkyInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
