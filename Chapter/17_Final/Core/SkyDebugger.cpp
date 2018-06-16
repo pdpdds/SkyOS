@@ -14,6 +14,8 @@
 
 SkyDebugger* SkyDebugger::m_pDebugger = nullptr;
 
+typedef I_MapFileReader*(*PGetDebugEngineDLL)();
+
 SKY_FILE_Interface g_FileInterface =
 {
 	fread,
@@ -68,10 +70,6 @@ SKY_Print_Interface g_printInterface =
 	0,
 	0,
 };
-
-
-typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
-typedef I_MapFileReader*(*PGetDebugEngineDLL)();
 
 
 SkyDebugger::SkyDebugger()
@@ -277,30 +275,4 @@ bool SkyDebugger::LoadSymbol(const char* moduleName)
 
 	m_symbolInit = true;
 	return true;
-}
-
-Module* SkyDebugger::FindModule(multiboot_info* bootinfo, const char* moduleName)
-{
-	uint32_t mb_flags = bootinfo->flags;
-	if (mb_flags & MULTIBOOT_INFO_MODS)
-	{
-		uint32_t mods_count = bootinfo->mods_count;
-		uint32_t mods_addr = (uint32_t)bootinfo->Modules;
-
-		for (uint32_t mod = 0; mod < mods_count; mod++)
-		{
-			Module* module = (Module*)(mods_addr + (mod * sizeof(Module)));
-
-			const char* module_string = (const char*)module->Name;
-
-			//SkyConsole::Print("Module Name : %s 0x%x 0x%x\n", module_string, module->ModuleStart, module->ModuleEnd);
-
-			if (strcmp(module_string, moduleName) == 0)
-			{
-				return module;
-			}
-		}
-	}
-
-	return nullptr;
 }

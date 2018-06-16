@@ -27,7 +27,6 @@
 #include "SysAPI.h"
 #include "FPU.h"
 #include "TSS.h"
-#include "SysInfo.h"
 #include "ProcessUtil.h"
 #include "KernelProcedure.h"
 #include "ProcessManager.h"

@@ -23,7 +23,10 @@ void *operator new(size_t, void *p)
 	return p;
 }
 
-
+void *operator new[](size_t, void *p)
+{
+	return p;
+}
 
 void * __cdecl operator new[](size_t size)
 {
@@ -39,6 +42,8 @@ void operator delete(void *p, size_t size)
 {
 	kfree(p);
 }
+
+
 
 void operator delete[](void *p)
 {

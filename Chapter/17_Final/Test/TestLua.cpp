@@ -14,7 +14,6 @@ extern SKY_FILE_Interface g_FileInterface;
 extern SKY_ALLOC_Interface g_allocInterface;
 extern SKY_Print_Interface g_printInterface;
 
-typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
 typedef I_LuaModule*(*PGetLuaModule)();
 
 extern FILE* g_stdOut;

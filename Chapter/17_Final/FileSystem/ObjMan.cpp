@@ -1,6 +1,6 @@
 #include "ObjMan.h"
 #include "windef.h"
-#include "SysInfo.h"
+#include "SkyAPI.h"
 #include "ACEList.h"
 #include "string.h"
 

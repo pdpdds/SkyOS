@@ -7,7 +7,6 @@
 #include "I_HangulEngine.h"
 #include "I_Hangul.h"
 
-typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
 typedef I_HangulEngine*(*PGetHangulMint64Engine)();
 typedef I_Hangul*(*PGetHangulEngine)();
 

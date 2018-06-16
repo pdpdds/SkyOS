@@ -1,6 +1,7 @@
 #pragma once
 #include "windef.h"
 #include "SkyStruct.h"
+#include "SysError.h"
 
 #define ASSERT(a, b) if(a == false) SkyConsole::Print("Kernel Panic : %s\n", b); _asm hlt
 
@@ -24,13 +25,14 @@ typedef struct _CRITICAL_SECTION {
 } CRITICAL_SECTION, *LPCRITICAL_SECTION;;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//½º·¹µå
-/////////////////////////////////////////////////////////////////////////////
 DWORD SKYAPI kGetCurrentThreadId();
 
 bool GetLocalTime(LPSYSTEMTIME lpSystemTime);
 BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime);
+
+DWORD GetLastError();
+DWORD SetLastError(DWORD dwErrorCode);
+
 
 void printf(const char* str, ...);
 void DumpMemory(void *data, size_t nbytes, size_t bytes_per_line);

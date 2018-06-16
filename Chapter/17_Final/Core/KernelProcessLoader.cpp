@@ -28,7 +28,6 @@ Process* KernelProcessLoader::CreateProcessFromMemory(const char* appName, LPTHR
 	{
 		PhysicalMemoryManager::EnablePaging(true);
 		return nullptr;
-
 	}
 
 	//힙공간을 페이지 디렉토리에 매핑한다.

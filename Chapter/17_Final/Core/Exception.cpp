@@ -10,19 +10,19 @@
 
 static char* sickpc = " (>_<) SkyOS Error!!\n\n";
 
-void _cdecl kExceptionMessageHeader() {
-
-	char* disclamer = "We apologize, SkyOS has encountered a problem and has been shut down\n\
+char* szDisclame = "We apologize, SkyOS has encountered a problem and has been shut down\n\
 to prevent damage to your computer. Any unsaved work might be lost.\n\
 We are sorry for the inconvenience this might have caused.\n\n\
 Please report the following information and restart your computer.\n\
 The system has been halted.\n\n";
-	
+
+void _cdecl kExceptionMessageHeader() 
+{	
 	SkyConsole::MoveCursor(0, 0);
 	SkyConsole::SetColor(ConsoleColor::White, ConsoleColor::Blue, false);
 	SkyConsole::Clear();
 	SkyConsole::Print(sickpc);
-	SkyConsole::Print(disclamer);
+	SkyConsole::Print(szDisclame);
 }
 
 extern int _divider;
@@ -311,13 +311,6 @@ void HaltSystem(const char* errMsg)
 	SkyConsole::Print("*** STOP: %s", errMsg);
 	SkyDebugger::GetInstance()->TraceStackWithSymbol();
 	for (;;);
-
-	__asm
-	{
-	
-	halt:
-		jmp halt;
-	}
 }
 
 void error(char *s)

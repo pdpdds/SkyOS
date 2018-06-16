@@ -220,9 +220,6 @@
     <ClCompile Include="Core\SysAPI.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\SysInfo.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\SystemProfiler.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -506,9 +503,6 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\SysError.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\SysInfo.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\SystemProfiler.h">

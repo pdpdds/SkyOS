@@ -15,7 +15,7 @@ void kHandleBreakPointTrap();
 //오버플로우
 void kHandleOverflowTrap();
 
-//! bounds check
+// bounds check
 void kHandleBoundsCheckFault();
 
 //유효하지 않은 OPCODE 또는 명령어

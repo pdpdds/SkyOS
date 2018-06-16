@@ -60,8 +60,7 @@ extern "C" void mouse_draw_mousepointerwoxy() {
 	mouse_draw_mousepointer(curx, cury);
 }
 
-void mouse_draw_mouseback(int x2, int y2) {
-	unsigned char r,g,b;
+void mouse_draw_mouseback(int x2, int y2) {	
 	int i,x,y;
 	i=0;
 	

@@ -103,6 +103,19 @@ BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime)
 	return 1;
 }
 
+DWORD g_dwSysLastError = 0;
+CPUID_DATA sysCPUBasicInformation[CPUID_MAX_BASIC_LEVEL];
+CPUID_DATA sysCPUExtendedInformation[CPUID_MAX_EXTENDED_LEVEL];
+
+DWORD GetLastError()
+{
+	return g_dwSysLastError;
+}
+DWORD SetLastError(DWORD dwErrorCode)
+{
+	return g_dwSysLastError = dwErrorCode;
+}
+
 void ksleep(int millisecond)
 {
 	msleep(millisecond);

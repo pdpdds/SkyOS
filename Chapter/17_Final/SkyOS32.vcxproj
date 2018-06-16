@@ -25,7 +25,6 @@
     <ClCompile Include="Core\SkyDebugger.cpp" />
     <ClCompile Include="Core\SkyModuleManager.cpp" />
     <ClCompile Include="Core\SysAPI.cpp" />
-    <ClCompile Include="Core\SysInfo.cpp" />
     <ClCompile Include="Core\SystemProfiler.cpp" />
     <ClCompile Include="Core\Thread.cpp" />
     <ClCompile Include="Core\UserProcessLoader.cpp" />
@@ -145,7 +144,6 @@
     <ClInclude Include="Core\SkyModuleManager.h" />
     <ClInclude Include="Core\SysAPI.h" />
     <ClInclude Include="Core\SysError.h" />
-    <ClInclude Include="Core\SysInfo.h" />
     <ClInclude Include="Core\SystemProfiler.h" />
     <ClInclude Include="Core\Thread.h" />
     <ClInclude Include="Core\UserProcessLoader.h" />

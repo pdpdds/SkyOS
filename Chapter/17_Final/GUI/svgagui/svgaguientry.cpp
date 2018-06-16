@@ -28,6 +28,7 @@
 #include "sprintf.h"
 #include "SkyAPI.h"
 #include "fileio.h"
+#include "string.h"
 
 #define VERSION		"1.2"
 
@@ -206,6 +207,121 @@ static void file_cb(GuiObject * obj, int data)
 		//fprintf(stderr, "Dir: %s\nFile: %s\n", directory, filename);
 }
 
+extern void update_browser(GuiObject * obj);
+
+#include "ConsoleManager.h"
+#include "I_Hangul.h"
+#include "SkyStartOption.h"
+#include "SkyGUISystem.h"
+
+void terminal_dispatch(GuiObject * obj, char *command)
+{
+	/*I_Hangul* pEngine = SkyGUISystem::GetInstance()->GetUnicodeEngine();
+	pEngine->PutFonts((char*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1024, 0, 0, 0xffffffff, (unsigned char*)command);
+	ConsoleManager cm;
+	cm.RunCommand(command);
+	strcat(obj->buffer, command);
+	strcat(obj->buffer, "\n");
+	set_browser_text(obj, obj->buffer);
+	update_browser(obj);*/
+	if (strcmp(command, "uname") == 0) {
+		strcat(obj->buffer, "SkyOS 2018 0.12\n");
+		set_browser_text(obj, obj->buffer);
+		update_browser(obj);
+	}
+}
+
+static void terminalinput_cb(GuiObject * obj, int user_data)
+{
+	GuiWinThread *win_thread = (obj->win)->win_thread;
+	GuiWindow *win;
+	GuiObject *object;
+
+	win = obj->win;
+	object = win->first;
+
+	if (object->objclass == BROWSER) {
+		terminal_dispatch(object, strdup(obj->label));
+		memset(obj->label, 0, strlen(obj->label));
+		return;
+	}
+
+	while (object->next != NULL) {
+		object = object->next;
+		if (object->objclass == BROWSER) {
+			terminal_dispatch(object, strdup(obj->label));
+			memset(obj->label, 0, strlen(obj->label));
+			return;
+		}
+	}
+}
+
+static GuiWindow *create_terminal(GuiWinThread *win_thread)
+{
+	GuiWindow *win;
+	GuiObject *browser, *text;
+
+	win = add_window(win_thread, NORMAL_WINDOW, (1024 - 640) / 2, (768 - 480) / 2, 640, 480, "System Terminal", FALSE, FALSE);
+	browser = add_browser(win, 5, 20, 630, 430, VERT_SLIDER);
+	set_browser_text(browser, "SkyOS System Terminal initialized.\n");
+	text = add_input(win, NORMAL_INPUT, 5, 480 - 20, 625, 256);
+	set_object_callback(text, terminalinput_cb);
+	create_window(win);
+
+	return win;
+}
+
+static void endtask_cb(GuiObject * obj, int data)
+{
+	show_button(obj);
+	if (question_dialog((obj->win)->win_thread, NULL, "Do you want to end this task?", DIA_QUESTION)) {
+		message_dialog((obj->win)->win_thread, NULL, "You cannot end this task!", DIA_INFO);
+	}
+}
+
+#include "ProcessManager.h"
+#include "Process.h"
+static GuiWindow * create_threadsview_win(GuiWinThread * win_thread)
+{
+	GuiWindow *win;
+	GuiObject *obj, *listbox;
+	ProcessManager::ProcessList* pProcessList = ProcessManager::GetInstance()->GetProcessList();
+	int k;
+
+	win = add_window(win_thread, NORMAL_WINDOW, (1024 - 300) / 2, (768 - 500) / 2, 300, 500, "LikeOS ThreadsView", FALSE, FALSE);
+	obj = add_button(win, NORMAL_BUTTON, 10, 30, 80, 17, "Applications");
+	obj = add_button(win, NORMAL_BUTTON, 95, 30, 80, 17, "Performance");
+	obj = add_button(win, NORMAL_BUTTON, 180, 30, 80, 17, "Networking");
+	obj = add_text(win, NORMAL_TEXT, 5, 60, "Taskname");
+	listbox = add_listbox(win, 10, 80, 300 - 35, 25);
+	k = 0;
+	
+	auto iter = pProcessList->begin();
+	for (; iter != pProcessList->end(); iter++)
+	{
+		k++;
+		Process* pProcess = (*iter).second;
+		obj = add_listentry(listbox, pProcess->m_processName);
+		set_object_callback(obj, listbox_cb);
+		set_object_callback2(obj, listbox_cb2);
+		set_object_user_data(obj, k);
+	}
+	
+	create_listbox(listbox);
+	obj = add_button(win, NORMAL_BUTTON, 200, 450, 80, 20, "End Task");
+	set_object_callback(obj, endtask_cb);
+	create_window(win);
+
+	return win;
+}
+
+static void Init_Sky_Interface(GuiWinThread * win_thread)
+{
+	create_terminal(win_thread);
+	create_threadsview_win(win_thread);
+
+}
+
 
 static void init_interface(GuiWinThread * win_thread)
 {
@@ -338,6 +454,7 @@ Testing 1...2";
 	create_color_win(win_thread);
 	create_slider_win(win_thread);
 
+
 	win = add_window(win_thread, NORMAL_WINDOW, 180, 340, 150, 107, "Browser", FALSE, FALSE);
 	obj = add_browser(win, 5, 21, 127, 68, TRUE);
 	set_browser_text(obj, text);
@@ -455,3 +572,43 @@ int StartSampleGui()
 
 	return 0;
 }
+
+int StartGui()
+{
+	GuiWinThread *win_thread;
+	GuiObject *obj = NULL;
+	int type = SVGALIB;
+
+	//GUI 모드 초기화
+	init_svgagui();
+
+	//1024*768 32비트로 초기화한다. 
+	open_screen(type, 1024, 768, 256, "SVGAGui");
+	update_screen();
+
+	//마우스 이미지만 초기화
+	init_mouse();
+	kleur = BACKGROUND;
+
+	//윈도우 컴포넌트를 담을 수 있는 윈도우 쉬트를 생성한다.
+	win_thread = create_window_thread();
+
+	//샘플 윈도우 컴포넌트를 윈도우 쉬트에 추가한다.
+	Init_Sky_Interface(win_thread);
+
+	//갱신된 버퍼를 화면에 출력한다.
+	show_window_thread(win_thread);
+
+	//입력 처리가 구현되어 있지 않으므로 루프에서 벗어나지 않는다.
+	while (!exit_program) {
+		obj = do_windows(win_thread);
+		if (obj == (obj->win)->kill)
+			delete_window(obj->win, TRUE);
+	}
+
+	delete_window_thread(win_thread);
+	close_screen();
+
+	return 0;
+}
+

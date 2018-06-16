@@ -66,7 +66,7 @@ bool SkySVGA::Run()
 {	
 	
 
-	StartSampleGui();
+	StartGui();
 	
 	for (;;);
 

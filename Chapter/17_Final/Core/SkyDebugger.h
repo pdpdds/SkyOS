@@ -21,8 +21,6 @@ public:
 
 	bool LoadSymbol(const char* moduleName);
 
-protected:
-	Module* FindModule(multiboot_info* bootinfo, const char* moduleName);
 
 private:
 	SkyDebugger();
