@@ -1,6 +1,7 @@
 #include "string.h"
 #include "CharType.h"
 #include "sprintf.h"
+#include "memory.h"
 
 //! warning C4706: assignment within conditional expression
 #pragma warning (disable:4706)
@@ -739,3 +740,23 @@ unsigned long strtoul(const char *nptr, char **endptr, int base)
 		*endptr = (char *)(any ? s - 1 : nptr);
 	return (acc);
 }*/
+
+
+char*	strndup(const char *s, size_t n)
+{
+	char *result;
+	result = (char*)new char[n + 1];
+	memcpy(result, s, n + 1);
+	result[n] = 0;
+	return result;
+}
+
+
+char*	strdup(const char *s)
+{
+	char *result;
+	int len = strlen(s);
+	result = (char*)new char[len + 1];
+	memcpy(result, s, len + 1);
+	return result;
+}
