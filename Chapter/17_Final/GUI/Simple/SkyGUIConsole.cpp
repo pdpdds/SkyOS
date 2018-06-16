@@ -68,6 +68,8 @@ bool SkyGUIConsole::Initialize(void* pVideoRamPtr, int width, int height, int bp
 		m_pRenderer->PutFonts_ASC((char*)m_pVideoRamPtr, m_width, m_xPos, m_yPos, (char)charColor, (unsigned char*)("MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT"));
 	GetNewLine();
 
+	PrintCurrentTime();
+
 	return true;
 }
 

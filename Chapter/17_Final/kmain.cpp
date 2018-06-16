@@ -84,9 +84,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	
 	kLeaveCriticalSection();
 
-
-	TestEasyZLib();
-	for (;;);
+	//TestEasyZLib();
+	//for (;;);
 	
 #if SKY_CONSOLE_MODE == 0	
 	pSystemLauncher = new SkyGUILauncher();
