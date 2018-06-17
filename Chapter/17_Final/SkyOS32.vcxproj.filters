@@ -324,6 +324,7 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="intrinsic.cpp" />
+    <ClCompile Include="CDRomAdaptor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\Hal.h">
@@ -625,6 +626,7 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="intrinsic.h" />
+    <ClInclude Include="CDRomAdaptor.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

@@ -1,5 +1,6 @@
 #include "SkyOS.h"
 #include "SkyTest.h"
+#include "CDRomAdaptor.h"
 
 StorageManager* StorageManager::m_pStorageManager = nullptr;
 
@@ -223,6 +224,16 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 	{
 		delete pMemoryResouceAdaptor;
 	}
+
+	/*FileSysAdaptor* pCDRomAdaptor = new CDRomAdaptor("CDRom", 'R');
+	if (pCDRomAdaptor->Initialize() == true)
+	{
+		StorageManager::GetInstance()->RegisterFileSystem(pCDRomAdaptor, 'R');
+	}
+	else
+	{
+		delete pCDRomAdaptor;
+	}*/
 	
 	//플로피 디스크
 	/*FileSysAdaptor* pFloppyDiskAdaptor = new FloppyDiskAdaptor("FloppyDisk", 'A');
