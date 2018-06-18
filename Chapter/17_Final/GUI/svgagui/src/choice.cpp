@@ -82,7 +82,7 @@ void create_choice(GuiObject *choice)
 
 	set_maximum_update_region(win);
 	if (win->data)
-		free(win->data);
+		kfree(win->data);
 	win->data = (char *)malloc(win->width * win->height);
 	if (win->data == NULL)
 		error("Cannot allocate memory in create_choice().");

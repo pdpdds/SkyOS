@@ -66,7 +66,7 @@ void set_browser_text(GuiObject * obj, char *lines)
 	}
 	
 	if (obj->data[0] != NULL)	/* free the block for new text */
-		free(obj->data[0]);
+		kfree(obj->data[0]);
 	obj->data[1] = NULL;	/* don't use second data-block */
 
 	obj->b_x = 0;
@@ -80,6 +80,9 @@ void set_browser_text(GuiObject * obj, char *lines)
 		obj->b_width = obj->width;
 	if (obj->b_height < obj->height)
 		obj->b_height = obj->height;
+
+	if (obj->b_width == 0 || obj->b_height == 0)
+		return;
 
 	obj->data[0] = (char *) malloc(obj->b_width * obj->b_height);
 	if (obj->data[0] == NULL)
@@ -98,7 +101,7 @@ void set_browser_text(GuiObject * obj, char *lines)
 		line = strtok(NULL, "\n");
 		count++;
 	}
-	free(hulp);
+	kfree(hulp);
 	
 	/* Resize sliders? */
 	if (!obj->sliders)

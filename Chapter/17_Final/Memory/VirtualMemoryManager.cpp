@@ -247,8 +247,13 @@ namespace VirtualMemoryManager
 		uint32_t frame = 0x00000000;
 		uint32_t virt = 0x00000000;
 
+		int pageTableCount = PhysicalMemoryManager::GetKernelEnd() / (PAGES_PER_TABLE * PAGE_SIZE);
+
+		if (pageTableCount < 2)
+			pageTableCount = 2;
+
 		//페이지 테이블을 생성
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < pageTableCount; i++)
 		{			
 			PageTable* identityPageTable = (PageTable*)PhysicalMemoryManager::AllocBlock();
 			if (identityPageTable == NULL)
@@ -258,9 +263,6 @@ namespace VirtualMemoryManager
 
 			memset(identityPageTable, 0, sizeof(PageTable));
 			
-			//0-128MB 의 물리 주소를 가상 주소와 동일하게 매핑시킨다
-
-		
 			for (int j = 0; j < PAGES_PER_TABLE; j++, frame += PAGE_SIZE, virt += PAGE_SIZE)
 			{
 				PTE page = 0;

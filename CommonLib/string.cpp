@@ -741,7 +741,7 @@ unsigned long strtoul(const char *nptr, char **endptr, int base)
 	return (acc);
 }*/
 
-
+/*
 char*	strndup(const char *s, size_t n)
 {
 	char *result;
@@ -759,4 +759,4 @@ char*	strdup(const char *s)
 	result = (char*)new char[len + 1];
 	memcpy(result, s, len + 1);
 	return result;
-}
+}*/

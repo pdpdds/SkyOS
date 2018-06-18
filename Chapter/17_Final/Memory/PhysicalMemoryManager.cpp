@@ -1,5 +1,8 @@
 ﻿#include "SkyOS.h"
 
+int g_stackPhysicalAddressPool = 0;
+extern uint32_t g_kernel_load_address;
+
 namespace PhysicalMemoryManager
 {
 	uint32_t	m_memorySize = 0;
@@ -15,6 +18,8 @@ namespace PhysicalMemoryManager
 	// memorySize : 전체 메모리의 크기(바이트 사이즈)
 	//bitmapAddr : 커널다음에 배치되는 비트맵 배열
 	uint32_t g_totalMemorySize = 0;
+
+	uint32_t m_kernelSize = 0;
 
 	uint32_t GetTotalMemory(multiboot_info* bootinfo)
 	{
@@ -51,7 +56,7 @@ namespace PhysicalMemoryManager
 		return (uint32_t)endAddress;
 	}
 
-	uint32_t GetKernelEnd(multiboot_info* bootinfo)
+	uint32_t GetModuleEnd(multiboot_info* bootinfo)
 	{
 		uint64_t endAddress = 0;
 		uint32_t mods_count = bootinfo->mods_count;   /* Get the amount of modules available */
@@ -67,10 +72,30 @@ namespace PhysicalMemoryManager
 				endAddress = moduleEnd;
 			}
 
-			SkyConsole::Print("%x %x\n", moduleStart, moduleEnd);
+			//SkyConsole::Print("%x %x\n", moduleStart, moduleEnd);
 		}
 
 		return (uint32_t)endAddress;
+	}
+
+	uint32_t GetKernelSize(multiboot_info* bootinfo)
+	{
+		uint64_t endAddress = 0;
+		uint32_t mods_count = bootinfo->mods_count;   /* Get the amount of modules available */
+		uint32_t mods_addr = (uint32_t)bootinfo->Modules;     /* And the starting address of the modules */
+		for (uint32_t i = 0; i < mods_count; i++) {
+			Module* module = (Module*)(mods_addr + (i * sizeof(Module)));     /* Loop through all modules */
+
+			if (strcmp(module->Name, KERNEL32_NAME) == 0)
+			{
+				uint32_t moduleStart = PAGE_ALIGN_DOWN((uint32_t)module->ModuleStart);
+				uint32_t moduleEnd = PAGE_ALIGN_UP((uint32_t)module->ModuleEnd);
+				
+				return moduleEnd - moduleStart;
+			}
+		}
+
+		return 0;
 	}
 
 	uint32_t FindFreeMemory(multiboot_info* info, uint32_t start, int count) {
@@ -112,7 +137,7 @@ namespace PhysicalMemoryManager
 		HaltSystem("could not find free memory chunk");
 		return 0;
 	}
-
+	
 	void Initialize(multiboot_info* bootinfo)
 	{
 		SkyConsole::Print("Physical Memory Manager Init..\n");
@@ -125,10 +150,24 @@ namespace PhysicalMemoryManager
 		int pageCount = m_maxBlocks / PMM_BLOCKS_PER_BYTE / PAGE_SIZE;
 		if (pageCount == 0)
 			pageCount = 1;
-
-		m_pMemoryMap = (uint32_t*)GetKernelEnd(bootinfo);
-
-		SkyConsole::Print("Total Memory (%dMB)\n", g_totalMemorySize / 1048576);
+		
+		//커널이 부트로더를 사용하지 않았다면
+		//모듈이 끝나는 이후부터가 자유공간이다.
+		//여기에 메모리맵을 할당한다.
+		if (g_kernel_load_address == GRUB_KERNEL_LOAD_ADDRESS)
+		{
+			m_kernelSize = GetModuleEnd(bootinfo) - g_kernel_load_address;
+			m_pMemoryMap = (uint32_t*)(g_kernel_load_address + m_kernelSize);
+		}
+		else
+		{
+			//부트로더에 의해 커널이 로드된 경우 커널다음에 바로 메모리맵을 
+			m_kernelSize = GetKernelSize(bootinfo);
+			m_pMemoryMap = (uint32_t*)(g_kernel_load_address + m_kernelSize);
+		}
+		
+		SkyConsole::Print("Total Memory (%dMB)\n", g_totalMemorySize / MEGA_BYTES);
+		SkyConsole::Print("Kernel Size(0x%x)\n", m_kernelSize);
 		SkyConsole::Print("BitMap Start Address(0x%x)\n", m_pMemoryMap);
 		SkyConsole::Print("BitMap Size(0x%x)\n", pageCount * PAGE_SIZE);		
 
@@ -150,10 +189,13 @@ namespace PhysicalMemoryManager
 		unsigned char flag = 0xff;
 		memset((char*)m_pMemoryMap, flag, m_memoryMapSize);
 		SetAvailableMemory((uint32_t)m_pMemoryMap, m_memorySize);
+
+		g_stackPhysicalAddressPool = PAGE_ALIGN_UP((uint32_t)m_pMemoryMap + GetMemoryMapSize() + MEGA_BYTES);
 	}
 
 	uint32_t GetMemoryMapSize() { return m_memoryMapSize; }
-	uint32_t GetKernelEnd() { return (uint32_t)m_pMemoryMap; }
+	uint32_t GetKernelEnd() { return (uint32_t)g_stackPhysicalAddressPool; }
+	uint32_t GetKernelSize() { return (uint32_t)m_kernelSize; }
 
 	//8번째 메모리 블럭이 사용중임을 표시하기 위해 1로 세팅하려면 배열 첫번째 요소(4바이트) 바이트의 8번째 비트에 접근해야 한다
 	void SetBit(int bit)
@@ -265,7 +307,6 @@ namespace PhysicalMemoryManager
 			return NULL;
 		}
 
-		
 		int frame = GetFreeFrames(size);
 
 		if (frame == -1)
@@ -356,10 +397,11 @@ namespace PhysicalMemoryManager
 		if (size == 1)
 			return GetFreeFrame();
 
-		
-
+	
 		for (uint32_t i = 0; i < GetTotalBlockCount() / 32; i++)
-		{		
+		{			
+			//SkyConsole::Print("%x\n", m_pMemoryMap);
+			//for (;;);
 			if (m_pMemoryMap[i] != 0xffffffff)
 			{				
 				for (unsigned int j = 0; j < 32; j++)

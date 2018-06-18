@@ -30,16 +30,8 @@ bool ValidatePEImage(void* image)
 	if (!(ntHeaders->FileHeader.Characteristics & (IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE)))
 		return false;
 
-	/*
-	Note: 1st 4 MB remains idenitity mapped as kernel pages as it contains
-	kernel stack and page directory. If you want to support loading below 1MB,
-	make sure to move these into kernel land
-	*/
-
-	//로드되는 프로세스의 베이스 주소는 0x00400000다. 
-	//비쥬얼 스튜디오에서 속성=> 링커 => 고급의 기준주소 항목에서 확인 가능하다
-	if ((ntHeaders->OptionalHeader.ImageBase < 0x400000) || (ntHeaders->OptionalHeader.ImageBase > 0x80000000))
-		return false;
+	//if ((ntHeaders->OptionalHeader.ImageBase < 0x400000) || (ntHeaders->OptionalHeader.ImageBase > 0x80000000))
+		//return false;
 
 	/* only support 32 bit optional header format */
 	if (ntHeaders->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR32_MAGIC)
@@ -47,5 +39,26 @@ bool ValidatePEImage(void* image)
 
 	//유효한 32비트 PE 파일이다.
 	return true;
+}
+
+uint32_t FindKernel32Entry(const char* szFileName, char* buf, uint32_t& imageBase)
+{
+	if (!ValidatePEImage(buf)) {
+		SkyConsole::Print("Invalid PE Format!! %s\n", szFileName);
+		return 0;
+	}
+
+	IMAGE_DOS_HEADER* dosHeader = 0;
+	IMAGE_NT_HEADERS* ntHeaders = 0;
+
+	SkyConsole::Print("Valid PE Format %s\n", szFileName);
+
+	dosHeader = (IMAGE_DOS_HEADER*)buf;
+	ntHeaders = (IMAGE_NT_HEADERS*)(dosHeader->e_lfanew + (uint32_t)buf);
+	SkyConsole::Print("sizeofcode 0x%x\n", ntHeaders->OptionalHeader.Magic);
+
+	uint32_t entryPoint = (uint32_t)ntHeaders->OptionalHeader.AddressOfEntryPoint + ntHeaders->OptionalHeader.ImageBase;
+	imageBase = ntHeaders->OptionalHeader.ImageBase;
+	return 	entryPoint;
 }
 

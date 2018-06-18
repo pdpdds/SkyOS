@@ -46,7 +46,7 @@ void save_background(GuiWinThread *win_thread)
 	char *src, *dst;
 
 	if (win_thread->background != NULL)
-		free(win_thread->background);
+		kfree(win_thread->background);
 
 	win_thread->background = (char *)malloc(guiscreen.width * guiscreen.height);
 	if (win_thread->background == NULL)
@@ -98,8 +98,8 @@ void delete_window_thread(GuiWinThread * win_thread)
 		delete_window(win, TRUE);
 		win = win_thread->first;
 	}
-	free(win_thread->background);
-	free(win_thread);
+	kfree(win_thread->background);
+	kfree(win_thread);
 }
 
 

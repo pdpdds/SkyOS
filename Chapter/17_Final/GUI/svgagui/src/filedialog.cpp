@@ -63,13 +63,13 @@ static void reread_dir(void)
 	/* delete directory objects */
 	for (int i = 0; i < dir_list->tot_nr_items; i++)
 		delete_object(dir_obj[i]);
-	free(dir_obj);
+	kfree(dir_obj);
 	dir_list->tot_nr_items = 0;
 
 	/* delete file objects */
 	for (int i = 0; i < file_list->tot_nr_items; i++)
 		delete_object(file_obj[i]);
-	free(file_obj);
+	kfree(file_obj);
 	file_list->tot_nr_items = 0;
 
 	/* read the new directory */

@@ -88,8 +88,8 @@ void TestLua51(lua_State* L)
 
 	luatinker::def(L, "cpp_func", cpp_func);
 	luatinker::dofile(L, "sample1.lua");
-	int result = luatinker::call<int>(L, "lua_func", 3, 4);
-	printf("lua_func(3,4) = %d\n", result);
+	int result = luatinker::call<int>(L, "luafunc", 3, 4);
+	printf("luafunc(3,4) = %d\n", result);
 }
 
 void TestLua52(lua_State* L)

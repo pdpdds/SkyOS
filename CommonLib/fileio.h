@@ -1,6 +1,7 @@
 #pragma once
 #include "windef.h"
 #include "stddef.h"
+
 #define SEEK_SET        0               /* seek to an absolute position */
 #define SEEK_CUR        1               /* seek relative to current position */
 #define SEEK_END        2               /* seek relative to end of file */

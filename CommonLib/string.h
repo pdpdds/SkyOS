@@ -35,8 +35,8 @@ void ftoa_fixed(char *buffer, double value);
 void ftoa_sci(char *buffer, double value);
 char * strichr(char *p, int c);
 
-char*	strndup(const char *s, size_t n);
-char*	strdup(const char *s);
+//char*	strndup(const char *s, size_t n);
+//char*	strdup(const char *s);
 #ifdef  __cplusplus
 }
 #endif

@@ -114,7 +114,7 @@ void determine_geometry(char *lines, int *width, int *height)
 		*height += 13;
 		line = strtok(NULL, "\n");
 	}
-	free(hulp);
+	kfree(hulp);
 }
 
 

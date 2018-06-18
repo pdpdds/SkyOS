@@ -38,7 +38,6 @@ namespace HeapManager
 			return false;
 		}
 
-		
 //페이지 시스템에 힙 가상주소와 물리주소를 매핑힌다.
 		MapHeapToAddressSpace(curPageDirectory);
 
@@ -55,7 +54,7 @@ namespace HeapManager
 		SkyConsole::Print("Heap Virtual Start Address 0x%x\n", pVirtualHeap);
 		SkyConsole::Print("Heap Virtual End Address 0x%x\n", virtualEndAddress);
 #endif
-
+		
 		//힙에 할당된 가상 주소 영역을 사용해서 힙 자료구조를 생성한다. 
 		create_kernel_heap((u32int)pVirtualHeap, (uint32_t)virtualEndAddress, (uint32_t)virtualEndAddress, 0, 0);
 

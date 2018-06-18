@@ -20,10 +20,10 @@ so ALIGN value must be greater */
 /*   Must be >= 1Mb for GRUB
 Base adress from advanced linker option
 */
-#define KERNEL_LOAD_ADDRESS            0x100000
+#define GRUB_KERNEL_LOAD_ADDRESS            0x100000
 #define STACK_SIZE 4096 * 10 //40K  
 
-#define   HEADER_ADRESS         KERNEL_LOAD_ADDRESS+ALIGN
+#define   HEADER_ADRESS         GRUB_KERNEL_LOAD_ADDRESS+ALIGN
 
 #define MULTIBOOT_HEADER_MAGIC         0x1BADB002
 #define MULTIBOOT_BOOTLOADER_MAGIC      0x2BADB002

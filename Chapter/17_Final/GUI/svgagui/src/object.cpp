@@ -129,10 +129,10 @@ void delete_object(GuiObject * obj)
 		(obj->prev)->next = obj->next;
 	}
 	if (obj->data[0] != NULL)
-		free(obj->data[0]);
+		kfree(obj->data[0]);
 	if (obj->data[1] != NULL)
-		free(obj->data[1]);
-	free(obj);
+		kfree(obj->data[1]);
+	kfree(obj);
 }
 
 

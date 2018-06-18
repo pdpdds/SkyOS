@@ -123,7 +123,7 @@ void create_pulldown(GuiObject * pulldown)
 	win->height = height;
 	win->hide = TRUE;
 	set_maximum_update_region(win);
-	free(win->data);
+	kfree(win->data);
 	win->data = (char *)malloc(width * height);
 	if (win->data == NULL)
 		error("Cannot allocate memory in create_pulldown().");

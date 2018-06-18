@@ -89,7 +89,7 @@ BYTE EnumeratePartitions(BYTE *StorageKey, void(*CallBackFunction)(BYTE * DPF, P
 	PartitionDPF[Len + 1] = PartitionDeepth;
 	PartitionDPF[Len + 2] = 0;
 
-	//CallBackFn = (void(*)(BYTE *, Partition *)) ((UINT32)CallBackFunction - KERNEL_LOAD_ADDRESS);
+	//CallBackFn = (void(*)(BYTE *, Partition *)) ((UINT32)CallBackFunction - g_kernel_load_address);
 	CallBackFn = (void(*)(BYTE *, Partition *)) ((UINT32)CallBackPartition);
 	ReadResult = g_pHDDHandler->ReadSectors(StorageKey, LBASector, 1, (BYTE *)&PT, TRUE);
 

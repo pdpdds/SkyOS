@@ -34,9 +34,6 @@
 Implementation is done in LikeOS kernel
 ***/
 
-#define malloc kmalloc
-#define free kfree
-
 // define the colorscheme.
 extern unsigned long	BACKGROUND, WIN_BACK,
 		TITLE_BACK, TITLE_FORE,

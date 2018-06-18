@@ -179,7 +179,7 @@ void enable_all_windows(GuiWindow *this_win)
 		activate_window(win, disable_win[disable_count][count++]);
 		win = win->next;
 	}
-	free(disable_win[disable_count]);
+	kfree(disable_win[disable_count]);
 }
 
 
@@ -252,8 +252,8 @@ void delete_window(GuiWindow * win, int update)
 		delete_object(obj);
 		obj = win->first;
 	}
-	free(win->data);
-	free(win);
+	kfree(win->data);
+	kfree(win);
 }
 
 

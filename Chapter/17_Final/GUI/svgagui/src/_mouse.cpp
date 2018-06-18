@@ -210,7 +210,7 @@ void switch_cursor(int cursor_id)
 
 	/* save screen under initial mouse position */
 	if (mouse.savescreen != NULL)
-		free(mouse.savescreen);
+		kfree(mouse.savescreen);
 	mouse.savescreen = (char *) malloc(cursor[cursor_id].cur_width * cursor[cursor_id].cur_height);
 	if (mouse.savescreen == NULL)
 		error("Cannot allocate memory for mouse in switch_cursor().");

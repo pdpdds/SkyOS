@@ -1,6 +1,6 @@
 ﻿#include <string.h>
 #include "PEImage64.h"
-#include "ProcessUtil.h"
+#include "ProcessUtil64.h"
 #include "SkyConsole.h"
 #include "defines.h"
 
@@ -40,5 +40,26 @@ bool ValidatePEImage64(void* image)
 	
 //유효한 64비트 PE 파일이다.
 	return true;
+}
+
+uint32_t FindKernel64Entry(const char* szFileName, char* buf, uint32_t& imageBase)
+{
+	if (!ValidatePEImage64(buf)) {
+		SkyConsole::Print("Invalid PE Format!! %s\n", szFileName);
+		return 0;
+	}
+
+	IMAGE_DOS_HEADER* dosHeader = 0;
+	IMAGE_NT_HEADERS64* ntHeaders = 0;
+
+	SkyConsole::Print("Valid PE Format %s\n", szFileName);
+
+	dosHeader = (IMAGE_DOS_HEADER*)buf;
+	ntHeaders = (IMAGE_NT_HEADERS64*)(dosHeader->e_lfanew + (uint32_t)buf);
+	SkyConsole::Print("sizeofcode 0x%x\n", ntHeaders->OptionalHeader.Magic);
+
+	uint32_t entryPoint = (uint32_t)ntHeaders->OptionalHeader.AddressOfEntryPoint + ntHeaders->OptionalHeader.ImageBase;
+	imageBase = ntHeaders->OptionalHeader.ImageBase;
+	return 	entryPoint;
 }
 

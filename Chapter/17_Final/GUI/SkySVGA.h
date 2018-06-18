@@ -1,5 +1,9 @@
 #pragma once
 #include "stdint.h"
+#include "svgagui.h"
+#include "lua.h"
+#include "lualib.h"
+#include "luatinker.h"
 
 class SkySVGA
 {
@@ -11,5 +15,13 @@ public:
 	bool Run();
 	bool Print(char* pMsg);
 	bool Clear();
+
+protected:
+	int StartGui();
+
+private:
+	bool m_exit_program;
+	GuiWinThread *m_pWinThread;
+	
 };
 

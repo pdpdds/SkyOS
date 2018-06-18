@@ -58,7 +58,7 @@ void show_info(GuiObject * obj)
 	if (info_win->y + info_win->height > guiscreen.height - 1)
 		info_win->y = guiscreen.height - 1 - info_win->height;
 
-	free(info_win->data);
+	kfree(info_win->data);
 	info_win->data = (char *) malloc(info_win->width * info_win->height);
 	if (info_win->data == NULL)
 		error("Cannot allocate window buffers in show_info().");

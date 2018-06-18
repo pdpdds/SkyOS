@@ -95,7 +95,7 @@ int question_dialog(GuiWinThread *win_thread, GuiWindow *p_win, char *message, i
 		line = strtok(NULL, "\n");
 		count++;
 	}
-	free(hulp);
+	kfree(hulp);
 
 	add_symbol(win, symbol);
 
@@ -153,7 +153,7 @@ void message_dialog(GuiWinThread *win_thread, GuiWindow *p_win, char *message, i
 		line = strtok(NULL, "\n");
 		count++;
 	}
-	free(hulp);
+	kfree(hulp);
 	add_symbol(win, symbol);
 
 	ok = add_button(win, NORMAL_BUTTON, (win->width - pos) / 2 - 22 + pos,

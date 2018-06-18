@@ -74,7 +74,7 @@ void create_listbox(GuiObject * listbox)
 
 	for (obj = win->first; obj != NULL; obj = obj->next)
 		if (obj->objclass == LISTENTRY && obj->obj_link == listbox) {
-			free(obj->data[0]);
+			kfree(obj->data[0]);
 			obj->width = width - 2 * indent;
 			obj->data[0] = (char *)malloc(obj->width * obj->height);
 			if (obj->data[0] == NULL)

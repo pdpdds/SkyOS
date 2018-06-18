@@ -16,8 +16,9 @@ namespace PhysicalMemoryManager
 
 	void SetBit(int bit);
 	void UnsetBit(int bit);
-	uint32_t GetMemoryMapSize();
+	uint32_t GetMemoryMapSize();	
 	uint32_t GetKernelEnd();
+	uint32_t GetKernelSize();
 
 	//물리 메모리의 사용 여부에 따라 초기에 프레임들을 Set하거나 Unset한다	
 	void	SetAvailableMemory(uint32_t, size_t);

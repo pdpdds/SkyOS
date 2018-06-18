@@ -315,5 +315,5 @@ void HaltSystem(const char* errMsg)
 
 void error(char *s)
 {
-
+	HaltSystem(s);
 }

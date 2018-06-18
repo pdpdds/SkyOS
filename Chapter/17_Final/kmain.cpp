@@ -3,66 +3,31 @@
 #include "SkyConsoleLauncher.h"
 #include "SkyTest.h"
 
-_declspec(naked) void multiboot_entry(void)
+uint32_t g_kernel_load_address = 0;
+
+void kmain(unsigned long magic, unsigned long addr, uint32_t imageBase)
 {
 #ifdef SKY_EMULATOR
-	__asm
-	{
-		MOV EAX, 0
-		PUSH EAX;
-		PUSH EAX;
-		CALL    kmain
-	}
-#else
-	__asm {
-		align 4
-
-		multiboot_header:
-		//멀티부트 헤더 사이즈 : 0X30
-		dd(MULTIBOOT_HEADER_MAGIC); magic number
-
-#if SKY_CONSOLE_MODE == 0
-		dd(MULTIBOOT_HEADER_FLAGS_GUI); flags
-		dd(CHECKSUM_GUI); checksum
-#else
-		dd(MULTIBOOT_HEADER_FLAGS); flags
-		dd(CHECKSUM); checksum
-#endif		
-		dd(HEADER_ADRESS); //헤더 주소 KERNEL_LOAD_ADDRESS+ALIGN(0x100400)
-		dd(KERNEL_LOAD_ADDRESS); //커널이 로드된 가상주소 공간
-		dd(00); //사용되지 않음
-		dd(00); //사용되지 않음
-		dd(HEADER_ADRESS + 0x30); //커널 시작 주소 : 멀티부트 헤더 주소 + 0x30, kernel_entry
-
-		dd(SKY_CONSOLE_MODE);
-		dd(SKY_WIDTH);
-		dd(SKY_HEIGHT);
-		dd(SKY_BPP)
-
-	kernel_entry:
-		MOV     ESP, 0x40000; //스택 설정
-
-		PUSH    0; //플래그 레지스터 초기화
-		POPF
-
-		//GRUB에 의해 담겨 있는 정보값을 스택에 푸쉬한다.
-		PUSH    EBX; //멀티부트 구조체 포인터
-		PUSH    EAX; //매직 넘버
-
-		//위의 두 파라메터와 함께 kmain 함수를 호출한다.
-		CALL    kmain; //C++ 메인 함수 호출
-
-		//루프를 돈다. kmain이 리턴되지 않으면 아래 코드는 수행되지 않는다.
-	halt:
-		jmp halt;
-	}
+	kmainSkyEmulator();
+	return;
 #endif
-}
-
-void kmain(unsigned long magic, unsigned long addr)
-{
 	multiboot_info* pBootInfo = (multiboot_info*)addr;
 	SkyLauncher* pSystemLauncher = nullptr;
+	
+	//매직값이 다르다면 이 커널은 GRUB => 부트로더에 의해 로드되었다고 판단	
+	//베이스 어드레스 0x400000
+	//메인엔트리 kmain
+	if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
+	{	
+		g_kernel_load_address = imageBase;
+	}
+	else
+	{
+		//GRUB에 단독으로 부팅되었을 경우
+		//베이스 어드레스 0x100000
+		//메인엔트리 multiboot_entry	
+		g_kernel_load_address = GRUB_KERNEL_LOAD_ADDRESS;		
+	}
 
 	InitContext(pBootInfo);
 	
@@ -153,7 +118,7 @@ bool InitMemoryManager(multiboot_info* pBootInfo)
 
 	int heapFrameCount = 256 * 10 * 5; //프레임수 12800개, 52MB
 	unsigned int requiredHeapSize = heapFrameCount * PAGE_SIZE;
-
+	
 	//요구되는 힙의 크기가 자유공간보다 크다면 그 크기를 자유공간 크기로 맞춘다음 반으로 줄인다.
 	uint32_t memorySize = PhysicalMemoryManager::GetMemorySize();
 	if (requiredHeapSize > memorySize)
@@ -161,10 +126,10 @@ bool InitMemoryManager(multiboot_info* pBootInfo)
 		requiredHeapSize = memorySize / 2;
 		heapFrameCount = requiredHeapSize / PAGE_SIZE / 2;
 	}
-
+	
 	HeapManager::InitKernelHeap(heapFrameCount);
-	SkyConsole::Print("Heap %dMB Allocated\n", requiredHeapSize / 1048576);
-
+	SkyConsole::Print("Heap %dMB Allocated\n", requiredHeapSize / MEGA_BYTES);
+	
 	return true;
 }
 
@@ -191,4 +156,67 @@ void SetInterruptVector()
 
 	SetInterruptVector(33, (void(__cdecl &)(void))InterrputDefaultHandler);
 	SetInterruptVector(38, (void(__cdecl &)(void))InterrputDefaultHandler);
+}
+
+_declspec(naked) void multiboot_entry(void)
+{
+#ifdef SKY_EMULATOR
+	__asm
+	{
+		MOV EAX, 0
+		PUSH EAX;
+		PUSH EAX;
+		PUSH EAX;
+		CALL    kmain
+	}
+#else
+	__asm {
+		align 4
+
+		multiboot_header:
+		//멀티부트 헤더 사이즈 : 0X30
+		dd(MULTIBOOT_HEADER_MAGIC); magic number
+
+#if SKY_CONSOLE_MODE == 0
+		dd(MULTIBOOT_HEADER_FLAGS_GUI); flags
+		dd(CHECKSUM_GUI); checksum
+#else
+		dd(MULTIBOOT_HEADER_FLAGS); flags
+		dd(CHECKSUM); checksum
+#endif		
+		dd(HEADER_ADRESS); //헤더 주소 KERNEL_LOAD_ADDRESS+ALIGN(0x100400)
+		dd(GRUB_KERNEL_LOAD_ADDRESS); //커널이 로드된 주소
+		dd(00); //사용되지 않음
+		dd(00); //사용되지 않음
+		dd(HEADER_ADRESS + 0x30); //커널 시작 주소 : 멀티부트 헤더 주소 + 0x30, kernel_entry
+
+		dd(SKY_CONSOLE_MODE);
+		dd(SKY_WIDTH);
+		dd(SKY_HEIGHT);
+		dd(SKY_BPP)
+
+	kernel_entry:
+		MOV     ESP, 0x40000; //스택 설정
+
+		PUSH    0; //플래그 레지스터 초기화
+		POPF
+
+		PUSH    GRUB_KERNEL_LOAD_ADDRESS;
+		//GRUB에 의해 담겨 있는 정보값을 스택에 푸쉬한다.
+		PUSH    EBX; //멀티부트 구조체 포인터
+		PUSH    EAX; //매직 넘버
+
+					 //위의 두 파라메터와 함께 kmain 함수를 호출한다.
+		CALL    kmain; //C++ 메인 함수 호출
+
+	//루프를 돈다. kmain이 리턴되지 않으면 아래 코드는 수행되지 않는다.
+	halt:
+		jmp halt;
+	}
+#endif
+}
+
+void kmainSkyEmulator()
+{
+
 }

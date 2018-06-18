@@ -74,7 +74,7 @@ void create_iconlist(GuiObject * iconlist)
 
 	for (obj = win->first; obj != NULL; obj = obj->next)
 		if (obj->objclass == LISTENTRY_ICON && obj->obj_link == iconlist) {
-			free(obj->data[0]);
+			kfree(obj->data[0]);
 			obj->width = 150 - 2 * indent;
 			obj->data[0] = (char *) malloc(obj->width * obj->height);
 			if (obj->data[0] == NULL)

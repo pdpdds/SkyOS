@@ -315,7 +315,7 @@ void open_svga_screen(int width, int height, int colors)
 	/* Allocate memory for the screen image */
 	define_32bit_colors();
 	if (guiscreen.data)
-		free(guiscreen.data);
+		kfree(guiscreen.data);
 	guiscreen.data = (char *) malloc(width * height);
 	if (guiscreen.data == NULL)
 		error("Cannot allocate memory for screen operations in open_screen().");
