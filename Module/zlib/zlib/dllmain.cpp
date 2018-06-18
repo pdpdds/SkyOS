@@ -3,11 +3,11 @@
 #include "windef.h"
 #include "SkyMockInterface.h"
 
-#ifdef SKYOS_WIN32
-#pragma comment(lib, "libucrt.lib")
-#endif
-
-#pragma comment(linker, "/defaultlib:kernel32.lib")
+#include "EasyCompress.h"
+extern "C" __declspec(dllexport) I_Compress* GetEasyCompress()
+{
+	return (I_Compress*)new EasyCompress();
+}
 
 #define DLL_PROCESS_ATTACH 1
 #define DLL_PROCESS_DETACH 0
