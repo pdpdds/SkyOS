@@ -14,7 +14,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HangulEngine", "HangulEngine\HangulEngine.vcxproj", "{3BB94C29-5903-40F9-97A4-045CED8B94E6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{83EE476C-AA21-4A23-9D6F-4FE675115B13} = {83EE476C-AA21-4A23-9D6F-4FE675115B13}
+		{810F9EC9-030B-4C05-8AE0-AB9DAFEA1129} = {810F9EC9-030B-4C05-8AE0-AB9DAFEA1129}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DllStub", "..\DllStub\DllStub.vcxproj", "{810F9EC9-030B-4C05-8AE0-AB9DAFEA1129}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +51,14 @@ Global
 		{3BB94C29-5903-40F9-97A4-045CED8B94E6}.Release|x64.Build.0 = Release|x64
 		{3BB94C29-5903-40F9-97A4-045CED8B94E6}.Release|x86.ActiveCfg = Release|Win32
 		{3BB94C29-5903-40F9-97A4-045CED8B94E6}.Release|x86.Build.0 = Release|Win32
+		{810F9EC9-030B-4C05-8AE0-AB9DAFEA1129}.Debug|x64.ActiveCfg = Debug|x64
+		{810F9EC9-030B-4C05-8AE0-AB9DAFEA1129}.Debug|x64.Build.0 = Debug|x64
+		{810F9EC9-030B-4C05-8AE0-AB9DAFEA1129}.Debug|x86.ActiveCfg = Debug|Win32
+		{810F9EC9-030B-4C05-8AE0-AB9DAFEA1129}.Debug|x86.Build.0 = Debug|Win32
+		{810F9EC9-030B-4C05-8AE0-AB9DAFEA1129}.Release|x64.ActiveCfg = Release|x64
+		{810F9EC9-030B-4C05-8AE0-AB9DAFEA1129}.Release|x64.Build.0 = Release|x64
+		{810F9EC9-030B-4C05-8AE0-AB9DAFEA1129}.Release|x86.ActiveCfg = Release|Win32
+		{810F9EC9-030B-4C05-8AE0-AB9DAFEA1129}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

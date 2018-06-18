@@ -100,7 +100,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalOptions>/Oy %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../../../CommonLib;../../../include;../../Include;./HanCode;.</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../CommonLib;../../../include;../../Include;./HanCode;.;../../DllStub</AdditionalIncludeDirectories>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <UndefineAllPreprocessorDefinitions>true</UndefineAllPreprocessorDefinitions>
       <OmitFramePointers>true</OmitFramePointers>
@@ -112,8 +112,8 @@
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <EntryPointSymbol>_DllMainCRTStartup</EntryPointSymbol>
-      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>CommonLib.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>CommonLib.lib;DllStub.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -206,7 +206,6 @@
     <ClInclude Include="LoadHanFont.h" />
     <ClInclude Include="LoadHanjaFont.h" />
     <ClInclude Include="LoadSpcFont.h" />
-    <ClInclude Include="SkyInterface.h" />
     <ClInclude Include="Table10x4x4.h" />
     <ClInclude Include="Table2x1x2.h" />
     <ClInclude Include="Table6x2x1.h" />
@@ -255,8 +254,7 @@
     <ClCompile Include="LoadEngFont.cpp" />
     <ClCompile Include="LoadHanFont.cpp" />
     <ClCompile Include="LoadHanjaFont.cpp" />
-    <ClCompile Include="LoadSpcFont.c" />
-    <ClCompile Include="SkyInterface.cpp" />
+    <ClCompile Include="LoadSpcFont.cpp" />
     <ClCompile Include="Table10x4x4.c" />
     <ClCompile Include="Table2x1x2.c" />
     <ClCompile Include="Table6x2x1.c" />

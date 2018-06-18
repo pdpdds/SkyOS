@@ -45,7 +45,7 @@ static int GetFileSize(char *AFileName)
 //------------------------------------------------------------------------------
 bool LoadHanFont(THanFont *AHanFont, char *AHanFile)
 {
-	byte Buffer[13056];
+	byte* Buffer = new byte[13056];
     byte *p = Buffer;
 	int i, j, FileSize;
     FILE *fp;
@@ -152,7 +152,9 @@ bool LoadHanFont(THanFont *AHanFont, char *AHanFile)
     	AHanFont->pF2B = _F2B_2x1x2;
     	AHanFont->pF3B = _F3B_2x1x2;
 		break;
-    default: return false;
+    default: 
+		delete Buffer;
+		return false;
     }
 
 	fp = fopen(AHanFile, "rb");
@@ -181,7 +183,7 @@ bool LoadHanFont(THanFont *AHanFont, char *AHanFile)
     strcpy(AHanFont->FullFileName, AHanFile);
 
 	GetHangulJamo(AHanFont);
-
+	delete Buffer;
 	return true;
 }
 //------------------------------------------------------------------------------

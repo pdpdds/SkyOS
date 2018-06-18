@@ -535,12 +535,6 @@ FILE* g_skyStdOut;
 FILE* g_skyStdIn;
 FILE* g_skyStdErr;
 
-#include "hanlib.h"
-#include "LoadEngFont.h"
-#include "LoadHanFont.h"
-#include "HanOut.h"
-#include "HangulEngine.h"
-
 extern "C" __declspec(dllexport) void SetSkyMockInterface(SKY_ALLOC_Interface allocInterface, 
 														  SKY_FILE_Interface fileInterface, 
 														  SKY_Print_Interface printInterface)
@@ -551,11 +545,7 @@ extern "C" __declspec(dllexport) void SetSkyMockInterface(SKY_ALLOC_Interface al
 	g_skyStdOut = printInterface.sky_stdout;
 	g_skyStdIn = printInterface.sky_stdin;
 	g_skyStdErr = printInterface.sky_stderr;
-}
 
-extern "C" __declspec(dllexport) I_Hangul* GetHangulEngine()
-{
-	return new HangulEngine();
 }
 
 void *operator new(size_t size)

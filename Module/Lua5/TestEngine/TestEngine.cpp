@@ -118,8 +118,8 @@ int main()
 
 		// Lua 기본 함수들을 로드한다.- print() 사용
 		luaopen_base(L);
-
-
+		luaL_dofile(L, "sample1.lua");
+		int result = luaL_dostring(L, "cpp_func(350, 1200)");
 		TestLua53(L);
 
 		// 프로그램 종료

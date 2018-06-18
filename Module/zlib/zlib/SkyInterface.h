@@ -1,5 +1,4 @@
 #pragma once
-#include "windef.h"
 #include "SkyMockInterface.h"
 
 #ifdef  __cplusplus

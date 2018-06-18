@@ -2,12 +2,16 @@
 
 #include "windef.h"
 #include "SkyMockInterface.h"
+#include "hanlib.h"
+#include "LoadEngFont.h"
+#include "LoadHanFont.h"
+#include "HanOut.h"
+#include "HangulEngine.h"
 
-#ifdef SKYOS_WIN32
-#pragma comment(lib, "libucrt.lib")
-#endif
-
-#pragma comment(linker, "/defaultlib:kernel32.lib")
+extern "C" __declspec(dllexport) I_Hangul* GetHangulEngine()
+{
+	return new HangulEngine();
+}
 
 #define DLL_PROCESS_ATTACH 1
 #define DLL_PROCESS_DETACH 0

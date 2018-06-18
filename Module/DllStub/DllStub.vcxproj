@@ -20,15 +20,15 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{3BB94C29-5903-40F9-97A4-045CED8B94E6}</ProjectGuid>
+    <ProjectGuid>{810F9EC9-030B-4C05-8AE0-AB9DAFEA1129}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SampleDll</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
-    <ProjectName>Lua5</ProjectName>
+    <ProjectName>DllStub</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -89,7 +89,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>SKY_DLL;LUA_BUILD_AS_DLL;SKYOS32;_CRT_SECURE_NO_WARNINGS ;MAPFILEDLL_EXPORTS;_X86_;_DEBUG;SampleDll_EXPORTS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SKY_DLL;SKYOS32;_CRT_SECURE_NO_WARNINGS;_X86_;_DEBUG;</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>false</ExceptionHandling>
@@ -100,9 +100,9 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalOptions>/Oy %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../../../CommonLib/stl;../../../CommonLib;../../../include;../../Include;../../../CommonLib/CPlusPlus</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../CommonLib;../../include;../Include;</AdditionalIncludeDirectories>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <UndefineAllPreprocessorDefinitions>true</UndefineAllPreprocessorDefinitions>
       <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
@@ -113,7 +113,8 @@
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <EntryPointSymbol>_DllMainCRTStartup</EntryPointSymbol>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>CommonLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -124,9 +125,6 @@
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
-    <Lib>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -189,80 +187,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Include\I_LuaModule.h" />
-    <ClInclude Include="lapi.h" />
-    <ClInclude Include="lauxlib.h" />
-    <ClInclude Include="lcode.h" />
-    <ClInclude Include="lctype.h" />
-    <ClInclude Include="ldebug.h" />
-    <ClInclude Include="ldo.h" />
-    <ClInclude Include="lfunc.h" />
-    <ClInclude Include="lgc.h" />
-    <ClInclude Include="ljumptab.h" />
-    <ClInclude Include="llex.h" />
-    <ClInclude Include="llimits.h" />
-    <ClInclude Include="lmem.h" />
-    <ClInclude Include="lobject.h" />
-    <ClInclude Include="lopcodes.h" />
-    <ClInclude Include="lparser.h" />
-    <ClInclude Include="lprefix.h" />
-    <ClInclude Include="lstate.h" />
-    <ClInclude Include="lstring.h" />
-    <ClInclude Include="ltable.h" />
-    <ClInclude Include="ltests.h" />
-    <ClInclude Include="ltm.h" />
-    <ClInclude Include="lua.h" />
-    <ClInclude Include="luaconf.h" />
-    <ClInclude Include="lualib.h" />
-    <ClInclude Include="LuaModule.h" />
-    <ClInclude Include="LuaScript.h" />
-    <ClInclude Include="LuaScriptModule.h" />
-    <ClInclude Include="luatinker.h" />
-    <ClInclude Include="lundump.h" />
-    <ClInclude Include="lvm.h" />
-    <ClInclude Include="lzio.h" />
-    <ClInclude Include="SkyInterface.h" />
+    <ClCompile Include="SkyInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="lapi.cpp" />
-    <ClCompile Include="lauxlib.cpp" />
-    <ClCompile Include="lbaselib.cpp" />
-    <ClCompile Include="lcode.cpp" />
-    <ClCompile Include="lcorolib.cpp" />
-    <ClCompile Include="lctype.cpp" />
-    <ClCompile Include="ldblib.cpp" />
-    <ClCompile Include="ldebug.cpp" />
-    <ClCompile Include="ldo.cpp" />
-    <ClCompile Include="ldump.cpp" />
-    <ClCompile Include="lfunc.cpp" />
-    <ClCompile Include="lgc.cpp" />
-    <ClCompile Include="linit.cpp" />
-    <ClCompile Include="liolib.cpp" />
-    <ClCompile Include="llex.cpp" />
-    <ClCompile Include="lmathlib.cpp" />
-    <ClCompile Include="lmem.cpp" />
-    <ClCompile Include="loadlib.cpp" />
-    <ClCompile Include="lobject.cpp" />
-    <ClCompile Include="lopcodes.cpp" />
-    <ClCompile Include="loslib.cpp" />
-    <ClCompile Include="lparser.cpp" />
-    <ClCompile Include="lstate.cpp" />
-    <ClCompile Include="lstring.cpp" />
-    <ClCompile Include="lstrlib.cpp" />
-    <ClCompile Include="ltable.cpp" />
-    <ClCompile Include="ltablib.cpp" />
-    <ClCompile Include="ltests.cpp" />
-    <ClCompile Include="ltm.cpp" />
-    <ClCompile Include="lua.cpp" />
-    <ClCompile Include="LuaModule.cpp" />
-    <ClCompile Include="LuaScript.cpp" />
-    <ClCompile Include="LuaScriptModule.cpp" />
-    <ClCompile Include="lundump.cpp" />
-    <ClCompile Include="lutf8lib.cpp" />
-    <ClCompile Include="lvm.cpp" />
-    <ClCompile Include="lzio.cpp" />
-    <ClCompile Include="SkyInterface.cpp" />
+    <ClInclude Include="SkyInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -45,9 +45,6 @@
     <ClCompile Include="KS2JohabTable.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="LoadSpcFont.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Table2x1x2.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -58,9 +55,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Table10x4x4.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyInterface.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="HanCode\HOUTVAR.C">
@@ -168,6 +162,9 @@
     <ClCompile Include="LoadHanjaFont.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="LoadSpcFont.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CompleteHan.h">
@@ -213,9 +210,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Table10x4x4.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyInterface.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="HanCode\EXTKEY.H">
