@@ -1,3 +1,3 @@
 #pragma once
 
-bool ValidatePEImage(void* image);
+bool ValidatePEImage64(void* image);

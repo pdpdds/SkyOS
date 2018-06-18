@@ -1,6 +1,6 @@
 ﻿#include "kmain.h"
 #include "ProcessUtil.h"
-#include "PEImage.h"
+#include "PEImage64.h"
 #include "memory.h"
 #include "Page.h"
 
@@ -233,7 +233,7 @@ Module* FindModule(multiboot_info_t* pInfo, const char* szFileName)
 
 uint32_t FindKernel64Entry(const char* szFileName, char* buf, uint32_t& imageBase)
 {
-	if (!ValidatePEImage(buf)) {
+	if (!ValidatePEImage64(buf)) {
 		SkyConsole::Print("Invalid PE Format!! %s\n", szFileName);
 		return 0;
 	}
