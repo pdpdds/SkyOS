@@ -17,6 +17,7 @@
     <ClCompile Include="kmain.cpp" />
     <ClCompile Include="Page.cpp" />
     <ClCompile Include="ProcessUtil.cpp" />
+    <ClCompile Include="ProcessUtil32.cpp" />
     <ClCompile Include="SkyConsole.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -26,8 +27,10 @@
     <ClInclude Include="kmain.h" />
     <ClInclude Include="MultiBoot.h" />
     <ClInclude Include="Page.h" />
+    <ClInclude Include="PEImage32.h" />
     <ClInclude Include="PEImage64.h" />
     <ClInclude Include="ProcessUtil.h" />
+    <ClInclude Include="ProcessUtil32.h" />
     <ClInclude Include="SkyConsole.h" />
   </ItemGroup>
   <ItemGroup>
