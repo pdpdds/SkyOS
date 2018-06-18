@@ -37,6 +37,9 @@ char * strichr(char *p, int c);
 
 //char*	strndup(const char *s, size_t n);
 //char*	strdup(const char *s);
+
+char* strtok_r(char *s, const char *delim, char **save_ptr);
+
 #ifdef  __cplusplus
 }
 #endif
