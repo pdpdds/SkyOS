@@ -24,7 +24,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SampleDll</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
-    <ProjectName>HangulMint64Engine</ProjectName>
+    <ProjectName>HangulInput</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -112,8 +112,8 @@
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <EntryPointSymbol>_DllMainCRTStartup</EntryPointSymbol>
-      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>CommonLib.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>CommonLib.lib;DllStub.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -192,7 +192,6 @@
     <ClCompile Include="HangulEngine.cpp" />
     <ClCompile Include="HangulFont.cpp" />
     <ClCompile Include="HangulInput.cpp" />
-    <ClCompile Include="SkyInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\I_HangulEngine.h" />
@@ -200,7 +199,6 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="HangulEngine.h" />
     <ClInclude Include="HangulInput.h" />
-    <ClInclude Include="SkyInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

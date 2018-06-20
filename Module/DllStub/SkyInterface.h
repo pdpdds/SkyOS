@@ -30,7 +30,11 @@ extern "C" {
 extern SkyMockInterface g_mockInterface;
 #define kmalloc(a) g_mockInterface.g_allocInterface.sky_kmalloc(a)
 #define kfree(p) g_mockInterface.g_allocInterface.sky_kfree(p)
+#define kcalloc(a, b) g_mockInterface.g_allocInterface.sky_kcalloc(a, b)
+#define krealloc(a, b) g_mockInterface.g_allocInterface.sky_krealloc(a, b)
 #endif
 
 extern "C" void* malloc(size_t size);
 extern "C" void free(void* p);
+extern "C" unsigned int calloc(unsigned int count, unsigned int size);
+extern "C" void* realloc(void* ptr, size_t size);

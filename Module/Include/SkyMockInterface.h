@@ -27,7 +27,10 @@ typedef struct SKY_FILE_Interface
 typedef struct SKY_ALLOC_Interface
 {
 	unsigned int (*sky_kmalloc)(unsigned int sz);
-	void (*sky_kfree)(void* p);
+	void (*sky_kfree)(void* p);	
+	unsigned int (*sky_kcalloc)(unsigned int count, unsigned int size);
+	void* (*sky_krealloc)(void* ptr, size_t size);
+
 } SKY_ALLOC_Interface;
 
 //출력관련 인터페이스

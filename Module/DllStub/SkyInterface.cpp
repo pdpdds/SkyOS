@@ -595,4 +595,15 @@ extern "C" void free(void *p)
 {
 	kfree(p);
 }
+
+extern "C" unsigned int calloc(unsigned int count, unsigned int size)
+{
+	return kcalloc(count, size);
+}
+
+extern "C" void* realloc(void* ptr, size_t size)
+{
+	return krealloc(ptr, size);
+}
+
 #endif
