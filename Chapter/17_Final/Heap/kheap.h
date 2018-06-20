@@ -88,6 +88,8 @@ u32int kmalloc_ap(u32int sz, u32int *phys);
 u32int kmalloc(u32int sz);
 u32int malloc(u32int sz);
 u32int calloc(u32int count, u32int size);
+size_t malloc_size(void * ptr);
+void* krealloc(void * ptr, size_t size);
 
 /**
    General deallocation function.

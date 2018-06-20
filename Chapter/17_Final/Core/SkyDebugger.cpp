@@ -42,10 +42,22 @@ void sky_kfree(void *p)
 	kfree(p);
 }
 
+unsigned int sky_kcalloc(unsigned int count, unsigned int size)
+{
+	return calloc(count, size);
+}
+
+void* sky_krealloc(void* ptr, size_t size)
+{
+	return krealloc(ptr, size);
+}
+
 SKY_ALLOC_Interface g_allocInterface =
 {
 	sky_kmalloc,
 	sky_kfree,
+	sky_kcalloc,
+	sky_krealloc,
 };
 
 

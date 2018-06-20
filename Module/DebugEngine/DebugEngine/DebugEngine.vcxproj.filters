@@ -18,9 +18,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ServiceFunc.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="MapFile.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
@@ -84,9 +81,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Undecorate.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ServiceFunc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

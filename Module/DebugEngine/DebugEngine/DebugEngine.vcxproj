@@ -112,8 +112,8 @@
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <EntryPointSymbol>_DllMainCRTStartup</EntryPointSymbol>
-      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>CommonLib.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>CommonLib.lib;DllStub.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -195,7 +195,6 @@
     <ClInclude Include="MapFileLineNumberFile.h" />
     <ClInclude Include="MapFileSection.h" />
     <ClInclude Include="MapFileSymbol.h" />
-    <ClInclude Include="ServiceFunc.h" />
     <ClInclude Include="Undecorate.h" />
   </ItemGroup>
   <ItemGroup>
@@ -209,7 +208,6 @@
     <ClCompile Include="MapFileLineNumberFile.cpp" />
     <ClCompile Include="MapFileSection.cpp" />
     <ClCompile Include="MapFileSymbol.cpp" />
-    <ClCompile Include="ServiceFunc.cpp" />
     <ClCompile Include="Undecorate.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

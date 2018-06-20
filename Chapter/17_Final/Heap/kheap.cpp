@@ -81,13 +81,58 @@ u32int malloc(u32int sz)
 
 u32int calloc(u32int count, u32int size)
 {
-	return kmalloc(count * size);
+	void* ptr = (void*)kmalloc(count * size);
+	memset(ptr, 0, count * size);
+	return (u32int)ptr;
 }
 
 u32int kmalloc(u32int sz)
 {		
 	u32int buffer = kmalloc_int(sz, 0, 0);
 	return buffer;
+}
+
+size_t malloc_size(void * ptr)
+{
+	kEnterCriticalSection();
+	header_t *header = (header_t*)((u32int)ptr - sizeof(header_t));
+	size_t ptrSize = header->size - sizeof(header_t) - sizeof(footer_t);
+	kLeaveCriticalSection();
+
+	SKY_ASSERT(ptrSize > 0, "malloc_size must return more 0!!");
+	
+	return ptrSize;
+}
+
+void* krealloc(void * ptr, size_t size)
+{
+	void *_new;
+
+	if (!ptr) {
+		_new = (void *)kmalloc(size);
+		if (!_new) { goto error; }
+	}
+	else {
+		if (malloc_size(ptr) < size) 
+		{
+			_new = (void *)kmalloc(size);
+			if (!_new) 
+			{ 
+				goto error; 
+			}
+
+			memcpy(_new, ptr, malloc_size(ptr));
+
+			kfree(ptr);
+		}
+		else {
+			_new = ptr;
+		}
+	}
+
+	return _new;
+error:
+	return NULL;
 }
 
 static void expand(u32int new_size, heap_t *heap)

@@ -1,14 +1,15 @@
 // dllmain.cpp: DLL 응용 프로그램의 진입점을 정의합니다.
 
-#include "ServiceFunc.h"
 #include "windef.h"
 #include "SkyMockInterface.h"
+#include "MapFile.h"
+#include "I_MapFileReader.h"
 
-#ifdef SKYOS_WIN32
-#pragma comment(lib, "libucrt.lib")
-#endif
-
-#pragma comment(linker, "/defaultlib:kernel32.lib")
+extern "C" __declspec(dllexport) I_MapFileReader* GetDebugEngineDLL()
+{
+	I_MapFileReader* reader = new MapFileReader();
+	return reader;
+}
 
 #define DLL_PROCESS_ATTACH 1
 #define DLL_PROCESS_DETACH 0

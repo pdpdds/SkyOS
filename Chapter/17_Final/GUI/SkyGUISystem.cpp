@@ -89,9 +89,9 @@ bool SkyGUISystem::LoadGUIModule()
 	//Load Hangul Engine
 	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
 
-	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory("HangulMint64Engine.dll");
+	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory("HangulInput.dll");
 	PSetSkyMockInterface SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "SetSkyMockInterface");
-	PGetHangulMint64Engine HanguleMint64Engine = (PGetHangulMint64Engine)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetHangulEngine");
+	PHangulInput HanguleMint64Engine = (PHangulInput)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetHangulEngine");
 
 	//디버그 엔진에 플랫폼 종속적인 인터페이스를 넘긴다.
 	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);

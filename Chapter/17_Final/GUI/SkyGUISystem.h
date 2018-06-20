@@ -7,7 +7,7 @@
 #include "I_HangulEngine.h"
 #include "I_Hangul.h"
 
-typedef I_HangulEngine*(*PGetHangulMint64Engine)();
+typedef I_HangulEngine*(*PHangulInput)();
 typedef I_Hangul*(*PGetHangulEngine)();
 
 typedef struct tagVideoRamInfo

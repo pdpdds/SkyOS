@@ -36,6 +36,7 @@ DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 
 	multiboot_info* pBootInfo = SkyModuleManager::GetInstance()->GetMultiBootInfo();
 	StorageManager::GetInstance()->Initilaize(pBootInfo);
+
 	kEnterCriticalSection();
 	SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
 	kLeaveCriticalSection();
