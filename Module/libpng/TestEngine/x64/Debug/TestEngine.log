@@ -1,0 +1,12 @@
+﻿  stdafx.cpp
+d:\dev\skyos\skyos.git\trunk\module\guiengine\testengine\stdafx.cpp : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+d:\dev\skyos\skyos.git\trunk\module\guiengine\testengine\stdafx.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+d:\dev\skyos\skyos.git\trunk\module\guiengine\testengine\targetver.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  TestEngine.cpp
+d:\dev\skyos\skyos.git\trunk\module\guiengine\testengine\testengine.cpp : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+d:\dev\skyos\skyos.git\trunk\module\guiengine\testengine\testengine.cpp(7): fatal error C1083: 포함 파일을 열 수 없습니다. 'SkyMockInterface.h': No such file or directory
+  SkyWin32FileInterface.cpp
+d:\dev\skyos\skyos.git\trunk\module\guiengine\testengine\skywin32fileinterface.cpp(119): fatal error C1010: 미리 컴파일된 헤더를 찾는 동안 예기치 않은 파일의 끝이 나타났습니다. '#include "stdafx.h"'을(를) 소스에 추가하시겠습니까?
+  SkyMockInterface.cpp
+d:\dev\skyos\skyos.git\trunk\module\guiengine\testengine\skymockinterface.cpp(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'SkyMockInterface.h': No such file or directory
+  코드를 생성하고 있습니다...
