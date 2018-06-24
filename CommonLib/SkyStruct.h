@@ -33,21 +33,6 @@
 #define RTC_STATUS_C 0x0C
 #define RTC_STATUS_D 0x0D
 
-#ifndef _SYSTIME_DEFINED
-    #define _SYSTIME_DEFINED
-    struct _SYSTEMTIME
-    {
-        WORD wYear; 
-        WORD wMonth; 
-        WORD wDayOfWeek; 
-        WORD wDay; 
-        WORD wHour; 
-        WORD wMinute; 
-        WORD wSecond; 
-        WORD wMilliseconds; 
-    }; 
-    typedef struct _SYSTEMTIME SYSTEMTIME;
-    typedef SYSTEMTIME * LPSYSTEMTIME;
-#endif
+
     
 

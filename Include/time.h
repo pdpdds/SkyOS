@@ -1,7 +1,5 @@
 #pragma once
-#include "SkyStruct.h"
-
-extern bool GetLocalTime(LPSYSTEMTIME lpSystemTime);
+#include "windef.h"
 
 struct tm
 {
@@ -15,3 +13,22 @@ struct tm
 	int tm_yday;
 	int tm_isdst;
 };
+
+#ifndef _SYSTIME_DEFINED
+#define _SYSTIME_DEFINED
+struct _SYSTEMTIME
+{
+	WORD wYear;
+	WORD wMonth;
+	WORD wDayOfWeek;
+	WORD wDay;
+	WORD wHour;
+	WORD wMinute;
+	WORD wSecond;
+	WORD wMilliseconds;
+};
+typedef struct _SYSTEMTIME SYSTEMTIME;
+typedef SYSTEMTIME * LPSYSTEMTIME;
+#endif
+
+extern bool GetLocalTime(LPSYSTEMTIME lpSystemTime);

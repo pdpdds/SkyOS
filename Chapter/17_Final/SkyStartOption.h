@@ -4,10 +4,10 @@
 #define SKY_CONSOLE_MODE	0
 
 //SkyGUIConsole
-#define SKY_GUI_SYSTEM	SkyGUIConsole
+/*#define SKY_GUI_SYSTEM	SkyGUIConsole
 #define SKY_WIDTH		1024
 #define SKY_HEIGHT		768
-#define SKY_BPP			32
+#define SKY_BPP			32*/
 
 //세가지 GUI 모드
 //SkyGUI
@@ -17,10 +17,10 @@
 #define SKY_BPP			8*/
 
 //SVGA GUI
-/*#define SKY_GUI_SYSTEM	SkySVGA
+#define SKY_GUI_SYSTEM	SkySVGA
 #define SKY_WIDTH		1024
 #define SKY_HEIGHT		768
-#define SKY_BPP			32*/
+#define SKY_BPP			32
 
 #define KERNEL32_NAME		"SKYOS32_EXE"
 #define KERNEL64_NAME		"SKYOS64_SYS"

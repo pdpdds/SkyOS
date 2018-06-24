@@ -391,6 +391,7 @@ int SkySVGA::StartGui()
 	m_pWinThread = create_window_thread();
 
 	//샘플 윈도우 컴포넌트를 윈도우 쉬트에 추가한다.
+	//StartSampleGui();
 	create_terminal(m_pWinThread);
 	create_threadsview_win(m_pWinThread);
 

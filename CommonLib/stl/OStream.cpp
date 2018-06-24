@@ -31,6 +31,12 @@ namespace std
 		return *this;
 	}
 
+	ostream& ostream::operator<<(unsigned long value)
+	{
+		printf("%d", value);
+		return *this;
+	}
+
 	ostream& ostream::operator<<(unsigned char *cq)
 	{
 		printf((char*)cq);		

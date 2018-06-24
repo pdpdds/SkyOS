@@ -32,4 +32,4 @@ void save_cb(GuiObject * obj, int data);
 void default_cb(GuiObject * obj, int data);
 void create_color_win(GuiWinThread * win_thread);
 int StartSampleGui();
-int StartGui();
+

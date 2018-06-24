@@ -10,7 +10,7 @@ extern SKY_Print_Interface g_printInterface;
 SkyGUISystem::SkyGUISystem()
 {
 	m_GUIEnable = false;
-	m_pMint64Engine = nullptr;
+	m_pInputEngine = nullptr;
 	m_pEngine = nullptr;
 }
 
@@ -91,17 +91,17 @@ bool SkyGUISystem::LoadGUIModule()
 
 	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory("HangulInput.dll");
 	PSetSkyMockInterface SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "SetSkyMockInterface");
-	PHangulInput HanguleMint64Engine = (PHangulInput)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetHangulEngine");
+	PHangulInput HanguleInput = (PHangulInput)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd, "GetHangulEngine");
 
 	//디버그 엔진에 플랫폼 종속적인 인터페이스를 넘긴다.
 	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
 
-	if (!HanguleMint64Engine)
+	if (!HanguleInput)
 	{
-		HaltSystem("HanguleMint64Engine Module Load Fail!!");
+		HaltSystem("HanguleInput Module Load Fail!!");
 	}
 
-	m_pMint64Engine = HanguleMint64Engine();
+	m_pInputEngine = HanguleInput();
 
 	MODULE_HANDLE hwnd2 = SkyModuleManager::GetInstance()->LoadModuleFromMemory("HangulEngine.dll");
 	SetSkyMockInterface = (PSetSkyMockInterface)SkyModuleManager::GetInstance()->GetModuleFunction(hwnd2, "SetSkyMockInterface");

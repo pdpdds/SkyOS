@@ -252,6 +252,8 @@ namespace VirtualMemoryManager
 		if (pageTableCount < 2)
 			pageTableCount = 2;
 
+		pageTableCount += 1;
+
 		//페이지 테이블을 생성
 		for (int i = 0; i < pageTableCount; i++)
 		{			

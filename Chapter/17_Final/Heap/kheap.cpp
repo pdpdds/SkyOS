@@ -104,36 +104,35 @@ size_t malloc_size(void * ptr)
 	return ptrSize;
 }
 
-void* krealloc(void * ptr, size_t size)
+//메모리 크기를 재조정한다.
+void* krealloc(void * ptr, size_t size) //메모리 크기를 재조정한다.
 {
 	void *_new;
-
-	if (!ptr) {
+	if (!ptr) { //기존 포인터가 널이면 size 크기의 새 버퍼를 생성하고 리턴한다.
 		_new = (void *)kmalloc(size);
 		if (!_new) { goto error; }
 	}
 	else {
-		if (malloc_size(ptr) < size) 
-		{
+		if (malloc_size(ptr) < size) //기존에 할당된 크기가 새롭게 요청된 크기보다 작으면
+		{//새로운 버퍼를 메모리에 할당한뒤 기존버퍼의 내용을 새 버퍼에 복사하고 리턴
 			_new = (void *)kmalloc(size);
-			if (!_new) 
-			{ 
-				goto error; 
+			if (!_new)
+			{
+				goto error;
 			}
-
 			memcpy(_new, ptr, malloc_size(ptr));
-
 			kfree(ptr);
 		}
-		else {
+		else //새롭게 요청된 할당 크기가 기존의 크기보다 작다면 
+		{//기존 포인터를 리턴
 			_new = ptr;
 		}
 	}
-
 	return _new;
 error:
 	return NULL;
 }
+
 
 static void expand(u32int new_size, heap_t *heap)
 {

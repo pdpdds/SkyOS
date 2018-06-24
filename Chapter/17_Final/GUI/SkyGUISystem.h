@@ -54,7 +54,7 @@ public:
 	VideoRamInfo& GetVideoRamInfo() { return m_videoRamInfo; }
 	void  SetVideoRamInfo(VideoRamInfo& info) { m_videoRamInfo = info; }
 
-	I_HangulEngine* GetIMEEngine() { return m_pMint64Engine; }
+	I_HangulEngine* GetIMEEngine() { return m_pInputEngine; }
 	I_Hangul* GetUnicodeEngine() { return m_pEngine; }
 
 protected:
@@ -69,7 +69,7 @@ private:
 
 	SkyWindow<SKY_GUI_SYSTEM>* m_pWindow;
 
-	I_HangulEngine* m_pMint64Engine;
+	I_HangulEngine* m_pInputEngine;
 	I_Hangul* m_pEngine;
 
 };
