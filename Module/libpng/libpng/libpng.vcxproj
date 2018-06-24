@@ -113,7 +113,7 @@
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <EntryPointSymbol>_DllMainCRTStartup</EntryPointSymbol>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>CommonLib.lib;DllStub.lib;zlibstat.lib</AdditionalDependencies>
+      <AdditionalDependencies>CommonLib.lib;DllStub.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Debug</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -186,18 +186,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="adler32.c" />
-    <ClCompile Include="bar.cpp" />
-    <ClCompile Include="compress.c" />
-    <ClCompile Include="crc32.c" />
-    <ClCompile Include="deflate.c" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="font.cpp" />
-    <ClCompile Include="GUIEngine.cpp" />
-    <ClCompile Include="infback.c" />
-    <ClCompile Include="inffast.c" />
-    <ClCompile Include="inflate.c" />
-    <ClCompile Include="inftrees.c" />
     <ClCompile Include="libpng\png.c" />
     <ClCompile Include="libpng\pngerror.cpp" />
     <ClCompile Include="libpng\pngget.c" />
@@ -213,21 +202,21 @@
     <ClCompile Include="libpng\pngwrite.c" />
     <ClCompile Include="libpng\pngwtran.c" />
     <ClCompile Include="libpng\pngwutil.c" />
+    <ClCompile Include="libpng\setjmp.c" />
     <ClCompile Include="modf.c" />
-    <ClCompile Include="setjmp.c" />
-    <ClCompile Include="svga_window.cpp" />
-    <ClCompile Include="textCtrl.cpp" />
-    <ClCompile Include="trees.c" />
-    <ClCompile Include="uncompr.c" />
-    <ClCompile Include="vesa.cpp" />
-    <ClCompile Include="wnd.cpp" />
-    <ClCompile Include="zutil.c" />
+    <ClCompile Include="zlib\adler32.c" />
+    <ClCompile Include="zlib\compress.c" />
+    <ClCompile Include="zlib\crc32.c" />
+    <ClCompile Include="zlib\deflate.c" />
+    <ClCompile Include="zlib\infback.c" />
+    <ClCompile Include="zlib\inffast.c" />
+    <ClCompile Include="zlib\inflate.c" />
+    <ClCompile Include="zlib\inftrees.c" />
+    <ClCompile Include="zlib\trees.c" />
+    <ClCompile Include="zlib\uncompr.c" />
+    <ClCompile Include="zlib\zutil.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bar.h" />
-    <ClInclude Include="font.h" />
-    <ClInclude Include="fontres.h" />
-    <ClInclude Include="GUIEngine.h" />
     <ClInclude Include="libpng\png.h" />
     <ClInclude Include="libpng\pngconf.h" />
     <ClInclude Include="libpng\pngdebug.h" />
@@ -235,11 +224,20 @@
     <ClInclude Include="libpng\pnglibconf.h" />
     <ClInclude Include="libpng\pngpriv.h" />
     <ClInclude Include="libpng\pngstruct.h" />
-    <ClInclude Include="setjmp.h" />
-    <ClInclude Include="svga_window.h" />
-    <ClInclude Include="txtCtrl.h" />
-    <ClInclude Include="VESA.h" />
-    <ClInclude Include="wnd.h" />
+    <ClInclude Include="libpng\setjmp.h" />
+    <ClInclude Include="libpng\signal.h" />
+    <ClInclude Include="libpng\_mingw.h" />
+    <ClInclude Include="zlib\crc32.h" />
+    <ClInclude Include="zlib\deflate.h" />
+    <ClInclude Include="zlib\gzguts.h" />
+    <ClInclude Include="zlib\inffast.h" />
+    <ClInclude Include="zlib\inffixed.h" />
+    <ClInclude Include="zlib\inflate.h" />
+    <ClInclude Include="zlib\inftrees.h" />
+    <ClInclude Include="zlib\trees.h" />
+    <ClInclude Include="zlib\zconf.h" />
+    <ClInclude Include="zlib\zlib.h" />
+    <ClInclude Include="zlib\zutil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

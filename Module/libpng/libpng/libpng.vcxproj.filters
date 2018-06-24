@@ -27,60 +27,6 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GUIEngine.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="bar.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="font.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="svga_window.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="textCtrl.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="wnd.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="vesa.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="adler32.c">
-      <Filter>ZLIB</Filter>
-    </ClCompile>
-    <ClCompile Include="compress.c">
-      <Filter>ZLIB</Filter>
-    </ClCompile>
-    <ClCompile Include="crc32.c">
-      <Filter>ZLIB</Filter>
-    </ClCompile>
-    <ClCompile Include="deflate.c">
-      <Filter>ZLIB</Filter>
-    </ClCompile>
-    <ClCompile Include="infback.c">
-      <Filter>ZLIB</Filter>
-    </ClCompile>
-    <ClCompile Include="inffast.c">
-      <Filter>ZLIB</Filter>
-    </ClCompile>
-    <ClCompile Include="inflate.c">
-      <Filter>ZLIB</Filter>
-    </ClCompile>
-    <ClCompile Include="inftrees.c">
-      <Filter>ZLIB</Filter>
-    </ClCompile>
-    <ClCompile Include="trees.c">
-      <Filter>ZLIB</Filter>
-    </ClCompile>
-    <ClCompile Include="uncompr.c">
-      <Filter>ZLIB</Filter>
-    </ClCompile>
-    <ClCompile Include="zutil.c">
-      <Filter>ZLIB</Filter>
-    </ClCompile>
     <ClCompile Include="libpng\png.c">
       <Filter>libpng</Filter>
     </ClCompile>
@@ -123,41 +69,50 @@
     <ClCompile Include="libpng\pngwutil.c">
       <Filter>libpng</Filter>
     </ClCompile>
-    <ClCompile Include="setjmp.c">
-      <Filter>libpng</Filter>
-    </ClCompile>
     <ClCompile Include="modf.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="libpng\pngerror.cpp">
       <Filter>libpng</Filter>
     </ClCompile>
+    <ClCompile Include="zlib\compress.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\crc32.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\deflate.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\infback.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inffast.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inflate.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inftrees.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\trees.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\uncompr.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\zutil.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\setjmp.c">
+      <Filter>libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\adler32.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GUIEngine.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="bar.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="font.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="fontres.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="svga_window.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="txtCtrl.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="wnd.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="VESA.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="libpng\png.h">
       <Filter>libpng</Filter>
     </ClInclude>
@@ -179,7 +134,46 @@
     <ClInclude Include="libpng\pngstruct.h">
       <Filter>libpng</Filter>
     </ClInclude>
-    <ClInclude Include="setjmp.h">
+    <ClInclude Include="zlib\crc32.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\deflate.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\gzguts.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffast.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffixed.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inflate.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inftrees.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\trees.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zconf.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zlib.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zutil.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\_mingw.h">
+      <Filter>libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\setjmp.h">
+      <Filter>libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\signal.h">
       <Filter>libpng</Filter>
     </ClInclude>
   </ItemGroup>
