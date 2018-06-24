@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="jpeg">
+      <UniqueIdentifier>{1f9886d3-3830-49ed-961f-35617cda11cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -27,6 +30,141 @@
     <ClCompile Include="libbmp.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="jpeg\jaricom.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcapimin.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcapistd.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcarith.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jccoefct.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jccolor.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcdctmgr.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jchuff.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcinit.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcmainct.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcmarker.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcmaster.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcomapi.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcparam.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcprepct.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jcsample.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jctrans.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdapimin.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdapistd.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdarith.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdatadst.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdatasrc.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdcoefct.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdcolor.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jddctmgr.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdhuff.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdinput.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdmainct.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdmarker.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdmaster.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdmerge.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdpostct.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdsample.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jdtrans.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jfdctflt.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jfdctfst.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jfdctint.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jidctflt.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jidctfst.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jidctint.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jmemmgr.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jmemnobs.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jquant1.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jquant2.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jutils.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\I_ImageInterface.h">
@@ -37,6 +175,30 @@
     </ClInclude>
     <ClInclude Include="libbmp.h">
       <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeg\jconfig.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeg\jdct.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeg\jinclude.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeg\jmemsys.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeg\jmorecfg.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeg\jpegint.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeg\jpeglib.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeg\jversion.h">
+      <Filter>jpeg</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

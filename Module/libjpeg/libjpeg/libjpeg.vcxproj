@@ -24,7 +24,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SampleDll</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
-    <ProjectName>libbmp</ProjectName>
+    <ProjectName>libjpeg</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -89,7 +89,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>SKY_DLL;SKYOS32;_CRT_SECURE_NO_WARNINGS ;_X86_;_DEBUG;./pixman</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NO_GETENV;SKY_DLL;SKYOS32;_CRT_SECURE_NO_WARNINGS ;_X86_;_DEBUG;./pixman</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>false</ExceptionHandling>
@@ -100,7 +100,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalOptions>/Oy %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../../../CommonLib/stl;../../../CommonLib;../../../include;../../Include;.;../../DllStub</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../CommonLib/stl;../../../CommonLib;../../../include;../../Include;.;../../DllStub;./jpeg</AdditionalIncludeDirectories>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <UndefineAllPreprocessorDefinitions>true</UndefineAllPreprocessorDefinitions>
       <OmitFramePointers>true</OmitFramePointers>
@@ -188,11 +188,64 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="BMPImageModule.cpp" />
+    <ClCompile Include="jpeg\jaricom.c" />
+    <ClCompile Include="jpeg\jcapimin.c" />
+    <ClCompile Include="jpeg\jcapistd.c" />
+    <ClCompile Include="jpeg\jcarith.c" />
+    <ClCompile Include="jpeg\jccoefct.c" />
+    <ClCompile Include="jpeg\jccolor.c" />
+    <ClCompile Include="jpeg\jcdctmgr.c" />
+    <ClCompile Include="jpeg\jchuff.c" />
+    <ClCompile Include="jpeg\jcinit.c" />
+    <ClCompile Include="jpeg\jcmainct.c" />
+    <ClCompile Include="jpeg\jcmarker.c" />
+    <ClCompile Include="jpeg\jcmaster.c" />
+    <ClCompile Include="jpeg\jcomapi.c" />
+    <ClCompile Include="jpeg\jcparam.c" />
+    <ClCompile Include="jpeg\jcprepct.c" />
+    <ClCompile Include="jpeg\jcsample.c" />
+    <ClCompile Include="jpeg\jctrans.c" />
+    <ClCompile Include="jpeg\jdapimin.c" />
+    <ClCompile Include="jpeg\jdapistd.c" />
+    <ClCompile Include="jpeg\jdarith.c" />
+    <ClCompile Include="jpeg\jdatadst.c" />
+    <ClCompile Include="jpeg\jdatasrc.c" />
+    <ClCompile Include="jpeg\jdcoefct.c" />
+    <ClCompile Include="jpeg\jdcolor.c" />
+    <ClCompile Include="jpeg\jddctmgr.c" />
+    <ClCompile Include="jpeg\jdhuff.c" />
+    <ClCompile Include="jpeg\jdinput.c" />
+    <ClCompile Include="jpeg\jdmainct.c" />
+    <ClCompile Include="jpeg\jdmarker.c" />
+    <ClCompile Include="jpeg\jdmaster.c" />
+    <ClCompile Include="jpeg\jdmerge.c" />
+    <ClCompile Include="jpeg\jdpostct.c" />
+    <ClCompile Include="jpeg\jdsample.c" />
+    <ClCompile Include="jpeg\jdtrans.c" />
+    <ClCompile Include="jpeg\jfdctflt.c" />
+    <ClCompile Include="jpeg\jfdctfst.c" />
+    <ClCompile Include="jpeg\jfdctint.c" />
+    <ClCompile Include="jpeg\jidctflt.c" />
+    <ClCompile Include="jpeg\jidctfst.c" />
+    <ClCompile Include="jpeg\jidctint.c" />
+    <ClCompile Include="jpeg\jmemmgr.c" />
+    <ClCompile Include="jpeg\jmemnobs.c" />
+    <ClCompile Include="jpeg\jquant1.c" />
+    <ClCompile Include="jpeg\jquant2.c" />
+    <ClCompile Include="jpeg\jutils.c" />
     <ClCompile Include="libbmp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\I_ImageInterface.h" />
     <ClInclude Include="BMPImageModule.h" />
+    <ClInclude Include="jpeg\jconfig.h" />
+    <ClInclude Include="jpeg\jdct.h" />
+    <ClInclude Include="jpeg\jinclude.h" />
+    <ClInclude Include="jpeg\jmemsys.h" />
+    <ClInclude Include="jpeg\jmorecfg.h" />
+    <ClInclude Include="jpeg\jpegint.h" />
+    <ClInclude Include="jpeg\jpeglib.h" />
+    <ClInclude Include="jpeg\jversion.h" />
     <ClInclude Include="libbmp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
