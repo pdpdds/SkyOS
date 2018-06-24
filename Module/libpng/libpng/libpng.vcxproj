@@ -100,7 +100,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalOptions>/Oy %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../../../CommonLib/stl;../../../CommonLib;../../../include;../../Include;./HanCode;.;../../DllStub;./libpng;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../CommonLib/stl;../../../CommonLib;../../../include;../../Include;./HanCode;.;../../DllStub;./libpng;./zlib</AdditionalIncludeDirectories>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <UndefineAllPreprocessorDefinitions>true</UndefineAllPreprocessorDefinitions>
       <OmitFramePointers>true</OmitFramePointers>
@@ -203,7 +203,7 @@
     <ClCompile Include="libpng\pngwtran.c" />
     <ClCompile Include="libpng\pngwutil.c" />
     <ClCompile Include="libpng\setjmp.c" />
-    <ClCompile Include="modf.c" />
+    <ClCompile Include="PNGImageModule.cpp" />
     <ClCompile Include="zlib\adler32.c" />
     <ClCompile Include="zlib\compress.c" />
     <ClCompile Include="zlib\crc32.c" />
@@ -217,6 +217,7 @@
     <ClCompile Include="zlib\zutil.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Include\I_ImageInterface.h" />
     <ClInclude Include="libpng\png.h" />
     <ClInclude Include="libpng\pngconf.h" />
     <ClInclude Include="libpng\pngdebug.h" />
@@ -227,6 +228,7 @@
     <ClInclude Include="libpng\setjmp.h" />
     <ClInclude Include="libpng\signal.h" />
     <ClInclude Include="libpng\_mingw.h" />
+    <ClInclude Include="PNGImageModule.h" />
     <ClInclude Include="zlib\crc32.h" />
     <ClInclude Include="zlib\deflate.h" />
     <ClInclude Include="zlib\gzguts.h" />

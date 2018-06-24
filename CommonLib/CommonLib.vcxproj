@@ -100,6 +100,7 @@
     <ClCompile Include="math\s_sin.c" />
     <ClCompile Include="math\s_tanh.c" />
     <ClCompile Include="memory.cpp" />
+    <ClCompile Include="modf.c" />
     <ClCompile Include="sprintf.cpp" />
     <ClCompile Include="stdio.cpp" />
     <ClCompile Include="stl\IStream.cpp" />

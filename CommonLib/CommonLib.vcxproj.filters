@@ -300,6 +300,7 @@
     <ClCompile Include="CPlusPlus\setjmp.c">
       <Filter>CPlusPlus</Filter>
     </ClCompile>
+    <ClCompile Include="modf.c" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="llshl.asm" />

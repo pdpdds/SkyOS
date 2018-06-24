@@ -69,9 +69,6 @@
     <ClCompile Include="libpng\pngwutil.c">
       <Filter>libpng</Filter>
     </ClCompile>
-    <ClCompile Include="modf.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="libpng\pngerror.cpp">
       <Filter>libpng</Filter>
     </ClCompile>
@@ -110,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="zlib\adler32.c">
       <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="PNGImageModule.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="libpng\signal.h">
       <Filter>libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\I_ImageInterface.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PNGImageModule.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
