@@ -15,9 +15,14 @@ void NativeConsole()
 
 	while (1)
 	{
-		SkyConsole::Print("Command> ");
+		int driveId = StorageManager::GetInstance()->GetCurrentDriveId();
+		char driveLetter = 'a' + driveId;
+		std::string driveName;
+		driveName += toupper(driveLetter);
+		driveName += ":> ";
+
+		SkyConsole::Print("%s", (char*)driveName.c_str());		
 		memset(commandBuffer, 0, MAXPATH);
-		//SkyConsole::Print("commandBuffer Address : 0x%x\n", &commandBuffer);	
 
 		SkyConsole::GetCommand(commandBuffer, MAXPATH - 2);
 		SkyConsole::Print("\n");

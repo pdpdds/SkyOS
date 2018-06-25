@@ -1,6 +1,7 @@
 #include "SkyOS.h"
 #include "SkyTest.h"
 #include "CDRomAdaptor.h"
+#include "SkyRamDiskAdaptor.h"
 
 StorageManager* StorageManager::m_pStorageManager = nullptr;
 
@@ -223,6 +224,17 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 	else
 	{
 		delete pMemoryResouceAdaptor;
+	}
+
+	//Sky 램 디스크
+	FileSysAdaptor* pSkyRamDiskAdaptor = new SkyRamDiskAdaptor("SkyRamDisk", 'P');
+	if (pSkyRamDiskAdaptor->Initialize() == true)
+	{
+		StorageManager::GetInstance()->RegisterFileSystem(pSkyRamDiskAdaptor, 'P');
+	}
+	else
+	{
+		delete pSkyRamDiskAdaptor;
 	}
 
 	/*FileSysAdaptor* pCDRomAdaptor = new CDRomAdaptor("CDRom", 'R');

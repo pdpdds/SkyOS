@@ -328,6 +328,7 @@
     <ClCompile Include="FileSystem\SkyRamDisk.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
+    <ClCompile Include="SkyRamDiskAdaptor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\Hal.h">
@@ -639,6 +640,7 @@
     <ClInclude Include="FileSystem\skyramdisk_struct.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="SkyRamDiskAdaptor.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

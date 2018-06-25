@@ -7,6 +7,7 @@
 
 #define USER_VIRTUAL_STACK_ADDRESS				0x00F00000
 #define KERNEL_VIRTUAL_HEAP_ADDRESS				0x10000000
+#define KERNEL_VIRTUAL_RAMDISK_ADDRESS			0x30000000
 
 using namespace PageTableEntry;
 using namespace PageDirectoryEntry;

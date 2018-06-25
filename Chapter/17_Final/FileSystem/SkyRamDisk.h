@@ -106,6 +106,7 @@ public:
 	 * Returns the root.
 	 */
 	g_ramdisk_entry* getRoot() const;
+	g_ramdisk_entry* getFirst() const;
 
 	/**
 	 *

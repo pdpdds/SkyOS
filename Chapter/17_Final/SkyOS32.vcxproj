@@ -120,6 +120,7 @@
     <ClCompile Include="SkyConsoleLauncher.cpp" />
     <ClCompile Include="SkyGUILauncher.cpp" />
     <ClCompile Include="SkyLauncher.cpp" />
+    <ClCompile Include="SkyRamDiskAdaptor.cpp" />
     <ClCompile Include="Test\Plane.cpp" />
     <ClCompile Include="Test\SkyTest.cpp" />
     <ClCompile Include="Test\TestLua.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="SkyGUILauncher.h" />
     <ClInclude Include="SkyLauncher.h" />
     <ClInclude Include="SkyOS.h" />
+    <ClInclude Include="SkyRamDiskAdaptor.h" />
     <ClInclude Include="SkyStartOption.h" />
     <ClInclude Include="Test\Plane.h" />
     <ClInclude Include="Test\PureCallExtend.h" />
@@ -339,9 +341,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <FunctionOrder>@order.txt</FunctionOrder>
-      <EntryPointSymbol>multiboot_entry</EntryPointSymbol>
+      <EntryPointSymbol>kmain</EntryPointSymbol>
       <NoEntryPoint>false</NoEntryPoint>
-      <BaseAddress>0x00100000</BaseAddress>
+      <BaseAddress>0x01000000</BaseAddress>
       <FixedBaseAddress>
       </FixedBaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
