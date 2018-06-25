@@ -7,12 +7,12 @@
 #include "string.h"
 #include "stl/IOStream.h"
 #include "sprintf.h"
-#include "BMPImageModule.h"
+#include "JPEGImageModule.h"
 
 extern FILE* g_skyStdErr;
 extern FILE* g_skyStdOut;
 
-void printf(const char* str, ...)
+extern "C" void printf(const char* str, ...)
 {
 	if (!str)
 		return;
@@ -162,5 +162,5 @@ extern "C" bool WINAPI _DllMainCRTStartup(
 
 extern "C" __declspec(dllexport) I_ImageInterface* GetImageInterface()
 {
-	return new BMPImageModule();
+	return new JPEGImageModule();
 }

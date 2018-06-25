@@ -42,7 +42,7 @@ int main()
 	HINSTANCE dllHandle = NULL;
 
 	//디버그엔진 모듈을 로드한다.
-	dllHandle = LoadLibrary("libbmp.dll");
+	dllHandle = LoadLibrary("libjpeg.dll");
 
 	PSetSkyMockInterface SetSkyMockInterface = (PSetSkyMockInterface)GetModuleFunction(dllHandle, "SetSkyMockInterface");
 	PGetImageInterface PngGetInterface = (PGetImageInterface)GetModuleFunction(dllHandle, "GetImageInterface");
@@ -51,7 +51,7 @@ int main()
 	SetSkyMockInterface(g_allocInterface, g_FileInterface, g_printInterface);
 	I_ImageInterface* pImageInterface = PngGetInterface();
 
-	SkyImageBuffer* pBuffer = pImageInterface->GetPixelDataFromFile("sample1.bmp");
+	SkyImageBuffer* pBuffer = pImageInterface->GetPixelDataFromFile("sample.jpg");
 
 
 
@@ -129,13 +129,23 @@ int main()
 				pixels[4 * (y * screen->w + x) + 0] = pixel[0];
 				pixels[4 * (y * screen->w + x) + 1] = pixel[1];
 				pixels[4 * (y * screen->w + x) + 2] = pixel[2];
-				pixels[4 * (y * screen->w + x) + 3] = 255;
+				pixels[4 * (y * screen->w + x) + 3] = pixel[3];
 			}
 		}
 	}
-	else
+	if (pBuffer->_bufferType == IAMGE_BUFFER_LINEAR)
 	{
-
+		for (int y = 0; y < pBuffer->_height; y++)
+		{
+			for (int x = 0; x < pBuffer->_width; x++)
+			{
+				char* pixel = (char*)pBuffer->_pBuffer;
+				pixels[4 * (y * screen->w + x) + 0] = pixel[(y * pBuffer->_width + x)*3 + 2];
+				pixels[4 * (y * screen->w + x) + 1] = pixel[(y * pBuffer->_width + x) * 3 + 1];
+				pixels[4 * (y * screen->w + x) + 2] = pixel[(y * pBuffer->_width + x) * 3 + 0];
+				pixels[4 * (y * screen->w + x) + 3] = 255;
+			}
+		}
 	}
 
 	pImageInterface->SavePixelData("sample3.png", nullptr, 0);

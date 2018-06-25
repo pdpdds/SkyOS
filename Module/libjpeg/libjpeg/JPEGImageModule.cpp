@@ -1,77 +1,88 @@
-#include "BMPImageModule.h"
-
+#include "JPEGImageModule.h"
+#include "jpgreader.h"
 extern void printf(const char* str, ...);
 
-BMPImageModule::BMPImageModule()
+//#include "IOStream.h"
+
+//#include <MimeParser.h>
+
+//#include "JpegDec.h"
+
+//using namespace jpegutil;
+//using namespace mimeutil;
+
+JPEGImageModule::JPEGImageModule()
 {
 }
 
 
-BMPImageModule::~BMPImageModule()
+JPEGImageModule::~JPEGImageModule()
 {
-	bmp_img_free(&m_img);
+	
 }
 
-bool BMPImageModule::Initialize()
+bool JPEGImageModule::Initialize()
 {
 	return true;
 }
 
-SkyImageBuffer* BMPImageModule::GetPixelDataFromFile(char* szFileName)
+SkyImageBuffer* JPEGImageModule::GetPixelDataFromFile(char* szFileName)
 {
-	//Test();
+	jpgReader* reader = new jpgReader();
+	laz_img img = reader->readJPG(szFileName);
+	
 
-	bmp_error error = bmp_img_read(&m_img, "sample1.bmp");
+	m_imageBuffer._pBuffer = (char**)img.getData();
+	m_imageBuffer._height = img.getHeight();
+	m_imageBuffer._width = img.getWidth();
+	m_imageBuffer._bufferType = IAMGE_BUFFER_LINEAR;
 
-	if (BMP_OK != error)
-		return nullptr;
+	/*FILE* pFile = fopen(szFileName, "rb");
+	//assert(testFile != nullptr);
 
-	m_imageBuffer._bufferType = IAMGE_BUFFER_2D_ARRAY;
-	m_imageBuffer._pBuffer = (char**)m_img.img_pixels;
-	m_imageBuffer._height = m_img.img_header.biHeight;
-	m_imageBuffer._width = m_img.img_header.biWidth;
-	m_imageBuffer._bpp = m_img.img_header.biBitCount;
-	m_imageBuffer._colorType = 0;
+	MimeParser* parser = new MimeParser();
+	JpegDec* decoder = new JpegDec();
 
+	size_t frameNum = 0;
+	while (true) {
+		uint8_t* img = nullptr;
+		int width, height;
+
+		//auto start = std::chrono::steady_clock::now();
+
+		if (!parser->readNext(pFile)) {
+			break;
+		}
+		frameNum++;
+
+		if (parser->getContentType() == "image/jpeg") {
+			decoder->decode(parser->getContent(), parser->getContentLength(), img, width, height);
+		}
+
+		//auto end = std::chrono::steady_clock::now();
+
+//		std::cout << "frame #" << frameNum;
+	//	std::cout << " size: " << parser->getContentLength();
+		//std::cout << " time: " << std::chrono::duration<double, std::milli>(end - start).count() << " ms";
+	//	std::cout << std::endl;
+
+		delete[] img;
+	}
+
+	delete decoder;
+	delete parser;*/
+	
 	return &m_imageBuffer;
 }
 
-SkyImageBuffer* BMPImageModule::GetPixelDataFromBuffer(char* pBuffer, int size)
+SkyImageBuffer* JPEGImageModule::GetPixelDataFromBuffer(char* pBuffer, int size)
 {
 	//not implemented
 	return nullptr;
 }
 
-bool BMPImageModule::SavePixelData(char* szFileName, char* pBuffer, int size)
+bool JPEGImageModule::SavePixelData(char* szFileName, char* pBuffer, int size)
 {
-	bmp_img_write(&m_img, szFileName);
-
+	//reader.writeJPG(img, "test_copy.jpg");
 	return true;
-}
-
-void BMPImageModule::Test()
-{
-	bmp_img img;
-	bmp_img_init_df(&img, 512, 512);
-
-	// Draw a checkerboard pattern:
-	for (size_t y = 0, x; y < 512; y++)
-	{
-		for (x = 0; x < 512; x++)
-		{
-			if ((y % 128 < 64 && x % 128 < 64) ||
-				(y % 128 >= 64 && x % 128 >= 64))
-			{
-				bmp_pixel_init(&img.img_pixels[y][x], 250, 250, 250);
-			}
-			else
-			{
-				bmp_pixel_init(&img.img_pixels[y][x], 0, 0, 0);
-			}
-		}
-	}
-
-	bmp_img_write(&img, "test.bmp");
-	bmp_img_free(&img);
-	
 }

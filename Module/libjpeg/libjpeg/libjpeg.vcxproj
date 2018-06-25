@@ -89,7 +89,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>NO_GETENV;SKY_DLL;SKYOS32;_CRT_SECURE_NO_WARNINGS ;_X86_;_DEBUG;./pixman</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HAVE_PROTOTYPES;NO_GETENV;SKY_DLL;SKYOS32;_CRT_SECURE_NO_WARNINGS ;_X86_;_DEBUG;./pixman</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>false</ExceptionHandling>
@@ -187,7 +187,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="BMPImageModule.cpp" />
+    <ClCompile Include="JpegDec.cpp" />
+    <ClCompile Include="JpegDecPlanarYCbCr.cpp" />
+    <ClCompile Include="JpegEnc.cpp" />
+    <ClCompile Include="JPEGImageModule.cpp" />
+    <ClCompile Include="jpegutil.cpp" />
     <ClCompile Include="jpeg\jaricom.c" />
     <ClCompile Include="jpeg\jcapimin.c" />
     <ClCompile Include="jpeg\jcapistd.c" />
@@ -222,6 +226,7 @@
     <ClCompile Include="jpeg\jdpostct.c" />
     <ClCompile Include="jpeg\jdsample.c" />
     <ClCompile Include="jpeg\jdtrans.c" />
+    <ClCompile Include="jpeg\jerror.c" />
     <ClCompile Include="jpeg\jfdctflt.c" />
     <ClCompile Include="jpeg\jfdctfst.c" />
     <ClCompile Include="jpeg\jfdctint.c" />
@@ -233,11 +238,19 @@
     <ClCompile Include="jpeg\jquant1.c" />
     <ClCompile Include="jpeg\jquant2.c" />
     <ClCompile Include="jpeg\jutils.c" />
-    <ClCompile Include="libbmp.cpp" />
+    <ClCompile Include="jpgReader.cpp" />
+    <ClCompile Include="laz_img.cpp" />
+    <ClCompile Include="MimeInfo.cpp" />
+    <ClCompile Include="MimeParser.cpp" />
+    <ClCompile Include="MimeWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\I_ImageInterface.h" />
-    <ClInclude Include="BMPImageModule.h" />
+    <ClInclude Include="JpegDec.h" />
+    <ClInclude Include="JpegDecPlanarYCbCr.h" />
+    <ClInclude Include="JpegEnc.h" />
+    <ClInclude Include="JPEGImageModule.h" />
+    <ClInclude Include="jpegutil.h" />
     <ClInclude Include="jpeg\jconfig.h" />
     <ClInclude Include="jpeg\jdct.h" />
     <ClInclude Include="jpeg\jinclude.h" />
@@ -246,7 +259,11 @@
     <ClInclude Include="jpeg\jpegint.h" />
     <ClInclude Include="jpeg\jpeglib.h" />
     <ClInclude Include="jpeg\jversion.h" />
-    <ClInclude Include="libbmp.h" />
+    <ClInclude Include="jpgReader.h" />
+    <ClInclude Include="laz_img.h" />
+    <ClInclude Include="MimeInfo.h" />
+    <ClInclude Include="MimeParser.h" />
+    <ClInclude Include="MimeWriter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

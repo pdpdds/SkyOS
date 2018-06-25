@@ -55,6 +55,7 @@
     <ClCompile Include="FileSystem\Partition.cpp" />
     <ClCompile Include="FileSystem\RAMDisk.cpp" />
     <ClCompile Include="FileSystem\RamDiskAdaptor.cpp" />
+    <ClCompile Include="FileSystem\SkyRamDisk.cpp" />
     <ClCompile Include="FileSystem\StorageManager.cpp" />
     <ClCompile Include="GUI\JPEG.cpp" />
     <ClCompile Include="GUI\Simple\SkyGUIConsole.cpp" />
@@ -177,6 +178,9 @@
     <ClInclude Include="FileSystem\Partition.h" />
     <ClInclude Include="FileSystem\RAMDisk.h" />
     <ClInclude Include="FileSystem\RamDiskAdaptor.h" />
+    <ClInclude Include="FileSystem\SkyRamDisk.h" />
+    <ClInclude Include="FileSystem\SkyRamDiskEntry.h" />
+    <ClInclude Include="FileSystem\skyramdisk_struct.h" />
     <ClInclude Include="FileSystem\StorageManager.h" />
     <ClInclude Include="GUI\JPEG.h" />
     <ClInclude Include="GUI\Simple\SkyGUIConsole.h" />

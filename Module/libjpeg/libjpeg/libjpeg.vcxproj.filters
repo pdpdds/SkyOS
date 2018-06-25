@@ -24,12 +24,6 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="BMPImageModule.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="libbmp.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="jpeg\jaricom.c">
       <Filter>jpeg</Filter>
     </ClCompile>
@@ -165,15 +159,42 @@
     <ClCompile Include="jpeg\jutils.c">
       <Filter>jpeg</Filter>
     </ClCompile>
+    <ClCompile Include="JPEGImageModule.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="JpegDec.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="JpegDecPlanarYCbCr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="JpegEnc.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="jpegutil.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\jerror.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="MimeInfo.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MimeParser.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MimeWriter.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="jpgReader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="laz_img.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\I_ImageInterface.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="BMPImageModule.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="libbmp.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="jpeg\jconfig.h">
@@ -199,6 +220,36 @@
     </ClInclude>
     <ClInclude Include="jpeg\jversion.h">
       <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="JPEGImageModule.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="JpegDec.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="JpegDecPlanarYCbCr.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="JpegEnc.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="jpegutil.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MimeInfo.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MimeParser.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MimeWriter.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="jpgReader.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="laz_img.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

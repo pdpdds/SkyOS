@@ -325,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="intrinsic.cpp" />
     <ClCompile Include="CDRomAdaptor.cpp" />
+    <ClCompile Include="FileSystem\SkyRamDisk.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\Hal.h">
@@ -627,6 +630,15 @@
     </ClInclude>
     <ClInclude Include="intrinsic.h" />
     <ClInclude Include="CDRomAdaptor.h" />
+    <ClInclude Include="FileSystem\SkyRamDisk.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\SkyRamDiskEntry.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\skyramdisk_struct.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">

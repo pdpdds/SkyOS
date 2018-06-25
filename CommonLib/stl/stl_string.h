@@ -71,6 +71,8 @@ namespace std
 		// string.
 		int length() const;
 
+		bool empty() const;
+
 		// Get the character at a given index of the string.
 		//
 		// If the index is negative, then it will return the character at

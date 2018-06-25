@@ -53,6 +53,11 @@ namespace std
 		return this->len;
 	}
 
+	bool string::empty() const
+	{
+		return this->len == 0;
+	}
+
 	char string::get(int i) const
 	{
 		// Add the length if the index is less than zero.
