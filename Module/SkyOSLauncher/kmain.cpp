@@ -52,27 +52,20 @@ _declspec(naked) void multiboot_entry(void)
 	}
 }
 
-extern "C" void SwitchAndExecute64bitKernel(int pml4EntryAddress, int kernelEntry, int bootinfo);
-bool Boot64BitMode(multiboot_info_t* pBootInfo, char* szKernelName);
-bool Boot32BitMode(unsigned long magic, multiboot_info_t* pBootInfo, char* szKernelName);
-
-bool Is64BitSwitchPossible();
-Module* FindModule(multiboot_info_t* pInfo, const char* szFileName);
-
 void kmain(unsigned long magic, unsigned long addr)
 {
 	bool result = false;
 
 	SkyConsole::Initialize();
-	SkyConsole::Print("32Bit Kernel Entered..\n");
+	SkyConsole::Print("32Bit Kernel Loader Entered..\n");
 
 	multiboot_info_t* mb_info = (multiboot_info_t*)addr;
 	
-	if (strcmp(mb_info->cmdline, KERNEL32_NAME) == 0)
+	if (strlen(mb_info->cmdline) > 0 && strcmp(KERNEL32_NAME, mb_info->cmdline) == 0)
 	{
 		//부트로더를 거쳐가는 경우 매직값을 다르게 한다.
 		magic += 1;
-		result = Boot32BitMode(magic, mb_info, KERNEL32_NAME);
+		result = Boot32BitMode(magic, mb_info, mb_info->cmdline);
 	}
 	else
 	{
@@ -81,7 +74,10 @@ void kmain(unsigned long magic, unsigned long addr)
 			SkyConsole::Print("Impossible 64bit Mode\n");
 		}
 		else
-			result = Boot64BitMode(mb_info, KERNEL64_NAME);
+			if(strlen(mb_info->cmdline) > 0)
+				result = Boot64BitMode(mb_info, mb_info->cmdline);
+			else
+				result = Boot64BitMode(mb_info, KERNEL64_NAME);
 	}
 
 	if(result == false)
@@ -108,6 +104,15 @@ bool Boot32BitMode(unsigned long magic, multiboot_info_t* pBootInfo, char* szKer
 	if (kernelEntry == 0 || imageBase == 0)
 	{
 		SkyConsole::Print("Invalid Kernel32 Address!!\n");
+		return false;
+	}
+
+	uint32_t moduleEndAddress = GetModuleEnd(pBootInfo);
+
+	if(moduleEndAddress > imageBase)
+	{
+		SkyConsole::Print("Module space and SKYOS32 image base address was overraped. 0x%x 0x%x\n", moduleEndAddress, imageBase);
+		SkyConsole::Print("Modify SKYOS32 image base address and check entry point(kmain)\n");
 		return false;
 	}
 
@@ -158,6 +163,7 @@ bool Boot64BitMode(multiboot_info_t* pBootInfo, char* szKernelName)
 	memcpy((void*)imageBase, (void*)pModule->ModuleStart, ((int)pModule->ModuleEnd - (int)pModule->ModuleStart));
 
 	InitializePageTables(pml4EntryAddress);
+	SkyConsole::Print("Start %s!!\n", szKernelName);
 	SwitchAndExecute64bitKernel(pml4EntryAddress, kernelEntry, (int)pBootInfo);
 
 	return true;
@@ -285,4 +291,26 @@ Module* FindModule(multiboot_info_t* pInfo, const char* szFileName)
 	}
 
 	return nullptr;
+}
+
+uint32_t GetModuleEnd(multiboot_info* bootinfo)
+{
+	uint32_t endAddress = 0;
+	uint32_t mods_count = bootinfo->mods_count;   /* Get the amount of modules available */
+	uint32_t mods_addr = (uint32_t)bootinfo->Modules;     /* And the starting address of the modules */
+	for (uint32_t i = 0; i < mods_count; i++) {
+		Module* module = (Module*)(mods_addr + (i * sizeof(Module)));     /* Loop through all modules */
+
+		uint32_t moduleStart = PAGE_ALIGN_DOWN((uint32_t)module->ModuleStart);
+		uint32_t moduleEnd = PAGE_ALIGN_UP((uint32_t)module->ModuleEnd);
+
+		if (endAddress < moduleEnd)
+		{
+			endAddress = moduleEnd;
+		}
+
+		SkyConsole::Print("%s (0x%x - 0x%x)\n", module->Name, moduleStart, moduleEnd);
+	}
+
+	return (uint32_t)endAddress;
 }
