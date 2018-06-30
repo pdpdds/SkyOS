@@ -8,6 +8,7 @@ int errno = 0;
 
 #ifdef SKY_DLL
 SkyMockInterface g_mockInterface;
+SKY_PROCESS_INTERFACE g_processInterface;
 
 FILE* g_stdOut;
 FILE* g_stdIn;
@@ -546,6 +547,11 @@ extern "C" __declspec(dllexport) void SetSkyMockInterface(SKY_ALLOC_Interface al
 	g_skyStdIn = printInterface.sky_stdin;
 	g_skyStdErr = printInterface.sky_stderr;
 
+}
+
+extern "C" __declspec(dllexport) void SetSkyProcessInterface(SKY_PROCESS_INTERFACE processInterface)
+{
+	g_processInterface = processInterface;
 }
 
 void *operator new(size_t size)

@@ -23,6 +23,17 @@ typedef struct SKY_FILE_Interface
 	char* (*sky_fgets)(char *dst, int max, FILE *fp);	
 } SKY_FILE_Interface;
 
+//프로세스 생성 및 삭제 인터페이스
+//불행중 다행으로 LPTHREAD_START_ROUTINE 함수포인터는 WIN32나 SKYOS나 똑같다...
+typedef struct tag_SKY_PROCESS_INTERFACE
+{
+	unsigned int (*sky_kcreate_process_from_memory)(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType);
+	unsigned int (*sky_kcreate_process_from_file)(char* appName, void* param, UINT32 processType);
+	unsigned int (*sky_kcreate_thread_from_memory)(unsigned int processId, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID param);	
+	unsigned int (*sky_kcreate_thread_from_file)(unsigned int processId, FILE* pFile, LPVOID param);
+	unsigned int (*sky_kdestroy_task)(unsigned int taskId); //task가 하나인 프로세스는 프로세스도 삭제, taskId가 메인 스레드면 역시 프로세스도 삭제
+} SKY_PROCESS_INTERFACE;
+
 //메모리 할당관련 인터페이스
 typedef struct SKY_ALLOC_Interface
 {
@@ -51,3 +62,4 @@ typedef struct SkyMockInterface
 }SkyMockInterface;
 
 typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
+typedef void(*PSetSkyProcessInterface)(SKY_PROCESS_INTERFACE);
