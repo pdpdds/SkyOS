@@ -3,6 +3,7 @@
 #include "SkyGUI.h"
 #include "SkyGUIConsole.h"
 #include "SkySVGA.h"
+#include "GUIMint64.h"
 #include "SkyMockInterface.h"
 #include "I_HangulEngine.h"
 #include "I_Hangul.h"

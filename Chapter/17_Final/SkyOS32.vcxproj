@@ -57,6 +57,7 @@
     <ClCompile Include="FileSystem\RamDiskAdaptor.cpp" />
     <ClCompile Include="FileSystem\SkyRamDisk.cpp" />
     <ClCompile Include="FileSystem\StorageManager.cpp" />
+    <ClCompile Include="GUIMint64.cpp" />
     <ClCompile Include="GUI\JPEG.cpp" />
     <ClCompile Include="GUI\Simple\SkyGUIConsole.cpp" />
     <ClCompile Include="GUI\SkyGUISystem.cpp" />
@@ -119,6 +120,7 @@
     <ClCompile Include="SkyConsole.cpp" />
     <ClCompile Include="SkyConsoleLauncher.cpp" />
     <ClCompile Include="SkyGUILauncher.cpp" />
+    <ClCompile Include="SkyIOHandler.cpp" />
     <ClCompile Include="SkyLauncher.cpp" />
     <ClCompile Include="SkyRamDiskAdaptor.cpp" />
     <ClCompile Include="Test\Plane.cpp" />
@@ -183,6 +185,7 @@
     <ClInclude Include="FileSystem\SkyRamDiskEntry.h" />
     <ClInclude Include="FileSystem\skyramdisk_struct.h" />
     <ClInclude Include="FileSystem\StorageManager.h" />
+    <ClInclude Include="GUIMint64.h" />
     <ClInclude Include="GUI\JPEG.h" />
     <ClInclude Include="GUI\Simple\SkyGUIConsole.h" />
     <ClInclude Include="GUI\SkyGUISystem.h" />
@@ -229,6 +232,7 @@
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="SkyConsoleLauncher.h" />
     <ClInclude Include="SkyGUILauncher.h" />
+    <ClInclude Include="SkyIOHandler.h" />
     <ClInclude Include="SkyLauncher.h" />
     <ClInclude Include="SkyOS.h" />
     <ClInclude Include="SkyRamDiskAdaptor.h" />
@@ -341,9 +345,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <FunctionOrder>@order.txt</FunctionOrder>
-      <EntryPointSymbol>kmain</EntryPointSymbol>
+      <EntryPointSymbol>multiboot_entry</EntryPointSymbol>
       <NoEntryPoint>false</NoEntryPoint>
-      <BaseAddress>0x01000000</BaseAddress>
+      <BaseAddress>0x00100000</BaseAddress>
       <FixedBaseAddress>
       </FixedBaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>

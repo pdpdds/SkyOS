@@ -32,7 +32,7 @@ void kmain(unsigned long magic, unsigned long addr, uint32_t imageBase)
 	InitContext(pBootInfo);
 	
 	kEnterCriticalSection();
-
+	
 	InitHardware();
 	InitMemoryManager(pBootInfo);
 

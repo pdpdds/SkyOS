@@ -80,7 +80,7 @@ typedef __time_t time_t;
   typedef HANDLE HWND;
   
   typedef unsigned long		ULONG;
-  typedef unsigned long		QWORD;
+  typedef long long			QWORD;
 
   typedef long               ISIZE;
   typedef unsigned long      LSIZE;

@@ -329,6 +329,8 @@
       <Filter>FileSystem</Filter>
     </ClCompile>
     <ClCompile Include="SkyRamDiskAdaptor.cpp" />
+    <ClCompile Include="GUIMint64.cpp" />
+    <ClCompile Include="SkyIOHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\Hal.h">
@@ -641,6 +643,8 @@
       <Filter>FileSystem</Filter>
     </ClInclude>
     <ClInclude Include="SkyRamDiskAdaptor.h" />
+    <ClInclude Include="GUIMint64.h" />
+    <ClInclude Include="SkyIOHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CPU">
@@ -684,6 +688,9 @@
     </Filter>
     <Filter Include="GUI\SkyGUI">
       <UniqueIdentifier>{038e56cf-3636-437f-b7f9-81cae7203789}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Mint64">
+      <UniqueIdentifier>{90d60de2-12d7-49ec-b374-58f14b160734}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

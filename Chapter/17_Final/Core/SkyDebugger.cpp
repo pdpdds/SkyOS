@@ -83,6 +83,50 @@ SKY_Print_Interface g_printInterface =
 	0,
 };
 
+unsigned int sky_kcreate_process_from_memory(const char* appName, LPTHREAD_START_ROUTINE lpStartAddress, void* param, UINT32 processType)
+{
+	return 0;
+}
+
+unsigned int sky_kcreate_process_from_file(char* appName, void* param, UINT32 processType)
+{
+	return 0;
+}
+
+unsigned int sky_kcreate_thread_from_memory(unsigned int processId, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID param)
+{
+	DWORD dwThreadId = 0;
+
+	kEnterCriticalSection();
+	Process* pProcess = ProcessManager::GetInstance()->GetCurrentTask()->m_pParent;
+	Thread* pThread = ProcessManager::GetInstance()->CreateThread(pProcess, lpStartAddress, param);
+	pProcess->AddThread(pThread);
+
+	kLeaveCriticalSection();
+
+	return (unsigned int)pThread;
+}
+
+unsigned int sky_kcreate_thread_from_file(unsigned int processId, FILE* pFile, LPVOID param)
+{
+	return 0;
+}
+
+
+unsigned int sky_kdestroy_task(unsigned int taskId)
+{
+	return 0;
+}
+
+//프로세스 생성 및 삭제
+SKY_PROCESS_INTERFACE g_processInterface =
+{
+	sky_kcreate_process_from_memory,
+	sky_kcreate_process_from_file,
+	sky_kcreate_thread_from_memory,
+	sky_kcreate_thread_from_file,
+	sky_kdestroy_task,
+};
 
 SkyDebugger::SkyDebugger()
 {
