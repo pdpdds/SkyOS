@@ -58,8 +58,9 @@ public:
 	I_HangulEngine* GetIMEEngine() { return m_pInputEngine; }
 	I_Hangul* GetUnicodeEngine() { return m_pEngine; }
 
-protected:
 	bool LoadGUIModule();
+protected:
+	
 
 private:
 	SkyGUISystem();

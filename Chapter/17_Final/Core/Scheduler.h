@@ -13,7 +13,7 @@ public:
 	}
 
 	bool  DoSchedule(int tick, registers_t& registers);
-	bool Yield(int processId);
+	bool Yield();
 	
 private:
 	Scheduler();

@@ -55,29 +55,46 @@ _declspec(naked) void multiboot_entry(void)
 void kmain(unsigned long magic, unsigned long addr)
 {
 	bool result = false;
+	magic += 1;
 
 	SkyConsole::Initialize();
 	SkyConsole::Print("32Bit Kernel Loader Entered..\n");
 
 	multiboot_info_t* mb_info = (multiboot_info_t*)addr;
+
 	
-	if (strlen(mb_info->cmdline) > 0 && strcmp(KERNEL32_NAME, mb_info->cmdline) == 0)
+	if (strlen(mb_info->cmdline) == 0)
 	{
+		SkyConsole::Print("Kernel Name Missing. Default Kernel Loading...\n");
 		//부트로더를 거쳐가는 경우 매직값을 다르게 한다.
-		magic += 1;
-		result = Boot32BitMode(magic, mb_info, mb_info->cmdline);
+		
+		result = Boot32BitMode(magic, mb_info, KERNEL32_NAME);
 	}
 	else
-	{
-		if (Is64BitSwitchPossible() == false)
+	{		
+		if (strcmp(mb_info->boot_loader_name, "GNU GRUB 0.95") == 0)
 		{
-			SkyConsole::Print("Impossible 64bit Mode\n");
+			//char* pName = strtok(mb_info->cmdline, " ");
+			//pName = strtok(NULL, " ");
+
+			result = Boot32BitMode(magic, mb_info, "ChobitsOS.exe");
 		}
 		else
-			if(strlen(mb_info->cmdline) > 0)
-				result = Boot64BitMode(mb_info, mb_info->cmdline);
+		{
+			result = Boot32BitMode(magic, mb_info, mb_info->cmdline);
+		}
+		
+
+		if (result == false) //32비트 커널 실행에 실패하면 64비트로 부팅 시도
+		{
+			if (Is64BitSwitchPossible() == false)
+			{
+				SkyConsole::Print("Impossible 64bit Mode\n");
+			}
+
 			else
-				result = Boot64BitMode(mb_info, KERNEL64_NAME);
+				result = Boot64BitMode(mb_info, mb_info->cmdline);
+		}		
 	}
 
 	if(result == false)
@@ -112,12 +129,12 @@ bool Boot32BitMode(unsigned long magic, multiboot_info_t* pBootInfo, char* szKer
 	if(moduleEndAddress > imageBase)
 	{
 		SkyConsole::Print("Module space and SKYOS32 image base address was overraped. 0x%x 0x%x\n", moduleEndAddress, imageBase);
-		SkyConsole::Print("Modify SKYOS32 image base address and check entry point(kmain)\n");
+		SkyConsole::Print("Modify Kernel image base address and check entry point(kmain)\n");
 		return false;
 	}
 
 	memcpy((void*)imageBase, (void*)pModule->ModuleStart, ((int)pModule->ModuleEnd - (int)pModule->ModuleStart));
-
+	
 	__asm
 	{
 		

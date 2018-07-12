@@ -62,7 +62,7 @@ DWORD WINAPI kApplicationPanelGUITask(LPVOID parameter)
         {
 			int j = 1;
 			//20180628
-            //kSleep( 0 );
+            ksleep( 0 );
         }            
     }
 

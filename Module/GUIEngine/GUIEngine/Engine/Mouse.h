@@ -22,11 +22,11 @@ typedef struct kMouseManagerStruct
 	MOUSEDATA stCurrentData;
 } MOUSEMANAGER;
 
-//#define kEnterCriticalSection()	__asm	PUSHFD	__asm CLI
-//#define kLeaveCriticalSection()		__asm	POPFD
+#define kEnterCriticalSection()	__asm	PUSHFD	__asm CLI
+#define kLeaveCriticalSection()		__asm	POPFD
 
-#define kEnterCriticalSection()	
-#define kLeaveCriticalSection()	
+//#define kEnterCriticalSection()	
+//#define kLeaveCriticalSection()	
 
 bool kInitializeMouse( void );
 bool kAccumulateMouseDataAndPutQueue( BYTE bMouseData );

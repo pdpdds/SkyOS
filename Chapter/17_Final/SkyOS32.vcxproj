@@ -307,7 +307,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>./ConsoleSystem;./;../../CommonLib;../../Include;./CPU;./Memory;./Heap;./Test;../../CommonLib/stl;../../CommonLib/jsmn;./FileSystem;./Keyboard;./V8086;./GUI/SkyGUI;./GUI/Simple;./GUI;../../CommonLib/math;./gui/svgagui;./gui/svgagui/example;../../Module/Include;../../Module/DebugEngine/DebugEngine;./thirdparty/easyzlib;./Device;./Core;../../CommonLib/CPlusPlus;../../Module/Lua5/Lua5;./GUI/SkySVGA</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>SKYOS32;__LE__;OLD_ANSI;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SKYOS32;__LE__;OLD_ANSI;_MSC_VER</PreprocessorDefinitions>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <StringPooling>
       </StringPooling>
@@ -325,6 +325,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>
       </LanguageStandard>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
     </ClCompile>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
@@ -345,9 +346,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <FunctionOrder>@order.txt</FunctionOrder>
-      <EntryPointSymbol>multiboot_entry</EntryPointSymbol>
+      <EntryPointSymbol>kmain</EntryPointSymbol>
       <NoEntryPoint>false</NoEntryPoint>
-      <BaseAddress>0x00100000</BaseAddress>
+      <BaseAddress>0x1600000</BaseAddress>
       <FixedBaseAddress>
       </FixedBaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>

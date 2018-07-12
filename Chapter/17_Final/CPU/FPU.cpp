@@ -35,15 +35,16 @@ bool InitFPU()
 
 bool EnableFPU()
 {
-#ifdef _WIN32
+//#ifdef _WIN32
 	unsigned long regCR4 = __readcr4();
 	__asm or regCR4, 0x200
-	__writecr4(regCR4);
-#else
+	__writecr4(regCR4);	
+//#else
 	//mov eax, cr4;
 	//or eax, 0x200
 	//mov cr4, eax
-#endif	
+// #endif
+	return true;
 }
 
 

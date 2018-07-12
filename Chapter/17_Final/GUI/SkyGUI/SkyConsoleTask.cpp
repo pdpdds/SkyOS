@@ -48,7 +48,7 @@ bool SkyConsoleTask::kGetMessage(LPSKY_MSG lpMsg, HWND hWnd, UINT wMsgFilterMin,
 	kEnterCriticalSection();
 	if (m_pIOListener->ReadyStatus() == false)
 	{
-		Scheduler::GetInstance()->Yield(m_ProcessId);
+		Scheduler::GetInstance()->Yield();
 	}
 	else
 	{

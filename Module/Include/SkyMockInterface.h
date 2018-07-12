@@ -6,6 +6,7 @@
 #include "fileio.h"
 #endif
 
+#pragma pack (push, 1)
 //입출력 관련 인터페이스
 typedef struct SKY_FILE_Interface
 {
@@ -32,6 +33,7 @@ typedef struct tag_SKY_PROCESS_INTERFACE
 	unsigned int (*sky_kcreate_thread_from_memory)(unsigned int processId, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID param);	
 	unsigned int (*sky_kcreate_thread_from_file)(unsigned int processId, FILE* pFile, LPVOID param);
 	unsigned int (*sky_kdestroy_task)(unsigned int taskId); //task가 하나인 프로세스는 프로세스도 삭제, taskId가 메인 스레드면 역시 프로세스도 삭제
+	void (*sky_ksleep)(int ms);
 } SKY_PROCESS_INTERFACE;
 
 //메모리 할당관련 인터페이스
@@ -60,6 +62,8 @@ typedef struct SkyMockInterface
 	SKY_FILE_Interface g_fileInterface;
 	SKY_Print_Interface g_printInterface;
 }SkyMockInterface;
+
+#pragma pack (pop, 1)
 
 typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
 typedef void(*PSetSkyProcessInterface)(SKY_PROCESS_INTERFACE);

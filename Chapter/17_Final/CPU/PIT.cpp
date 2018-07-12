@@ -1,6 +1,10 @@
 #include "PIT.h"
 #include "Hal.h"
 #include "SkyConsole.h"
+#include "Scheduler.h"
+#include "ProcessManager.h"
+#include "Process.h"
+#include "Thread.h"
 
 extern void SwitchTask(int tick, registers_t& regs);
 extern void SendEOI();
@@ -139,8 +143,10 @@ unsigned int GetTickCount()
 void msleep(int ms)
 {
 	unsigned int ticks = ms + GetTickCount();
-	while (ticks > GetTickCount())
-		;
+	while (ticks >= GetTickCount())
+	{				
+		Scheduler::GetInstance()->Yield();
+	}
 }
 
 void SendPITCommand(uint8_t cmd) {

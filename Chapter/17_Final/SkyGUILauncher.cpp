@@ -21,6 +21,7 @@ void SkyGUILauncher::Launch()
 {
 	Process* pMainProcess = ProcessManager::GetInstance()->CreateProcessFromMemory("GUISystem", SystemGUIProc, NULL, PROCESS_KERNEL);
 	ProcessManager::GetInstance()->CreateProcessFromMemory("ProcessRemover", ProcessRemoverProc, NULL, PROCESS_KERNEL);	
+	ProcessManager::GetInstance()->CreateProcessFromMemory("SystemIdle", SystemIdle, NULL, PROCESS_KERNEL);
 	SkyConsole::Print("Init GUI System....\n");
 
 	Thread* pThread = pMainProcess->GetMainThread();

@@ -32,6 +32,16 @@ void NativeConsole()
 	}
 }
 
+DWORD WINAPI SystemIdle(LPVOID parameter)
+{
+	while (1)
+	{
+		ksleep(10);
+	}
+
+	return 0;
+}
+
 DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 {
 	SkyConsole::Print("Console Mode Start!!\n");
@@ -54,7 +64,7 @@ DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 
 	return 0;
 }
-
+extern void SampleFillRect(ULONG* lfb0, int x, int y, int w, int h, int col);
 
 DWORD WINAPI SystemGUIProc(LPVOID parameter)
 {
@@ -62,19 +72,25 @@ DWORD WINAPI SystemGUIProc(LPVOID parameter)
 	SkyConsole::Print("start ebp : %x\n", *ebp);	
 	SkyConsole::Print("parameter : %x\n", parameter);
 
-
+	
 	multiboot_info* pBootInfo = SkyModuleManager::GetInstance()->GetMultiBootInfo();
 
-	systemOn = true;
+	//kEnterCriticalSection();
 	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
+	
+	//kLeaveCriticalSection();
 
 	StorageManager::GetInstance()->Initilaize(pBootInfo);
-	
-	kEnterCriticalSection();
+	SampleFillRect((ULONG*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1004, 0, 20, 20, 0x0000FF00);	
 	SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
-	kLeaveCriticalSection();
 
+	//SampleFillRect((ULONG*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1004, 0, 20, 20, 0x00FF0000);
 	SkyGUISystem::GetInstance()->InitGUIModule();
+	//SampleFillRect((ULONG*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1004, 0, 20, 20, 0x000000FF);	
+	//SampleFillRect((ULONG*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1004, 0, 20, 20, 0x0000FF00);
+
+	systemOn = true;
+
 	SkyGUISystem::GetInstance()->Run();
 
 	return 0;
@@ -108,7 +124,7 @@ DWORD WINAPI WatchDogProc(LPVOID parameter)
 			first = GetTickCount();
 		}
 		kEnterCriticalSection();
-		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
+		Scheduler::GetInstance()->Yield();
 		kLeaveCriticalSection();
 	}
 
@@ -153,7 +169,7 @@ void WatchDogLoop(Process* pProcess)
 		}
 
 		//빠르게 실행될 필요가 없으므로 실행시간을 타 프로세스에 양보한다.
-		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
+		Scheduler::GetInstance()->Yield();
 	}
 }
 
@@ -183,7 +199,7 @@ void LoopProcessRemove(Process* pProcess)
 
 		ProcessManager::GetInstance()->RemoveTerminatedProcess();
 
-		//Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
+		//Scheduler::GetInstance()->Yield();
 		kLeaveCriticalSection();
 
 		int second = GetTickCount();

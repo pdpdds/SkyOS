@@ -9,6 +9,8 @@
 #include "WindowManagerTask.h"
 #include "Queue.h"
 
+
+
 extern shell Shell;
 extern void gui_init(unsigned char *wallpaper_ptr);
 extern "C" void SHLaunchShell();

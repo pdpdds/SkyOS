@@ -5,13 +5,16 @@
 // 키 큐의 최대 크기
 #define KEY_MAXQUEUECOUNT	100
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// 구조체
-//
-////////////////////////////////////////////////////////////////////////////////
-// 1바이트로 정렬
 #pragma pack( push, 1 )
+
+////////////////////////////////////////////////////////////////////////////////
+// 마우스 큐에 대한 매크로
+#define MOUSE_MAXQUEUECOUNT 100
+
+// 버튼의 상태를 나타내는 매크로
+#define MOUSE_LBUTTONDOWN   0x01
+#define MOUSE_RBUTTONDOWN   0x02
+#define MOUSE_MBUTTONDOWN   0x04
 
 // 스캔 코드 테이블을 구성하는 항목
 typedef struct kKeyMappingEntryStruct
@@ -51,26 +54,6 @@ typedef struct kKeyDataStruct
 	BYTE bFlags;
 } KEYDATA;
 
-#pragma pack( pop )
-
-
-////////////////////////////////////////////////////////////////////////////////
-// 마우스 큐에 대한 매크로
-#define MOUSE_MAXQUEUECOUNT 100
-
-// 버튼의 상태를 나타내는 매크로
-#define MOUSE_LBUTTONDOWN   0x01
-#define MOUSE_RBUTTONDOWN   0x02
-#define MOUSE_MBUTTONDOWN   0x04
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// 구조체
-//
-////////////////////////////////////////////////////////////////////////////////
-// 1바이트로 정렬
-#pragma pack( push, 1 )
-
 // PS/2 마우스 패킷을 저장하는 자료구조, 마우스 큐에 삽입하는 데이터
 typedef struct kMousePacketStruct
 {
@@ -83,8 +66,6 @@ typedef struct kMousePacketStruct
 	// 상대좌표값인지 절대좌표값인지를 나타내는 플래그
 	BYTE bAbsoluteCoordinate;
 } MOUSEDATA;
-
-#pragma pack( pop )
 
 // 마우스의 상태를 관리하는 자료구조
 typedef struct tag_MouseManagerStruct
@@ -107,6 +88,8 @@ typedef struct tag_LinearBufferInfo
 	bool isDirectVideoBuffer;
 
 } LinearBufferInfo;
+
+#pragma pack( pop )
 
 class I_GUIEngine
 {

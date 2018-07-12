@@ -385,7 +385,7 @@ int kdbg_printf(char *pFmt, ...)
 typedef struct tag_SKY_APIStruct
 {
 	char * strAPIName;		//함수 이름
-	void * ptrAPIFunction;		//함수 포인터
+	void* ptrAPIFunction;		//함수 포인터
 	tag_SKY_APIStruct * Next;
 }SKY_APIStruct;
 SKY_APIStruct* g_pRegisteredSkyAPIEntries = nullptr;

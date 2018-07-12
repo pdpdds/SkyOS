@@ -292,7 +292,10 @@ namespace FloppyDisk
 	{
 		for (int i = 0; i < 500; i++)
 			if (ReadStatus() & FLPYDSK_MSR_MASK_DATAREG)
-				return OutPortByte(FLPYDSK_FIFO, cmd);
+			{
+				OutPortByte(FLPYDSK_FIFO, cmd);
+				return;
+			}
 	}
 	
 	uint8_t ReadData() 

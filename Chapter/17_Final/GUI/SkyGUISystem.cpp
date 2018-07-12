@@ -64,7 +64,7 @@ bool SkyGUISystem::Initialize(multiboot_info* pBootInfo)
 	m_GUIEnable = false;
 	return false;
 }
-
+extern void SampleFillRect(ULONG* lfb, int x, int y, int w, int h, int col);
 bool SkyGUISystem::InitGUIModule()
 {
 	if (m_GUIEnable == false)
@@ -78,9 +78,9 @@ bool SkyGUISystem::InitGUIModule()
 	if (false == LoadGUIModule())
 		return false;
 
-
+	
 	m_pWindow->Initialize(m_videoRamInfo._pVideoRamPtr, m_videoRamInfo._width, m_videoRamInfo._height, m_videoRamInfo._bpp, m_videoRamInfo._framebuffer_type);
-
+	
 	return true;
 }
 

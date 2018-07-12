@@ -195,8 +195,10 @@ bool  Scheduler::DoSchedule(int tick, registers_t& registers)
 	return true;
 }
 
-bool Scheduler::Yield(int processId)
+bool Scheduler::Yield()
 {
+	Thread* pCurrentThread = ProcessManager::GetInstance()->GetCurrentTask();	
+
 	kEnterCriticalSection();
 
 	ProcessManager::TaskList* pTaskList = ProcessManager::GetInstance()->GetTaskList();
@@ -205,8 +207,8 @@ bool Scheduler::Yield(int processId)
 	for (; iter != pTaskList->end(); iter++)
 	{
 		Thread* pThread = *iter;
-		if (pThread->m_pParent->GetProcessId() == processId)
-			pThread->m_waitingTime = 0;
+		if (pThread->GetThreadId() == pCurrentThread->GetThreadId())
+			pCurrentThread->m_waitingTime = 0;
 	}
 
 	kLeaveCriticalSection();

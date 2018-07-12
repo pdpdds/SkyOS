@@ -115,7 +115,13 @@ unsigned int sky_kcreate_thread_from_file(unsigned int processId, FILE* pFile, L
 
 unsigned int sky_kdestroy_task(unsigned int taskId)
 {
+
 	return 0;
+}
+
+void sky_ksleep(int ms)
+{
+	ksleep(ms);
 }
 
 //프로세스 생성 및 삭제
@@ -126,6 +132,7 @@ SKY_PROCESS_INTERFACE g_processInterface =
 	sky_kcreate_thread_from_memory,
 	sky_kcreate_thread_from_file,
 	sky_kdestroy_task,
+	sky_ksleep,
 };
 
 SkyDebugger::SkyDebugger()

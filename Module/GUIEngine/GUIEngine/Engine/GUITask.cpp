@@ -15,6 +15,7 @@
 #include "MintFont.h"
 //#include "Console.h"
 #include "ConsoleShell.h"
+#include "SkyInterface.h"
 #include "Mouse.h"
 #define FILESYSTEM_MAXFILENAMELENGTH        24
 //#include "MultiProcessor.h"
@@ -69,7 +70,7 @@ DWORD WINAPI kBaseGUITask(LPVOID parameter)
         {
 
 			//20180628
-            //kSleep( 0 );
+			ksleep( 0 );
             continue;
         }
         
@@ -237,7 +238,7 @@ void UpdateHelloGUITask()
 		if (kReceiveEventFromWindowQueue(qwGUIWindowID, &stReceivedEvent) == FALSE)
 		{
 			//20180628
-			//kSleep( 0 );
+			ksleep( 0 );
 			continue;
 		}
 
@@ -511,7 +512,7 @@ void UpdateHelloGUITask()
         // 0.5초마다 한번씩 시스템 상태를 확인
         if( ( kGetTickCount() - qwLastTickCount ) < 500 )
         {
-            kSleep( 1 );
+            ksleep( 1 );
             continue;
         }
 
@@ -787,7 +788,7 @@ DWORD WINAPI kGUIConsoleShellTask(LPVOID parameter)
         if( kReceiveEventFromWindowQueue( s_qwWindowID, &stReceivedEvent ) == FALSE )
         {
 			//20180628
-          //  kSleep( 0 );
+            ksleep( 0 );
             continue;
         }
         
@@ -814,7 +815,7 @@ DWORD WINAPI kGUIConsoleShellTask(LPVOID parameter)
             //while( kIsTaskExist( qwConsoleShellTaskID ) == TRUE )
             {
 				//20180628
-               // kSleep( 1 );
+			ksleep( 1 );
             }
             
             // 윈도우를 삭제하고 윈도우 ID를 초기화
@@ -986,7 +987,7 @@ DWORD WINAPI kImageViewerTask(LPVOID parameter)
         if( kReceiveEventFromWindowQueue( qwWindowID, &stReceivedEvent ) == FALSE )
         {
 			//20180628
-           // kSleep( 0 );
+            ksleep( 0 );
             continue;
         }
         
@@ -1015,7 +1016,7 @@ DWORD WINAPI kImageViewerTask(LPVOID parameter)
                     // 윈도우 생성에 실패하면 버튼이 눌려졌다가 떨어지는 효과를 주려고
                     // 200ms 대기
 					//20180628	
-					//kSleep( 200 );
+					ksleep( 200 );
                 }
                 
                 // 버튼을 떨어진 것으로 표시
@@ -1222,6 +1223,7 @@ static bool kCreateImageViewerWindowAndExecute( QWORD qwMainWindowID,
 
     // 윈도우의 너비를 구하여 제목 표시줄 영역을 제외한 나머지 화면 버퍼 영역에 디코딩된
     // 이미지를 복사
+	kEnterCriticalSection();
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow != NULL )
     {
@@ -1232,8 +1234,9 @@ static bool kCreateImageViewerWindowAndExecute( QWORD qwMainWindowID,
 
         // 동기화 처리
         //kUnlock( &( pstWindow->stLock ) );
-		kLeaveCriticalSection();
+		
     }
+	kLeaveCriticalSection();
     
     // 파일 버퍼를 해제하고 윈도우를 화면에 표시
     delete ( pbFileBuffer );
@@ -1252,7 +1255,7 @@ static bool kCreateImageViewerWindowAndExecute( QWORD qwMainWindowID,
         if( kReceiveEventFromWindowQueue( qwWindowID, &stReceivedEvent ) == FALSE )
         {
 			//20180628
-           // kSleep( 0 );
+            ksleep( 0 );
             continue;
         }
         

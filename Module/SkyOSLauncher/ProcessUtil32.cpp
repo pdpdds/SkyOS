@@ -54,11 +54,14 @@ uint32_t FindKernel32Entry(const char* szFileName, char* buf, uint32_t& imageBas
 	SkyConsole::Print("Valid PE Format %s\n", szFileName);
 
 	dosHeader = (IMAGE_DOS_HEADER*)buf;
-	ntHeaders = (IMAGE_NT_HEADERS*)(dosHeader->e_lfanew + (uint32_t)buf);
-	SkyConsole::Print("sizeofcode 0x%x\n", ntHeaders->OptionalHeader.Magic);
+	ntHeaders = (IMAGE_NT_HEADERS*)(dosHeader->e_lfanew + (uint32_t)buf);	
 
-	uint32_t entryPoint = (uint32_t)ntHeaders->OptionalHeader.AddressOfEntryPoint + ntHeaders->OptionalHeader.ImageBase;
 	imageBase = ntHeaders->OptionalHeader.ImageBase;
+	uint32_t entryPoint = (uint32_t)ntHeaders->OptionalHeader.AddressOfEntryPoint + imageBase;
+	
+
+	SkyConsole::Print("image base : 0x%x, entry : 0x%x\n", imageBase, entryPoint);
+
 	return 	entryPoint;
 }
 

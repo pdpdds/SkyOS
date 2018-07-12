@@ -58,7 +58,7 @@ enum FLPYDSK_DOR_MASK {
 	FLPYDSK_DOR_MASK_DRIVE3_MOTOR = 128	//10000000
 };
 
-/**
+/**		
 *	Main Status Register
 */
 

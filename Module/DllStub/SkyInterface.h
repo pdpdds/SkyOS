@@ -28,10 +28,12 @@ extern "C" {
 
 #ifdef SKY_DLL
 extern SkyMockInterface g_mockInterface;
+extern SKY_PROCESS_INTERFACE g_processInterface;
 #define kmalloc(a) g_mockInterface.g_allocInterface.sky_kmalloc(a)
 #define kfree(p) g_mockInterface.g_allocInterface.sky_kfree(p)
 #define kcalloc(a, b) g_mockInterface.g_allocInterface.sky_kcalloc(a, b)
 #define krealloc(a, b) g_mockInterface.g_allocInterface.sky_krealloc(a, b)
+#define ksleep(a) g_processInterface.sky_ksleep(a)
 #endif
 
 extern "C" void* malloc(size_t size);

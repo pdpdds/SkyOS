@@ -96,7 +96,7 @@ void kUpdate(bool isDirectBuffer)
 				(bEventQueueResult == FALSE))
 			{
 				//20180628
-				// kSleep( 0 );
+				 ksleep( 0 );
 			}
 		}
 	}
@@ -130,7 +130,7 @@ void kUpdate(bool isDirectBuffer)
 			(bEventQueueResult == FALSE))
 		{
 			//20180628
-			// kSleep( 0 );
+			 ksleep( 0 );
 		}
 	}
 }

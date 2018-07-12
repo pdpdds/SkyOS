@@ -401,9 +401,8 @@ bool SkyGUI::kGetMessage(LPSKY_MSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 	}
 	else
 	{
-		//Process* pProcess = ProcessManager::GetInstance()->GetCurrentTask()->m_pParent;
-		//if(pProcess != nullptr)
-		//	Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
+		
+		//	Scheduler::GetInstance()->Yield();
 	}
 
 	kLeaveCriticalSection();
@@ -832,7 +831,7 @@ DWORD WINAPI ConsoleDebugGUIProc(LPVOID parameter)
 				sheet->Refresh(cursor_x, cursor_y, cursor_x + 8, cursor_y + 16);
 		}
 
-		Scheduler::GetInstance()->Yield(pProcess->GetProcessId());
+		Scheduler::GetInstance()->Yield();
 
 		kLeaveCriticalSection();
 		

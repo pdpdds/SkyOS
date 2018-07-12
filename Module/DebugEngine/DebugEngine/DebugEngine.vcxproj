@@ -102,7 +102,7 @@
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../../../CommonLib/stl;../../../CommonLib;../../../include;../../Include</AdditionalIncludeDirectories>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <UndefineAllPreprocessorDefinitions>true</UndefineAllPreprocessorDefinitions>
       <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>

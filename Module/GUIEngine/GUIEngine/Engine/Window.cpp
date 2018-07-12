@@ -427,7 +427,6 @@ bool kDeleteWindow( QWORD qwWindowID )
     {
         // 동기화 처리
 		kLeaveCriticalSection();
-		
         //kUnlock( &( gs_stWindowManager.stLock ) );
         return FALSE;
     }
@@ -454,7 +453,7 @@ bool kDeleteWindow( QWORD qwWindowID )
         // 동기화 처리
         //kUnlock( &( pstWindow->stLock ) );
         //kUnlock( &( gs_stWindowManager.stLock ) );
-		kLeaveCriticalSection();
+		
 		kLeaveCriticalSection();
         return FALSE;
     }
@@ -472,7 +471,7 @@ bool kDeleteWindow( QWORD qwWindowID )
 
     // 동기화 처리
     //kUnlock( &( pstWindow->stLock ) );
-	kLeaveCriticalSection();
+	
 
     // 윈도우 자료구조를 반환
     kFreeWindow( qwWindowID );
@@ -585,12 +584,12 @@ WINDOW* kGetWindowWithWindowLock( QWORD qwWindowID )
     // 윈도우 동기화를 한 뒤에 윈도우 ID로 윈도우를 검색할 수 없다면 도중에 윈도우가
     // 바뀐 것이므로 NULL 반환
 
-	kEnterCriticalSection();
+	//kEnterCriticalSection();
     pstWindow = kGetWindow( qwWindowID );
     if( ( pstWindow == NULL ) || ( pstWindow->pstEventBuffer == NULL ) ||
         ( pstWindow->pstWindowBuffer == NULL ) )                
     {
-		kLeaveCriticalSection();
+		//kLeaveCriticalSection();
         // 동기화 처리
         //kUnlock( &(pstWindow->stLock ) );
         return NULL;
@@ -607,10 +606,12 @@ bool kShowWindow( QWORD qwWindowID, bool bShow )
     WINDOW* pstWindow;
     RECT stWindowArea;
 
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -1236,10 +1237,12 @@ bool kMoveWindow( QWORD qwWindowID, int iX, int iY )
     int iHeight;
     EVENT stEvent;
     
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -1312,10 +1315,12 @@ bool kResizeWindow( QWORD qwWindowID, int iX, int iY, int iWidth, int iHeight )
     COLOR* pstOldWindowBuffer;
     RECT stPreviousArea;
 
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -1430,10 +1435,12 @@ bool kGetWindowArea( QWORD qwWindowID, RECT* pstArea )
 {
     WINDOW* pstWindow;
     
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
 
@@ -1607,10 +1614,12 @@ bool kSendEventToWindow( QWORD qwWindowID, const EVENT* pstEvent )
     WINDOW* pstWindow;
 	bool bResult;
     
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
 
@@ -1631,10 +1640,12 @@ bool kReceiveEventFromWindowQueue( QWORD qwWindowID, EVENT* pstEvent )
     WINDOW* pstWindow;
 	bool bResult;
 
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     	
@@ -1810,10 +1821,12 @@ bool kDrawWindowFrame( QWORD qwWindowID )
     int iWidth;
     int iHeight;
 
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -1850,10 +1863,12 @@ bool kDrawWindowBackground( QWORD qwWindowID )
     int iX;
     int iY;
 
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
 
@@ -1909,10 +1924,12 @@ bool kDrawWindowTitle( QWORD qwWindowID, const char* pcTitle, bool bSelectedTitl
     RECT stButtonArea;
     COLOR stTitleBarColor;
 
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -1976,10 +1993,12 @@ bool kDrawWindowTitle( QWORD qwWindowID, const char* pcTitle, bool bSelectedTitl
     kDrawButton( qwWindowID, &stButtonArea, WINDOW_COLOR_BACKGROUND, "", 
             WINDOW_COLOR_BACKGROUND );
 
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection(;)
         return FALSE;
     }
     
@@ -2021,10 +2040,12 @@ bool kDrawWindowTitle( QWORD qwWindowID, const char* pcTitle, bool bSelectedTitl
         kDrawButton( qwWindowID, &stButtonArea, WINDOW_COLOR_BACKGROUND, "", 
                 WINDOW_COLOR_BACKGROUND );
     
+		kEnterCriticalSection();
         // 윈도우 검색과 동기화 처리
         pstWindow = kGetWindowWithWindowLock( qwWindowID );
         if( pstWindow == NULL )
         {
+			kLeaveCriticalSection();
             return FALSE;
         }
         
@@ -2092,10 +2113,12 @@ bool kDrawButton( QWORD qwWindowID, RECT* pstButtonArea, COLOR stBackgroundColor
     int iTextX;
     int iTextY;
 
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -2303,10 +2326,12 @@ bool kDrawPixel( QWORD qwWindowID, int iX, int iY, COLOR stColor )
     WINDOW* pstWindow;
     RECT stArea;
 
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -2334,10 +2359,12 @@ bool kDrawLine( QWORD qwWindowID, int iX1, int iY1, int iX2, int iY2, COLOR stCo
     WINDOW* pstWindow;
     RECT stArea;
 
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -2364,10 +2391,12 @@ bool kDrawRect( QWORD qwWindowID, int iX1, int iY1, int iX2, int iY2,
     WINDOW* pstWindow;
     RECT stArea;
     
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
 
@@ -2394,10 +2423,12 @@ bool kDrawCircle( QWORD qwWindowID, int iX, int iY, int iRadius, COLOR stColor,
     WINDOW* pstWindow;
     RECT stArea;
     
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -2424,10 +2455,12 @@ bool kDrawText( QWORD qwWindowID, int iX, int iY, COLOR stTextColor,
     WINDOW* pstWindow;
     RECT stArea;
 
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     
@@ -2467,10 +2500,12 @@ bool kBitBlt( QWORD qwWindowID, int iX, int iY, COLOR* pstBuffer, int iWidth,
     int iStartX;
     int iStartY;
     
+	kEnterCriticalSection();
     // 윈도우 검색과 동기화 처리
     pstWindow = kGetWindowWithWindowLock( qwWindowID );
     if( pstWindow == NULL )
     {
+		kLeaveCriticalSection();
         return FALSE;
     }
     

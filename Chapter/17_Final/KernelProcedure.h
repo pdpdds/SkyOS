@@ -9,3 +9,5 @@ DWORD WINAPI SystemGUIProc(LPVOID parameter);
 DWORD WINAPI ConsoleGUIProc(LPVOID parameter);
 DWORD WINAPI ConsoleDebugGUIProc(LPVOID parameter);
 DWORD WINAPI GUIWatchDogProc(LPVOID parameter);
+
+DWORD WINAPI SystemIdle(LPVOID parameter);
