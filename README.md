@@ -53,3 +53,9 @@ Chapter
 14 DLL  
 15 Advanced Debugging  
 16 SkyOS64  
+
+실행화면
+-------
+
+다국어 출력  
+<img src="./img/localization.jpg">
