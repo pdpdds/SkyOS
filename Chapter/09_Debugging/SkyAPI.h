@@ -3,7 +3,7 @@
 #include "SkyStruct.h"
 #include "Hal.h"
 #include "PIT.h"
-
+#include "time.h"
 
 #define ASSERT(a, b) if(a == false) SkyConsole::Print("Kernel Panic : %s\n", b); _asm hlt
 

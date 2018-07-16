@@ -1,6 +1,7 @@
 #pragma once
 #include "windef.h"
 #include "SkyStruct.h"
+#include "time.h"
 
 #define ASSERT(a, b) if(a == false) SkyConsole::Print("Kernel Panic : %s\n", b); _asm hlt
 

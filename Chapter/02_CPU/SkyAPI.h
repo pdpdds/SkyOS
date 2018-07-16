@@ -3,6 +3,7 @@
 #include "SkyStruct.h"
 #include "Hal.h"
 #include "PIT.h"
+#include "time.h"
 
 void SKYASSERT(bool result, const char* pMsg);
 

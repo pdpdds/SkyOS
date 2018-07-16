@@ -28,7 +28,7 @@ Note : The year is only 2 digits and the RTC is Real Time Clock  and donot confu
 
 The Day of week problem is still unsolved
 */
-void GetLocalTime(LPSYSTEMTIME lpSystemTime)
+ void GetLocalTime(LPSYSTEMTIME lpSystemTime)
 {
 	/* Checking whether we can read the time now or not according to some documentation the MSB in Status A will remain 1 (invalid time) only a millisecond*/
 	int TimeOut;
