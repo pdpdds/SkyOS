@@ -28,7 +28,7 @@ void SKYAPI kLeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 /////////////////////////////////////////////////////////////////////////////
 DWORD SKYAPI kGetCurrentThreadId();
 
-void GetLocalTime(LPSYSTEMTIME lpSystemTime);
+bool GetLocalTime(LPSYSTEMTIME lpSystemTime);
 BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime);
 
 void printf(const char* str, ...);

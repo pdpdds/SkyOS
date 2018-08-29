@@ -8,16 +8,10 @@
 #pragma pack (push, 1)
 #endif
 
-//! processor gdtr register points to base of gdt. This helps
-//! us set up the pointer
-struct gdtr {
-
-	//! size of gdt
-	uint16_t		m_limit;
-
-	//! base address of gdt
-	uint32_t		m_base;
-};
+typedef struct tag_gdtr {
+	USHORT m_limit; // GDT의 크기
+	UINT m_base; // GDT의 시작 주소
+}gdtr;
 
 #ifdef _MSC_VER
 #pragma pack (pop, 1)
@@ -27,7 +21,7 @@ struct gdtr {
 static struct gdt_descriptor	_gdt [MAX_DESCRIPTORS];
 
 //! gdtr data
-static struct gdtr				_gdtr;
+static gdtr				_gdtr;
 
 
 //! install gdtr
