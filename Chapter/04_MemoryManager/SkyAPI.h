@@ -27,7 +27,7 @@ extern CRITICAL_SECTION g_criticalSection;
 /////////////////////////////////////////////////////////////////////////////
 DWORD SKYAPI kGetCurrentThreadId();
 
-void GetLocalTime(LPSYSTEMTIME lpSystemTime);
+bool GetLocalTime(LPSYSTEMTIME lpSystemTime);
 BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime);
 
 void printf(const char* str, ...);

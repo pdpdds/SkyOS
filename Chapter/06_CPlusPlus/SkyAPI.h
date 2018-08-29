@@ -21,7 +21,7 @@ void __SKY_ASSERT(const char* expr_str, bool expr, const char* file, int line, c
 /////////////////////////////////////////////////////////////////////////////
 DWORD SKYAPI kGetCurrentThreadId();
 
-void GetLocalTime(LPSYSTEMTIME lpSystemTime);
+bool GetLocalTime(LPSYSTEMTIME lpSystemTime);
 BYTE SetLocalTime(LPSYSTEMTIME lpSystemTime);
 
 void printf(const char* str, ...);
