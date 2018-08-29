@@ -1,6 +1,7 @@
 #ifndef _IDT_H
 #define _IDT_H
 #include <stdint.h>
+#include "windef.h"
 
 //Interrupt Descriptor Table : IDT는 인터럽트를 다루는 인터페이스를 제공할 책임이 있다.
 //인터페이스 설치, 요청, 그리고 인터럽트를 처리하는 콜백 루틴
@@ -34,24 +35,14 @@ struct idtr {
 	uint32_t base;
 };
 
-//인터럽트 디스크립터
-struct idt_descriptor {
-
-	//인터럽트 핸들러 주소의 0-16 비트
-	uint16_t		baseLo;
-
-	//GDT의 코드 셀렉터
-	uint16_t		sel;
-
-	//예약된 값 0이어야 한다.
-	uint8_t			reserved;
-
-	//8비트 비트 플래그
-	uint8_t			flags;
-
-	//인터럽트 핸들러 주소의 16-32 비트
-	uint16_t		baseHi;
-};
+typedef struct tag_idt_descriptor
+{
+	USHORT offsetLow; //인터럽트 핸들러 주소의 0-16 비트
+	USHORT selector; //GDT의 코드 셀렉터
+	BYTE reserved; //예약된 값 0이어야 한다.
+	BYTE flags; //8비트 비트 플래그
+	USHORT offsetHigh; //인터럽트 핸들러 주소의 16-32 비트
+}idt_descriptor;
 
 #ifdef _MSC_VER
 #pragma pack (pop)
