@@ -67,7 +67,7 @@ void TestInvalidOpcode()
 
 
 //C++ Å×½ºÆ® 
-void TestCPP14();
+void TestCPP11();
 void TestPureFunctionCall();
 void TestHeapCorruption();
 void TestHeapCorruption2();
@@ -75,16 +75,16 @@ void TestInheritance();
 
 void TestCPlusPlus()
 {
-	TestCPP14();
+	TestCPP11();
 	//TestPureFunctionCall();
 	//TestHeapCorruption();
 	//TestHeapCorruption2();
 	//TestInheritance();
 }
 
-void TestCPP14()
+void TestCPP11()
 {
-	SkyConsole::Print("\nCPP14 Test\n\n");
+	SkyConsole::Print("\nCPP11 Test\n\n");
 
 	auto func = [x = 5]() { return x; };
 	auto n1 = func();
@@ -93,7 +93,7 @@ void TestCPP14()
 	constexpr TestInteger size(10);
 	int x[size];
 	x[3] = 11;
-	SkyConsole::Print("constexor x[3]:%d\n", x[3]);
+	SkyConsole::Print("constexpr x[3]:%d\n", x[3]);
 }
 
 void TestPureFunctionCall()
