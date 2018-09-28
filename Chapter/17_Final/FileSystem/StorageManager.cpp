@@ -258,20 +258,9 @@ bool StorageManager::ConstructFileSystem(multiboot_info* info)
 		delete pFloppyDiskAdaptor;
 	}*/
 
-	//TestStorage("sample.txt", 'A');
 
 	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
 	SkyConsole::Print("L drive Selected\n");
-
-	/*drive_info* driveInfo = info->drives_addr;
-
-	for (uint32_t i = 0; i < info->drives_length; i++)
-	{
-		int driveNum = driveInfo[i].drive_number;
-
-		if (driveNum != 0)
-			SkyConsole::Print("%d drive Detected\n", driveNum);
-	}*/
 
 	return true;
 }

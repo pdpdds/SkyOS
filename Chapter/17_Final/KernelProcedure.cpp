@@ -69,27 +69,27 @@ extern void SampleFillRect(ULONG* lfb0, int x, int y, int w, int h, int col);
 DWORD WINAPI SystemGUIProc(LPVOID parameter)
 {
 	unsigned int* ebp = (unsigned int*)&parameter - 1;
-	SkyConsole::Print("start ebp : %x\n", *ebp);	
+	SkyConsole::Print("start ebp : %x\n", *ebp);
 	SkyConsole::Print("parameter : %x\n", parameter);
 
-	
 	multiboot_info* pBootInfo = SkyModuleManager::GetInstance()->GetMultiBootInfo();
 
-	//kEnterCriticalSection();
-	StartPITCounter(100, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
-	
-	//kLeaveCriticalSection();
+	kEnterCriticalSection();
 
+	StartPITCounter(1000, I86_PIT_OCW_COUNTER_0, I86_PIT_OCW_MODE_SQUAREWAVEGEN);
+	
 	StorageManager::GetInstance()->Initilaize(pBootInfo);
-	SampleFillRect((ULONG*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1004, 0, 20, 20, 0x0000FF00);	
+	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
+
 	SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
 
-	//SampleFillRect((ULONG*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1004, 0, 20, 20, 0x00FF0000);
+	SampleFillRect((ULONG*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1004, 0, 20, 20, 0x0000FF00);		
+	
+
 	SkyGUISystem::GetInstance()->InitGUIModule();
-	//SampleFillRect((ULONG*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1004, 0, 20, 20, 0x000000FF);	
-	//SampleFillRect((ULONG*)SkyGUISystem::GetInstance()->GetVideoRamInfo()._pVideoRamPtr, 1004, 0, 20, 20, 0x0000FF00);
 
 	systemOn = true;
+	kLeaveCriticalSection();
 
 	SkyGUISystem::GetInstance()->Run();
 
