@@ -1,6 +1,5 @@
 #pragma once
 #include "windef.h"
-#include "SkyStartOption.h"
 #include "Hal.h"
 #include "stdint.h"
 #include "stdio.h"

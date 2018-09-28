@@ -103,30 +103,9 @@ long CmdExec(char *theCommand)
 	return false;
 }
 
-long cmdGUI(char *theCommand)
-{
-	RequesGUIResolution();
-
-	return false;
-}
-
 long cmdPCI(char *theCommand)
 {
 	RequestPCIList();
-
-	return false;
-}
-
-long cmdCallStack(char *theCommand)
-{
-	SkyDebugger::GetInstance()->TraceStack();
-
-	return false;
-}
-
-long cmdCallStack2(char *theCommand)
-{
-	SkyDebugger::GetInstance()->TraceStackWithSymbol();
 
 	return false;
 }

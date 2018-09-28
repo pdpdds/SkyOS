@@ -14,11 +14,8 @@ START_COMMAND_TABLE
 	CMD_ENTRY("watchdog", false, cmdCreateWatchdogTask, "Create watchdog process")
 	CMD_ENTRY("taskcount", false, cmdTaskCount, "Get current task count")
 	CMD_ENTRY("globalstate", false, cmdGlobalState, "Get memory layout")
-	CMD_ENTRY("exec", true, CmdExec, "Execute File")
-	CMD_ENTRY("gui", false, cmdGUI, "Get Resolution Mode")	
+	CMD_ENTRY("exec", true, CmdExec, "Execute File")	
 	CMD_ENTRY("pci", false, cmdPCI, "Get PCI List")
-	CMD_ENTRY("dir", false, cmdDir, "Get File List")
-	CMD_ENTRY("callstack", false, cmdCallStack, "Trace Call stack")
-	CMD_ENTRY("callstack2", false, cmdCallStack2, "Trace Call stack with symbol")
+	CMD_ENTRY("dir", false, cmdDir, "Get File List")	
 END_COMMAND_TABLE
 

@@ -37,10 +37,10 @@ _declspec(naked) void multiboot_entry(void)
 		dd(00); //사용되지 않음
 		dd(HEADER_ADRESS + 0x30); //커널 시작 주소 : 멀티부트 헤더 주소 + 0x30, kernel_entry
 
-		dd(SKY_CONSOLE_MODE);
-		dd(SKY_WIDTH);
-		dd(SKY_HEIGHT);
-		dd(SKY_BPP)
+		dd(1);
+		dd(0);
+		dd(0);
+		dd(0)
 
 	kernel_entry:
 		MOV     ESP, 0x40000; //스택 설정
@@ -81,12 +81,6 @@ void kmain(unsigned long magic, unsigned long addr)
 	Scheduler::GetInstance();
 	
 	SkyModuleManager::GetInstance()->Initialize(pBootInfo);
-
-	//GUI 시스템의초기화 코드위치를 여기에 둔 것은 
-	//로그를 출력하기 위해서다.
-#if SKY_CONSOLE_MODE == 0
-	SkyGUISystem::GetInstance()->Initialize(pBootInfo);
-#endif
 
 	SystemProfiler::GetInstance()->Initialize();
 
