@@ -300,7 +300,6 @@
     <ClInclude Include="MultiBoot.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="SkyOS.h" />
-    <ClInclude Include="SkyStartOption.h" />
     <ClInclude Include="FileSystem\MemoryResourceAdaptor.h">
       <Filter>FileSystem</Filter>
     </ClInclude>

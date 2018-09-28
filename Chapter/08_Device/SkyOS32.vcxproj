@@ -118,7 +118,6 @@
     <ClInclude Include="MultiBoot.h" />
     <ClInclude Include="SkyConsole.h" />
     <ClInclude Include="SkyOS.h" />
-    <ClInclude Include="SkyStartOption.h" />
     <ClInclude Include="Test\Plane.h" />
     <ClInclude Include="Test\PureCallExtend.h" />
     <ClInclude Include="Test\SkyTest.h" />

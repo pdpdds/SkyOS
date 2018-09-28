@@ -366,9 +366,6 @@ void TestDeque()
 
 //공통 라이브러리 테스트 끝
 
-#include "lua.h"
-#include "luadebug.h"
-#include "lualib.h"
 
 //저장장치 테스트
 void TestStorage(const char* filename, char driveLetter)

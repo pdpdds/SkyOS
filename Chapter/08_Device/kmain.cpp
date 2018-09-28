@@ -26,10 +26,10 @@ _declspec(naked) void multiboot_entry(void)
 		dd(00); //사용되지 않음
 		dd(HEADER_ADRESS + 0x30); //커널 시작 주소 : 멀티부트 헤더 주소 + 0x30, kernel_entry
 
-		dd(SKY_CONSOLE_MODE);
-		dd(SKY_WIDTH);
-		dd(SKY_HEIGHT);
-		dd(SKY_BPP)
+		dd(1);
+		dd(0);
+		dd(0);
+		dd(0)
 
 	kernel_entry:
 		MOV     ESP, 0x40000; //스택 설정
