@@ -1,7 +1,6 @@
 ﻿#include "kmain.h"
 #include "SkyTest.h"
 #include "SkyConsoleLauncher.h"
-#include "SkyDebugger.h"
 
 void StartConsoleSystem();
 void JumpToNewKernelEntry(int entryPoint, unsigned int procStack);

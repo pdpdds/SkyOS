@@ -2,12 +2,10 @@
 #include "SkyOS.h"
 #include "ProcessManager.h"
 #include "ZetPlane.h"
-#include "RMEFunc.h"
 #include "PCI.h"
 #include "SystemProfiler.h"
 #include "Process.h"
 #include "Thread.h"
-#include "SkyDebugger.h"
 
 long CmdCls(char *theCommand)
 {

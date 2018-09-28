@@ -2,10 +2,8 @@
 #include "TestInteger.h"
 #include "PureCallExtend.h"
 #include "ZetPlane.h"
-#include "jsmn.h"
 #include "ctrycatch.h"
-#include "easyzlib.h"
-//#include "hash_map.h"
+#include "jsmn.h"
 
 //인터럽트 핸들러 테스트
 void TestDivideByZero();
@@ -367,9 +365,6 @@ void TestDeque()
 
 //공통 라이브러리 테스트 끝
 
-#include "lua.h"
-#include "luadebug.h"
-#include "lualib.h"
 
 //저장장치 테스트
 void TestStorage(const char* filename, char driveLetter)
@@ -396,19 +391,6 @@ void TestStorage(const char* filename, char driveLetter)
 
 	SkyConsole::Print("Test End\n");
 	for (;;);
-}
-
-//루아 테스트
-void TestLua()
-{
-	lua_open();
-	lua_pushstring("> "); 
-	lua_setglobal("_PROMPT");
-	lua_userinit();
-
-	int result = lua_dofile("1.LUA");
-
-	SkyConsole::Print("Lua Exec Result : %d\n", result);	
 }
 
 void TestFPU()
@@ -447,40 +429,6 @@ void TestNullPointer()
 {
 	ZetPlane* pPlane = 0;
 	pPlane->IsRotate();
-}
-
-char easyTestBuffer[] = "Sky OS Compression Test!!";
-void TestEasyZLib()
-{
-	char* destBuffer = new char[256];
-	long destBufferLen = 256;
-	long nSrcLen = sizeof(easyTestBuffer);
-
-	char* decompressedBuffer = new char[256];
-	long decompressedLen = 256;
-
-	memset(destBuffer, 0, 256);
-	memset(decompressedBuffer, 0, 256);
-
-	SkyConsole::Print("text : %s\n", easyTestBuffer);
-	
-	//압축한다.
-	if (0 != ezcompress((unsigned char* )destBuffer, &destBufferLen, (const unsigned char* )easyTestBuffer, nSrcLen))
-	{
-		HaltSystem("easyzlib test fail!!");
-	}
-	SkyConsole::Print("Compressed : Src Size %d, Dest Size %d\n", nSrcLen, destBufferLen);
-
-	//압축을 해제한다. 
-	if (0 != ezuncompress((unsigned char*)decompressedBuffer, &decompressedLen, (const unsigned char*)destBuffer, destBufferLen))
-	{
-		HaltSystem("easyzlib test fail!!");
-	}
-	SkyConsole::Print("Decompressed : Src Size %d, Dest Size %d\n", destBufferLen, decompressedLen);
-	SkyConsole::Print("result : %s\n", decompressedBuffer);
-
-	delete destBuffer;
-	delete decompressedBuffer;
 }
 
 bool TestMemoryModule(const char* moduleName)
