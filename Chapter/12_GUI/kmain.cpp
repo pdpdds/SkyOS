@@ -2,7 +2,6 @@
 #include "SkyTest.h"
 #include "SkyGUILauncher.h"
 #include "SkyConsoleLauncher.h"
-#include "SkyDebugger.h"
 
 _declspec(naked) void multiboot_entry(void)
 {

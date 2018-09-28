@@ -30,6 +30,7 @@ public:
 
 	bool Initialize(multiboot_info* pBootInfo);
 	bool InitializeWithConsole();
+	bool InitGUIModule();
 	bool Run();
 	bool Print(char* pMsg);
 	bool Clear();

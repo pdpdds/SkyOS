@@ -217,9 +217,6 @@
     <ClCompile Include="Core\SkyAPI.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\SkyDebugger.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\SkyModuleManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -240,78 +237,6 @@
     </ClCompile>
     <ClCompile Include="ConsoleSystem\commands.cpp">
       <Filter>ConsoleSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lapi.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lauxlib.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lbuffer.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lbuiltin.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\ldblib.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\ldo.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lfunc.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lgc.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\linit.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\liolib.cpp">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\llex.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lmathlib.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lmem.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lobject.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lparser.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lstate.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lstring.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lstrlib.cpp">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\ltable.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\ltm.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lua.cpp">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lundump.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lvm.c">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\LUA\lzio.c">
-      <Filter>ThirdParty\Lua</Filter>
     </ClCompile>
     <ClCompile Include="KernelProcedure.cpp" />
     <ClCompile Include="kmain.cpp" />
@@ -393,9 +318,6 @@
     </ClCompile>
     <ClCompile Include="GUI\SkyGUI\SkySheetController.cpp">
       <Filter>GUI\SkyGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\easyzlib\easyzlib.c">
-      <Filter>ThirdParty\easyzlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -576,9 +498,6 @@
     <ClInclude Include="Core\SkyAPI.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\SkyDebugger.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\SkyModuleManager.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -608,72 +527,6 @@
     </ClInclude>
     <ClInclude Include="ConsoleSystem\commandTable.h">
       <Filter>ConsoleSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lapi.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lauxlib.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lbuiltin.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\ldo.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lfunc.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lgc.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\llex.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lmem.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lobject.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lopcodes.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lparser.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lstate.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lstring.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\ltable.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\ltm.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lua.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\luadebug.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lualib.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lundump.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lvm.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\LUA\lzio.h">
-      <Filter>ThirdParty\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\easyzlib\easyzlib.h">
-      <Filter>ThirdParty\easyzlib</Filter>
     </ClInclude>
     <ClInclude Include="KernelProcedure.h" />
     <ClInclude Include="kmain.h" />
@@ -799,15 +652,6 @@
     </Filter>
     <Filter Include="GUI\SkyGUIConsole">
       <UniqueIdentifier>{b1600453-6a49-4b0c-acf7-a29e797046fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty">
-      <UniqueIdentifier>{ed89521a-a04d-4826-81ee-909009de1595}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\Lua">
-      <UniqueIdentifier>{08d06810-3e6b-4d5f-826a-70d6c92d6e22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\easyzlib">
-      <UniqueIdentifier>{8836ebd4-0c3b-432d-96af-277a768dea88}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{592d1206-0af8-47a5-877a-333ef81963f0}</UniqueIdentifier>

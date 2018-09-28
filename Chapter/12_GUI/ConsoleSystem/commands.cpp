@@ -7,10 +7,7 @@
 #include "SystemProfiler.h"
 #include "Process.h"
 #include "Thread.h"
-#include "SkyDebugger.h"
 #include "SkyGUILauncher.h"
-#include "lua.h"
-#include "lualib.h"
 
 long CmdCls(char *theCommand)
 {
@@ -106,31 +103,6 @@ long CmdExec(char *theCommand)
 	return false;
 }
 
-long cmdLua(char *theCommand)
-{
-	if (theCommand == nullptr)
-		return false;
-
-	static bool init = false;
-	
-	if (init == false)
-	{
-		lua_open();
-		lua_pushstring("> ");
-		lua_setglobal("_PROMPT");
-		lua_userinit();		
-
-		init = true;
-	}
-
-	int result = lua_dofile(theCommand);
-
-	if (result != 0)
-		SkyConsole::Print("Lua Exec Result : %d\n", result);
-
-	return false;
-}
-
 long cmdGUI(char *theCommand)
 {
 	RequesGUIResolution();
@@ -173,20 +145,6 @@ long cmdSwitchGUI(char *theCommand)
 long cmdPCI(char *theCommand)
 {
 	RequestPCIList();
-
-	return false;
-}
-
-long cmdCallStack(char *theCommand)
-{
-	SkyDebugger::GetInstance()->TraceStack();
-
-	return false;
-}
-
-long cmdCallStack2(char *theCommand)
-{
-	SkyDebugger::GetInstance()->TraceStackWithSymbol();
 
 	return false;
 }
