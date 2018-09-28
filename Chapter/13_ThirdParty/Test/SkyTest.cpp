@@ -413,7 +413,7 @@ void TestLua()
 	lua_setglobal("_PROMPT");
 	lua_userinit();
 
-	int result = lua_dofile("1.LUA");
+	int result = lua_dofile("1.lua");
 
 	SkyConsole::Print("Lua Exec Result : %d\n", result);	
 }
@@ -495,32 +495,4 @@ void TestEasyZLib()
 
 	delete destBuffer;
 	delete decompressedBuffer;
-}
-
-bool TestMemoryModule(const char* moduleName)
-{
-	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory(moduleName);
-
-	if (hwnd == nullptr)
-	{
-		HaltSystem("Memory Module Load Fail!!");
-	}
-
-	PGetDLLInterface GetDLLInterface = (PGetDLLInterface)SkyModuleManager::GetInstance()->GetModuleFunction((MODULE_HANDLE)(hwnd), "GetDLLInterface");
-
-	if (!GetDLLInterface)
-	{
-		HaltSystem("Memory Module Load Fail!!");
-	}
-
-	const DLLInterface* dll_interface = GetDLLInterface();
-
-	int sum = dll_interface->AddNumbers(5, 6);
-
-	SkyConsole::Print("AddNumbers(5, 6): %d\n", sum);
-
-	if (false == SkyModuleManager::GetInstance()->UnloadModule((MODULE_HANDLE)(hwnd)))
-		HaltSystem("UnloadDLL() failed!\n");
-
-	return true;
 }

@@ -15,14 +15,12 @@
     <ClCompile Include="ConsoleSystem\ConsoleManager.cpp" />
     <ClCompile Include="Core\Exception.cpp" />
     <ClCompile Include="Core\KernelProcessLoader.cpp" />
-    <ClCompile Include="Core\LoadDLL.cpp" />
     <ClCompile Include="Core\Loader.cpp" />
     <ClCompile Include="Core\Process.cpp" />
     <ClCompile Include="Core\ProcessManager.cpp" />
     <ClCompile Include="Core\ProcessUtil.cpp" />
     <ClCompile Include="Core\Scheduler.cpp" />
     <ClCompile Include="Core\SkyAPI.cpp" />
-    <ClCompile Include="Core\SkyDebugger.cpp" />
     <ClCompile Include="Core\SkyModuleManager.cpp" />
     <ClCompile Include="Core\SysAPI.cpp" />
     <ClCompile Include="Core\SysInfo.cpp" />
@@ -155,7 +153,6 @@
     <ClInclude Include="ConsoleSystem\ConsoleManager.h" />
     <ClInclude Include="Core\Exception.h" />
     <ClInclude Include="Core\KernelProcessLoader.h" />
-    <ClInclude Include="Core\LoadDLL.h" />
     <ClInclude Include="Core\Loader.h" />
     <ClInclude Include="Core\PEImage.h" />
     <ClInclude Include="Core\Process.h" />
@@ -163,7 +160,6 @@
     <ClInclude Include="Core\ProcessUtil.h" />
     <ClInclude Include="Core\Scheduler.h" />
     <ClInclude Include="Core\SkyAPI.h" />
-    <ClInclude Include="Core\SkyDebugger.h" />
     <ClInclude Include="Core\SkyModuleManager.h" />
     <ClInclude Include="Core\SysAPI.h" />
     <ClInclude Include="Core\SysError.h" />

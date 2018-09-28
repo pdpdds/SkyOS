@@ -2,7 +2,7 @@
 #include "SkyTest.h"
 #include "SkyGUILauncher.h"
 #include "SkyConsoleLauncher.h"
-#include "SkyDebugger.h"
+#include "SkyModuleManager.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -89,6 +89,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	SystemProfiler::GetInstance()->Initialize();
 	
 	PrintCurrentTime();
+	
+	StorageManager::GetInstance()->Initilaize(pBootInfo);
 
 	TestThirdParty();
 	for (;;);

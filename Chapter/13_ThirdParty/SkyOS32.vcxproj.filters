@@ -196,9 +196,6 @@
     <ClCompile Include="Core\KernelProcessLoader.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\LoadDLL.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Loader.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -215,12 +212,6 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\SkyAPI.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\SkyDebugger.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\SkyModuleManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\SysAPI.cpp">
@@ -397,6 +388,9 @@
     <ClCompile Include="ThirdParty\easyzlib\easyzlib.c">
       <Filter>ThirdParty\easyzlib</Filter>
     </ClCompile>
+    <ClCompile Include="Core\SkyModuleManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU\Hal.h">
@@ -552,9 +546,6 @@
     <ClInclude Include="Core\KernelProcessLoader.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\LoadDLL.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Loader.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -574,12 +565,6 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\SkyAPI.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\SkyDebugger.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\SkyModuleManager.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\SysAPI.h">
@@ -767,6 +752,9 @@
     </ClInclude>
     <ClInclude Include="GUI\SkyGUI\SkySheetController.h">
       <Filter>GUI\SkyGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SkyModuleManager.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

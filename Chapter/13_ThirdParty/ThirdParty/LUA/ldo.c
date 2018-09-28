@@ -364,7 +364,7 @@ int lua_dofile (char *filename) {
   char source[MAXFILENAME];
   FILE *f = fopen(filename, "r");
   if (f == NULL)
-    return 2;
+    return 10;
   luaL_filesource(source, filename, sizeof(source));
   /*c = fgetc(f);
   ungetc(c, f);
