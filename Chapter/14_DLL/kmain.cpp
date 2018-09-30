@@ -2,7 +2,6 @@
 #include "SkyTest.h"
 #include "SkyGUILauncher.h"
 #include "SkyConsoleLauncher.h"
-#include "SkyDebugger.h"
 
 _declspec(naked) void multiboot_entry(void)
 {
@@ -90,9 +89,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	
 	PrintCurrentTime();
 
-	//TestLua();
-	//TestEasyZLib();
-	//for (;;);
+	TestMemoryModule("SAMPLE_DLL");
+	for (;;);
 	
 	kLeaveCriticalSection();
 	

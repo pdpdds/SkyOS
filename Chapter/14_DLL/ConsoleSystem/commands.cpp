@@ -7,7 +7,6 @@
 #include "SystemProfiler.h"
 #include "Process.h"
 #include "Thread.h"
-#include "SkyDebugger.h"
 #include "SkyGUILauncher.h"
 #include "lua.h"
 #include "lualib.h"
@@ -173,20 +172,6 @@ long cmdSwitchGUI(char *theCommand)
 long cmdPCI(char *theCommand)
 {
 	RequestPCIList();
-
-	return false;
-}
-
-long cmdCallStack(char *theCommand)
-{
-	SkyDebugger::GetInstance()->TraceStack();
-
-	return false;
-}
-
-long cmdCallStack2(char *theCommand)
-{
-	SkyDebugger::GetInstance()->TraceStackWithSymbol();
 
 	return false;
 }

@@ -217,9 +217,6 @@
     <ClCompile Include="Core\SkyAPI.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\SkyDebugger.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\SkyModuleManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -574,9 +571,6 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\SkyAPI.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\SkyDebugger.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\SkyModuleManager.h">

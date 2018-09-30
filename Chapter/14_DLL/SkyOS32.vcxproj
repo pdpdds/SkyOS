@@ -22,7 +22,6 @@
     <ClCompile Include="Core\ProcessUtil.cpp" />
     <ClCompile Include="Core\Scheduler.cpp" />
     <ClCompile Include="Core\SkyAPI.cpp" />
-    <ClCompile Include="Core\SkyDebugger.cpp" />
     <ClCompile Include="Core\SkyModuleManager.cpp" />
     <ClCompile Include="Core\SysAPI.cpp" />
     <ClCompile Include="Core\SysInfo.cpp" />
@@ -163,7 +162,6 @@
     <ClInclude Include="Core\ProcessUtil.h" />
     <ClInclude Include="Core\Scheduler.h" />
     <ClInclude Include="Core\SkyAPI.h" />
-    <ClInclude Include="Core\SkyDebugger.h" />
     <ClInclude Include="Core\SkyModuleManager.h" />
     <ClInclude Include="Core\SysAPI.h" />
     <ClInclude Include="Core\SysError.h" />

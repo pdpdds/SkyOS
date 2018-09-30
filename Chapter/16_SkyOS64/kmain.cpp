@@ -28,10 +28,10 @@ _declspec(naked) void multiboot_entry(void)
 		dd(00); //사용되지 않음
 		dd(HEADER_ADRESS + 0x30); //커널 시작 주소 : 멀티부트 헤더 주소 + 0x30, kernel_entry
 
-		dd(SKY_CONSOLE_MODE);
-		dd(SKY_WIDTH);
-		dd(SKY_HEIGHT);
-		dd(SKY_BPP)
+		dd(1);
+		dd(0);
+		dd(0);
+		dd(0)
 
 		kernel_entry:
 		MOV     ESP, 0x40000; //스택 설정
@@ -64,8 +64,8 @@ void kmain(unsigned long magic, unsigned long addr)
 	bool result = false;
 
 	SkyConsole::Initialize();
-	SkyConsole::Print("32Bit Kernel Entered..\n");
-
+	SkyConsole::Print("32Bit Kernel Loader Entered..\n");
+	
 	multiboot_info_t* mb_info = (multiboot_info_t*)addr;
 	
 	if (strcmp(mb_info->cmdline, KERNEL32_NAME) == 0)

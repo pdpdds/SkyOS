@@ -3,7 +3,6 @@
 #include "nic.h"
 #include "SkyGUISystem.h"
 #include "SkyTest.h"
-#include "SkyDebugger.h"
 
 bool systemOn = false;
 
@@ -45,9 +44,6 @@ DWORD WINAPI SystemConsoleProc(LPVOID parameter)
 
 	multiboot_info* pBootInfo = SkyModuleManager::GetInstance()->GetMultiBootInfo();
 	StorageManager::GetInstance()->Initilaize(pBootInfo);
-	kEnterCriticalSection();
-	SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
-	kLeaveCriticalSection();
 
 	NativeConsole();
 
@@ -68,10 +64,6 @@ DWORD WINAPI SystemGUIProc(LPVOID parameter)
 
 	multiboot_info* pBootInfo = SkyModuleManager::GetInstance()->GetMultiBootInfo();
 	StorageManager::GetInstance()->Initilaize(pBootInfo);
-	
-	kEnterCriticalSection();
-	SkyDebugger::GetInstance()->LoadSymbol("DEBUG_ENGINE_DLL");
-	kLeaveCriticalSection();
 
 	SkyGUISystem::GetInstance()->Run();
 
