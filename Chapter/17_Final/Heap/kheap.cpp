@@ -361,6 +361,8 @@ void *memory_alloc(u32int size, u8int page_align, heap_t *heap)
             footer->header = header;
             footer->magic = HEAP_MAGIC;
         }
+
+		kLeaveCriticalSection();
         // We now have enough space. Recurse, and call the function again.
         return memory_alloc(size, page_align, heap);
     }
