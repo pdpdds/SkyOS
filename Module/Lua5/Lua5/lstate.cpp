@@ -12,7 +12,7 @@
 
 #include <stddef.h>
 #include <string.h>
-
+#include "memory.h"
 #include "lua.h"
 
 #include "lapi.h"

@@ -15,7 +15,7 @@
 //#include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
+#include "memory.h"
 #include "lua.h"
 
 #include "lauxlib.h"
