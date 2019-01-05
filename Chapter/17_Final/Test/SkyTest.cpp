@@ -450,8 +450,7 @@ extern SKY_Print_Interface g_printInterface;
 
 char easyTestBuffer[] = "Sky OS Compression Test!!";
 void TestEasyZLib()
-{
-	//Load Hangul Engine
+{	
 	StorageManager::GetInstance()->SetCurrentFileSystemByID('L');
 
 	MODULE_HANDLE hwnd = SkyModuleManager::GetInstance()->LoadModuleFromMemory("zlib.dll");
