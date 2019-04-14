@@ -7,6 +7,8 @@ SkyOS32는 Visual Studio 환경에서 C++로 개발중인 32비트 운영체제�
 SkyOS32는 윈도우즈 환경에서 Visual Studio IDE 단 하나만으로 커널을 빌드할 수 있습니다.  
 SkyOS32를 통해 운영체제를 응용 프로그램 제작하듯 개발해 보시기 바랍니다.  
 
+[네이버 카페 바로가기](https://cafe.naver.com/codemasterproject)
+
 License
 -------
 
