@@ -1,18 +1,18 @@
 SkyOS32
 ----------------
 
-SkyOS32는 Visual Studio 환경에서 C++로 개발중인 32비트 운영체제입니다.  
-일반적으로 운영체제의 개발은 쉽지 않은데 그 이유로는 많은 예비지식이  
-필요한 면도 있지만 개발 플랫폼이 너무나도 불편하기 때문입니다.  
-SkyOS32는 윈도우즈 환경에서 Visual Studio IDE 단 하나만으로 커널을 빌드할 수 있습니다.  
-SkyOS32를 통해 운영체제를 응용 프로그램 제작하듯 개발해 보시기 바랍니다.  
+SkyOS32 is a 32-bit operating system under development in C ++ in a Visual Studio environment.
+In general, the development of an operating system is not easy,
+because the development platform is so inconvenient.
+SkyOS32 allows you to build a kernel with only one Visual Studio IDE in a Windows environment.
+Develop an operating system just as you would develop an application through SkyOS32.
 
 [네이버 카페 바로가기](https://cafe.naver.com/codemasterproject)
 
 License
 -------
 
-SkyOS32는 BSD 라이선스를 준수합니다.
+SkyOS32 is BSD licensed.
 
 Development Tool
 -------------------
@@ -20,24 +20,22 @@ Development Tool
 Visual Studio 2017  
 QEMU  
 WinImage  
-[구글드라이브](https://drive.google.com/drive/folders/1KR2yITxhtZJaK7uHf54bP1nslQGdMFAS?usp=sharing)
+[Google Drive](https://drive.google.com/drive/folders/1KR2yITxhtZJaK7uHf54bP1nslQGdMFAS?usp=sharing)
 
 Feature
 -------
 
-GRUB을 통한 커널 로딩  
-Visual Studio 2017로 커널 빌드  
-C++ 언어 지원  
-STL 사용가능  
-new, delete 연산자 구현  
-try/catch 구현  
-디버깅엔진 탑재  
-프로세스간 독립 주소공간 제공  
-GUI 개발 환경  
-DLL을 활용한 준선행적 디버깅  
-루아 5.42 내장 및 루아팅커 실행  
-한글 입력 및 다국어 출력  
-여러가지 GUI 샘플 제공  
+Loading the kernel via GRUB  
+Build the kernel with Visual Studio 2017  
+C++ language support  
+STL available  
+try/catch implementation  
+Debugging Engine  
+Independent address space between processes  
+Debugging using DLL  
+Lua 5.42 and LuaTinker 
+Multi Language Support  
+A few GUI Sample  
 
 Chapter
 -------
@@ -59,8 +57,8 @@ Chapter
 15 Advanced Debugging  
 16 SkyOS64  
 
-실행화면
+Sample Screen
 -------
 
-다국어 출력  
+Multi Language Output  
 <img src="./img/localization.jpg">
