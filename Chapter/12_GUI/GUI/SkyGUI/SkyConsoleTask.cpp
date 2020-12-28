@@ -87,7 +87,8 @@ bool SkyConsoleTask::kDispatchMessage(const LPSKY_MSG lpMsg)
 	return kWndProc(lpMsg->_hwnd, lpMsg->_msgId, lpMsg->_extra, 0);
 }
 
-bool CALLBACK SkyConsoleTask::kWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+bool CALLBACK SkyConsoleTask::
+(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 
 	switch (message)

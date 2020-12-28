@@ -166,7 +166,9 @@ CopyImage:
    	 mov	edi, IMAGE_PMODE_BASE
    	 mov	ecx, eax
    	 rep	movsd                   ; copy image to its protected mode address
-
+     call IMAGE_PMODE_BASE
+	 cli
+  	 hlt
 TestImage:
   	  mov    ebx, [IMAGE_PMODE_BASE+60]
   	  add    ebx, IMAGE_PMODE_BASE    ; ebx now points to file sig (PE00)
