@@ -312,4 +312,7 @@
       <Filter>CPlusPlus</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="_ftol.s" />
+  </ItemGroup>
 </Project>

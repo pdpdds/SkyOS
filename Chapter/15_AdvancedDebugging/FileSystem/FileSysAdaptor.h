@@ -6,7 +6,7 @@ class FileSysAdaptor
 {
 public:
 	FileSysAdaptor(char* deviceName, DWORD deviceID);
-	~FileSysAdaptor();
+	virtual ~FileSysAdaptor();
 
 	virtual FILE* Open(const char* FileName, const char *mode) = 0;
 	virtual int Read(PFILE file, unsigned char* buffer, unsigned int size, int count) = 0;	

@@ -181,17 +181,6 @@ float __declspec(naked) _CIsqrt()
    };
 };
 
-//! called by MSVC++ to convert a float to a long
-long __declspec (naked) _ftol2_sse() {
-
-	int a;
-	_asm {
-		fistp [a]
-		mov	ebx, a
-		ret
-	}
-}
-
 //! required by MSVC++ runtime for floating point operations (Must be 1)
 int _fltused = 1;
 

@@ -132,6 +132,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CPlusPlus\ctrycatch_exception_types.conf" />
+    <CustomBuild Include="_ftol.s">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Solution)nasmw -f win32 _ftol.s</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_ftol.obj</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{83EE476C-AA21-4A23-9D6F-4FE675115B13}</ProjectGuid>
