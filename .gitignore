@@ -24,7 +24,6 @@ Chapter/.vs/17_Final/v16/.suo
 *.recipe
 *.txt
 *.lib
-*.exe
 *.pdb
 *.map
 *.idb
@@ -36,3 +35,8 @@ Module/Lua5/.vs/Lua5/v16/.suo
 Chapter/Sort/Intermediate/main.asm
 Chapter/Hello/Intermediate/main.asm
 Chapter/Math/Intermediate/main.asm
+Chapter/Debug/Sort.exe
+Chapter/Debug/SkyOSLoader.EXE
+Chapter/Debug/SkyOS32.EXE
+Chapter/Debug/Math.exe
+Chapter/Debug/Hello.exe
