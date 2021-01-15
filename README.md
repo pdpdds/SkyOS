@@ -17,7 +17,7 @@ SkyOS32 is BSD licensed.
 Development Tool
 -------------------
 
-Visual Studio 2017  
+Visual Studio 2019  
 QEMU  
 WinImage  
 [Google Drive](https://drive.google.com/drive/folders/1KR2yITxhtZJaK7uHf54bP1nslQGdMFAS?usp=sharing)
