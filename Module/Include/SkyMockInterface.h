@@ -1,9 +1,11 @@
 #pragma once
 #ifdef WIN32
+#include <Windows.h>
 #include <stdio.h>
 #else
 #include "windef.h"
 #include "fileio.h"
+
 #endif
 
 #pragma pack (push, 1)
@@ -64,6 +66,7 @@ typedef struct SkyMockInterface
 }SkyMockInterface;
 
 #pragma pack (pop, 1)
+
 
 typedef void(*PSetSkyMockInterface)(SKY_ALLOC_Interface, SKY_FILE_Interface, SKY_Print_Interface);
 typedef void(*PSetSkyProcessInterface)(SKY_PROCESS_INTERFACE);

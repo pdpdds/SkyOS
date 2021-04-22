@@ -1,4 +1,3 @@
-#include <Windows.h>
 #include "SkyMockInterface.h"
 
 

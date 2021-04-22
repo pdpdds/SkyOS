@@ -1,5 +1,7 @@
 
 *.db
+v16/
+Debug/
 Chapter/.vs/06_CPlusPlus/v16/.suo
 Chapter/.vs/11_Application/v16/.suo
 Chapter/.vs/10_ConsoleSystem/v16/.suo
@@ -18,6 +20,7 @@ Chapter/.vs/04_MemoryManager/v16/.suo
 Chapter/.vs/15_AdvancedDebugging/v16/.suo
 Chapter/.vs/16_SkyOSLoader/v16/.suo
 Chapter/.vs/17_Final/v16/.suo
+*.suo
 *.obj
 *.log
 *.tlog
