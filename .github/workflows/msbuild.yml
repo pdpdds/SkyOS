@@ -38,4 +38,5 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}CommonLib
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} CommonLib.vcxproj TARGET_CPU=X86
+      # run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} CommonLib.vcxproj TARGET_CPU=X86
+      run: msbuild 17_Final.sln /t:Build /p:Configuration=Debug;Platform=Win32
