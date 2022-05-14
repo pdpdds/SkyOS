@@ -1,11 +1,11 @@
 SkyOS32
 ----------------
 
-SkyOS32 is a 32-bit operating system under development in C ++ in a Visual Studio environment.
-In general, the development of an operating system is not easy,
-because the development platform is so inconvenient.
-SkyOS32 allows you to build a kernel with only one Visual Studio IDE in a Windows environment.
-Develop an operating system just as you would develop an application through SkyOS32.
+SkyOS32 is a 32-bit operating system under development in C ++ in a Visual Studio environment.  
+In general, the development of an operating system is not easy,  
+because the development platform is so inconvenient.  
+SkyOS32 allows you to build a kernel with only one Visual Studio IDE in a Windows environment.  
+Develop an operating system just as you would develop an application through SkyOS32.  
 
 [네이버 카페 바로가기](https://cafe.naver.com/codemasterproject)
 
