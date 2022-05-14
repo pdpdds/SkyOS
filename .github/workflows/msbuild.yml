@@ -29,12 +29,6 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
       with:
         msbuild-architecture: x86
-    - name: VSNASM
-      run: |
-        git clone https://github.com/ShiftMediaProject/VSNASM
-        cd VSNASM
-        ./install_script
-        cd ..
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}Chapter
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
